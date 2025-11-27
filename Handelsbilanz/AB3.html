@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Arbeitsblatt S3 – Währung schwächen (Brexit &amp; Pfund)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+    }
+    .content-font{font-family:'Raleway',sans-serif;}
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">Arbeitsblatt S3 – Währung schwächen</h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Welthandel &amp; Handelsdefizite<br/>
+        Geographie – Klasse 10
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- Abschnitt 1: Einstieg – Wechselkurs & Abwertung -->
+      <section class="section-card p-4 md:p-5">
+        <h2 class="text-lg md:text-xl font-semibold text-green-900 mb-2">
+          1. Einstieg: Wechselkurs &amp; Währungsabwertung
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="space-y-2 text-sm text-gray-800">
+            <p>
+              Ein <strong>Wechselkurs</strong> gibt an, wie viel eine Währung im Vergleich zu einer anderen wert ist –
+              zum Beispiel: <em>1&nbsp;britisches Pfund (£) = 1,30&nbsp;€</em>.
+            </p>
+            <p>
+              Wenn eine Währung <strong>abwertet</strong>, wird sie im Vergleich zu anderen Währungen
+              <strong>weniger wert</strong>. Beispiel:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>Vorher: 1&nbsp;£ = 1,30&nbsp;€</li>
+              <li>Nach der Abwertung: 1&nbsp;£ = 1,10&nbsp;€</li>
+            </ul>
+            <p>
+              Folgen:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>Für Ausländer werden Waren aus dem abwertenden Land <strong>billiger</strong> → Exporte können steigen.</li>
+              <li>Für Inländer werden Importwaren <strong>teurer</strong> → Importe werden unattraktiver.</li>
+            </ul>
+            <p class="text-xs text-gray-500">
+              In diesem Arbeitsblatt untersucht ihr das Beispiel <strong>Großbritannien nach dem Brexit-Referendum 2016</strong>
+              und die Entwicklung des britischen Pfunds.
+            </p>
+          </div>
+
+          <!-- Mini-Schema -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
+            <div class="font-semibold text-green-900 mb-1">
+              Schema: Wirkung einer schwächeren Währung
+            </div>
+            <table class="w-full text-xs border border-gray-200 bg-white">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border px-2 py-1 text-left">Perspektive</th>
+                  <th class="border px-2 py-1 text-left">Folge der Abwertung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border px-2 py-1 align-top">Ausländische Käufer</td>
+                  <td class="border px-2 py-1">
+                    Produkte aus dem Land mit schwächerer Währung werden <strong>billiger</strong>.<br/>
+                    → Exporte <strong>können</strong> zunehmen.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 align-top">Inländische Käufer</td>
+                  <td class="border px-2 py-1">
+                    Importwaren werden <strong>teurer</strong>.<br/>
+                    → Importe <strong>können</strong> zurückgehen.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 align-top">Tourismus</td>
+                  <td class="border px-2 py-1">
+                    Urlaub im Land mit schwächerer Währung wird für Ausländer <strong>günstiger</strong>.<br/>
+                    Für Einheimische wird Urlaub im Ausland <strong>teurer</strong>.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-xs text-gray-600 mt-2">
+              Idee dahinter: Eine <strong>schwache Währung</strong> kann helfen, das Handelsdefizit zu verringern –
+              hat aber auch <strong>Nebenwirkungen</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Material A – Brexit & Pfund -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            2. Material A – Brexit &amp; das britische Pfund
+          </h2>
+          <span class="mini-heading text-gray-500">Kurztext &amp; Vergleich vorher/nachher</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <div class="space-y-2">
+            <p>
+              Im Juni 2016 stimmte Großbritannien in einem Referendum für den <strong>Austritt aus der EU</strong> (Brexit).
+              Viele Anleger waren verunsichert: Wie würden sich Handel, Verträge und Bankenstandort London entwickeln?
+            </p>
+            <p>
+              Die Folge war ein <strong>starker Kurssturz</strong> des britischen Pfunds:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>2015: Pfund noch relativ <strong>stark</strong>.</li>
+              <li>2016: Pfund verliert deutlich an Wert (Abwertung um rund 15–20&nbsp;%).</li>
+              <li>In den Folgejahren: leichte Erholung, aber das Pfund bleibt eher <strong>schwach</strong>.</li>
+            </ul>
+            <p class="text-xs text-gray-500">
+              Hinweis: Die Zahlen sind didaktisch vereinfacht und als Index dargestellt
+              (2015 = 100).
+            </p>
+          </div>
+
+          <!-- Vorher-Nachher -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="font-semibold text-green-900 mb-1">
+              Vergleich: Pfund vor und nach dem Brexit-Votum (Index 2015 = 100)
+            </div>
+            <table class="w-full text-xs border border-gray-200 bg-white">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border px-2 py-1">Jahr</th>
+                  <th class="border px-2 py-1 text-right">Wechselkurs-Index</th>
+                  <th class="border px-2 py-1 text-left">Kommentar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border px-2 py-1">2015</td>
+                  <td class="border px-2 py-1 text-right">100</td>
+                  <td class="border px-2 py-1">Ausgangsniveau vor Referendum</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1">2016</td>
+                  <td class="border px-2 py-1 text-right">80</td>
+                  <td class="border px-2 py-1">starker Kurssturz (Schock nach Brexit-Votum)</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1">2017</td>
+                  <td class="border px-2 py-1 text-right">83</td>
+                  <td class="border px-2 py-1">leichte Erholung, aber deutlich unter 2015</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1">2018</td>
+                  <td class="border px-2 py-1 text-right">85</td>
+                  <td class="border px-2 py-1">weitere kleine Schwankungen</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-xs text-gray-600 mt-2">
+              Merke: Ein starker politischer Schock kann die Währung eines Landes deutlich
+              schwächen – manchmal sogar stärker als eine gezielte Politik.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Material B – Daten & Diagramme -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            3. Material B – Entwicklung des Pfunds &amp; mögliche Wirkungen
+          </h2>
+          <span class="mini-heading text-gray-500">Indexdaten &amp; vereinfachte Effekte</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+
+          <!-- B1: Wechselkursverlauf -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              B1 – Wechselkursindex des Pfunds (2015 = 100)
+            </p>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-xs text-gray-700 border border-gray-200">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="border px-2 py-1">Jahr</th>
+                    <th class="border px-2 py-1 text-right">Indexwert</th>
+                    <th class="border px-2 py-1 text-left">Kurzbeschreibung</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="border px-2 py-1">2015</td><td class="border px-2 py-1 text-right">100</td><td class="border px-2 py-1">vor dem Brexit-Votum</td></tr>
+                  <tr><td class="border px-2 py-1">2016</td><td class="border px-2 py-1 text-right">80</td><td class="border px-2 py-1">schwe­res Abwertungsjahr</td></tr>
+                  <tr><td class="border px-2 py-1">2017</td><td class="border px-2 py-1 text-right">83</td><td class="border px-2 py-1">leichte Erholung</td></tr>
+                  <tr><td class="border px-2 py-1">2018</td><td class="border px-2 py-1 text-right">85</td><td class="border px-2 py-1">weiter leicht höher</td></tr>
+                  <tr><td class="border px-2 py-1">2019</td><td class="border px-2 py-1 text-right">86</td><td class="border px-2 py-1">noch unter Ausgangsniveau</td></tr>
+                  <tr><td class="border px-2 py-1">2020</td><td class="border px-2 py-1 text-right">88</td><td class="border px-2 py-1">Corona-Krise, leichte Schwankungen</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="width:100%; height:220px;">
+              <canvas id="s3FxChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-500">
+              Der Index zeigt nur die <strong>Richtung</strong>: 80 heißt nicht „80 Pfund“, sondern
+              „20&nbsp;% schwächer als 2015“.
+            </p>
+          </article>
+
+          <!-- B2: Vereinfachte Effekte auf Tourismus & Importkosten -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              B2 – Vereinfachte Auswirkungen der Pfund-Abwertung (Index 2015 = 100)
+            </p>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-xs text-gray-700 border border-gray-200">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="border px-2 py-1">Größe</th>
+                    <th class="border px-2 py-1 text-right">2015</th>
+                    <th class="border px-2 py-1 text-right">2018</th>
+                    <th class="border px-2 py-1 text-left">Interpretation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="border px-2 py-1">Tourismuseinnahmen UK</td>
+                    <td class="border px-2 py-1 text-right">100</td>
+                    <td class="border px-2 py-1 text-right">115</td>
+                    <td class="border px-2 py-1">mehr Besucher, weil UK billiger ist</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-2 py-1">Importpreise (verarbeitete Waren)</td>
+                    <td class="border px-2 py-1 text-right">100</td>
+                    <td class="border px-2 py-1 text-right">110</td>
+                    <td class="border px-2 py-1">teure Importe belasten Betriebe &amp; Haushalte</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="width:100%; height:220px;">
+              <canvas id="s3ImpactChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-500">
+              Die Werte sind vereinfacht. Sie zeigen: Abwertung kann bestimmte Bereiche (Tourismus, Exporte)
+              helfen, aber an anderer Stelle (Importkosten) Probleme erzeugen.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Abschnitt 4: Material C – Wirkungskette & Gewinner / Verlierer -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            4. Material C – Wirkungskette &amp; Gewinner / Verlierer
+          </h2>
+          <span class="mini-heading text-gray-500">Übersicht</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <!-- Wirkungskette -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="font-semibold text-green-900 mb-2">Vereinfachte Wirkungskette einer Abwertung</div>
+            <ol class="list-decimal list-inside space-y-1">
+              <li>Politisches Ereignis (z.&nbsp;B. Brexit-Votum) → Unsicherheit.</li>
+              <li>Investoren verkaufen Pfund → Pfundkurs <strong>fällt</strong>.</li>
+              <li>Ausländische Käufer finden britische Produkte <strong>billiger</strong> → Exporte können steigen.</li>
+              <li>Importe werden <strong>teurer</strong> → einige Konsumenten &amp; Betriebe schränken Importe ein.</li>
+              <li>Teurere Importe können <strong>Inflation</strong> (Preisanstieg) anheizen.</li>
+              <li>Komplexe Gesamtauswirkung: Handelsdefizit kann kleiner werden, gleichzeitig aber
+                Druck auf Löhne und Realeinkommen.</li>
+            </ol>
+            <p class="text-xs text-gray-600 mt-2">
+              In der Realität hängen die Effekte von vielen weiteren Faktoren ab (z.&nbsp;B. weltweite Konjunktur,
+              Verhandlungsergebnisse nach dem Brexit, Verhalten der Unternehmen).
+            </p>
+          </div>
+
+          <!-- Gewinner/Verlierer -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-green-50 border border-green-300 rounded-lg p-3">
+              <div class="font-semibold text-green-900 mb-1 text-sm">Mögliche Gewinner</div>
+              <ul class="list-disc list-inside text-xs">
+                <li>Exportorientierte Unternehmen (Maschinen, Dienstleistungen)</li>
+                <li>Tourismusbranche in Großbritannien</li>
+                <li>Ausländische Touristen (billigere Reisen nach UK)</li>
+              </ul>
+            </div>
+            <div class="bg-red-50 border border-red-300 rounded-lg p-3">
+              <div class="font-semibold text-red-700 mb-1 text-sm">Mögliche Verlierer</div>
+              <ul class="list-disc list-inside text-xs">
+                <li>Haushalte, die viele Importwaren kaufen (Elektronik, Kleidung)</li>
+                <li>Unternehmen, die Importteile benötigen (z.&nbsp;B. Autohersteller)</li>
+                <li>Britische Touristen im Ausland (Urlaub wird teurer)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 5: Material D – Kontroverse um „Wechselkurs-Politik“ -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <h2 class="text-lg md:text-xl font-semibold text-green-900 mb-2">
+          5. Material D – Streitfrage: Ist eine schwache Währung eine gute Strategie?
+        </h2>
+        <p class="text-sm text-gray-800 mb-1">
+          Einige Länder versuchen (direkt oder indirekt), ihre Währung <strong>relativ schwach</strong> zu halten,
+          um ihre Exporte anzukurbeln. Ökonomen diskutieren, ob das sinnvoll ist:
+        </p>
+        <div class="grid gap-4 md:grid-cols-2 text-sm">
+          <div class="bg-green-50 border border-green-300 rounded-lg p-3">
+            <div class="font-semibold text-green-900 mb-1">
+              Position A – „Schwache Währung hilft beim Export“
+            </div>
+            <ul class="list-disc list-inside text-xs text-gray-800 space-y-1">
+              <li>Produkte im Ausland günstiger → Unternehmen können mehr exportieren.</li>
+              <li>Tourismus wird gefördert, weil das Land billig wirkt.</li>
+              <li>Handelsdefizit kann kleiner werden, wenn Exporte steigen &amp; Importe sinken.</li>
+              <li>Kann als „schnelle Hilfe“ in einer Wirtschaftskrise wirken.</li>
+            </ul>
+          </div>
+          <div class="bg-red-50 border border-red-300 rounded-lg p-3">
+            <div class="font-semibold text-red-700 mb-1">
+              Position B – „Schwache Währung hat hohe Kosten“
+            </div>
+            <ul class="list-disc list-inside text-xs text-gray-800 space-y-1">
+              <li>Importe werden dauerhaft teurer → höhere Lebenshaltungskosten.</li>
+              <li>Gefahr steigender <strong>Inflation</strong>.</li>
+              <li>Löhne müssen steigen, um Kaufkraft zu halten → kann Wettbewerbsfähigkeit wieder verschlechtern.</li>
+              <li>Andere Länder könnten mit eigenen Abwertungen reagieren → „Abwertungswettlauf“.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 6: Aufgaben – Auswertung & Diskussion -->
+      <section class="relative bg-green-50 border-2 border-green-700 rounded-xl p-4 md:p-5">
+        <div class="absolute -top-3 left-4 bg-green-700 text-white text-xs px-3 py-1 rounded-full font-semibold">
+          6. Aufgaben (Gruppenarbeit – Arbeitsblatt S3)
+        </div>
+        <ol class="list-decimal list-inside text-sm text-gray-800 mt-2 space-y-1">
+          <li>
+            Nutzt <strong>Material A</strong>:
+            Beschreibt in 3–4 Sätzen, was 2016 mit dem britischen Pfund passiert ist
+            und warum die Währung so stark gefallen ist.
+          </li>
+          <li>
+            Analysiert <strong>Material B1</strong>:
+            <ul class="list-disc list-inside ml-4">
+              <li>Wie stark war die Abwertung zwischen 2015 und 2016?</li>
+              <li>Erholt sich das Pfund danach wieder vollständig oder nur teilweise?</li>
+            </ul>
+          </li>
+          <li>
+            Nutzt <strong>Material B2</strong>:
+            Erklärt, warum Tourismuseinnahmen steigen können, während Importpreise ebenfalls steigen.
+            Ist das aus Sicht der Bevölkerung eher gut oder eher problematisch?
+          </li>
+          <li>
+            Ordnet mithilfe von <strong>Material C</strong> die genannten Gruppen in
+            „Gewinner“ und „Verlierer“ ein. Ergänzt in jeder Spalte je <strong>mindestens zwei weitere
+            Beispiele</strong>.
+          </li>
+          <li>
+            Lest <strong>Material D</strong>:
+            Entscheidet euch in der Gruppe, ob ihr eher Position A oder Position B (oder eine Mischposition)
+            vertretet. Formuliert einen <strong>Merksatz</strong>:
+            <em>„Eine schwache Währung ist sinnvoll, wenn … / problematisch, weil …“</em>
+          </li>
+          <li>
+            Transfer:
+            Stellt euch vor, euer eigenes Land hätte ein großes Handelsdefizit. Würdet ihr
+            eher an der Währung „drehen“ oder andere Maßnahmen (z.&nbsp;B. Bildungs- und
+            Innovationspolitik, Zölle, Freihandelsabkommen) bevorzugen?
+            Notiert <strong>mindestens fünf Stichpunkte</strong> mit Begründung.
+          </li>
+        </ol>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Arbeitsblatt S3 – Währung schwächen (Brexit &amp; Pfund)</span>
+      <span>Geographie 10</span>
+    </footer>
+  </div>
+
+  <script>
+    // ------------------------------------------
+    // Diagramm B1: Wechselkursindex des Pfunds
+    // ------------------------------------------
+    const s3Years  = [2015, 2016, 2017, 2018, 2019, 2020];
+    const s3Index  = [100, 80, 83, 85, 86, 88];  // 2015 = 100 (vereinfacht)
+
+    const fxCtx = document.getElementById('s3FxChart').getContext('2d');
+
+    new Chart(fxCtx, {
+      type: 'line',
+      data: {
+        labels: s3Years,
+        datasets: [{
+          label: 'Wechselkursindex des Pfunds (2015 = 100)',
+          data: s3Index,
+          borderWidth: 2,
+          tension: 0.15,
+          pointRadius: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              font: { family:'Montserrat', size:10 }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(ctx){
+                return ctx.parsed.y + ' (Index, 2015 = 100)';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display:true,
+              text:'Jahr',
+              font:{ family:'Montserrat', weight:'600', size:11 }
+            }
+          },
+          y: {
+            title: {
+              display:true,
+              text:'Index (2015 = 100)',
+              font:{ family:'Montserrat', weight:'600', size:11 }
+            },
+            min: 70,
+            max: 110
+          }
+        }
+      }
+    });
+
+    // -------------------------------------------------
+    // Diagramm B2: Tourismuseinnahmen & Importpreise
+    // -------------------------------------------------
+    const impactLabels = ['Tourismuseinnahmen UK', 'Importpreise (verarb. Waren)'];
+    const impact2015   = [100, 100];
+    const impact2018   = [115, 110];
+
+    const impactCtx = document.getElementById('s3ImpactChart').getContext('2d');
+
+    new Chart(impactCtx, {
+      type: 'bar',
+      data: {
+        labels: impactLabels,
+        datasets: [
+          {
+            label: '2015 (Index 2015 = 100)',
+            data: impact2015,
+            borderWidth: 1
+          },
+          {
+            label: '2018 (vereinfacht)',
+            data: impact2018,
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{
+            labels:{ font:{family:'Montserrat', size:10} }
+          },
+          tooltip:{
+            callbacks:{
+              label:function(ctx){
+                return ctx.parsed.y + ' (Index, 2015 = 100)';
+              }
+            }
+          }
+        },
+        scales:{
+          x:{
+            title:{
+              display:true,
+              text:'Größen',
+              font:{family:'Montserrat', weight:'600', size:11}
+            }
+          },
+          y:{
+            title:{
+              display:true,
+              text:'Index (2015 = 100)',
+              font:{family:'Montserrat', weight:'600', size:11}
+            },
+            min: 80,
+            max: 130
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

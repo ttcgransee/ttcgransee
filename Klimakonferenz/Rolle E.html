@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Rollenkarte E – Fossile Energie-Nation (Nation E)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js (nicht genutzt, nur für einheitlichen Stil eingebunden) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+    }
+    .content-font{font-family:'Raleway',sans-serif;}
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">
+          Rollenkarte E – Fossile Energie-Nation (Nation E)
+        </h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Klimakonferenz 2025 – Zukunftsabkommen von Genf<br/>
+        Geographie – Klasse 10
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- Abschnitt 1: Kurzsteckbrief -->
+      <section class="section-card p-4 md:p-5">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            1. Wer seid ihr? – Kurzsteckbrief der Rolle
+          </h2>
+          <span class="mini-heading text-gray-500">Überblick</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <!-- Beschreibung -->
+          <div class="md:col-span-2 space-y-2">
+            <p>
+              Ihr vertretet eine <strong>fossile Energie-Nation</strong>, deren
+              Wirtschaft stark von der Förderung und dem Export von
+              <strong>Öl, Gas oder Kohle</strong> abhängt. Ein großer Teil des
+              Staatshaushalts stammt aus diesen Einnahmen.
+            </p>
+            <p>
+              Eure Bevölkerung genießt im Vergleich zur Region oft einen relativ hohen
+              Lebensstandard: kostenlose oder günstige Bildung, Gesundheitsversorgung,
+              subventionierte Energie- und Benzinpreise. Viele Menschen arbeiten direkt
+              oder indirekt in der <strong>Energiebranche</strong>.
+            </p>
+            <p>
+              Gleichzeitig spürt ihr bereits <strong>Klimafolgen</strong>:
+              Hitzewellen, Trockenheit, Wasserknappheit, Sturmfluten oder auftauender
+              Permafrost (je nach Region). Ihr wisst, dass die Welt langfristig von
+              fossilen Energien wegkommen will – doch das bedroht eure Einnahmen und
+              euren sozialen Frieden.
+            </p>
+            <p>
+              Ihr steht vor der Frage, wie ihr von einer <strong>fossilen Wirtschaft</strong>
+              zu einer <strong>diversifizierten, klimafreundlicheren Wirtschaft</strong>
+              kommen könnt, ohne dass euer Land ins Chaos stürzt.
+            </p>
+          </div>
+
+          <!-- Steckbrief -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-xs">
+            <div class="font-semibold text-green-900 mb-1">
+              Steckbrief: Nation E (vereinfacht)
+            </div>
+            <table class="w-full text-left border border-gray-200 bg-white">
+              <tbody>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Bevölkerung</th>
+                  <td class="border px-2 py-1">
+                    je nach Land einige Millionen bis über 100&nbsp;Mio. Menschen,
+                    oft mit stark wachsender Stadtbevölkerung
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Wirtschaft</th>
+                  <td class="border px-2 py-1">
+                    hoher Anteil von Öl-, Gas- oder Kohle-Exporten am BIP;
+                    andere Sektoren schwächer entwickelt
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Energie</th>
+                  <td class="border px-2 py-1">
+                    sehr billige fossile Energie im Inland, erste Programme
+                    für <strong>erneuerbare Energien</strong> und Wasserstoff
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Rolle im Klima</th>
+                  <td class="border px-2 py-1">
+                    hohe Emissionen aus Förderung, Verarbeitung und Nutzung
+                    fossiler Brennstoffe – im Inland und im Ausland
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Kernspannungsfeld</th>
+                  <td class="border px-2 py-1">
+                    <strong>Wohlstand durch Fossile</strong> vs.
+                    <strong>globaler Ausstieg aus fossilen Energien</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-gray-700">
+              Merke: Ihr habt mit fossilen Energien großen Reichtum aufgebaut –
+              müsst aber jetzt einen Weg in die <strong>Nach-Öl-Ära</strong> finden.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Ausgangslage & Dilemma -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            2. Eure Ausgangslage &amp; das zentrale Dilemma
+          </h2>
+          <span class="mini-heading text-gray-500">Hintergrund</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <div class="md:col-span-2 space-y-2">
+            <p>
+              Jahrzehntelang war die Welt geradezu abhängig von euren Öl-, Gas- oder
+              Kohlelieferungen. Ihr habt große Devisenreserven aufgebaut, moderne
+              Städte und Infrastruktur finanziert – aber auch eine
+              <strong>einseitige Wirtschaftsstruktur</strong> geschaffen.
+            </p>
+            <p>
+              Viele Stellen im öffentlichen Dienst, im Bauwesen oder im Handel
+              hängen direkt an den Einnahmen aus dem Energieexport. Wenn die
+              Nachfrage nach fossilen Energien stark fällt, drohen:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>hohe Arbeitslosigkeit,</li>
+              <li>Lücken im Staatshaushalt (weniger Geld für Bildung, Gesundheit),</li>
+              <li>soziale Spannungen bis hin zu Protesten und Unruhen.</li>
+            </ul>
+            <p>
+              Gleichzeitig erwartet die Welt von euch, dass ihr beim
+              <strong>globalen Ausstieg aus fossilen Energien</strong> mitmacht,
+              eure Förderung reduziert und Klimaschutz vorantreibt – obwohl ihr
+              noch große Reserven besitzt, die viel Geld bringen könnten.
+            </p>
+            <p>
+              Euer Dilemma:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>
+                Ihr wollt <strong>Stabilität und Wohlstand</strong> erhalten.
+              </li>
+              <li>
+                Ihr müsst eure Wirtschaft <strong>diversifizieren</strong>, bevor
+                die Nachfrage nach fossilen Energien einbricht.
+              </li>
+              <li>
+                Ihr wollt nicht als „die Bösen“ dastehen, sondern als
+                <strong>Partner für den Übergang</strong>.
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs">
+            <div class="font-semibold text-green-900 mb-2">
+              Zentrales Spannungsfeld (für eure Verhandlung)
+            </div>
+            <ol class="list-decimal list-inside space-y-1 text-gray-800">
+              <li>
+                Weltweit wird weniger fossile Energie gefordert –
+                ihr lebt aber noch davon.
+              </li>
+              <li>
+                Ihr wollt <strong>Zeit für einen geordneten Übergang</strong>,
+                ohne Zusammenbruch eurer Wirtschaft.
+              </li>
+              <li>
+                Ihr könnt viel zur <strong>Reduktion von Methan- und CO₂-Emissionen</strong>
+                beitragen – braucht aber Technologie und Investitionen.
+              </li>
+              <li>
+                Ihr fordert Anerkennung als <strong>Teil der Lösung</strong>,
+                nicht nur als Problem.
+              </li>
+            </ol>
+            <p class="mt-2 text-gray-700">
+              Eure Leitfrage:<br/>
+              <em>„Wie gestalten wir den Ausstieg aus fossilen Energien
+              so, dass unsere Gesellschaft nicht auseinanderbricht – und
+              wie beteiligt sich die Welt an den Kosten?“</em>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Interessen, Ziele, rote Linien -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            3. Eure wichtigsten Interessen, Ziele &amp; roten Linien
+          </h2>
+          <span class="mini-heading text-gray-500">Verhandlungsrahmen</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <!-- Interessen -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+            <div class="font-semibold text-green-900 mb-1">
+              Was ihr unbedingt wollt
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>Wirtschaftliche Stabilität:</strong>
+                Keine plötzlichen Einbrüche eurer Einnahmen aus Öl, Gas oder Kohle.
+              </li>
+              <li>
+                <strong>Sozialer Frieden:</strong>
+                Schutz von Arbeitsplätzen, gerechter Übergang („just transition“)
+                für Beschäftigte im Energiesektor.
+              </li>
+              <li>
+                <strong>Diversifizierung der Wirtschaft:</strong>
+                Aufbau neuer Branchen (z.&nbsp;B. Industrie, Tourismus,
+                erneuerbare Energien, Wasserstoff, Dienstleistungen).
+              </li>
+              <li>
+                <strong>Technologieführerschaft bei Übergangslösungen:</strong>
+                CO₂-Abscheidung und -Speicherung (CCS), Wasserstoffproduktion,
+                effizientere Förderung.
+              </li>
+              <li>
+                <strong>Mitspracherecht in der globalen Energiepolitik:</strong>
+                Ihr wollt nicht einfach „abgeschaltet“ werden, sondern aktiv
+                an Fahrplänen mitarbeiten.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Rote Linien -->
+          <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+            <div class="font-semibold text-red-700 mb-1">
+              Rote Linien – das lehnt ihr ab
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>Sofortige Verbote</strong> für Förderung und Export,
+                die euer Land wirtschaftlich zerstören würden.
+              </li>
+              <li>
+                Internationale Abkommen, die eure fossilen Reserven
+                als „<strong>unantastbar im Boden lassen</strong>“ festschreiben,
+                ohne Entschädigung.
+              </li>
+              <li>
+                Regeln, die <strong>Gas</strong> sofort genauso behandeln wie Kohle,
+                obwohl Gas teilweise als <strong>„Brückentechnologie“</strong>
+                genutzt werden kann.
+              </li>
+              <li>
+                Einseitige Schuldzuweisungen, die nur auf euch zeigen,
+                während große Verbraucherländer ihre Nachfrage kaum senken.
+              </li>
+              <li>
+                Forderungen nach teurem Umbau, wenn euch
+                <strong>Finanzmittel und Technologiezugang</strong> verweigert werden.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs text-gray-800">
+          <div class="font-semibold text-green-900 mb-1">
+            Mögliche Kompromisslinie (Merksatz)
+          </div>
+          <p>
+            <em>„Wir akzeptieren einen schrittweisen Ausstieg aus fossilen Energien –
+            aber er muss planbar, gerecht und mit Unterstützung beim Umbau unserer
+            Wirtschaft erfolgen.“</em>
+          </p>
+        </div>
+      </section>
+
+      <!-- Abschnitt 4: Position zu den vier Konferenzthemen -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            4. Eure Position zu den vier Verhandlungsthemen
+          </h2>
+          <span class="mini-heading text-gray-500">Fachliche Linie</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- Thema A: Emissionsreduktion -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema A</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Reduktion von Treibhausgasen
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Eure direkten Emissionen stammen vor allem aus
+                <strong>Förderung, Verarbeitung und Verbrennung</strong> von Öl,
+                Gas oder Kohle.
+              </li>
+              <li>
+                Ihr seid bereit, bis 2030:
+                <ul class="list-disc list-inside ml-4">
+                  <li>
+                    <strong>Methanemissionen</strong> aus Öl- und Gasförderung
+                    deutlich zu senken (z.&nbsp;B. um 70–75&nbsp;%),
+                  </li>
+                  <li>
+                    Fackeln und Gas-Leckagen technisch zu minimieren,
+                  </li>
+                  <li>
+                    Energieeffizienz in Industrie und Gebäuden zu steigern.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Mittelfristig seid ihr bereit, einen
+                <strong>Peak der fossilen Produktion</strong> zu akzeptieren
+                (z.&nbsp;B. keine weitere Steigerung nach einem bestimmten Jahr),
+                wenn die Welt euch bei der Diversifizierung unterstützt.
+              </li>
+              <li>
+                Ihr betont, dass <strong>Gas</strong> in manchen Regionen vorübergehend
+                Kohle ersetzen kann und dadurch Emissionen senkt – solange
+                gleichzeitig der Ausbau der erneuerbaren Energien vorangetrieben wird.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema B: Kohlenstoffsenken -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema B</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Schutz &amp; Ausbau von Kohlenstoffsenken
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Je nach Lage eures Landes besitzt ihr:
+                <ul class="list-disc list-inside ml-4">
+                  <li>Wälder, Moore oder Küstenökosysteme,</li>
+                  <li>oder trockene Regionen, in denen Aufforstung schwieriger ist.</li>
+                </ul>
+              </li>
+              <li>
+                Ihr seid bereit, Programme zu unterstützen, die:
+                <ul class="list-disc list-inside ml-4">
+                  <li>Wüstenränder aufforsten,</li>
+                  <li>Moore und Feuchtgebiete renaturieren,</li>
+                  <li>Stadtbegrünung und Küstenökosysteme stärken.</li>
+                </ul>
+              </li>
+              <li>
+                Zusätzlich setzt ihr auf <strong>technische Senken</strong>, z.&nbsp;B.
+                CO₂-Abscheidung und Speicherung (CCS) in ehemaligen Gas- oder Ölfeldern.
+              </li>
+              <li>
+                Ihr fordert, dass solche technischen Senken in internationalen
+                Abkommen klar berücksichtigt werden – sofern sie sicher und überprüfbar sind.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema C: Anpassung -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema C</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Anpassung an den Klimawandel
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Euer Land ist ebenfalls von Klimafolgen betroffen, z.&nbsp;B.:
+                <ul class="list-disc list-inside ml-4">
+                  <li>Hitzewellen, Dürren und Wüstenbildung,</li>
+                  <li>Sturmfluten und Meeresspiegelanstieg an Küsten,</li>
+                  <li>Tauwetter und Schäden in Permafrostregionen.</li>
+                </ul>
+              </li>
+              <li>
+                Ihr braucht Anpassungsstrategien für:
+                <ul class="list-disc list-inside ml-4">
+                  <li>Trinkwasserversorgung (z.&nbsp;B. Entsalzungsanlagen, Speicher),</li>
+                  <li>Schutz von Hafenstädten und Pipelines,</li>
+                  <li>Gesundheitsschutz in extrem heißen Perioden.</li>
+                </ul>
+              </li>
+              <li>
+                Ihr seid bereit, einen Teil eurer fossilen Einnahmen in
+                <strong>eigene Anpassungsprogramme</strong> zu stecken, erwartet
+                aber auch technischen Austausch und Kooperation.
+              </li>
+              <li>
+                Ihr könnt euch beteiligen, wenn internationale Fonds
+                <strong>Wissen und Technologie</strong> für Anpassung bereitstellen.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema D: Finanzierung & Technologie -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema D</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Finanzierung &amp; Technologietransfer
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr seid bereit, euch an internationalen Klimafonds zu beteiligen,
+                <strong>wenn</strong>:
+                <ul class="list-disc list-inside ml-4">
+                  <li>die Mittel wirksam und transparent eingesetzt werden,</li>
+                  <li>ihr als Partner und nicht nur als „Problemstaat“ behandelt werdet.</li>
+                </ul>
+              </li>
+              <li>
+                Ihr fordert Unterstützung bei der <strong>Diversifizierung</strong>:
+                Investitionen und Technologien für:
+                <ul class="list-disc list-inside ml-4">
+                  <li>erneuerbare Energien &amp; grünen Wasserstoff,</li>
+                  <li>Industrien außerhalb des fossilen Sektors,</li>
+                  <li>Bildungs- und Innovationsprogramme.</li>
+                </ul>
+              </li>
+              <li>
+                Ihr wollt internationale Partnerschaften für CO₂-Abscheidung (CCS)
+                und möglicherweise CO₂-Nutzung (CCU), um Emissionen bestehender Anlagen
+                zu reduzieren.
+              </li>
+              <li>
+                Ihr fordert, dass der Übergang zu einer klimaneutralen Wirtschaft
+                <strong>Finanzhilfen und Investitionsgarantien</strong> umfasst, damit
+                der Umbau nicht nur von eurem Staatshaushalt getragen wird.
+              </li>
+              <li>
+                Im Gegenzug könnt ihr zusagen, fossile Einnahmen schrittweise stärker
+                in <strong>Bildung, Forschung und Nachhaltigkeitsprojekte</strong> zu lenken.
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 5: Vorbereitung auf die Konferenz -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            5. Eure Vorbereitung: Recherche, Positionspapier &amp; Plädoyer
+          </h2>
+          <span class="mini-heading text-gray-500">Arbeitsaufträge</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <!-- Recherche -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-green-900 mb-1 text-sm">
+              A) Recherche
+            </div>
+            <p class="text-xs mb-1">
+              Sucht Informationen zu <strong>fossilen Exportländern</strong>
+              (z.&nbsp;B. Saudi-Arabien, Russland, Norwegen, Australien, Katar):
+            </p>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>Wie viel Prozent der Exporte entfallen auf Öl, Gas oder Kohle?</li>
+              <li>Wie stark hängt der Staatshaushalt davon ab?</li>
+              <li>Welche Pläne gibt es dort für <strong>Diversifizierung</strong>?</li>
+              <li>
+                Welche Klimafolgen sind in diesen Ländern zu spüren
+                (z.&nbsp;B. Hitzewellen, Waldbrände, Permafrost, Sturmfluten)?
+              </li>
+              <li>
+                Welche Rolle spielen diese Länder auf Klimakonferenzen?
+              </li>
+            </ul>
+          </div>
+
+          <!-- Positionspapier -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-green-900 mb-1 text-sm">
+              B) Positionspapier (Stichpunkte)
+            </div>
+            <p class="text-xs mb-1">
+              Notiert für eure Rolle:
+            </p>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>3–5 Hauptziele</strong> (z.&nbsp;B. geordneter Ausstieg,
+                Erhalt von Stabilität, Aufbau neuer Branchen).
+              </li>
+              <li>
+                <strong>2–3 rote Linien</strong> (z.&nbsp;B. kein sofortiger Förderstopp
+                ohne Entschädigung).
+              </li>
+              <li>
+                <strong>mindestens 2 konkrete Angebote</strong>:
+                <ul class="list-disc list-inside ml-4">
+                  <li>starke Methanreduktion bis 2030,</li>
+                  <li>Investitionen in erneuerbare Energien und Wasserstoff,</li>
+                  <li>Bereitschaft, Einnahmen in Klimafonds einzuzahlen.</li>
+                </ul>
+              </li>
+              <li>
+                Zu jedem Verhandlungsthema (A–D) einen Bulletpoint:
+                <em>Was fordert ihr? Was bietet ihr an?</em>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Plädoyer -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-yellow-800 mb-1 text-sm">
+              C) Plädoyer (Eröffnungsrede, ca. 1 Minute)
+            </div>
+            <p class="text-xs mb-1">
+              Formuliert eine kurze Rede, in der:
+            </p>
+            <ol class="list-decimal list-inside text-xs space-y-1">
+              <li>
+                ihr erklärt, dass euer Land <strong>vom Export fossiler Energien lebt</strong>,
+                aber die Notwendigkeit des Klimaschutzes anerkennt,
+              </li>
+              <li>
+                ihr euer Dilemma beschreibt:
+                <strong>Wohlstand &amp; Jobs</strong> vs. globaler Ausstieg,
+              </li>
+              <li>
+                ihr konkrete <strong>Schritte zur Emissionsminderung</strong>
+                nennt (z.&nbsp;B. Methanreduktion, CCS, Ausbau Erneuerbarer),
+              </li>
+              <li>
+                ihr sagt, welche <strong>Unterstützung</strong> ihr für die
+                Diversifizierung eurer Wirtschaft braucht,
+              </li>
+              <li>
+                ihr betont, dass ihr beim Klimaschutz
+                <strong>Partner und nicht Gegner</strong> sein wollt.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 6: Checkliste -->
+      <section class="relative bg-green-50 border-2 border-green-700 rounded-xl p-4 md:p-5">
+        <div class="absolute -top-3 left-4 bg-green-700 text-white text-xs px-3 py-1 rounded-full font-semibold">
+          6. Checkliste für eure Gruppe
+        </div>
+        <p class="mt-1 mb-2 text-sm text-gray-800">
+          Prüft vor der Konferenz, ob ihr alles vorbereitet habt:
+        </p>
+        <ul class="list-disc list-inside text-xs text-gray-800 space-y-1 ml-1">
+          <li>
+            ✔ Wir können erklären, <strong>wer wir sind</strong>
+            (fossile Energie-Nation, abhängig von Öl, Gas oder Kohle).
+          </li>
+          <li>
+            ✔ Wir kennen unsere <strong>wichtigsten Interessen, Ziele und roten Linien</strong>.
+          </li>
+          <li>
+            ✔ Wir haben zu allen vier Themen (A–D) festgehalten, was wir fordern
+            und was wir anbieten.
+          </li>
+          <li>
+            ✔ Wir haben <strong>Beispiele aus realen fossilen Exportländern</strong>
+            recherchiert.
+          </li>
+          <li>
+            ✔ Unser <strong>Plädoyer</strong> ist fertig formuliert und geübt
+            (ca. 1 Minute Redezeit).
+          </li>
+          <li>
+            ✔ Wir wissen, mit wem wir in den Verhandlungen
+            <strong>Bündnisse</strong> suchen wollen
+            (z.&nbsp;B. einige Schwellenländer, waldreiche Staaten, Industrienationen
+            mit Interesse an Übergangstechnologien).
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Rollenkarte E – Fossile Energie-Nation (Nation E)</span>
+      <span>Klimakonferenz 2025 · Geographie 10</span>
+    </footer>
+  </div>
+</body>
+</html>

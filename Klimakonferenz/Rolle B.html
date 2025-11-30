@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Rollenkarte B – Aufstrebende Wirtschaftsmacht (Nation B)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js (hier nicht zwingend genutzt, aber belassen für einheitlichen Stil) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+    }
+    .content-font{font-family:'Raleway',sans-serif;}
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">
+          Rollenkarte B – Aufstrebende Wirtschaftsmacht (Nation B)
+        </h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Klimakonferenz 2025 – Zukunftsabkommen von Genf<br/>
+        Geographie – Klasse 10
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- Abschnitt 1: Kurzsteckbrief -->
+      <section class="section-card p-4 md:p-5">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            1. Wer seid ihr? – Kurzsteckbrief der Rolle
+          </h2>
+          <span class="mini-heading text-gray-500">Überblick</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <!-- Text links -->
+          <div class="md:col-span-2 space-y-2">
+            <p>
+              Ihr vertretet eine <strong>aufstrebende Wirtschaftsmacht</strong> mit sehr vielen
+              Einwohnerinnen und Einwohnern. Ein Teil der Bevölkerung lebt bereits in modernen
+              Großstädten mit wachsendem Wohlstand, viele Menschen arbeiten aber noch in der
+              Landwirtschaft oder in informellen Jobs.
+            </p>
+            <p>
+              Eure Wirtschaft wächst seit Jahren schnell – häufig mit Hilfe von
+              <strong>Kohlekraftwerken, energieintensiver Industrie und dichter Verkehrsinfrastruktur</strong>.
+              Dadurch steigen eure <strong>Treibhausgasemissionen</strong> deutlich an.
+            </p>
+            <p>
+              Gleichzeitig seid ihr schon <strong>heute von Klimafolgen betroffen</strong>:
+              Überflutungen in Küstenstädten, Hitzewellen, Gesundheitsprobleme durch Luftverschmutzung
+              und Ernteausfälle setzen eurem Land zu.
+            </p>
+          </div>
+
+          <!-- Steckbrief rechts -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-xs">
+            <div class="font-semibold text-green-900 mb-1">
+              Steckbrief: Nation B (vereinfacht)
+            </div>
+            <table class="w-full text-left border border-gray-200 bg-white">
+              <tbody>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Bevölkerung</th>
+                  <td class="border px-2 py-1">
+                    über 1&nbsp;Mrd. Menschen, weiter wachsend
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Wirtschaft</th>
+                  <td class="border px-2 py-1">
+                    schnell wachsendes BIP, Mischung aus Landwirtschaft,
+                    Industrie und Dienstleistungen
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Energie</th>
+                  <td class="border px-2 py-1">
+                    starke Abhängigkeit von Kohle, zugleich Ausbau erneuerbarer Energien
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Rolle im Klima</th>
+                  <td class="border px-2 py-1">
+                    einer der größten Emittenten der Welt <em>heute</em>, aber
+                    historisch deutlich weniger als klassische Industrienationen
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Kernspannungsfeld</th>
+                  <td class="border px-2 py-1">
+                    <strong>Recht auf Entwicklung</strong> vs.
+                    <strong>Verantwortung für das Klima</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-gray-700">
+              Merke: Ihr wollt <strong>Armut bekämpfen</strong und gleichzeitig nicht zum
+              alleinigen „Klimasündenbock“ werden.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Ausgangslage & Dilemma -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            2. Eure Ausgangslage &amp; das zentrale Dilemma
+          </h2>
+          <span class="mini-heading text-gray-500">Hintergrund</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <div class="md:col-span-2 space-y-2">
+            <p>
+              In den letzten Jahrzehnten hat sich euer Land von einem armen
+              Agrarstaat zu einer <strong>aufstrebenden Industrie- und Dienstleistungsnation</strong>
+              entwickelt. Millionen Menschen konnten der extremen Armut entkommen.
+            </p>
+            <p>
+              Dieses Wachstum wurde jedoch zu einem großen Teil durch
+              <strong>fossile Energieträger</strong> ermöglicht: Kohlekraftwerke, Stahl- und
+              Zementindustrie, stark wachsender Autoverkehr und Luftverkehr. Dadurch seid ihr heute
+              einer der größten Emittenten von CO₂ weltweit.
+            </p>
+            <p>
+              Gleichzeitig erinnert ihr daran, dass die <strong>historische Verantwortung</strong>
+              für den Klimawandel vor allem bei den alten Industrienationen liegt: Sie haben
+              bereits seit dem 19. Jahrhundert große Mengen CO₂ emittiert und damit Wohlstand aufgebaut.
+            </p>
+            <p>
+              Nun stehen ihr vor einem Dilemma:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>
+                Ihr wollt <strong>weiter wirtschaftlich wachsen</strong>, um Armut abzubauen,
+                moderne Infrastruktur aufzubauen und sozialen Frieden zu sichern.
+              </li>
+              <li>
+                Gleichzeitig fordert die Weltgemeinschaft von euch, eure Emissionen
+                <strong>früher als geplant zu begrenzen</strong> und schnell Klimaschutzmaßnahmen
+                einzuleiten.
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs">
+            <div class="font-semibold text-green-900 mb-2">
+              Zentrales Spannungsfeld (für eure Verhandlung)
+            </div>
+            <ol class="list-decimal list-inside space-y-1 text-gray-800">
+              <li>Ihr braucht <strong>billige Energie</strong>, um eure Industrialisierung fortzusetzen.</li>
+              <li>Ihr wollt nicht, dass eure Entwicklung abgebremst wird.</li>
+              <li>Ihr seid bereits stark von Klimafolgen betroffen.</li>
+              <li>Die Welt erwartet von euch <strong>klare Klimaziele</strong>.</li>
+            </ol>
+            <p class="mt-2 text-gray-700">
+              Eure Hauptbotschaft könnte lauten:
+              <br/>
+              <em>„Wir sind bereit zu handeln – aber nicht allein und nicht auf Kosten
+              unserer Entwicklung.“</em>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Interessen, Ziele, rote Linien -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            3. Eure wichtigsten Interessen, Ziele &amp; roten Linien
+          </h2>
+          <span class="mini-heading text-gray-500">Verhandlungsrahmen</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <!-- Was ihr wollt -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+            <div class="font-semibold text-green-900 mb-1">
+              Was ihr unbedingt wollt
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>Recht auf Entwicklung:</strong>
+                Ausbau von Industrie, Infrastruktur, Bildung, Gesundheitsversorgung.
+              </li>
+              <li>
+                <strong>Wachstum sichern:</strong>
+                Jährlich weiter wachsende Wirtschaft, um Jobs zu schaffen.
+              </li>
+              <li>
+                <strong>Gerechte Verantwortung:</strong>
+                Reiche Länder müssen früher und stärker reduzieren als ihr und
+                mehr finanzielle Last tragen.
+              </li>
+              <li>
+                <strong>Finanzielle Unterstützung:</strong>
+                Zahlungen für Klimaschutz- und Anpassungsprojekte in eurem Land.
+              </li>
+              <li>
+                <strong>Technologietransfer:</strong>
+                Zugang zu moderner, klimafreundlicher Technik zu bezahlbaren
+                Bedingungen.
+              </li>
+              <li>
+                <strong>Anpassungshilfen:</strong>
+                Unterstützung beim Umgang mit Überflutungen, Dürren und Hitzewellen.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Rote Linien -->
+          <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+            <div class="font-semibold text-red-700 mb-1">
+              Rote Linien – das lehnt ihr ab
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>Gleiche Pflichten wie reiche Länder</strong> beim Tempo der
+                Emissionsreduktion – ihr seid noch im Aufholprozess.
+              </li>
+              <li>
+                <strong>Starre CO₂-Obergrenzen</strong>, die euer Wirtschaftswachstum
+                massiv ausbremsen würden.
+              </li>
+              <li>
+                Forderungen, wichtige Technologien <strong>kostenlos</strong> abzugeben,
+                ohne Gegenleistung oder Partnerschaft.
+              </li>
+              <li>
+                Abkommen, die eure Klimamaßnahmen detailliert vorschreiben, aber keine
+                <strong>verlässliche Finanzierung</strong> vorsehen.
+              </li>
+              <li>
+                Symbolische Verpflichtungen der reichen Länder ohne klare Zahlen und
+                Zeitpläne für Zahlungen und Emissionsreduktion.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs text-gray-800">
+          <div class="font-semibold text-green-900 mb-1">
+            Mögliche Kompromisslinie (Merksatz)
+          </div>
+          <p>
+            <em>„Wir akzeptieren ambitionierte Klimaziele, wenn die historische Verantwortung
+            anerkannt wird und reiche Staaten uns mit Geld und Technologie beim
+            klimafreundlichen Umbau unterstützen.“</em>
+          </p>
+        </div>
+      </section>
+
+      <!-- Abschnitt 4: Position zu den vier Konferenzthemen -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            4. Eure Position zu den vier Verhandlungsthemen
+          </h2>
+          <span class="mini-heading text-gray-500">Fachliche Linie</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- Thema A: Emissionsreduktion -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema A</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Reduktion von Treibhausgasen
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr akzeptiert das Ziel, dass eure Emissionen <strong>bis spätestens
+                2030 ihren Höchststand</strong> erreichen und danach sinken.
+              </li>
+              <li>
+                Ihr seid bereit, die <strong>Emissionsintensität</strong> (CO₂ pro
+                Wirtschaftseinheit) bis 2040 deutlich zu senken (z.&nbsp;B. um 70&nbsp;%).
+              </li>
+              <li>
+                Ihr wollt den Anteil erneuerbarer Energien (Solar, Wind, Wasserkraft)
+                stark ausbauen, aber weiterhin Übergangsfristen für Kohle.
+              </li>
+              <li>
+                Ihr verlangt von Industrienationen:
+                <ul class="list-disc list-inside ml-4">
+                  <li>frühere Klimaneutralität (z.&nbsp;B. bis 2045),</li>
+                  <li>deutlich stärkere Reduktion schon vor 2030.</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema B: Kohlenstoffsenken -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema B</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Schutz &amp; Ausbau von Kohlenstoffsenken
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr seid bereit, <strong>Aufforstungsprogramme</strong> zu starten und
+                degradierte Flächen zu renaturieren.
+              </li>
+              <li>
+                Ihr unterstützt den Schutz von Wäldern, Mangroven und Feuchtgebieten,
+                wenn dies mit <strong>sozialen Programmen</strong> für die lokale
+                Bevölkerung verbunden ist.
+              </li>
+              <li>
+                Für jeden Hektar neu geschützten Wald verlangt ihr
+                <strong>verlässliche Finanzierung</strong> und Beteiligung der
+                lokalen Gemeinden.
+              </li>
+              <li>
+                Ihr lehnt Waldschutzprogramme ab, bei denen Menschen
+                <strong>vertrieben</strong> werden oder ohne Mitsprache bleiben.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema C: Anpassung -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema C</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Anpassung an den Klimawandel
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr fordert einen <strong>Anpassungsfonds</strong>, aus dem ihr Geld für
+                Deiche, Frühwarnsysteme, hitzeresistente Infrastruktur und
+                klimaresiliente Landwirtschaft erhaltet.
+              </li>
+              <li>
+                Besonders gefährdete Regionen (Flussdeltas, Küstenmegalopolis,
+                Trockengebiete) sollen <strong>priorisiert</strong> werden.
+              </li>
+              <li>
+                Ihr macht deutlich, dass fehlende Anpassung zu
+                <strong>Millionen Klimaflüchtlingen</strong> führen könnte – ein
+                Problem für die ganze Welt.
+              </li>
+              <li>
+                Ihr seid bereit, eigene Mittel bereitzustellen, erwartet aber
+                <strong>Mitfinanzierung</strong> durch reiche Staaten.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema D: Finanzierung & Technologie -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema D</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Finanzierung &amp; Technologietransfer
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr fordert, dass reiche Staaten ihre
+                <strong>Klimafinanzierung deutlich über 100 Mrd. US-$ pro Jahr</strong>
+                hinaus steigern.
+              </li>
+              <li>
+                Ein Teil dieser Mittel soll gezielt in eure
+                <strong>erneuerbare Energie-Infrastruktur</strong> fließen
+                (Solar-, Windparks, Netze, Speicher).
+              </li>
+              <li>
+                Ihr wollt leichteren Zugang zu grünen Technologien: geringere
+                Lizenzkosten, gemeinsame Forschungszentren, Ausbildungsprogramme.
+              </li>
+              <li>
+                Ihr seid bereit, eigene Beiträge („co-financing“) zu leisten, wenn
+                die Bedingungen fair sind und euch nicht in neue Schuldenfallen
+                treiben.
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 5: Vorbereitung auf die Konferenz -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            5. Eure Vorbereitung: Recherche, Positionspapier &amp; Plädoyer
+          </h2>
+          <span class="mini-heading text-gray-500">Arbeitsaufträge</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <!-- Recherche -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-green-900 mb-1 text-sm">
+              A) Recherche
+            </div>
+            <p class="text-xs mb-1">
+              Sucht mit Atlas, Schulbuch oder Internet Informationen zu
+              <strong>echten Ländern, die eurer Rolle ähneln</strong> (z.&nbsp;B. China,
+              Indien, Indonesien o.Ä.).
+            </p>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>Wie viele Menschen leben dort?</li>
+              <li>Wie hat sich das BIP in den letzten Jahrzehnten entwickelt?</li>
+              <li>Wie stark sind die CO₂-Emissionen gestiegen?</li>
+              <li>Welche Klimafolgen sind heute schon spürbar?</li>
+              <li>Welche erneuerbaren Energien werden dort ausgebaut?</li>
+            </ul>
+          </div>
+
+          <!-- Positionspapier -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-green-900 mb-1 text-sm">
+              B) Positionspapier (Stichpunkte)
+            </div>
+            <p class="text-xs mb-1">
+              Haltet auf einem Blatt in Stichpunkten fest:
+            </p>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li><strong>3–5 Hauptziele</strong> eures Landes.</li>
+              <li>
+                <strong>2–3 rote Linien</strong>, die ihr in den Verhandlungen
+                nicht überschreitet.
+              </li>
+              <li>
+                <strong>mindestens 2 Kompromissangebote</strong>, z.&nbsp;B.
+                Emissionspeak 2030, Ausbau erneuerbarer Energien, Schutzprogramme,
+                wenn ihr Unterstützung erhaltet.
+              </li>
+              <li>
+                Kurze Notizen zu jedem der vier Themen (A–D): Was fordert ihr?
+                Was bietet ihr an?
+              </li>
+            </ul>
+          </div>
+
+          <!-- Plädoyer -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-yellow-800 mb-1 text-sm">
+              C) Plädoyer (Eröffnungsrede, ca. 1 Minute)
+            </div>
+            <p class="text-xs mb-1">
+              Formuliert eine kurze Rede, in der:
+            </p>
+            <ol class="list-decimal list-inside text-xs space-y-1">
+              <li>
+                ihr eure Situation beschreibt (aufstrebende Wirtschaft, fortbestehende
+                Armut, Klimafolgen),
+              </li>
+              <li>
+                ihr erklärt, warum ihr mehr Klimaschutz unterstützen wollt –
+                aber nicht alleine,
+              </li>
+              <li>
+                ihr <strong>eure zentrale Forderung</strong> an reiche Staaten klar
+                formuliert (z.&nbsp;B. mehr Geld, Technologie, Anerkennung der
+                historischen Verantwortung),
+              </li>
+              <li>
+                ihr zeigt, zu welchen <strongeigenen Beiträgen</strong> ihr bereit seid
+                (z.&nbsp;B. Emissionspeak, Ausbau erneuerbarer Energien).
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 6: Checkliste -->
+      <section class="relative bg-green-50 border-2 border-green-700 rounded-xl p-4 md:p-5">
+        <div class="absolute -top-3 left-4 bg-green-700 text-white text-xs px-3 py-1 rounded-full font-semibold">
+          6. Checkliste für eure Gruppe
+        </div>
+        <p class="mt-1 mb-2 text-sm text-gray-800">
+          Nutzt diese Liste, um zu prüfen, ob ihr für die Konferenz bereit seid:
+        </p>
+        <ul class="list-disc list-inside text-xs text-gray-800 space-y-1 ml-1">
+          <li>
+            ✔ Wir können kurz erklären, <strong>wer wir sind</strong> (aufstrebende
+            Wirtschaftsmacht, Lage, Bevölkerung, Energie).
+          </li>
+          <li>
+            ✔ Wir haben unsere <strong>wichtigsten Interessen und roten Linien</strong>
+            in Stichpunkten festgehalten.
+          </li>
+          <li>
+            ✔ Wir wissen, was wir bei jedem der vier Themen (A–D) fordern und was wir
+            anbieten können.
+          </li>
+          <li>
+            ✔ Wir haben Beispiele aus einem oder mehreren
+            <strong>realen Ländern</strong> recherchiert.
+          </li>
+          <li>
+            ✔ Unser <strong>Plädoyer</strong> ist vorbereitet, verteilt und geprobt
+            (ca. 1 Minute).
+          </li>
+          <li>
+            ✔ Wir haben eine grobe <strong>Verhandlungsstrategie</strong>:
+            Mit wem wollen wir Bündnisse schließen? Wo können wir nachgeben?
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Rollenkarte B – Aufstrebende Wirtschaftsmacht (Nation B)</span>
+      <span>Klimakonferenz 2025 · Geographie 10</span>
+    </footer>
+  </div>
+</body>
+</html>

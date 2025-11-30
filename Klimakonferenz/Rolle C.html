@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Rollenkarte C – Vulnerabler Inselstaat (Nation C)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js (nicht genutzt, nur für einheitlichen Stil eingebunden) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+    }
+    .content-font{font-family:'Raleway',sans-serif;}
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">
+          Rollenkarte C – Vulnerabler Inselstaat (Nation C)
+        </h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Klimakonferenz 2025 – Zukunftsabkommen von Genf<br/>
+        Geographie – Klasse 10
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- Abschnitt 1: Kurzsteckbrief -->
+      <section class="section-card p-4 md:p-5">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            1. Wer seid ihr? – Kurzsteckbrief der Rolle
+          </h2>
+          <span class="mini-heading text-gray-500">Überblick</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <!-- Beschreibung -->
+          <div class="md:col-span-2 space-y-2">
+            <p>
+              Ihr vertretet einen <strong>kleinen Inselstaat</strong>, z.&nbsp;B. im
+              Pazifik oder Indischen Ozean. Eure Inseln sind flach, traumhaft schön
+              und stark vom <strong>Meer</strong> geprägt – touristisch attraktiv,
+              aber auch sehr verletzlich.
+            </p>
+            <p>
+              Eure eigenen <strong>CO₂-Emissionen sind minimal</strong> im Vergleich zu
+              großen Ländern. Trotzdem seid ihr eine der Regionen, die am stärksten unter
+              dem <strong>Klimawandel</strong> leiden: Der Meeresspiegel steigt,
+              Stürme werden extremer, Korallenriffe sterben ab.
+            </p>
+            <p>
+              Für euch ist Klimapolitik eine <strong>Überlebensfrage</strong>:
+              Wenn die Erwärmung ungebremst weitergeht, drohen Teile eures Staatsgebiets
+              unbewohnbar oder komplett überflutet zu werden. Viele Menschen überlegen
+              schon jetzt, ob sie ihre Heimat verlassen müssen.
+            </p>
+            <p>
+              Ihr habt weltweit ein <strong>moralisches Argument</strong>: Ihr habt das
+              Problem kaum verursacht, tragt aber seine dramatischen Folgen. Dadurch
+              habt ihr in Klimaverhandlungen eine besondere Stimme.
+            </p>
+          </div>
+
+          <!-- Steckbrief -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-xs">
+            <div class="font-semibold text-green-900 mb-1">
+              Steckbrief: Nation C (vereinfacht)
+            </div>
+            <table class="w-full text-left border border-gray-200 bg-white">
+              <tbody>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Bevölkerung</th>
+                  <td class="border px-2 py-1">
+                    einige hunderttausend bis wenige Millionen Menschen,
+                    viele leben an der Küste
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Wirtschaft</th>
+                  <td class="border px-2 py-1">
+                    stark abhängig von <strong>Tourismus</strong>, Fischerei und etwas Landwirtschaft
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Energie</th>
+                  <td class="border px-2 py-1">
+                    bisher viel Diesel &amp; Importenergie, aber Potenzial für
+                    <strong>Sonne, Wind, Meeresenergie</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Rolle im Klima</th>
+                  <td class="border px-2 py-1">
+                    sehr geringe Emissionen, aber besonders stark von
+                    Meeresspiegelanstieg und Extremwetter betroffen
+                  </td>
+                </tr>
+                <tr>
+                  <th class="border px-2 py-1 align-top">Kernspannungsfeld</th>
+                  <td class="border px-2 py-1">
+                    <strong>Existenzsicherung</strong> vs. sehr begrenzte eigene Macht
+                    (ihr seid klein und wirtschaftlich schwach)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-2 text-gray-700">
+              Merke: Ihr seid <strong>Opfer</strong> des Klimawandels, wollt aber nicht
+              nur jammern, sondern aktiv Lösungen mitgestalten.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Ausgangslage & Dilemma -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            2. Eure Ausgangslage &amp; das zentrale Dilemma
+          </h2>
+          <span class="mini-heading text-gray-500">Hintergrund</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <div class="md:col-span-2 space-y-2">
+            <p>
+              Der Anstieg des Meeresspiegels ist für euch bereits sichtbar:
+              <strong>Strände schrumpfen, Häuser an der Küste werden unterspült,
+              Süßwasserlinsen versalzen</strong>. Manche Dörfer mussten schon
+              umgesiedelt werden.
+            </p>
+            <p>
+              Tropische Stürme werden häufiger und stärker. Sie zerstören Straßen,
+              Häfen, Stromleitungen und touristische Anlagen. Euer Staatshaushalt
+              ist klein – nach jeder Katastrophe fehlen Geld und Kapazitäten
+              für den Wiederaufbau.
+            </p>
+            <p>
+              Gleichzeitig hängt ein Großteil eurer Einnahmen vom
+              <strong>Tourismus</strong> ab: schöne Strände, Korallenriffe, intakte Natur.
+              Doch genau diese Grundlagen werden durch den Klimawandel zerstört.
+            </p>
+            <p>
+              Euer Dilemma:
+            </p>
+            <ul class="list-disc list-inside">
+              <li>
+                Ihr braucht <strong>massive Anpassungsmaßnahmen</strong> (Hochwasserschutz,
+                Trinkwasser, Schutz der Infrastruktur).
+              </li>
+              <li>
+                Ihr habt <strong>kaum Geld</strong> und nur geringe Verhandlungsmacht
+                gegenüber den großen Emittenten.
+              </li>
+              <li>
+                Ihr könnt mit euren eigenen Emissionen das Klima kaum beeinflussen,
+                seid aber voll von den Entscheidungen anderer abhängig.
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs">
+            <div class="font-semibold text-green-900 mb-2">
+              Zentrales Spannungsfeld (für eure Verhandlung)
+            </div>
+            <ol class="list-decimal list-inside space-y-1 text-gray-800">
+              <li>
+                Ohne <strong>ambitionierten globalen Klimaschutz</strong> wird euer
+                Land langfristig unbewohnbar.
+              </li>
+              <li>
+                Ihr seid <strong>auf Hilfe anderer angewiesen</strong>, habt selbst
+                aber nur begrenzten Einfluss.
+              </li>
+              <li>
+                Ihr müsst <strong>jetzt handeln</strong>, obwohl andere noch zögern.
+              </li>
+              <li>
+                Ihr wollt nicht nur Bittsteller sein, sondern als
+                <strong>moralische Stimme</strong> ernstgenommen werden.
+              </li>
+            </ol>
+            <p class="mt-2 text-gray-700">
+              Eure Leitfrage:<br/>
+              <em>„Wie bringen wir die großen Verursacher dazu, unsere
+              Existenz ernst zu nehmen – und uns wirklich zu unterstützen?“</em>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Interessen, Ziele, rote Linien -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            3. Eure wichtigsten Interessen, Ziele &amp; roten Linien
+          </h2>
+          <span class="mini-heading text-gray-500">Verhandlungsrahmen</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <!-- Interessen -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+            <div class="font-semibold text-green-900 mb-1">
+              Was ihr unbedingt wollt
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>Überleben sichern:</strong>
+                Das globale <strong>1,5-Grad-Ziel</strong> darf nicht aufgeweicht werden.
+                Jeder Zehntelgrad mehr bedeutet für euch verlorenes Land.
+              </li>
+              <li>
+                <strong>Schnelle Emissionsreduktionen</strong> der großen Emittenten
+                (Industrienationen und große Schwellenländer).
+              </li>
+              <li>
+                Einen starken <strong>Anpassungsfonds</strong> für Küstenschutz,
+                Trinkwassersicherung, Katastrophenschutz.
+              </li>
+              <li>
+                Einen eigenen <strong>„Loss &amp; Damage“-Mechanismus</strong>, der
+                Schäden ersetzt, die nicht mehr vermeidbar sind.
+              </li>
+              <li>
+                Respekt für eure <strong>Souveränität und Kultur</strong>: Falls
+                Umsiedlungen nötig werden, sollen sie menschenwürdig und mit
+                Mitsprache erfolgen.
+              </li>
+              <li>
+                Unterstützung beim <strongUmstieg auf erneuerbare Energien</strong>,
+                damit ihr eure wenigen Emissionen selbst stark senken könnt.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Rote Linien -->
+          <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+            <div class="font-semibold text-red-700 mb-1">
+              Rote Linien – das lehnt ihr ab
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Jede <strong>Aufweichung</strong> des 1,5-Grad-Ziels („2 Grad reichen doch“).
+              </li>
+              <li>
+                Verträge, die zwar viele schöne Worte enthalten, aber
+                <strong>keine klaren Zahlen</strong> zu Emissionsreduktion oder
+                Klimafinanzierung liefern.
+              </li>
+              <li>
+                Hilfszusagen ohne <strong>direkten Zugang</strong> für euch
+                (z.&nbsp;B. nur über komplizierte, langwierige Programme).
+              </li>
+              <li>
+                Projekte, bei denen eure Bevölkerung <strong>vertrieben</strong> wird
+                oder ihre kulturellen Wurzeln verliert, ohne selbst zu entscheiden.
+              </li>
+              <li>
+                Behauptungen, ihr sollt „euch eben umsiedeln“, ohne dass dafür
+                Verantwortung übernommen wird.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs text-gray-800">
+          <div class="font-semibold text-green-900 mb-1">
+            Mögliche Kompromisslinie (Merksatz)
+          </div>
+          <p>
+            <em>„Wir sind bereit, unsere eigene Entwicklung möglichst klimafreundlich
+            zu gestalten – aber dafür brauchen wir schnelle, verlässliche Unterstützung
+            und echte Anstrengungen der großen Emittenten.“</em>
+          </p>
+        </div>
+      </section>
+
+      <!-- Abschnitt 4: Position zu den vier Konferenzthemen -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            4. Eure Position zu den vier Verhandlungsthemen
+          </h2>
+          <span class="mini-heading text-gray-500">Fachliche Linie</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- Thema A: Emissionsreduktion -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema A</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Reduktion von Treibhausgasen
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr fordert, dass die Weltgemeinschaft klar beim
+                <strong>1,5-Grad-Ziel</strong> bleibt und die Emissionen schnell
+                und stark reduziert.
+              </li>
+              <li>
+                Von Industrienationen verlangt ihr:
+                <ul class="list-disc list-inside ml-4">
+                  <li>frühere Klimaneutralität (z.&nbsp;B. spätestens 2045),</li>
+                  <li>deutlich höhere Ziele bis 2030.</li>
+                </ul>
+              </li>
+              <li>
+                Von großen Schwellenländern erwartet ihr:
+                <strong>Emissionspeak bis ca. 2030</strong> und klaren Ausbau
+                erneuerbarer Energien.
+              </li>
+              <li>
+                Ihr selbst seid bereit, eure Emissionen
+                <strong>nahe Null</strong> zu bringen, wenn ihr beim Umbau
+                eurer Energieversorgung unterstützt werdet.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema B: Kohlenstoffsenken -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema B</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Schutz &amp; Ausbau von Kohlenstoffsenken
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Eure Korallenriffe, Mangrovenwälder und Seegraswiesen sind
+                wichtige <strong>CO₂-Speicher</strong> und schützen gleichzeitig
+                eure Küsten.
+              </li>
+              <li>
+                Ihr fordert Geld für Programme zur
+                <strong>Renaturierung und zum Schutz</strong> dieser Ökosysteme.
+              </li>
+              <li>
+                Ihr wollt sicherstellen, dass lokale Fischer:innen und Gemeinden
+                von Schutzprojekten profitieren und nicht verdrängt werden.
+              </li>
+              <li>
+                Ihr akzeptiert internationale Partnerschaften (z.&nbsp;B. Meeresschutzgebiete),
+                wenn sie euch helfen, Küstenschutz und Naturschutz zu verbinden.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema C: Anpassung -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema C</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Anpassung an den Klimawandel
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Anpassung ist für euch <strong>überlebenswichtig</strong>:
+                Küstenschutz, höher gelegene Siedlungen, stabile Trinkwasserversorgung.
+              </li>
+              <li>
+                Ihr fordert, dass <strong>vulnerable Staaten wie ihr</strong> beim
+                globalen Anpassungsfonds Vorrang haben.
+              </li>
+              <li>
+                Ihr benötigt Unterstützung für:
+                <ul class="list-disc list-inside ml-4">
+                  <li>Deiche, Schutzmauern, Mangrovenpflanzungen,</li>
+                  <li>Trinkwasserentsalzung und Speicher,</li>
+                  <li>Katastrophenschutz &amp; Evakuierungspläne.</li>
+                </ul>
+              </li>
+              <li>
+                Ihr fordert Schulungsprogramme, damit eure Bevölkerung lernt,
+                mit den neuen Risiken umzugehen.
+              </li>
+            </ul>
+          </article>
+
+          <!-- Thema D: Finanzierung & Technologie -->
+          <article class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <div class="mini-heading text-green-800 mb-1">Thema D</div>
+            <h3 class="font-semibold text-green-900 mb-1 text-sm">
+              Finanzierung &amp; Technologietransfer
+            </h3>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                Ihr seid auf <strong>ausländische Finanzmittel</strong> angewiesen,
+                um Klimaschutz und Anpassung zu finanzieren.
+              </li>
+              <li>
+                Ihr fordert direkten Zugang zu einem
+                <strong>„Loss &amp; Damage“-Fonds</strong>, um Schäden nach
+                Stürmen oder Überflutungen zu decken.
+              </li>
+              <li>
+                Ihr wollt Hilfe beim Ausbau erneuerbarer Energien:
+                Solaranlagen, kleine Windräder, Speicher, Inselnetze.
+              </li>
+              <li>
+                Ihr verlangt, dass zumindest ein Teil der Technik zu
+                <strong>vergünstigten Bedingungen</strong> bereitgestellt wird.
+              </li>
+              <li>
+                Im Gegenzug bietet ihr:
+                <ul class="list-disc list-inside ml-4">
+                  <li>eine Umstellung eurer Stromversorgung auf fast 100&nbsp;% Erneuerbare,</li>
+                  <li>die Einrichtung von Modellprojekten für nachhaltigen Tourismus,</li>
+                  <li>die Mitarbeit an internationalen Meeresschutzprogrammen.</li>
+                </ul>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 5: Vorbereitung auf die Konferenz -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            5. Eure Vorbereitung: Recherche, Positionspapier &amp; Plädoyer
+          </h2>
+          <span class="mini-heading text-gray-500">Arbeitsaufträge</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-sm text-gray-800">
+          <!-- Recherche -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-green-900 mb-1 text-sm">
+              A) Recherche
+            </div>
+            <p class="text-xs mb-1">
+              Sucht Informationen zu <strong>realen Inselstaaten</strong>,
+              die eurer Rolle ähneln (z.&nbsp;B. Tuvalu, Kiribati, Malediven,
+              Marshallinseln, Fidschi):
+            </p>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>Wie hoch liegt der höchste Punkt des Landes (in Metern)?</li>
+              <li>Wie viele Menschen leben dort und wovon?</li>
+              <li>Welche <strong>Klimafolgen</strong> sind bereits sichtbar?</li>
+              <li>Was fordern diese Staaten auf internationalen Klimakonferenzen?</li>
+              <li>
+                Gibt es Pläne oder Diskussionen über <strong>Umsiedlungen</strong>?
+              </li>
+            </ul>
+          </div>
+
+          <!-- Positionspapier -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-green-900 mb-1 text-sm">
+              B) Positionspapier (Stichpunkte)
+            </div>
+            <p class="text-xs mb-1">
+              Haltet auf einem Blatt fest:
+            </p>
+            <ul class="list-disc list-inside text-xs space-y-1">
+              <li>
+                <strong>3–5 Hauptforderungen</strong> eures Inselstaats
+                (z.&nbsp;B. 1,5-Grad-Ziel, Loss &amp; Damage, Anpassungsfonds).
+              </li>
+              <li>
+                <strong>2–3 rote Linien</strong> (z.&nbsp;B. keine Aufweichung des
+                1,5-Grad-Ziels).
+              </li>
+              <li>
+                <strong>mindestens 2 konkrete Angebote</strong>, was ihr selbst
+                beitragen könnt (z.&nbsp;B. Umstieg auf erneuerbare Energien,
+                Meeresschutzgebiete).
+              </li>
+              <li>
+                Zu jedem Verhandlungsthema (A–D) einen Bulletpoint:
+                <em>Was fordert ihr? Was bietet ihr an?</em>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Plädoyer -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 md:col-span-1">
+            <div class="font-semibold text-yellow-800 mb-1 text-sm">
+              C) Plädoyer (Eröffnungsrede, ca. 1 Minute)
+            </div>
+            <p class="text-xs mb-1">
+              Formuliert eine kurze Rede, in der:
+            </p>
+            <ol class="list-decimal list-inside text-xs space-y-1">
+              <li>
+                ihr eure <strong>Situation bildhaft beschreibt</strong>:
+                Meer, Küsten, bedrohte Dörfer, Stürme.
+              </li>
+              <li>
+                ihr deutlich macht, dass ihr das Problem kaum verursacht habt,
+                aber zu den ersten gehört, die darunter leiden.
+              </li>
+              <li>
+                ihr klar sagt, welche <strong>Forderung an die großen Emittenten</strong>
+                euch am wichtigsten ist.
+              </li>
+              <li>
+                ihr zeigt, dass ihr selbst bereit seid, Verantwortung zu übernehmen
+                (z.&nbsp;B. erneuerbare Energien, Naturschutz).
+              </li>
+              <li>
+                ihr an die <strong>Gerechtigkeit und Menschlichkeit</strong>
+                der anderen appelliert.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 6: Checkliste -->
+      <section class="relative bg-green-50 border-2 border-green-700 rounded-xl p-4 md:p-5">
+        <div class="absolute -top-3 left-4 bg-green-700 text-white text-xs px-3 py-1 rounded-full font-semibold">
+          6. Checkliste für eure Gruppe
+        </div>
+        <p class="mt-1 mb-2 text-sm text-gray-800">
+          Prüft vor der Konferenz, ob ihr alles vorbereitet habt:
+        </p>
+        <ul class="list-disc list-inside text-xs text-gray-800 space-y-1 ml-1">
+          <li>
+            ✔ Wir können erklären, <strong>wer wir sind</strong> (kleiner Inselstaat,
+            sehr verwundbar, kaum Emissionen).
+          </li>
+          <li>
+            ✔ Wir kennen unsere <strong>wichtigsten Interessen und roten Linien</strong>.
+          </li>
+          <li>
+            ✔ Wir haben zu allen vier Themen (A–D) festgehalten, was wir fordern
+            und was wir anbieten.
+          </li>
+          <li>
+            ✔ Wir haben <strong>Beispiele aus echten Inselstaaten</strong>
+            recherchiert und können sie nennen.
+          </li>
+          <li>
+            ✔ Unser <strong>Plädoyer</strong> ist fertig formuliert und geübt
+            (ca. 1 Minute Redezeit).
+          </li>
+          <li>
+            ✔ Wir wissen, mit wem wir in den Verhandlungen
+            <strong>Bündnisse</strong> suchen wollen (z.&nbsp;B. NGO-Allianz,
+            andere verwundbare Länder).
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Rollenkarte C – Vulnerabler Inselstaat (Nation C)</span>
+      <span>Klimakonferenz 2025 · Geographie 10</span>
+    </footer>
+  </div>
+</body>
+</html>

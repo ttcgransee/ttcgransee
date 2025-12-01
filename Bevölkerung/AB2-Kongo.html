@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Arbeitsblatt – DR Kongo: Bevölkerungsexplosion & Megacity Kinshasa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+    }
+    .content-font{font-family:'Raleway',sans-serif;}
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+    .badge{
+      display:inline-block;
+      padding:0.1rem 0.5rem;
+      border-radius:999px;
+      font-size:0.7rem;
+      font-weight:600;
+      background:#064E3B;
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">DR Kongo – Bevölkerungsexplosion &amp; Megacity Kinshasa</h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Bevölkerungsentwicklung, Verstädterung &amp; Armut<br/>
+        Geographie – Klasse 12
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- Abschnitt 1: Einstieg & Ländersteckbrief -->
+      <section class="section-card p-4 md:p-5">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            1. Einstieg: DR Kongo – riesig, reich an Rohstoffen, arm an Infrastruktur
+          </h2>
+          <span class="mini-heading text-gray-500">Material M1 – Ländersteckbrief (vereinfacht)</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <div class="space-y-2">
+            <p>
+              Die <strong>Demokratische Republik Kongo</strong> (DR Kongo) ist flächenmäßig eines der größten Länder Afrikas
+              und besitzt enorme Rohstoffvorkommen (z.&nbsp;B. Kupfer, Kobalt, Coltan). Gleichzeitig gehört sie zu den
+              ärmsten Ländern der Welt. Seit 1990 hat sich die Bevölkerung etwa verdreifacht und könnte bis 2050
+              auf über <strong>200 Millionen Menschen</strong> anwachsen.
+            </p>
+            <p>
+              Die Altersstruktur ist extrem jung: fast die Hälfte der Bevölkerung ist jünger als 15 Jahre.
+              Das bedeutet eine große Zahl an Kindern und Jugendlichen, die versorgt, ausgebildet und später in Arbeit
+              gebracht werden müssen. Schulen, Gesundheitszentren und Arbeitsplätze sind vielerorts knapp.
+            </p>
+            <p>
+              Lange Bürgerkriege, Konflikte im Osten des Landes und schwache staatliche Strukturen verschärfen die Lage.
+              Viele Menschen fliehen vor Gewalt und suchen Schutz – häufig in städtischen Gebieten. Die Hauptstadt
+              <strong>Kinshasa</strong> wächst zu einer der größten Megastädte Afrikas heran. Dort zeigen sich die Folgen
+              von Bevölkerungsexplosion, Land-Stadt-Wanderung und Armut besonders deutlich.
+            </p>
+            <p class="text-xs text-gray-500">
+              Hinweis: Alle Daten in diesem Arbeitsblatt sind für den Unterricht vereinfacht und gerundet.
+              Für exakte Werte kannst du später Originalquellen (z.&nbsp;B. UN, Weltbank) nutzen.
+            </p>
+          </div>
+
+          <!-- Steckbrief -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-xs md:text-sm">
+            <div class="font-semibold text-green-900 mb-1">Steckbrief DR Kongo (Auswahl, gerundet)</div>
+            <table class="w-full text-xs border border-gray-200 bg-white">
+              <tbody>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Fläche</td>
+                  <td class="border px-2 py-1">≈ 2.345.000 km²</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Einwohnerzahl 1990</td>
+                  <td class="border px-2 py-1">≈ 36 Mio.</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Einwohnerzahl 2020</td>
+                  <td class="border px-2 py-1">≈ 94 Mio.</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Projektion 2050</td>
+                  <td class="border px-2 py-1">≈ 218 Mio.</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Lebenserwartung 1990</td>
+                  <td class="border px-2 py-1">≈ 49 Jahre</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Lebenserwartung 2020</td>
+                  <td class="border px-2 py-1">≈ 61 Jahre</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">BIP je Einwohner (2020)</td>
+                  <td class="border px-2 py-1">&lt; 1.500 US-$ (Kaufkraft, grob)</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Urbanisierungsgrad 1990</td>
+                  <td class="border px-2 py-1">≈ 29&nbsp;% Stadtbevölkerung</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Urbanisierungsgrad 2020</td>
+                  <td class="border px-2 py-1">≈ 45&nbsp;% Stadtbevölkerung</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Urbanisierungsgrad 2050*</td>
+                  <td class="border px-2 py-1">≈ 60&nbsp;% (Projektion)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-[0.65rem] text-gray-600 mt-2">
+              *Projektionen: UN / UN-Habitat (vereinfacht). Exakte Werte können je nach Quelle leicht abweichen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Material A – Bevölkerungspyramiden & Bildung -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            2. Material A – Altersstruktur & Bildungsniveau in der DR Kongo
+          </h2>
+          <span class="mini-heading text-gray-500">Bevölkerungspyramiden &amp; Bildung (vereinfacht)</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- A1: Bevölkerungspyramide -->
+          <article class="space-y-2">
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-gray-500 uppercase tracking-wide">
+                M1 – Bevölkerungspyramide (Auswahljahre)
+              </p>
+              <div class="text-xs flex items-center gap-2">
+                <label for="pyramidYear" class="font-semibold text-gray-700">Jahr:</label>
+                <select id="pyramidYear" class="border border-gray-300 rounded px-1 py-0.5 text-xs">
+                  <option value="1990">1990</option>
+                  <option value="2020" selected>2020</option>
+                  <option value="2050">2050 (Projektion)</option>
+                </select>
+              </div>
+            </div>
+            <p class="text-xs text-gray-700">
+              Die Bevölkerungspyramide zeigt eine <strong>vereinfachte Altersstruktur</strong> der DR Kongo.
+              Unten steht die jüngste Altersgruppe (0–14 Jahre), oben die älteste (65+).
+              Die Balken zeigen, wie groß der Anteil der jeweiligen Altersgruppe an der Gesamtbevölkerung ist.
+              Die Form der Pyramide verrät dir, ob ein Land sehr jung ist, sich stabilisiert oder langsam altert.
+            </p>
+            <div style="width:100%; height:260px;">
+              <canvas id="pyramidChart"></canvas>
+            </div>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Im Jahr 1990 ist die Basis extrem breit – ein Zeichen für sehr hohe Geburtenraten.
+              Bis 2050 wird die Basis etwas schmaler, der Mittelteil breiter: Die Bevölkerung bleibt jung,
+              aber der demografische Übergang hat begonnen.
+            </p>
+          </article>
+
+          <!-- A2: Bildungsniveau nach Altersgruppen -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              M2 – Bildungsniveau nach Altersgruppen (DR Kongo, ca. 2020, vereinfacht)
+            </p>
+            <p class="text-xs text-gray-700">
+              In der DR Kongo ist Bildung sehr ungleich verteilt. In ländlichen Gebieten und in
+              Konfliktregionen brechen viele Kinder die Schule früh ab. Jüngere Generationen haben
+              im Durchschnitt höhere Bildungsniveaus als ältere, aber insgesamt ist der Anteil an
+              Menschen mit Sekundar- oder Tertiärbildung noch relativ gering.
+            </p>
+            <div style="width:100%; height:260px;">
+              <canvas id="educationChart"></canvas>
+            </div>
+            <ul class="text-xs list-disc list-inside text-gray-700 mt-1">
+              <li>„Ohne / Primar“ = keine Schule oder nur Grundschule.</li>
+              <li>„Sekundar“ = abgeschlossene Sekundarschule, College.</li>
+              <li>„Tertiär“ = Universität, Fachhochschule oder vergleichbare Ausbildung.</li>
+            </ul>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Bildung – vor allem von Mädchen – ist eine zentrale Voraussetzung dafür, dass
+              Geburtenraten sinken, Armut abnimmt und mehr Menschen am wirtschaftlichen Wachstum teilnehmen können.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Material B – Geburten-, Sterbe- und Wachstumsrate -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            3. Material B – Geburten-, Sterbe- und Wachstumsrate in der DR Kongo
+          </h2>
+          <span class="mini-heading text-gray-500">Zeitreihe (vereinfacht, je 1000 Einwohner)</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500">
+              Die Grafik zeigt, wie sich drei wichtige Kennziffern seit 1990 verändert haben:
+            </p>
+            <ul class="list-disc list-inside text-xs">
+              <li><strong>Geburtenrate (CBR)</strong>: Geburten je 1000 Einwohner und Jahr.</li>
+              <li><strong>Sterberate (CDR)</strong>: Todesfälle je 1000 Einwohner und Jahr.</li>
+              <li><strong>Natürliches Wachstum</strong>: Geburtenrate minus Sterberate.</li>
+            </ul>
+            <p class="text-xs text-gray-700">
+              In der DR Kongo ist die Geburtenrate seit Jahrzehnten sehr hoch und sinkt nur langsam.
+              Gleichzeitig ist die Sterberate zwar zurückgegangen, bleibt aber durch Konflikte, Armut
+              und schwache Gesundheitsversorgung relativ hoch. Das <strong>natürliche Wachstum</strong>
+              ist deshalb stärker als in vielen anderen Ländern auf ähnlichem Entwicklungsniveau.
+            </p>
+            <p class="text-xs text-gray-700">
+              Auch wenn die Kinderzahl pro Frau in Zukunft sinkt, wächst die Bevölkerung weiter –
+              weil schon heute sehr viele Kinder und Jugendliche leben. Dieses „Nachschwingen“ der
+              Altersstruktur nennt man <strong>Bevölkerungsträgheit</strong> (demographic momentum).
+            </p>
+          </article>
+          <article>
+            <div style="width:100%; height:260px;">
+              <canvas id="ratesChart"></canvas>
+            </div>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Die Werte sind vereinfacht und orientieren sich grob an typischen Datensätzen (z.&nbsp;B.
+              Geburtenrate um 1990 &gt; 45, heute knapp über 40 je 1000 Einwohner). Für exakte Analysen
+              kannst du später Originaldaten verwenden.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 4: Material C – Verstädterung & Megacity Kinshasa -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            4. Material C – Verstädterung in der DR Kongo &amp; Megacity Kinshasa
+          </h2>
+          <span class="mini-heading text-gray-500">Urbanisierungsgrad, Stadtwachstum &amp; Slums</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- C1: Urbanisierungsgrad -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              M3 – Anteil der Stadtbevölkerung in der DR Kongo (vereinfacht)
+            </p>
+            <p class="text-xs">
+              Die DR Kongo war lange überwiegend ländlich geprägt. Seit den 1990er Jahren wächst die
+              <strong>Stadtbevölkerung</strong> sehr schnell: 1990 lebten knapp 30&nbsp;% der Menschen in Städten,
+              heute sind es bereits deutlich über 40&nbsp;%. Für 2050 wird ein Anteil von rund
+              <strong>60&nbsp;% Stadtbevölkerung</strong> erwartet.
+            </p>
+            <p class="text-xs">
+              Gründe sind neben der natürlichen Bevölkerungszunahme auch <strong>Land-Stadt-Wanderung</strong>:
+              Viele Menschen verlassen ländliche Regionen, weil dort Armut, fehlende Infrastruktur
+              oder Unsicherheit herrschen, und hoffen in den Städten auf Arbeit, Schutz und bessere
+              Lebensbedingungen.
+            </p>
+            <div style="width:100%; height:220px;">
+              <canvas id="urbanChart"></canvas>
+            </div>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Wenn Städte schneller wachsen, als Wohnungen, Straßen, Wasser- und Stromversorgung ausgebaut werden,
+              entstehen Engpässe und informelle Siedlungen – die Lebensqualität vieler Menschen sinkt.
+            </p>
+          </article>
+
+          <!-- C2: Kinshasa als Megacity -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              M4 – Kinshasa: Wachstum einer Megacity (vereinfacht)
+            </p>
+            <p class="text-xs">
+              Kinshasa ist Hauptstadt und wirtschaftliches Zentrum der DR Kongo. Von einer Stadt mit wenigen
+              Millionen Einwohnern ist sie in wenigen Jahrzehnten zu einer <strong>Megacity mit weit über
+              15 Millionen Einwohnern</strong> geworden. Prognosen gehen davon aus, dass Kinshasa bis 2050
+              zu den größten Städten der Welt gehören könnte.
+            </p>
+            <p class="text-xs">
+              Die Stadt wächst durch natürliche Bevölkerungszunahme, Zuwanderung aus dem Hinterland und
+              Binnenflüchtlinge, die vor Konflikten fliehen. Viele Neuankömmlinge finden keinen Platz im
+              formellen Wohnungsmarkt und siedeln in <strong>informellen Quartieren</strong> am Stadtrand
+              oder in innerstädtischen Lücken.
+            </p>
+            <div style="width:100%; height:220px;">
+              <canvas id="lagosChart"></canvas>
+            </div>
+
+            <!-- Bildplatzhalter -->
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <img src="https://i.pinimg.com/474x/11/16/75/1116755c7b02bf03d78826e3c4e1f880.jpg">
+               
+              </div>
+              <img src="https://images.squarespace-cdn.com/content/v1/5b337d97cc8fed47c3d96ba8/1531146875330-LX12B7M3R9703D7QKI6A/IMG_2371%2C+Kinshasa+%28Polio+tailors+association%29.JPG">
+              
+              </div>
+            </div>
+
+
+            <div class="mt-2 bg-red-50 border border-red-200 rounded-md p-2 text-[0.7rem]">
+              <div class="font-semibold text-red-700 mb-1">Probleme des Wachstums in Kinshasa (Beispiele)</div>
+              <ul class="list-disc list-inside space-y-1 text-red-900">
+                <li>Entstehung großer <strong>informeller Siedlungen</strong> ohne gesichertes Landrecht.</li>
+                <li>Mangel an sauberem Trinkwasser, Abwasserentsorgung und Müllabfuhr.</li>
+                <li>Überfüllte Wohnungen, hohe Mieten, wenige legale Bauflächen.</li>
+                <li>Starker Verkehr, Staus, Luftverschmutzung, lange Wege zur Arbeit.</li>
+                <li>Viele Menschen arbeiten im <strong>informellen Sektor</strong> (z.&nbsp;B. Kleinsthandel, Transport, Gelegenheitsjobs).</li>
+                <li>Hohe Verwundbarkeit bei Überschwemmungen und Erdrutschen an Hängen.</li>
+              </ul>
+              <p class="mt-1">
+                Die Kombination aus <strong>Bevölkerungsexplosion</strong>, <strong>Armut</strong> und
+                <strong>Konflikten</strong> macht Kinshasa zu einem gesellschaftlich und räumlich sehr
+                angespannten Stadtraum.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 5: Material D – Ursachen, Folgen & Strategien -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-1">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            5. Material D – Ursachen &amp; Folgen des Bevölkerungs- und Stadtwachstums
+          </h2>
+          <span class="mini-heading text-gray-500">Textbausteine für deine Auswertung</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-xs md:text-sm text-gray-800">
+          <!-- Ursachen -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+            <div class="badge mb-2">Ursachen</div>
+            <p class="mb-1">
+              Das starke Bevölkerungs- und Stadtwachstum in der DR Kongo hat vielfältige Ursachen.
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Sehr hohe <strong>Fertilitätsraten</strong> (viele Kinder pro Frau) – noch immer deutlich über dem Weltdurchschnitt.</li>
+              <li>Verbesserte medizinische Versorgung in einigen Regionen → mehr Kinder überleben das Kleinkindalter.</li>
+              <li>Armut: Kinder tragen oft früh zum <strong>Haushaltseinkommen</strong> bei und gelten als Unterstützung im Alter.</li>
+              <li>Konflikte im Osten des Landes → Binnenflüchtlinge ziehen in sichere Regionen und Städte.</li>
+              <li>Land-Stadt-Wanderung, weil ländliche Infrastruktur, Schulen und Gesundheitsversorgung fehlen.</li>
+              <li>Schwache staatliche Strukturen: Familienplanung, Bildung und Sozialpolitik können nicht flächendeckend umgesetzt werden.</li>
+            </ul>
+          </div>
+
+          <!-- Folgen -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <div class="badge mb-2">Folgen</div>
+            <p class="mb-1">
+              Die Folgen betreffen Umwelt, Wirtschaft und Gesellschaft – sowohl auf dem Land
+              als auch in den städtischen Räumen.
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Schnelles Anwachsen der Bevölkerung → Druck auf Landwirtschaft, Wälder und Rohstoffe.</li>
+              <li>Ausbreitung informeller Siedlungen in Kinshasa und anderen Städten.</li>
+              <li>Überlastete Schulen, zu wenige Lehrkräfte, überfüllte Klassen.</li>
+              <li>Schwache Gesundheitsversorgung, insbesondere in ländlichen Regionen und Slums.</li>
+              <li>Hohe Arbeitslosigkeit und Unterbeschäftigung → viele Menschen im informellen Sektor.</li>
+              <li>Umweltprobleme: Abholzung, Bodenerosion, Verschmutzung von Flüssen und Böden.</li>
+              <li>Verstärkung bestehender Ungleichheiten zwischen reichen Eliten und armer Mehrheit.</li>
+            </ul>
+          </div>
+
+          <!-- Strategien -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div class="badge mb-2">Strategien &amp; Maßnahmen</div>
+            <p class="mb-1">
+              Staat, Kirchen, Nichtregierungsorganisationen und internationale Partner versuchen,
+              das Wachstum zu steuern und Lebensbedingungen zu verbessern.
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Ausbau von <strong>Grundbildung</strong> und Alphabetisierung, insbesondere für Mädchen.</li>
+              <li>Programme zur <strong>Familienplanung</strong> (Gesundheitsberatung, Zugang zu Verhütungsmitteln).</li>
+              <li>Verbesserung der Gesundheitsversorgung (Impfprogramme, Mutter-Kind-Betreuung).</li>
+              <li>Friedensprozesse und Versuche, Konfliktregionen zu stabilisieren.</li>
+              <li>Stadtplanung in Kinshasa: Ausbau von Straßen, Strom- und Wasserleitungen.</li>
+              <li>Slum-Aufwertung durch Basisinfrastruktur (Wasser, Sanitäranlagen, Müllentsorgung).</li>
+              <li>Nachhaltige Nutzung von Rohstoffen, um langfristige Einnahmen für Bildung und Infrastruktur zu sichern.</li>
+            </ul>
+            <p class="mt-1 text-[0.7rem] text-gray-700">
+              Viele Projekte stehen am Anfang und stoßen auf finanzielle und politische Grenzen.
+              Trotzdem zeigen Beispiele aus einzelnen Regionen, dass Verbesserungen möglich sind,
+              wenn Bildung, Gesundheit, Frieden und Stadtplanung zusammen gedacht werden.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 6: Aufgaben – sinnstiftende Bearbeitung (du-Form) -->
+      <section class="relative bg-green-50 border-2 border-green-700 rounded-xl p-4 md:p-5">
+        <div class="absolute -top-3 left-4 bg-green-700 text-white text-xs px-3 py-1 rounded-full font-semibold">
+          6. Aufgaben (Einzelarbeit / Gruppenarbeit)
+        </div>
+        <ol class="list-decimal list-inside text-sm text-gray-800 mt-2 space-y-1 md:space-y-2">
+          <li>
+            Nutze <strong>Material M1</strong> (Steckbrief).
+            Beschreibe in 5–6 Sätzen, warum man bei der DR Kongo von einer
+            <strong>Bevölkerungsexplosion</strong> sprechen kann. Gehe dabei auf Einwohnerzahl,
+            Wachstumsraten und die Rolle der Großstädte ein.
+          </li>
+          <li>
+            Betrachte die <strong>Bevölkerungspyramiden in M1</strong> (Jahre 1990, 2020, 2050).
+            <ul class="list-disc list-inside ml-4">
+              <li>Beschreibe für jedes Jahr die Form der Pyramide (z.&nbsp;B. „extrem breite Basis“, „leicht schmalere Basis“).</li>
+              <li>Ordne die DR Kongo einem Stadium des <strong>demografischen Übergangs</strong> zu und begründe deine Entscheidung.</li>
+              <li>(Optional) Vergleiche die Pyramiden der DR Kongo mit denen von Nigeria oder Bangladesch: Welche Unterschiede erkennst du?</li>
+            </ul>
+          </li>
+          <li>
+            Nutze <strong>Material M2</strong> (Bildungsniveau nach Altersgruppen).
+            <ul class="list-disc list-inside ml-4">
+              <li>Vergleiche den Bildungsstand der Altersgruppen 20–24 und 50+.</li>
+              <li>Erkläre, wie sich bessere Bildung – vor allem von Mädchen – langfristig auf
+                  <strong>Geburtenrate</strong>, <strong>Armut</strong> und <strong>Stadtentwicklung</strong> auswirken kann.</li>
+            </ul>
+          </li>
+          <li>
+            Analysiere mit Hilfe von <strong>Material B</strong> (Geburten-, Sterbe- und Wachstumsrate),
+            warum die Bevölkerung der DR Kongo trotz Konflikten und Armut stark wächst.
+            Erkläre den Begriff <strong>Bevölkerungsträgheit</strong> (demographic momentum)
+            in eigenen Worten und nutze Beispiele aus den Daten.
+          </li>
+          <li>
+            Nutze <strong>Material C</strong> (Urbanisierung &amp; Megacity Kinshasa).
+            <ul class="list-disc list-inside ml-4">
+              <li>Beschreibe die Entwicklung des Urbanisierungsgrades in der DR Kongo von 1990 bis 2050.</li>
+              <li>Erkläre, warum Kinshasa so schnell wächst (Push-Faktoren vom Land, Pull-Faktoren der Stadt).</li>
+              <li>Stelle dar, welche Probleme aus dem schnellen Wachstum für Kinshasa und seine Einwohner entstehen
+                  (z.&nbsp;B. informelle Siedlungen, Armut, Verkehr, Umweltbelastung).</li>
+            </ul>
+          </li>
+          <li>
+            Erstelle auf Grundlage von <strong>Material D</strong> eine Tabelle mit zwei Spalten:
+            <strong>„Chancen des Bevölkerungs- und Stadtwachstums“</strong> und
+            <strong>„Risiken des Bevölkerungs- und Stadtwachstums“</strong> für die DR Kongo
+            (besonders für Kinshasa). Trage in jede Spalte mindestens <strong>5 Stichpunkte</strong> ein.
+          </li>
+          <li>
+            Entwickle ein eigenes <strong>Maßnahmenpaket</strong>, mit dem die DR Kongo das Bevölkerungs-
+            und Stadtwachstum steuern und gleichzeitig Armut und Slumbildung verringern könnte.
+            Notiere in Stichpunkten:
+            <ul class="list-disc list-inside ml-4">
+              <li>mindestens 3 Maßnahmen im Bereich Bildung/Familienplanung,</li>
+              <li>mindestens 3 Maßnahmen im Bereich Stadtplanung/Slum-Aufwertung,</li>
+              <li>mindestens 2 Maßnahmen im Bereich Friedenssicherung/Konfliktlösung.</li>
+            </ul>
+            Begründe jeweils kurz, warum du diese Maßnahmen für sinnvoll hältst.
+          </li>
+        </ol>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Arbeitsblatt – DR Kongo: Bevölkerungsexplosion &amp; Megacity Kinshasa</span>
+      <span>Geographie 12</span>
+    </footer>
+  </div>
+
+  <!-- Diagramme / Charts -->
+  <script>
+    // Globale Schriftart für Charts
+    Chart.defaults.font.family = "'Raleway','system-ui','-apple-system','BlinkMacSystemFont','Segoe UI',sans-serif";
+    Chart.defaults.font.size = 10;
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+
+    // ------------------------------
+    // A1: Bevölkerungspyramide
+    // ------------------------------
+    const ageGroups = ['0–14','15–24','25–34','35–44','45–54','55–64','65+'];
+
+    // stark vereinfachte Prozentanteile je Altersgruppe (gesamt) für 3 Jahre
+    const pyramidData = {
+      1990: [47, 19, 14, 10, 6, 3, 1],
+      2020: [42, 19, 15, 11, 7, 4, 2],
+      2050: [35, 18, 17, 13, 9, 5, 3] // Projektion: etwas schmalere Basis, breiterer Mittelteil
+    };
+
+    const pyramidCtx = document.getElementById('pyramidChart').getContext('2d');
+
+    // Symmetrische Darstellung: Männer = -Hälfte, Frauen = +Hälfte
+    function getPyramidDataset(year) {
+      const total = pyramidData[year];
+      const male = total.map(v => -v / 2);
+      const female = total.map(v => v / 2);
+      return { male, female };
+    }
+
+    const startYear = '2020';
+    const startData = getPyramidDataset(startYear);
+
+    const pyramidChart = new Chart(pyramidCtx, {
+      type: 'bar',
+      data: {
+        labels: ageGroups,
+        datasets: [
+          {
+            label: 'Männer (%)',
+            data: startData.male,
+            backgroundColor: 'rgba(37,99,235,0.7)'
+          },
+          {
+            label: 'Frauen (%)',
+            data: startData.female,
+            backgroundColor: 'rgba(236,72,153,0.7)'
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              callback: function(value) {
+                return Math.abs(value) + ' %';
+              }
+            },
+            title: {
+              display: true,
+              text: 'Bevölkerungsanteil (%)'
+            }
+          },
+          y: {
+            stacked: true,
+            reverse: true   // 0–14 Jahre unten, 65+ oben
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const label = ctx.dataset.label || '';
+                const val = Math.abs(ctx.parsed.x).toFixed(1);
+                return label + ': ' + val + ' %';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    document.getElementById('pyramidYear').addEventListener('change', (e) => {
+      const year = e.target.value;
+      const data = getPyramidDataset(year);
+      pyramidChart.data.datasets[0].data = data.male;
+      pyramidChart.data.datasets[1].data = data.female;
+      pyramidChart.update();
+    });
+
+    // ------------------------------
+    // A2: Bildungsniveau nach Altersgruppen
+    // ------------------------------
+    const eduCtx = document.getElementById('educationChart').getContext('2d');
+
+    // Altersgruppen (vereinfacht): 20–24, 25–34, 35–49, 50+
+    const eduLabels = ['20–24','25–34','35–49','50+'];
+
+    // Anteile in % (vereinfachte, plausible Werte für DR Kongo):
+    const eduPrimary = [35, 40, 50, 65];   // keine/Primar
+    const eduSecondary = [55, 50, 45, 33]; // Sekundar
+    const eduTertiary = [10, 10, 5, 2];    // Tertiär
+
+    new Chart(eduCtx, {
+      type: 'bar',
+      data: {
+        labels: eduLabels,
+        datasets: [
+          {
+            label: 'Ohne / Primar (%)',
+            data: eduPrimary,
+            backgroundColor: 'rgba(248,250,252,1)',
+            borderColor: 'rgba(148,163,184,1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Sekundar (%)',
+            data: eduSecondary,
+            backgroundColor: 'rgba(16,185,129,0.7)'
+          },
+          {
+            label: 'Tertiär (%)',
+            data: eduTertiary,
+            backgroundColor: 'rgba(59,130,246,0.7)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Anteil in der Altersgruppe (%)'
+            },
+            max: 100
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)} %`
+            }
+          }
+        }
+      }
+    });
+
+    // ------------------------------
+    // B: Geburten-, Sterbe- und Wachstumsrate (vereinfacht)
+    // ------------------------------
+    const ratesCtx = document.getElementById('ratesChart').getContext('2d');
+
+    // Werte pro 1000 Einwohner, grob angelehnt an UN/Weltbank
+    const rateYears = [1990, 2000, 2010, 2020, 2030, 2050];
+    const births = [47, 46, 45, 42, 39, 35];  // Geburtenrate
+    const deaths = [17, 16, 14, 12, 11, 9];   // Sterberate
+    const growth = births.map((b, i) => b - deaths[i]); // natürliches Wachstum
+
+    new Chart(ratesCtx, {
+      type: 'line',
+      data: {
+        labels: rateYears,
+        datasets: [
+          {
+            label: 'Geburtenrate (CBR)',
+            data: births,
+            borderColor: 'rgba(37,99,235,1)',
+            backgroundColor: 'rgba(37,99,235,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: false
+          },
+          {
+            label: 'Sterberate (CDR)',
+            data: deaths,
+            borderColor: 'rgba(239,68,68,1)',
+            backgroundColor: 'rgba(239,68,68,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: false
+          },
+          {
+            label: 'Natürliches Wachstum',
+            data: growth,
+            borderColor: 'rgba(16,185,129,1)',
+            backgroundColor: 'rgba(16,185,129,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Jahr'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Werte je 1000 Einwohner'
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} je 1000`
+            }
+          }
+        }
+      }
+    });
+
+    // ------------------------------
+    // C1: Urbanisierungsgrad DR Kongo
+    // ------------------------------
+    const urbanCtx = document.getElementById('urbanChart').getContext('2d');
+
+    const urbanYears = [1990, 2000, 2010, 2020, 2030, 2050];
+    const urbanShare = [29, 32, 38, 45, 53, 60]; // % Stadtbevölkerung, vereinfacht
+
+    new Chart(urbanCtx, {
+      type: 'line',
+      data: {
+        labels: urbanYears,
+        datasets: [
+          {
+            label: 'Urbanisierungsgrad DR Kongo (%)',
+            data: urbanShare,
+            borderColor: 'rgba(30,64,175,1)',
+            backgroundColor: 'rgba(59,130,246,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Jahr'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Anteil Stadtbevölkerung (%)'
+            },
+            min: 0,
+            max: 100
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.parsed.y.toFixed(0)} %`
+            }
+          }
+        }
+      }
+    });
+
+    // ------------------------------
+    // C2: Wachstum Kinshasa (als „lagosChart“ wiederverwendet)
+    // ------------------------------
+    const lagosCtx = document.getElementById('lagosChart').getContext('2d');
+
+    const kinYears = [1990, 2000, 2010, 2020, 2035, 2050];
+    const kinPop = [4, 6, 9, 14, 23, 30]; // Mio. Einwohner, vereinfacht
+
+    new Chart(lagosCtx, {
+      type: 'line',
+      data: {
+        labels: kinYears,
+        datasets: [
+          {
+            label: 'Einwohner Kinshasa (Mio.)',
+            data: kinPop,
+            borderColor: 'rgba(234,179,8,1)',
+            backgroundColor: 'rgba(234,179,8,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Jahr'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Einwohner (Mio.)'
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.parsed.y.toFixed(1)} Mio.`
+            }
+          }
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Arbeitsblatt – Nigeria: Bevölkerungsexplosion & Megacity Lagos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+    }
+    .content-font{font-family:'Raleway',sans-serif;}
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+    }
+    .badge{
+      display:inline-block;
+      padding:0.1rem 0.5rem;
+      border-radius:999px;
+      font-size:0.7rem;
+      font-weight:600;
+      background:#064E3B;
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">Nigeria – Bevölkerungsexplosion &amp; Megacity Lagos</h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Bevölkerungsentwicklung, Verstädterung &amp; Armut<br/>
+        Geographie – Klasse 12
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- Abschnitt 1: Einstieg & Ländersteckbrief -->
+      <section class="section-card p-4 md:p-5">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            1. Einstieg: Nigeria als „Bevölkerungsgigant Afrikas“
+          </h2>
+          <span class="mini-heading text-gray-500">Material M1 – Ländersteckbrief (vereinfacht)</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <div class="space-y-2">
+            <p>
+              Nigeria ist das bevölkerungsreichste Land Afrikas und liegt beim Wachstum weltweit an der Spitze.
+              Seit 1990 hat sich die Einwohnerzahl mehr als verdoppelt. Schätzungen gehen davon aus, dass Nigeria
+              bis 2050 mehr als <strong>400 Millionen Einwohner</strong> haben könnte. Damit würde das Land in die
+              Gruppe der bevölkerungsreichsten Staaten der Erde aufrücken.
+            </p>
+            <p>
+              Ein großer Teil der Bevölkerung ist sehr jung. Viele Kinder und Jugendliche bedeuten zunächst
+              ein <strong>demografisches Potenzial</strong> (zukünftige Arbeitskräfte, Konsumenten), aber gleichzeitig
+              enorme Herausforderungen: Es müssen genügend Schulen, Ausbildungsplätze, Jobs, Wohnungen und
+              Gesundheitsangebote geschaffen werden, damit die junge Generation eine Perspektive hat.
+            </p>
+            <p>
+              Besonders deutlich wird das in den Städten. Nigeria erlebt eine rasante
+              <strong>Verstädterung</strong>: Immer mehr Menschen wandern vom Land in die Städte, allen voran in die
+              heutige Megastadt <strong>Lagos</strong>. Dort ballen sich Chancen (Arbeitsmöglichkeiten, Dienstleistungen,
+              Infrastruktur) und Probleme (Slums, Armut, Umweltbelastung) auf engem Raum.
+            </p>
+            <p class="text-xs text-gray-500">
+              Hinweis: Alle Daten in diesem Arbeitsblatt sind für den Unterricht vereinfacht und gerundet. Für exakte
+              Werte kannst du später auf Originalquellen (z.&nbsp;B. UN, Weltbank) zurückgreifen.
+            </p>
+          </div>
+
+          <!-- Steckbrief -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-xs md:text-sm">
+            <div class="font-semibold text-green-900 mb-1">Steckbrief Nigeria (Auswahl, gerundet)</div>
+            <table class="w-full text-xs border border-gray-200 bg-white">
+              <tbody>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Fläche</td>
+                  <td class="border px-2 py-1">≈ 924.000 km²</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Einwohnerzahl 1990</td>
+                  <td class="border px-2 py-1">≈ 95 Mio.</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Einwohnerzahl 2020</td>
+                  <td class="border px-2 py-1">≈ 206 Mio.</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Projektion 2050</td>
+                  <td class="border px-2 py-1">≈ 400 Mio.</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Lebenserwartung 1990</td>
+                  <td class="border px-2 py-1">≈ 46 Jahre</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Lebenserwartung 2020</td>
+                  <td class="border px-2 py-1">≈ 53 Jahre</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">BIP je Einwohner (2020)</td>
+                  <td class="border px-2 py-1">≈ 2.400 US-$ (Kaufkraft, grob)</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Urbanisierungsgrad 1990</td>
+                  <td class="border px-2 py-1">≈ 35&nbsp;% Stadtbevölkerung</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Urbanisierungsgrad 2020</td>
+                  <td class="border px-2 py-1">≈ 52&nbsp;% Stadtbevölkerung</td>
+                </tr>
+                <tr>
+                  <td class="border px-2 py-1 font-semibold">Urbanisierungsgrad 2050*</td>
+                  <td class="border px-2 py-1">≈ 70&nbsp;% (Projektion)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-[0.65rem] text-gray-600 mt-2">
+              *Projektionen: UN / UN-Habitat (vereinfacht). Exakte Werte können je nach Quelle leicht abweichen.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Material A – Bevölkerungspyramiden & Bildung -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            2. Material A – Altersstruktur & Bildungsniveau in Nigeria
+          </h2>
+          <span class="mini-heading text-gray-500">Bevölkerungspyramiden &amp; Bildung (vereinfacht)</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- A1: Bevölkerungspyramide -->
+          <article class="space-y-2">
+            <div class="flex items-center justify-between">
+              <p class="text-xs text-gray-500 uppercase tracking-wide">
+                M1 – Bevölkerungspyramide (Auswahljahre)
+              </p>
+              <div class="text-xs flex items-center gap-2">
+                <label for="pyramidYear" class="font-semibold text-gray-700">Jahr:</label>
+                <select id="pyramidYear" class="border border-gray-300 rounded px-1 py-0.5 text-xs">
+                  <option value="1990">1990</option>
+                  <option value="2020" selected>2020</option>
+                  <option value="2050">2050 (Projektion)</option>
+                </select>
+              </div>
+            </div>
+            <p class="text-xs text-gray-700">
+              Die Bevölkerungspyramide zeigt eine <strong>vereinfachte Altersstruktur</strong> Nigerias.
+              Unten siehst du die jüngste Altersgruppe (0–14 Jahre), oben die älteste (65+).
+              Die Balkenlänge zeigt, wie groß der Anteil dieser Altersgruppe an der Gesamtbevölkerung ist.
+              Die Werte sind gerundet und sollen vor allem die typische Form der Pyramide deutlich machen:
+              <strong>untere, mittlere und künftige Struktur</strong>.
+            </p>
+            <div style="width:100%; height:260px;">
+              <canvas id="pyramidChart"></canvas>
+            </div>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Tipp: Achte darauf, wie sehr die Basis der Pyramide in den verschiedenen Jahren
+              verbreitert oder verschmälert ist. So erkennst du, ob ein Land schnell wächst,
+              sich stabilisiert oder altert.
+            </p>
+          </article>
+
+          <!-- A2: Bildungsniveau nach Altersgruppen -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              M2 – Bildungsniveau nach Altersgruppen (Nigeria, ca. 2020, vereinfacht)
+            </p>
+            <p class="text-xs text-gray-700">
+              Die Grafik zeigt, wie hoch der Anteil an Menschen mit unterschiedlichem Bildungsabschluss
+              in verschiedenen Altersgruppen ist. Bei den Jüngeren haben deutlich mehr Menschen einen
+              <strong>Sekundarschulabschluss</strong> oder sogar eine <strong>tertiäre Bildung</strong>
+              als bei den Älteren. Das deutet auf einen Wandel hin: Bildung wird wichtiger, der Zugang
+              verbessert sich – allerdings nicht für alle gleichermaßen.
+            </p>
+            <div style="width:100%; height:260px;">
+              <canvas id="educationChart"></canvas>
+            </div>
+            <ul class="text-xs list-disc list-inside text-gray-700 mt-1">
+              <li>„Ohne / Primar“ = keine Schulbildung oder nur Grundschule.</li>
+              <li>„Sekundar“ = abgeschlossene Sekundarschule / College.</li>
+              <li>„Tertiär“ = Universität, Fachhochschule oder vergleichbare Ausbildung.</li>
+            </ul>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Bildung – vor allem von Mädchen – gilt als einer der wichtigsten Faktoren, um
+              langfristig Geburtenraten zu senken und Armut zu verringern.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Material B – Geburten-, Sterbe- und Wachstumsrate -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            3. Material B – Geburten-, Sterbe- und Wachstumsrate in Nigeria
+          </h2>
+          <span class="mini-heading text-gray-500">Zeitreihe (vereinfacht, pro 1000 Einwohner)</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 text-sm text-gray-800">
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500">
+              Die Grafik zeigt drei wichtige demografische Kennziffern:
+            </p>
+            <ul class="list-disc list-inside text-xs">
+              <li><strong>Geburtenrate (CBR)</strong>: Geburten je 1000 Einwohner und Jahr.</li>
+              <li><strong>Sterberate (CDR)</strong>: Todesfälle je 1000 Einwohner und Jahr.</li>
+              <li><strong>Natürliches Wachstum</strong>: Geburtenrate minus Sterberate.</li>
+            </ul>
+            <p class="text-xs text-gray-700">
+              In Nigeria bleibt die Geburtenrate trotz eines leichten Rückgangs sehr hoch,
+              während die Sterberate seit Jahrzehnten deutlich sinkt. Die Kurve für das
+              <strong>natürliche Wachstum</strong> zeigt, dass jährlich immer noch deutlich mehr
+              Menschen geboren werden als sterben. Selbst wenn die Geburtenrate in den nächsten
+              Jahrzehnten deutlich fällt, wächst die Bevölkerung weiter – weil bereits jetzt viele
+              junge Menschen nachwachsen und selbst wieder Kinder bekommen.
+            </p>
+            <p class="text-xs text-gray-700">
+              Dieses Phänomen nennt man <strong>Bevölkerungsträgheit</strong> (demographic momentum):
+              Die Altersstruktur sorgt dafür, dass ein starkes Wachstum noch lange anhält,
+              selbst wenn sich das Verhalten (z.&nbsp;B. Kinderzahl pro Frau) langsam ändert.
+            </p>
+          </article>
+          <article>
+            <div style="width:100%; height:260px;">
+              <canvas id="ratesChart"></canvas>
+            </div>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Die Werte sind vereinfacht aus typischen Datensätzen abgeleitet (z.&nbsp;B. Geburtenrate um 1990 &gt; 40,
+              heute um 33; Sterberate sinkend; Wachstum weiterhin deutlich positiv). Wenn du später genau rechnen
+              möchtest, kannst du mit Originaldaten arbeiten.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 4: Material C – Verstädterung & Megacity Lagos -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            4. Material C – Verstädterung in Nigeria &amp; Megacity Lagos
+          </h2>
+          <span class="mini-heading text-gray-500">Urbanisierungsgrad, Stadtwachstum &amp; Armut</span>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2 text-sm text-gray-800">
+          <!-- C1: Urbanisierungsgrad -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              M3 – Anteil der Stadtbevölkerung in Nigeria (vereinfacht)
+            </p>
+            <p class="text-xs">
+              Nigeria befindet sich mitten in einer <strong>Urbanisierungswelle</strong>.
+              Noch 1990 lebte nur etwa ein Drittel der Bevölkerung in Städten. Heute ist es bereits mehr als die Hälfte,
+              und bis 2050 könnten rund <strong>70&nbsp;%</strong> der Menschen in Städten leben.
+              Das bedeutet: Millionen von Menschen ziehen vom Land in die Städte – auf der Suche nach
+              Arbeit, besseren Schulen, medizinischer Versorgung und einem „modernen“ Leben.
+            </p>
+            <div style="width:100%; height:220px;">
+              <canvas id="urbanChart"></canvas>
+            </div>
+            <p class="text-[0.7rem] text-gray-500 mt-1">
+              Wenn Städte schneller wachsen als Infrastruktur und Verwaltung mithalten können,
+              entstehen Überlastung, Verkehrschaos und informelle Siedlungen ohne ausreichende Versorgung.
+            </p>
+          </article>
+
+          <!-- C2: Lagos als Megacity -->
+          <article class="space-y-2">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">
+              M4 – Lagos: Wachstum einer Megacity (vereinfacht)
+            </p>
+            <p class="text-xs">
+              Lagos war früher eine Küstenstadt mit einigen Hunderttausend Einwohnern. Heute ist Lagos eine
+              <strong>Megacity mit über 15 Millionen Einwohnern</strong> (je nach Abgrenzung sogar deutlich mehr).
+              Die Stadt wächst sowohl durch Zuwanderung aus dem Hinterland als auch durch natürliches Wachstum.
+              Viele Neuankömmlinge können sich Wohnungen im formellen Sektor nicht leisten und siedeln in
+              <strong>informellen Quartieren</strong>.
+            </p>
+            <div style="width:100%; height:220px;">
+              <canvas id="lagosChart"></canvas>
+            </div>
+
+            <!-- Bildplatzhalter -->
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <img src="https://www.airgradient.com/blog/children-slum-lagos-affected-by-air-pollution/slum-impressions_hu_de3c2d9abc218650.jpeg">
+              <img src="https://bilder.deutschlandfunk.de/33/2b/1a/a0/332b1aa0-6ce6-48b2-9e51-1a1d2cbd8b41/lagos-nigeria-100-1920x1080.jpg">
+
+              </div>
+            </div>
+            <div class="mt-2 bg-red-50 border border-red-200 rounded-md p-2 text-[0.7rem]">
+              <div class="font-semibold text-red-700 mb-1">Probleme des Wachstums in Lagos (Beispiele)</div>
+              <ul class="list-disc list-inside space-y-1 text-red-900">
+                <li>Entstehung großer <strong>Slums</strong> ohne gesichertes Eigentum an Grund und Boden.</li>
+                <li>Mangel an sauberem Trinkwasser, Abwasserentsorgung und Müllabfuhr.</li>
+                <li>Dichtes Gedränge in Wohnungen, hohe Mieten, Überbelegung.</li>
+                <li>Starker Verkehr, Staus, Luftverschmutzung, lange Wege zur Arbeit.</li>
+                <li>Viele Menschen arbeiten im <strong>informellen Sektor</strong> und leben von unsicheren Gelegenheitsjobs.</li>
+                <li>Hohe Verwundbarkeit bei Überschwemmungen (z.&nbsp;B. in Küsten- und Lagunengebieten).</li>
+              </ul>
+              <p class="mt-1">
+                In vielen Vierteln leben Menschen in <strong>Armut</strong>: Einkommen sind instabil,
+                es gibt wenig soziale Absicherung, und der Zugang zu Bildung und Gesundheitsdiensten ist eingeschränkt.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Abschnitt 5: Material D – Ursachen, Folgen & Strategien -->
+      <section class="section-card p-4 md:p-5 space-y-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-1">
+          <h2 class="text-lg md:text-xl font-semibold text-green-900">
+            5. Material D – Ursachen &amp; Folgen des Bevölkerungs- und Stadtwachstums
+          </h2>
+          <span class="mini-heading text-gray-500">Textbausteine (vereinfacht)</span>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3 text-xs md:text-sm text-gray-800">
+          <!-- Ursachen -->
+          <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+            <div class="badge mb-2">Ursachen</div>
+            <p class="mb-1">
+              Das starke Bevölkerungswachstum in Nigeria hat mehrere Gründe. Einige davon
+              sind tief in Gesellschaft und Wirtschaft verankert.
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Hohe Kinderzahl als <strong>Absicherung im Alter</strong> und als Arbeitskräfte im Haushalt oder in der Landwirtschaft.</li>
+              <li>Traditionelle Normen und religiöse Vorstellungen, die große Familien positiv bewerten.</li>
+              <li>Verbesserte medizinische Versorgung: Mehr Kinder überleben die ersten Lebensjahre.</li>
+              <li>Geringe Verbreitung von <strong>Familienplanung</strong>, vor allem in ländlichen Gebieten.</li>
+              <li>Zu wenig Zugang zu höherer Bildung, vor allem für Mädchen und Frauen.</li>
+              <li>Land-Stadt-Wanderung: Hoffnung auf Jobs, Einkommen, Bildung und medizinische Versorgung in den Städten.</li>
+            </ul>
+          </div>
+
+          <!-- Folgen -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <div class="badge mb-2">Folgen</div>
+            <p class="mb-1">
+              Das schnelle Wachstum hat Folgen für Gesellschaft, Wirtschaft und Umwelt.
+              Viele Probleme zeigen sich besonders deutlich in Lagos.
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Rasches Anwachsen der Städte → <strong>Slumbildung</strong> und Wohnungsnot.</li>
+              <li>Überlastete Infrastruktur: Verkehrsinfarkt, Stromausfälle, Wasserknappheit, überfüllte Busse.</li>
+              <li>Hoher Druck auf Schulen, Ausbildungsplätze und Krankenhäuser.</li>
+              <li>Jugendüberschuss: viele junge Menschen, aber zu wenig Ausbildungs- und Arbeitsplätze → Arbeitslosigkeit.</li>
+              <li>Umweltprobleme: Abholzung im Umland, Abfälle in Flüssen und Lagunen, Luftverschmutzung durch Verkehr.</li>
+              <li>Starke soziale Unterschiede: Reiche Wohnviertel und Geschäftsviertel liegen dicht neben Armutsquartieren.</li>
+            </ul>
+          </div>
+
+          <!-- Strategien -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div class="badge mb-2">Strategien &amp; Maßnahmen</div>
+            <p class="mb-1">
+              Regierung und internationale Organisationen versuchen, das Wachstum zu steuern
+              und Lebensbedingungen zu verbessern. Nicht alle Maßnahmen sind bisher erfolgreich.
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Ausbau von <strong>Bildung</strong> (vor allem für Mädchen) als Grundlage für kleinere Familien und bessere Chancen auf dem Arbeitsmarkt.</li>
+              <li>Programme zur <strong>Familienplanung</strong> (Beratung, Zugang zu Verhütungsmitteln).</li>
+              <li>Förderung von Arbeitsplätzen im formellen Sektor (Industrie, Dienstleistungen), um mehr stabile Einkommen zu schaffen.</li>
+              <li>Stadtplanung: Ausbau von Verkehr, Wohnungsbau, Wasser- und Abwassersystemen.</li>
+              <li>Aufwertung von Slums: Zufuhr von sauberem Wasser, Bau von Toiletten, Müllentsorgung, bessere Wege.</li>
+              <li>Förderung ländlicher Regionen und kleinerer Städte, damit nicht „alles“ nach Lagos zieht.</li>
+            </ul>
+            <p class="mt-1 text-[0.7rem] text-gray-700">
+              In der Realität stoßen viele Projekte an finanzielle, politische und organisatorische Grenzen.
+              Trotzdem zeigen Beispiele, dass verbesserte Bildung, Gesundheit und Stadtplanung das Wachstum
+              langfristig beeinflussen können.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 6: Aufgaben – sinnstiftende Bearbeitung (du-Form) -->
+      <section class="relative bg-green-50 border-2 border-green-700 rounded-xl p-4 md:p-5">
+        <div class="absolute -top-3 left-4 bg-green-700 text-white text-xs px-3 py-1 rounded-full font-semibold">
+          6. Aufgaben (Einzelarbeit / Gruppenarbeit)
+        </div>
+        <ol class="list-decimal list-inside text-sm text-gray-800 mt-2 space-y-1 md:space-y-2">
+          <li>
+            Nutze <strong>Material M1</strong> (Steckbrief). Beschreibe in 5–6 Sätzen, warum man bei Nigeria von einer
+            <strong>Bevölkerungsexplosion</strong> sprechen kann. Gehe dabei auf Einwohnerzahl, Wachstum und Urbanisierung ein.
+          </li>
+          <li>
+            Betrachte die <strong>Bevölkerungspyramiden in M1</strong> (Jahre 1990, 2020, 2050).
+            <ul class="list-disc list-inside ml-4">
+              <li>Beschreibe für jedes Jahr die Form der Pyramide (z.&nbsp;B. „breite Basis“, „Zwischenform“).</li>
+              <li>Ordne Nigeria mit Hilfe von M1 und M3 einem Stadium des <strong>demografischen Übergangs</strong> zu und begründe deine Entscheidung.</li>
+            </ul>
+          </li>
+          <li>
+            Nutze <strong>Material M2</strong> (Bildungsniveau nach Altersgruppen).
+            <ul class="list-disc list-inside ml-4">
+              <li>Vergleiche den Bildungsstand der Altersgruppen 20–24 und 50+.</li>
+              <li>Erkläre, welchen Einfluss steigende Bildungsniveaus auf die künftige <strong>Geburtenrate</strong> in Nigeria haben können.</li>
+            </ul>
+          </li>
+          <li>
+            Analysiere mit Hilfe von <strong>Material B</strong> (Geburten-, Sterbe- und Wachstumsrate),
+            warum die Bevölkerung Nigerias trotz sinkender Geburtenrate weiterhin sehr stark wächst.
+            Erkläre den Begriff <strong>Bevölkerungsträgheit</strong> (demographic momentum) in eigenen Worten.
+          </li>
+          <li>
+            Nutze <strong>Material C</strong> (Urbanisierung in Nigeria &amp; Wachstum von Lagos).
+            <ul class="list-disc list-inside ml-4">
+              <li>Beschreibe, wie sich der Anteil der Stadtbevölkerung von 1990 bis 2050 entwickelt.</li>
+              <li>Erkläre, warum Lagos so schnell wächst und welche Probleme für die Stadt und die
+                  Bevölkerung dadurch entstehen (z.&nbsp;B. Slums, Armut, Verkehr, Umwelt).</li>
+            </ul>
+          </li>
+          <li>
+            Erstelle auf Grundlage von <strong>Material D</strong> eine Tabelle mit zwei Spalten:
+            <strong>„Chancen des starken Bevölkerungswachstums“</strong> und
+            <strong>„Risiken des starken Bevölkerungswachstums“</strong> für Nigeria.
+            Trage in jede Spalte mindestens <strong>5 Stichpunkte</strong> ein.
+          </li>
+          <li>
+            Überlege in deiner Gruppe, welche <strong>Maßnahmen</strong> der Regierung oder internationaler
+            Organisationen besonders wirksam sein könnten, um das Bevölkerungs- und Stadtwachstum zu steuern,
+            ohne die Entwicklungschancen zu zerstören. Formuliere zum Schluss ein
+            <strong>konkretes Maßnahmenpaket</strong> (max. 10 Stichpunkte) und halte es schriftlich fest.
+          </li>
+        </ol>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Arbeitsblatt – Nigeria: Bevölkerungsexplosion &amp; Megacity Lagos</span>
+      <span>Geographie 12</span>
+    </footer>
+  </div>
+
+  <!-- Diagramme / Charts -->
+  <script>
+    // Globale Schriftart für Charts
+    Chart.defaults.font.family = "'Raleway','system-ui','-apple-system','BlinkMacSystemFont','Segoe UI',sans-serif";
+    Chart.defaults.font.size = 10;
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+
+    // ------------------------------
+    // A1: Bevölkerungspyramide
+    // ------------------------------
+    const ageGroups = ['0–14','15–24','25–34','35–44','45–54','55–64','65+'];
+
+    // stark vereinfachte Prozentanteile je Altersgruppe (gesamt) für 3 Jahre
+    const pyramidData = {
+      1990: [45, 20, 13, 10, 6, 4, 2],
+      2020: [42, 19, 15, 10, 7, 4, 3],
+      2050: [32, 19, 18, 12, 9, 6, 4] // Projektion: etwas schmalere Basis, mehr Erwachsene
+    };
+
+    const pyramidCtx = document.getElementById('pyramidChart').getContext('2d');
+
+    // Für die Darstellung als "Pyramide" nehmen wir männlich = -Hälfte, weiblich = +Hälfte (symmetrisch).
+    function getPyramidDataset(year) {
+      const total = pyramidData[year];
+      const male = total.map(v => -v / 2);
+      const female = total.map(v => v / 2);
+      return { male, female };
+    }
+
+    const startYear = '2020';
+    const startData = getPyramidDataset(startYear);
+
+    const pyramidChart = new Chart(pyramidCtx, {
+      type: 'bar',
+      data: {
+        labels: ageGroups,
+        datasets: [
+          {
+            label: 'Männer (%)',
+            data: startData.male,
+            backgroundColor: 'rgba(37,99,235,0.7)'
+          },
+          {
+            label: 'Frauen (%)',
+            data: startData.female,
+            backgroundColor: 'rgba(236,72,153,0.7)'
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              callback: function(value) {
+                return Math.abs(value) + ' %';
+              }
+            },
+            title: {
+              display: true,
+              text: 'Bevölkerungsanteil (%)'
+            }
+          },
+          y: {
+            stacked: true,
+            reverse: true   // WICHTIG: 0–14 Jahre unten, 65+ oben
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const label = ctx.dataset.label || '';
+                const val = Math.abs(ctx.parsed.x).toFixed(1);
+                return label + ': ' + val + ' %';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    document.getElementById('pyramidYear').addEventListener('change', (e) => {
+      const year = e.target.value;
+      const data = getPyramidDataset(year);
+      pyramidChart.data.datasets[0].data = data.male;
+      pyramidChart.data.datasets[1].data = data.female;
+      pyramidChart.update();
+    });
+
+    // ------------------------------
+    // A2: Bildungsniveau nach Altersgruppen
+    // ------------------------------
+    const eduCtx = document.getElementById('educationChart').getContext('2d');
+
+    // Altersgruppen (vereinfacht): 20–24, 25–34, 35–49, 50+
+    const eduLabels = ['20–24','25–34','35–49','50+'];
+
+    // Anteile in % (vereinfachte, plausible Werte):
+    const eduPrimary = [30, 35, 40, 50];   // keine/Primar
+    const eduSecondary = [60, 50, 55, 45]; // Sekundar
+    const eduTertiary = [10, 15, 5, 5];    // Tertiär
+
+    new Chart(eduCtx, {
+      type: 'bar',
+      data: {
+        labels: eduLabels,
+        datasets: [
+          {
+            label: 'Ohne / Primar (%)',
+            data: eduPrimary,
+            backgroundColor: 'rgba(248,250,252,1)',
+            borderColor: 'rgba(148,163,184,1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Sekundar (%)',
+            data: eduSecondary,
+            backgroundColor: 'rgba(16,185,129,0.7)'
+          },
+          {
+            label: 'Tertiär (%)',
+            data: eduTertiary,
+            backgroundColor: 'rgba(59,130,246,0.7)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Anteil in der Altersgruppe (%)'
+            },
+            max: 100
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)} %`
+            }
+          }
+        }
+      }
+    });
+
+    // ------------------------------
+    // B: Geburten-, Sterbe- und Wachstumsrate
+    // ------------------------------
+    const ratesCtx = document.getElementById('ratesChart').getContext('2d');
+
+    // Werte pro 1000 Einwohner, stark vereinfacht
+    const rateYears = [1990, 2000, 2010, 2020, 2030, 2050];
+    const births = [44, 41, 39, 37, 34, 30];
+    const deaths = [15, 14, 13, 13, 11, 9];
+    const growth = births.map((b, i) => b - deaths[i]); // natürliches Wachstum
+
+    new Chart(ratesCtx, {
+      type: 'line',
+      data: {
+        labels: rateYears,
+        datasets: [
+          {
+            label: 'Geburtenrate (CBR)',
+            data: births,
+            borderColor: 'rgba(37,99,235,1)',
+            backgroundColor: 'rgba(37,99,235,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: false
+          },
+          {
+            label: 'Sterberate (CDR)',
+            data: deaths,
+            borderColor: 'rgba(239,68,68,1)',
+            backgroundColor: 'rgba(239,68,68,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: false
+          },
+          {
+            label: 'Natürliches Wachstum',
+            data: growth,
+            borderColor: 'rgba(16,185,129,1)',
+            backgroundColor: 'rgba(16,185,129,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Jahr'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Werte je 1000 Einwohner'
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} je 1000`
+            }
+          }
+        }
+      }
+    });
+
+    // ------------------------------
+    // C1: Urbanisierungsgrad Nigeria
+    // ------------------------------
+    const urbanCtx = document.getElementById('urbanChart').getContext('2d');
+
+    const urbanYears = [1990, 2000, 2010, 2020, 2030, 2050];
+    const urbanShare = [35, 40, 47, 52, 60, 70]; // % Stadtbevölkerung, vereinfacht
+
+    new Chart(urbanCtx, {
+      type: 'line',
+      data: {
+        labels: urbanYears,
+        datasets: [
+          {
+            label: 'Urbanisierungsgrad Nigeria (%)',
+            data: urbanShare,
+            borderColor: 'rgba(30,64,175,1)',
+            backgroundColor: 'rgba(59,130,246,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Jahr'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Anteil Stadtbevölkerung (%)'
+            },
+            min: 0,
+            max: 100
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.parsed.y.toFixed(0)} %`
+            }
+          }
+        }
+      }
+    });
+
+    // ------------------------------
+    // C2: Wachstum Lagos
+    // ------------------------------
+    const lagosCtx = document.getElementById('lagosChart').getContext('2d');
+
+    const lagosYears = [1990, 2000, 2010, 2020, 2035, 2050];
+    const lagosPop = [5, 7, 10, 14, 24, 32]; // Mio. Einwohner, grob vereinfacht
+
+    new Chart(lagosCtx, {
+      type: 'line',
+      data: {
+        labels: lagosYears,
+        datasets: [
+          {
+            label: 'Einwohner Lagos (Mio.)',
+            data: lagosPop,
+            borderColor: 'rgba(234,179,8,1)',
+            backgroundColor: 'rgba(234,179,8,0.15)',
+            tension: 0.2,
+            pointRadius: 3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Jahr'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Einwohner (Mio.)'
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.parsed.y.toFixed(1)} Mio.`
+            }
+          }
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>

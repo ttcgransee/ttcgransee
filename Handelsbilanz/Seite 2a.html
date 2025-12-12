@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Planspiel – Komparative Kostenvorteile</title>
+
+  <!-- Tailwind & Fonts & Icons (wie Vorlage) -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1.25rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:1rem;
+    }
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.2rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+
+    .tiny { font-size:.85rem; color:#4B5563; }
+    .tiny strong { color:#111827; }
+
+    table.simple {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.8rem;
+      margin:.4rem 0 .4rem 0;
+    }
+    table.simple th, table.simple td {
+      border:1px solid #E5E7EB;
+      padding:.25rem .35rem;
+      text-align:center;
+    }
+    table.simple th {
+      background:#F9FAFB;
+      font-weight:600;
+    }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.5rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:600;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.9rem; }
+
+    .footer {
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Planspiel: 3 Länder – 3 Produkte</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Komparative Kostenvorteile | Klasse 10</p>
+    </div>
+
+    <!-- Inhalt -->
+    <div class="slide-content">
+
+      <!-- Drei Länder-Kästchen -->
+      <div class="materials-grid">
+
+        <!-- Deutschland -->
+        <div class="material">
+          <div class="mat-head">
+            <div class="badge">Land 1</div>
+            <div class="mat-title">Deutschland (Hochlohnland)</div>
+          </div>
+          <div class="mat-body tiny">
+            <p><strong>Rolle:</strong> Hoch entwickeltes Industrieland mit hoher Produktivität.</p>
+
+            <!-- Ausgangswerte -->
+            <p class="mt-1"><strong>1. Produktionsmöglichkeiten (pro Arbeitstag):</strong></p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Gut</th>
+                  <th>Max. Stück / Tag</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maschinen</td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>15</td>
+                </tr>
+                <tr>
+                  <td>Kleidung</td>
+                  <td>20</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Leere Tabellen: Opportunitätskosten -->
+            <p><strong>2. Opportunitätskosten – in „Kleidung“ gemessen</strong><br/>
+               (Wie viele Kleidungsstücke müsst ihr aufgeben, um eine Einheit Maschinen bzw. Elektronik herzustellen?)</p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>1 zusätzliche Einheit von …</th>
+                  <th>Rechnung</th>
+                  <th>Opportunitätskosten in Kleidung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maschinen</td>
+                  <td>20 ÷ 10 = …</td>
+                  <td>… Stück Kleidung</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>…</td>
+                  <td>… Stück Kleidung</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p><strong>3. Opportunitätskosten – in „Maschinen“ gemessen</strong></p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>1 zusätzliche Einheit von …</th>
+                  <th>Rechnung</th>
+                  <th>Opportunitätskosten in Maschinen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Kleidung</td>
+                  <td>…</td>
+                  <td>… Maschinen</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>…</td>
+                  <td>… Maschinen</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+
+        <!-- China -->
+        <div class="material">
+          <div class="mat-head">
+            <div class="badge">Land 2</div>
+            <div class="mat-title">China (Mittellohnland)</div>
+          </div>
+          <div class="mat-body tiny">
+            <p><strong>Rolle:</strong> Schwellenland mit wachsender Industrie und mittleren Löhnen.</p>
+
+            <!-- Ausgangswerte -->
+            <p class="mt-1"><strong>1. Produktionsmöglichkeiten (pro Arbeitstag):</strong></p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Gut</th>
+                  <th>Max. Stück / Tag</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maschinen</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>14</td>
+                </tr>
+                <tr>
+                  <td>Kleidung</td>
+                  <td>18</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Leere Tabellen: Opportunitätskosten -->
+            <p><strong>2. Opportunitätskosten – in „Kleidung“ gemessen</strong><br/>
+               (Wie viele Kleidungsstücke müsst ihr aufgeben, um eine Einheit Maschinen bzw. Elektronik herzustellen?)</p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>1 zusätzliche Einheit von …</th>
+                  <th>Rechnung</th>
+                  <th>Opportunitätskosten in Kleidung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maschinen</td>
+                  <td>18 ÷ 6 = …</td>
+                  <td>… Stück Kleidung</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>…</td>
+                  <td>… Stück Kleidung</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p><strong>3. Opportunitätskosten – in „Maschinen“ gemessen</strong></p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>1 zusätzliche Einheit von …</th>
+                  <th>Rechnung</th>
+                  <th>Opportunitätskosten in Maschinen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Kleidung</td>
+                  <td>…</td>
+                  <td>… Maschinen</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>…</td>
+                  <td>… Maschinen</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+
+        <!-- Bangladesch -->
+        <div class="material">
+          <div class="mat-head">
+            <div class="badge">Land 3</div>
+            <div class="mat-title">Bangladesch (Niedriglohnland)</div>
+          </div>
+          <div class="mat-body tiny">
+            <p><strong>Rolle:</strong> Entwicklungsland mit niedrigen Löhnen, viel arbeitsintensiver Produktion.</p>
+
+            <!-- Ausgangswerte -->
+            <p class="mt-1"><strong>1. Produktionsmöglichkeiten (pro Arbeitstag):</strong></p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Gut</th>
+                  <th>Max. Stück / Tag</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maschinen</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>Kleidung</td>
+                  <td>16</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Leere Tabellen: Opportunitätskosten -->
+            <p><strong>2. Opportunitätskosten – in „Kleidung“ gemessen</strong><br/>
+               (Wie viele Kleidungsstücke müsst ihr aufgeben, um eine Einheit Maschinen bzw. Elektronik herzustellen?)</p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>1 zusätzliche Einheit von …</th>
+                  <th>Rechnung</th>
+                  <th>Opportunitätskosten in Kleidung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Maschinen</td>
+                  <td>16 ÷ 2 = …</td>
+                  <td>… Stück Kleidung</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>…</td>
+                  <td>… Stück Kleidung</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p><strong>3. Opportunitätskosten – in „Maschinen“ gemessen</strong></p>
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>1 zusätzliche Einheit von …</th>
+                  <th>Rechnung</th>
+                  <th>Opportunitätskosten in Maschinen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Kleidung</td>
+                  <td>…</td>
+                  <td>… Maschinen</td>
+                </tr>
+                <tr>
+                  <td>Elektronik</td>
+                  <td>…</td>
+                  <td>… Maschinen</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+
+      </div><!-- /materials-grid -->
+
+      <!-- Grünes Aufgabenkästchen mit genauer Anleitung -->
+      <a href="Seite 2b.html"><section class="task-section">
+        <div class="task-label">Aufgaben – Schritt für Schritt</div>
+        <ol>
+          <li>
+            <strong>Bildet Gruppen:</strong> Jede Gruppe ist ein Land (Deutschland, China oder Bangladesch).
+            Nutzt das Länder-Kästchen eures Landes.
+          </li>
+          <li>
+            <strong>Übernehmt die Ausgangsdaten:</strong> Übertragt die Tabelle
+            <em>„Produktionsmöglichkeiten (pro Arbeitstag)”</em> eures Landes in euer Heft.
+          </li>
+          <li>
+            <strong>Berechnet die Opportunitätskosten</strong> <i>(OC)</i> mit Hilfe der Formeln
+            (für jede Zeile der leeren Tabellen in eurem Kästchen):<br>
+            <i>Hinweis: Die Opportunitätskosten geben an, auf wie viele Einheiten eines anderen Produktes (z.B. Textilien) bei der Herstellung einer Einheit eines bestimmten Produkts (z.B. Maschinen) verzichtet werden muss.</i>
+            <ul class="list-disc ml-5 mt-1">
+              <li>
+                <strong>Allgemein:</strong><br/>
+                OC(1 Einheit von Gut X in Gut Y) = 
+                <em>max. Menge von Gut Y</em> ÷ <em>max. Menge von Gut X</em>
+              </li>
+              <li class="mt-1">
+                <strong>Beispiele für euer Land:</strong><br/>
+                OC(1 Maschine in Kleidung) = (max. Kleidung) ÷ (max. Maschinen)<br/>
+                OC(1 Elektronik in Kleidung) = (max. Kleidung) ÷ (max. Elektronik)<br/>
+                OC(1 Kleidung in Maschinen) = (max. Maschinen) ÷ (max. Kleidung)
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>Tragt eure Ergebnisse</strong> in die leeren Tabellen
+            <em>„Opportunitätskosten in Kleidung“</em und <em>„Opportunitätskosten in Maschinen“</em>
+            ein (im Heft oder auf einem Extrablatt).
+          </li>
+          <li>
+            <strong>Vergleicht im Plenum:</strong> Welche Gruppe hat bei
+            <em>Maschinen</em>, <em>Elektronik</em> und <em>Kleidung</em> jeweils die
+            <strong>niedrigsten Opportunitätskosten</strong>?<br/>
+            → Dieses Land hat bei diesem Gut den <strong>komparativen Kostenvorteil</strong>.
+          </li>
+          <li>
+            <strong>Leitet Spezialisierung ab:</strong> Formuliert für euer Land einen Satz:<br/>
+            „Wir sollten uns auf <em>…</em> spezialisieren, weil unsere Opportunitätskosten
+            dafür im Vergleich zu den anderen Ländern am geringsten sind.“
+          </li>
+          <li>
+            (Optional) <strong>Diskussion:</strong> Warum lohnt sich Handel,
+            obwohl z.&nbsp;B. Deutschland bei allen Gütern <em>absolut</em> mehr produzieren kann?
+          </li>
+        </ol>
+      </section></a>
+
+    </div><!-- /slide-content -->
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Theo Schierbaum – Welthandel</p>
+      <p>Planspiel – 3 Länder / 3 Produkte</p>
+    </div>
+  </div>
+</body>
+</html>

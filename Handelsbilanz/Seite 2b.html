@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Planspiel – Komparative Kostenvorteile</title>
+
+  <!-- Tailwind & Fonts & Icons (wie Vorlage) -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1.25rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:1rem;
+    }
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.2rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+
+    .tiny { font-size:.85rem; color:#4B5563; }
+    .tiny strong { color:#111827; }
+
+    table.simple {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.8rem;
+      margin:.4rem 0 .4rem 0;
+    }
+    table.simple th, table.simple td {
+      border:1px solid #E5E7EB;
+      padding:.25rem .35rem;
+      text-align:center;
+    }
+    table.simple th {
+      background:#F9FAFB;
+      font-weight:600;
+    }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.5rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:600;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.9rem; }
+
+    .footer {
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+    table.simple {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    table.simple th, table.simple td {
+      border: 1px solid #E5E7EB;
+      padding: 0.4rem 0.5rem;
+      text-align: center;
+    }
+    table.simple th {
+      background-color: #F9FAFB;
+      font-weight: 600;
+    }
+    .highlight {
+      background-color: #D1FAE5; /* Hellgrün für markierte Zellen */
+      font-weight: bold;
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Planspiel: 3 Länder – 3 Produkte</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Komparative Kostenvorteile | Klasse 10</p>
+    </div>
+
+    <!-- Inhalt -->
+    <div class="slide-content">
+
+
+    <!-- Tabelle mit Opportunitätskosten und Spezialisierung -->
+    <a href="Seite 3.html"><table class="simple">
+      <thead>
+        <tr>
+          <th>Gut</th>
+          <th>Deutschland</th>
+          <th>China</th>
+          <th>Bangladesch</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Maschinen -->
+	<tr>
+          <td><strong>Produktionskapazitäten <i>(Stückzahl)</i> für:</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Maschinen</td>
+          <td>10</td>
+          <td>6</td>
+          <td>2</td>
+        </tr>
+        <!-- Elektronik -->
+        <tr>
+          <td>Elektronik</td>
+          <td>15</td>
+          <td>14</td>
+          <td>6</td>
+        </tr>
+        <!-- Kleidung -->
+        <tr>
+          <td>Kleidung</td>
+          <td>20</td>
+          <td>18</td>
+          <td>16</td>
+        </tr>
+
+        <!-- Opportunitätskosten in Maschinen -->
+        <tr>
+          <td><strong>Opportunitätskosten (in Maschinen) für:</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+	<tr>
+          <td><i>1 x Elektronik</i></td>
+          <td>10 ÷ 15 = 0,67</td>
+          <td>6 ÷ 14 = 0,43</td>
+          <td  class="highlight">2 ÷ 6 = 0,33</td>
+        </tr>
+	<tr>
+          <td><i>1 x Kleidung</i></td>
+          <td>10 ÷ 20 = 0,5</td>
+          <td>6 ÷ 18 = 0,33</td>
+          <td class="highlight">2 ÷ 16 = 0,125</td>
+        </tr>
+        <!-- Opportunitätskosten in Kleidung -->
+        <tr>
+          <td><strong>Opportunitätskosten (in Kleidung) für:</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+	<tr>
+          <td><i>1 x Maschine</i></td>
+          <td class="highlight">20 ÷ 10 = 2</td>
+          <td>18 ÷ 6 = 3</td>
+          <td>16 ÷ 2 = 8</td>
+        </tr>
+        <tr>
+          <td><i>1 x Elektronik</i></td>
+          <td>20 ÷ 15 = 1,33</td>
+          <td class="highlight">18 ÷ 14 = 1,29</td>
+          <td>16 ÷ 6 = 2,67</td>
+        </tr>
+        <!-- Opportunitätskosten in Elektronik -->
+        <tr>
+          <td><strong>Opportunitätskosten (in Elektronik) für:</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+	<tr>
+          <td><i>1 x Maschine</i></td>
+          <td class="highlight">15 ÷ 10 = 1,5</td>
+          <td>14 ÷ 6 = 2,33</td>
+          <td>6 ÷ 2 = 3</td>
+        </tr>
+	<tr>
+          <td><i>1 x Kleidung</i></td>
+          <td>15 ÷ 20 = 0,75</td>
+          <td>14 ÷ 18 = 0,78</td>
+          <td class="highlight">6 ÷ 16 = 0,375</td>
+        </tr>
+        
+        <!-- Spezialisierung -->
+        <tr>
+          <td><strong>Spezialisierung auf:</strong></td>
+          <td><strong>Maschinen</strong></td>
+          <td><strong>Elektronik</strong></td>
+          <td><strong>Kleidung</strong></td>
+        </tr>
+      </tbody>
+    </table></a>
+
+    </div><!-- /slide-content -->
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Theo Schierbaum – Welthandel</p>
+      <p>Planspiel – 3 Länder / 3 Produkte</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Welthandel – Warum nicht super reich / nicht bankrott?</title>
+
+  <!-- Tailwind & Fonts & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+    }
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.2rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+
+    .tiny { font-size:.85rem; color:#6B7280; }
+    .small { font-size:.9rem; }
+
+    .chart-row {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.75rem;
+      margin-top:.5rem;
+    }
+
+    .chart-wrapper {
+      position:relative;
+      width:100%;
+      height:260px;
+    }
+
+    .full-span {
+      grid-column:1 / -1;
+    }
+
+    .pill-row {
+      display:flex;
+      flex-direction:column;
+      gap:.4rem;
+      margin-top:.5rem;
+    }
+    .pill {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      border-radius:999px;
+      padding:.3rem .7rem;
+      font-size:.85rem;
+    }
+    .pill-icon {
+      width:22px; height:22px;
+      border-radius:999px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.85rem;
+      color:#fff;
+    }
+    .pill-text { flex:1; }
+
+    .pill-ausland { background:#F3F4F6; }
+    .pill-ausland .pill-icon { background:#374151; }
+
+    .pill-lohn { background:#EFF6FF; }
+    .pill-lohn .pill-icon { background:#2563EB; }
+
+    .pill-invest { background:#ECFDF5; }
+    .pill-invest .pill-icon { background:#16A34A; }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.5rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:600;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1rem; padding-left:.2rem; }
+    .task-section li { margin:.35rem 0; line-height:1.55; font-size:.9rem; }
+
+    .footer {
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+      .chart-row{ grid-template-columns:1fr; }
+      .chart-wrapper{ height:230px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Deutschland &amp; USA – Überschuss, Defizit &amp; Reichtum</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Geographie | Klasse 10</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="materials-grid">
+
+        <!-- M7: Handelsbilanz vs. Reichtum -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M1</span>
+            <div class="mat-title">Überschuss vs. Defizit – wer ist „reicher“?</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-1">
+              Schematischer Vergleich: <strong>Handelssaldo</strong> und
+              <strong>BIP pro Kopf</strong> für Deutschland und die USA.
+            </p>
+
+            <div class="chart-row">
+              <div>
+                <p class="tiny text-center mb-0"><strong>Langfristige Außenposition</strong></p>
+                <div class="chart-wrapper">
+                  <canvas id="niipChart"></canvas>
+                </div>
+              </div>
+              <div>
+                <p class="tiny text-center mb-0"><strong>BIP pro Kopf</strong></p>
+                <div class="chart-wrapper">
+                  <canvas id="gdpPerCapitaChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <ul class="tiny mt-2 list-disc pl-5">
+              <li>Deutschland: <strong>Exportüberschüsse</strong>, positive Auslandsposition.</li>
+              <li>USA: <strong>Handelsdefizite</strong>, negative Auslandsposition.</li>
+              <li>Trotzdem: USA haben ein <strong>höheres BIP pro Kopf</strong> als Deutschland.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- M8: Woraus besteht Reichtum? -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M2</span>
+            <div class="mat-title">Woraus besteht Reichtum wirklich?</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-1">
+              Exportüberschüsse sind nur <strong>ein Baustein</strong> von Vermögen.
+              Der größte Teil ist <strong>Inlandsvermögen</strong> (Häuser, Firmen, Infrastruktur).
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="wealthCompositionChart"></canvas>
+            </div>
+            <ul class="tiny mt-2 list-disc pl-5">
+              <li><strong>Deutschland:</strong> solider Vermögensstock, plus große Auslandsforderungen.</li>
+              <li><strong>USA:</strong> riesiger Vermögensstock im Inland, obwohl Auslandsposition negativ ist.</li>
+              <li>Exportüberschüsse machen ein Land <strong>etwas</strong> reicher – aber nicht automatisch „super reich“.</li>
+            </ul>
+          </div>
+        </section></div>
+
+        <!-- O3: Opportunitätskosten – Was hätte man mit den Überschüssen tun können? -->
+        <div class="materials-grid">
+
+        <!-- O1: 100 € Exportüberschuss – Status quo vs. Alternative -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M3</span>
+            <div class="mat-title">100&nbsp;€ Exportüberschuss – wohin damit?</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-1">
+              Schematisch: Was passiert (vereinfacht) mit <strong>100&nbsp;€ Exportüberschuss</strong> –
+              und was könnte man stattdessen tun?
+            </p>
+
+            <div class="chart-row">
+              <div>
+                <p class="tiny text-center mb-0"><strong>heute (vereinfacht)</strong></p>
+                <div class="chart-wrapper">
+                  <canvas id="statusQuoChart"></canvas>
+                </div>
+              </div>
+              <div>
+                <p class="tiny text-center mb-0"><strong>„Was-wäre-wenn“-Szenario</strong></p>
+                <div class="chart-wrapper">
+                  <canvas id="alternativeChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <p class="tiny mt-1">
+              Zahlen sind <strong>didaktisch vereinfacht</strong> – sie sollen die Idee
+              der <strong>Opportunitätskosten</strong> verdeutlichen:
+              Jeder Euro, der als Guthaben im Ausland landet, fehlt als <strong>Lohn</strong>
+              oder <strong>Investition</strong> im Inland.
+            </p>
+          </div>
+        </section>
+
+        <!-- O2: Drei Wege der Verwendung – schematisches Schema -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M4</span>
+            <div class="mat-title">Drei Wege – drei Folgen</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-1">
+              Jeder Exportüberschuss kann grob auf drei Arten genutzt werden –
+              jede mit anderen Folgen für den Alltag in Deutschland:
+            </p>
+
+            <div class="pill-row">
+              <div class="pill pill-ausland">
+                <div class="pill-icon"><i class="fas fa-globe-europe"></i></div>
+                <div class="pill-text tiny">
+                  <strong>1. Ausland anlegen</strong><br/>
+                  Kauf von Anleihen, Kredite, Firmenanteile im Ausland.<br/>
+                  ➜ Gut für Vermögensbesitzer, bringt Zinsen/Dividenden – aber nicht sofort sichtbar im Alltag.<br>
+                  ➜ <i>zahlreiche Fehlanlagen und schlechte Auslandsinvestitionen (z.B. vor Finanzkrise) haben deutsches Auslandsvermögen teilweise vernichtet</i>
+                </div>
+              </div>
+
+              <div class="pill pill-lohn">
+                <div class="pill-icon"><i class="fas fa-coins"></i></div>
+                <div class="pill-text tiny">
+                  <strong>2. Höhere Löhne &amp; Sozialleistungen</strong><br/>
+                  Mehr Geld in Tariferhöhungen, Sozialstaat, Renten.<br/>
+                  ➜ Mehr <strong>Kaufkraft</strong>, weniger Armut – aber vielleicht etwas weniger Wettbewerbsvorteil im Export.<br>
+                  ➜ <i>deutsche Politik (z.B. Agenda 2010) hat zur Steigerung der Wettbewerbsfähigkeit Jahrzehnte lang Lohnentwicklung und Binnenkonsum gebremst </i> 
+                </div>
+              </div>
+
+              <div class="pill pill-invest">
+                <div class="pill-icon"><i class="fas fa-school"></i></div>
+                <div class="pill-text tiny">
+                  <strong>3. Öffentliche Investitionen</strong><br/>
+                  Ausbau von <strong>Schulen, ÖPNV, Digitalisierung, Klimaschutz</strong>.<br/>
+                  ➜ Bessere Infrastruktur, langfristig höhere Produktivität – dafür weniger Ersparnis im Ausland.<br>
+                  ➜ <i>Geld, das im Ausland angelegt wurde, fehlte zur Investition in die deutsche Infrastruktur ➜ vermindert Wert und Attraktivität der deutschen Wirtschafts-und Vermögenslandschaft</i>
+                </div>
+              </div>
+            </div>
+
+            <p class="tiny mt-2">
+              <strong>Opportunitätskosten:</strong>
+              Wenn wir sehr viel in <em>Auslandsguthaben</em> stecken, verzichten wir gleichzeitig
+              auf einen Teil von <strong>Löhnen</strong>, <strong>Konsum</strong> und
+              <strong>öffentlichen Investitionen</strong> im Inland.
+            </p>
+          </div>
+        </section>
+
+      </div><!-- /materials-grid -->
+
+      <!-- Aufgabenbereich -->
+      <a href="Seite 8.html"><section class="task-section">
+        <div class="task-label">Arbeitsaufträge (Partner- oder Gruppenarbeit)</div>
+        <ol>
+          <li>
+            1. <strong>Vergleicht</strong> Deutschland und USA in den beiden Diagrammen.
+            Was passt <strong>nicht</strong> zur einfachen Vorstellung
+            „Überschuss = reich, Defizit = arm“?
+          </li>
+          <li>
+            2. <strong>Begründe:</strong> In welchen Punkten kann man sagen:
+            „Deutschland ist kein superreiches Land, obwohl es viele Überschüsse hatte“?
+          </li>
+          <li>
+            3. <strong>Diskutiere:</strong> Ihr habt 100&nbsp;€ Exportüberschuss zur Verfügung.
+            Wie würdet ihr ihn aufteilen:
+            <em>Ausland anlegen</em> / <em>Löhne &amp; Sozialstaat</em> /
+            <em>Investitionen</em>? Zeichnet euer eigenes Kreisdiagramm.
+          </li>
+          <li>
+            4. <strong>Formuliere</strong>je einen Merksatz dazu,
+            <br/>a) warum Exportüberschüsse ein Land nicht automatisch für alle reich machen,<br/>
+            b) warum ein Handelsdefizit (wie in den USA) nicht automatisch „Bankrott“ bedeutet.
+          </li>
+        </ol>
+      </section></a>
+
+    </div><!-- /slide-content -->
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Theo Schierbaum – Welthandel &amp; Reichtum</p>
+      <p>Seite 7</p>
+    </div>
+  </div>
+
+  <script>
+    // -----------------------------
+    // M7: Außenposition vs. BIP pro Kopf (schematisch)
+    // -----------------------------
+    const niipCountries = ['Deutschland', 'USA'];
+    // grob: Nettoauslandsvermögen in % des BIP (DE positiv, USA negativ)
+    const niipValues = [80, -70];
+
+    const ctxNiip = document.getElementById('niipChart').getContext('2d');
+    new Chart(ctxNiip, {
+      type: 'bar',
+      data: {
+        labels: niipCountries,
+        datasets: [{
+          label: 'Nettoauslandsposition (% des BIP, grob)',
+          data: niipValues,
+          backgroundColor: niipValues.map(v =>
+            v >= 0 ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)'
+          ),
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display:false },
+          tooltip: {
+            callbacks: {
+              label: ctx => (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y + ' % des BIP'
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display:false } },
+          y: {
+            title: {
+              display:true,
+              text:'% des BIP',
+              font:{ family:'Montserrat', weight:'600' }
+            },
+            grid: { color:'rgba(209,213,219,0.5)' }
+          }
+        }
+      }
+    });
+
+    const gdpCountries = ['Deutschland', 'USA'];
+    // gerundete BIP-pro-Kopf-Werte in Tsd. US-$ (schematisch)
+    const gdpValues = [60, 90];
+
+    const ctxGdp = document.getElementById('gdpPerCapitaChart').getContext('2d');
+    new Chart(ctxGdp, {
+      type: 'bar',
+      data: {
+        labels: gdpCountries,
+        datasets: [{
+          label: 'BIP pro Kopf (Tsd. US-$, grob)',
+          data: gdpValues,
+          backgroundColor: 'rgba(37, 99, 235, 0.9)',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display:false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ctx.parsed.y.toFixed(0) + ' Tsd. US-$ pro Kopf'
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display:false } },
+          y: {
+            title: {
+              display:true,
+              text:'Tsd. US-$ pro Kopf',
+              font:{ family:'Montserrat', weight:'600' }
+            },
+            beginAtZero:true,
+            grid:{ color:'rgba(209,213,219,0.5)' }
+          }
+        }
+      }
+    });
+
+    // -----------------------------
+    // M8: Zusammensetzung des „Reichtums“ (stark vereinfacht)
+    // Index: Deutschland Binnenvermögen = 100
+    // -----------------------------
+    const wealthLabels = ['Deutschland', 'USA'];
+    const domesticWealthIndex = [100, 130];  // Inlandsvermögen (relativ)
+    const niipShareIndex = [15, -10];        // Nettoauslandsposition (relativ, klein & mit Vorzeichen)
+
+    const ctxWealth = document.getElementById('wealthCompositionChart').getContext('2d');
+    new Chart(ctxWealth, {
+      type: 'bar',
+      data: {
+        labels: wealthLabels,
+        datasets: [
+          {
+            label: 'Binnenvermögen (Index)',
+            data: domesticWealthIndex,
+            backgroundColor: 'rgba(107, 114, 128, 0.9)',
+            borderRadius: 4
+          },
+          {
+            label: 'Nettoauslandsvermögen (relativ)',
+            data: niipShareIndex,
+            backgroundColor: function(ctx) {
+              const v = ctx.raw;
+              return v >= 0 ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)';
+            },
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{
+            position:'top',
+            labels:{ usePointStyle:true, font:{ family:'Montserrat', size:11 } }
+          },
+          tooltip:{
+            callbacks:{
+              label: function(context){
+                const label = context.dataset.label || '';
+                const val = context.parsed.y;
+                return label + ': ' + val.toFixed(0);
+              }
+            }
+          }
+        },
+        scales:{
+          x:{ grid:{ display:false } },
+          y:{
+            title:{
+              display:true,
+              text:'Index (DE-Binnenvermögen = 100)',
+              font:{ family:'Montserrat', weight:'600' }
+            },
+            grid:{ color:'rgba(209,213,219,0.5)' }
+          }
+        }
+      }
+    });
+
+    // -----------------------------
+    // O3: Opportunitätskosten – 100 € Exportüberschuss
+    // -----------------------------
+    const oppLabels = ['Ausland anlegen', 'Löhne & Sozialstaat', 'öffentliche Investitionen'];
+    const statusQuoData = [60, 20, 20]; // schematisch
+    const alternativeData = [40, 30, 30];
+
+    const oppColors = [
+      'rgba(55, 65, 81, 0.9)',   // Ausland
+      'rgba(37, 99, 235, 0.9)',  // Löhne
+      'rgba(16, 185, 129, 0.9)'  // Investitionen
+    ];
+
+    const statusCtx = document.getElementById('statusQuoChart').getContext('2d');
+    const altCtx = document.getElementById('alternativeChart').getContext('2d');
+
+    new Chart(statusCtx, {
+      type:'doughnut',
+      data:{
+        labels: oppLabels,
+        datasets:[{
+          data: statusQuoData,
+          backgroundColor: oppColors
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        cutout:'55%',
+        plugins:{
+          legend:{
+            position:'bottom',
+            labels:{ usePointStyle:true, font:{ family:'Montserrat', size:10 } }
+          },
+          tooltip:{
+            callbacks:{
+              label: ctx => ctx.label + ': ' + ctx.parsed + ' € von 100 €'
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(altCtx, {
+      type:'doughnut',
+      data:{
+        labels: oppLabels,
+        datasets:[{
+          data: alternativeData,
+          backgroundColor: oppColors
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        cutout:'55%',
+        plugins:{
+          legend:{
+            position:'bottom',
+            labels:{ usePointStyle:true, font:{ family:'Montserrat', size:10 } }
+          },
+          tooltip:{
+            callbacks:{
+              label: ctx => ctx.label + ': ' + ctx.parsed + ' € von 100 €'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

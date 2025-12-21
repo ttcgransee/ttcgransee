@@ -6,6 +6,7 @@
     <title>TTC Gransee 98 e.V. - Tischtennisverein</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+
     <style>
         :root {
             --primary-color: #000000;
@@ -13,35 +14,28 @@
             --text-light: #ffffff;
             --bg-dark: #1a1a1a;
         }
-        
+
         .bg-primary { background-color: var(--primary-color); }
         .bg-accent { background-color: var(--accent-color); }
         .text-accent { color: var(--accent-color); }
         .border-accent { border-color: var(--accent-color); }
         .hover-accent:hover { color: var(--accent-color); }
-        
-        .smooth-scroll {
-            scroll-behavior: smooth;
-        }
-        
-        .section-spacing {
-            padding: 4rem 0;
-        }
-        
+
+        .smooth-scroll { scroll-behavior: smooth; }
+        .section-spacing { padding: 4rem 0; }
+
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 255, 0, 0.2);
         }
-        
+
         .nav-link {
             position: relative;
             transition: color 0.3s ease;
         }
-        
         .nav-link::after {
             content: '';
             position: absolute;
@@ -52,30 +46,119 @@
             background-color: var(--accent-color);
             transition: width 0.3s ease;
         }
-        
-        .nav-link:hover::after {
-            width: 100%;
+        .nav-link:hover::after { width: 100%; }
+
+        /* === Galerie Thumbnails: quadratisch, voll gefüllt, ohne Verzerrung === */
+        .gallery-thumb {
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background: #111;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
-        .gallery-item {
-            aspect-ratio: 1;
-            background: linear-gradient(45deg, #333, #555);
-            display: flex;
+        .gallery-thumb:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 255, 0, 0.18);
+        }
+        .gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;      /* füllt Kachel, schneidet ggf. zu */
+            object-position: center; /* mittig zuschneiden */
+            transform: scale(1.01);  /* verhindert manchmal dünne Kanten */
+            transition: transform 0.25s ease;
+        }
+        .gallery-thumb:hover img { transform: scale(1.08); }
+
+        /* === Lightbox (Originalgröße anzeigen) === */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            display: none;
             align-items: center;
             justify-content: center;
-            color: var(--accent-color);
-            font-size: 3rem;
-            transition: all 0.3s ease;
+            padding: 1rem;
         }
-        
-        .gallery-item:hover {
-            background: linear-gradient(45deg, #555, #777);
+        .lightbox-overlay.is-open { display: flex; }
+
+        .lightbox-figure {
+            max-width: 100%;
+            max-height: 100%;
+            display: grid;
+            gap: 0.75rem;
+            justify-items: center;
+        }
+
+        /* Bild NICHT skalieren -> Originalpixelgröße.
+           Wenn es größer als der Viewport ist, kann man scrollen. */
+        .lightbox-frame {
+            max-width: 100%;
+            max-height: 80vh;
+            overflow: auto;               /* scrollen falls Bild größer */
+            border-radius: 0.75rem;
+            border: 1px solid rgba(0,255,0,0.25);
+            background: rgba(20,20,20,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .lightbox-img {
+            display: block;
+            width: auto;                  /* Originalgröße */
+            height: auto;                 /* Originalgröße */
+            max-width: none;              /* wichtig: keine automatische Skalierung */
+            max-height: none;             /* wichtig: keine automatische Skalierung */
+        }
+
+        .lightbox-caption {
+            max-width: min(900px, 95vw);
+            color: #e5e7eb;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            border: 1px solid rgba(0,255,0,0.35);
+            background: rgba(0,0,0,0.6);
+            color: var(--accent-color);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.15s ease;
+            z-index: 10000;
+        }
+        .lightbox-close:hover {
             transform: scale(1.05);
+            background: rgba(0,0,0,0.85);
+        }
+
+        .lightbox-hint {
+            position: fixed;
+            bottom: 0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.75);
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 0.35rem 0.6rem;
+            border-radius: 9999px;
+            z-index: 10000;
         }
     </style>
 </head>
+
 <body class="bg-primary text-white smooth-scroll">
-    
+
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-primary bg-opacity-95 backdrop-blur-sm z-50 border-b border-accent">
         <div class="container mx-auto px-4 py-3">
@@ -112,13 +195,9 @@
     <header id="home" class="section-spacing mt-16 text-center">
         <div class="container mx-auto px-4">
             <div class="mb-8">
-                <!-- Logo Platzhalter  -->
                 <div class="w-32 h-32 mx-auto bg-accent rounded-full flex items-center justify-center mb-6">
                     <i class="fas fa-table-tennis text-6xl text-black"></i>
                 </div>
-                <!-- Alternativ für echtes Logo:
-                <img src="PFAD_ZUM_LOGO" alt="Vereinslogo" class="w-32 h-32 mx-auto mb-6">
-                -->
             </div>
             <h1 class="text-5xl font-bold mb-4">
                 <span class="text-accent">TTC</span> Gransee 98 e.V.
@@ -162,7 +241,7 @@
                         <li class="border-l-4 border-accent pl-4">
                             <strong>Zwischen den Feiertagen:</strong> Training am 30.12.25, 17:00 Uhr
                         </li>
-						<li class="border-l-4 border-accent pl-4">
+                        <li class="border-l-4 border-accent pl-4">
                             <strong>Jahreshauptversammlung:</strong> Vorstand auf Mitgliederversammlung am 12.12.25 bestätigt
                         </li>
                     </ul>
@@ -220,7 +299,7 @@
                             <div>
                                 <strong>Freitag</strong>
                                 <div class="text-sm text-gray-400">Nachwuchstraining</div>
-				<div class="text-sm text-gray-400">Erwachsenentraining</div>
+                                <div class="text-sm text-gray-400">Erwachsenentraining</div>
                             </div>
                             <span class="text-accent font-bold"><br>17:00 - 19:00<br>19:00 - 21:00</span>
                         </div>
@@ -272,7 +351,7 @@
                 Unsere <span class="text-accent">Mannschaften</span>
             </h2>
             <div class="grid lg:grid-cols-3 gap-8">
-                
+
                 <!-- 1. Mannschaft -->
                 <div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
                     <div class="bg-accent text-black p-4">
@@ -284,29 +363,14 @@
                     <div class="p-6">
                         <h4 class="font-bold mb-4 text-accent">Spieler:</h4>
                         <ul class="space-y-2 mb-6">
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Ulf Bartel
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Stefan Reinsberg (Mannschaftsführer)
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Oliver Stiegat
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Diethardt Goldenbogen
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Michael Melchin
-                            </li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Ulf Bartel</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Stefan Reinsberg (Mannschaftsführer)</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Oliver Stiegat</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Diethardt Goldenbogen</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Michael Melchin</li>
                         </ul>
                         <div class="text-center">
-                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/1-Kreisklasse-Erwachsene/gruppe/493634/mannschaft/2956061/TTC-Gransee/spielplan/aktuell/" 
+                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/1-Kreisklasse-Erwachsene/gruppe/493634/mannschaft/2956061/TTC-Gransee/spielplan/aktuell/"
                                class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition">
                                 <i class="fas fa-external-link-alt mr-1"></i>
                                 Ergebnisse & Tabelle
@@ -326,29 +390,14 @@
                     <div class="p-6">
                         <h4 class="font-bold mb-4 text-accent">Spieler:</h4>
                         <ul class="space-y-2 mb-6">
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Bernd Guth (Mannschaftsführer)
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Lutz Kade
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Peter Gogol
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Anica Erdmann
-                            </li>
-							<li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Uwe Heiden
-                            </li>
-						</ul>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Bernd Guth (Mannschaftsführer)</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Lutz Kade</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Peter Gogol</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Anica Erdmann</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Uwe Heiden</li>
+                        </ul>
                         <div class="text-center">
-                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/5-Kreisklasse-Erwachsene/gruppe/493609/mannschaft/2955897/TTC-Gransee-II/spielplan/aktuell/"  
+                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/5-Kreisklasse-Erwachsene/gruppe/493609/mannschaft/2955897/TTC-Gransee-II/spielplan/aktuell/"
                                class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition">
                                 <i class="fas fa-external-link-alt mr-1"></i>
                                 Ergebnisse & Tabelle
@@ -368,26 +417,13 @@
                     <div class="p-6">
                         <h4 class="font-bold mb-4 text-accent">Spieler:</h4>
                         <ul class="space-y-2 mb-6">
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Tim Heiden (Mannschaftsführer)
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Tristan Krick
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Alexander Beil
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user text-accent mr-2"></i>
-                                Leonard Wudicke
-                            </li>
-
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Tim Heiden (Mannschaftsführer)</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Tristan Krick</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Alexander Beil</li>
+                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Leonard Wudicke</li>
                         </ul>
                         <div class="text-center">
-                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/Kreisliga-Jugend-19/gruppe/493647/mannschaft/2991364/TTC-Gransee/spielplan/aktuell/" 
+                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/Kreisliga-Jugend-19/gruppe/493647/mannschaft/2991364/TTC-Gransee/spielplan/aktuell/"
                                class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition">
                                 <i class="fas fa-external-link-alt mr-1"></i>
                                 Ergebnisse & Tabelle
@@ -395,6 +431,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -405,43 +442,40 @@
             <h2 class="text-3xl font-bold text-center mb-12">
                 <span class="text-accent">Bilder</span>galerie
             </h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- Bildplatzhalter -->
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6486.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6488.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6498.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6499.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6500.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6501.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6504.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <div class="gallery-item rounded-lg">
-                    <img src="DSC_6505.JPG" alt="Weihnachtsfeier am 19.12.25" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                </div>
-                <!-- 
-                Ersetzen der Platzhalter mit Bildern:
-                <img src="pfad/zu/ihrem/bild1.jpg" alt="Beschreibung" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                <img src="pfad/zu/ihrem/bild2.jpg" alt="Beschreibung" class="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform">
-                usw.
 
-				Platzhalter:
-				<div class="gallery-item rounded-lg">
-                    <i class="fas fa-image"></i>
-                </div>
-                -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Thumbnail-Kacheln: quadratisch & voll -->
+                <button class="gallery-thumb" type="button" data-full="DSC_6486.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6486.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6488.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6488.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6498.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6498.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6499.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6499.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6500.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6500.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6501.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6501.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6504.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6504.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
+
+                <button class="gallery-thumb" type="button" data-full="DSC_6505.JPG" data-caption="Weihnachtsfeier am 19.12.25">
+                    <img src="DSC_6505.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
+                </button>
             </div>
         </div>
     </section>
@@ -514,7 +548,7 @@
                             </p>
                         </div>
                         <div class="mt-6">
-                            <a href="mailto:guth.Musikladen@web.de" 
+                            <a href="mailto:guth.Musikladen@web.de"
                                class="inline-block bg-accent text-black px-6 py-3 rounded font-bold hover:bg-green-400 transition">
                                 <i class="fas fa-envelope mr-2"></i>
                                 Nachricht senden
@@ -537,25 +571,10 @@
                     <div>
                         <h3 class="text-xl font-bold mb-4 text-accent">Vereinsangaben</h3>
                         <div class="space-y-3 text-sm">
-                            <p>
-                                <strong>Vereinsname:</strong><br>
-                                TTC Gransee 98 e.V.
-                            </p>
-                            <p>
-                                <strong>Anschrift:</strong><br>
-                                Rudolf-Breitscheid-Str. 72<br>
-                                16775 Gransee
-                            </p>
-                            <p>
-                                <strong>Vereinsregister:</strong><br>
-                                Registergericht: Amtsgericht Neuruppin<br>
-                                Vereinsnummer: 1024
-                            </p>
-                            <p>
-                                <strong>Vertretungsberechtigter Vorstand:</strong><br>
-                                Bernd Guth<br>
-                                Michael Melchin
-                            </p>
+                            <p><strong>Vereinsname:</strong><br>TTC Gransee 98 e.V.</p>
+                            <p><strong>Anschrift:</strong><br>Rudolf-Breitscheid-Str. 72<br>16775 Gransee</p>
+                            <p><strong>Vereinsregister:</strong><br>Registergericht: Amtsgericht Neuruppin<br>Vereinsnummer: 1024</p>
+                            <p><strong>Vertretungsberechtigter Vorstand:</strong><br>Bernd Guth<br>Michael Melchin</p>
                         </div>
                     </div>
                     <div>
@@ -568,12 +587,12 @@
                             </p>
                             <p>
                                 <strong>Haftungsausschluss:</strong><br>
-                                Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. 
+                                Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links.
                                 Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
                             </p>
                             <p>
                                 <strong>Datenschutz:</strong><br>
-                                Die Nutzung unserer Website ist in der Regel ohne Angabe personenbezogener Daten möglich. 
+                                Die Nutzung unserer Website ist in der Regel ohne Angabe personenbezogener Daten möglich.
                                 Soweit auf unseren Seiten personenbezogene Daten erhoben werden, erfolgt dies stets auf freiwilliger Basis.
                             </p>
                         </div>
@@ -603,25 +622,37 @@
         </div>
     </footer>
 
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-label="Bildanzeige">
+        <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Schließen">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="lightbox-figure" role="document">
+            <div class="lightbox-frame" id="lightboxFrame">
+                <img id="lightboxImg" class="lightbox-img" src="" alt="">
+            </div>
+            <div id="lightboxCaption" class="lightbox-caption"></div>
+        </div>
+
+        <div class="lightbox-hint">ESC zum Schließen • Klicken außerhalb schließt</div>
+    </div>
+
     <!-- JavaScript -->
     <script>
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        
+
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
 
- 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     mobileMenu.classList.add('hidden');
                 }
             });
@@ -630,7 +661,7 @@
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-link');
-            
+
             let currentSection = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop - 100;
@@ -639,7 +670,7 @@
                     currentSection = section.getAttribute('id');
                 }
             });
-            
+
             navLinks.forEach(link => {
                 link.classList.remove('text-accent');
                 if (link.getAttribute('href') === `#${currentSection}`) {
@@ -648,15 +679,63 @@
             });
         });
 
-        // Einfache Gallerie-Funktionalität (Kann mit Lightbox erweitert werden)
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', () => {
-                // Hier ggf. Lightbox-Funktionalität hinzufügen
-                console.log('Bild geklickt - Lightbox öffnen');
+        // === Lightbox Logik: Originalgröße anzeigen (bei größeren Bildern scrollen) ===
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxFrame = document.getElementById('lightboxFrame');
+
+        function openLightbox(src, caption, alt) {
+            lightboxImg.src = src;
+            lightboxImg.alt = alt || caption || 'Bild';
+            lightboxCaption.textContent = caption || '';
+            lightbox.classList.add('is-open');
+            lightbox.setAttribute('aria-hidden', 'false');
+
+            // Scrollposition zurücksetzen (falls vorher gescrollt wurde)
+            lightboxFrame.scrollTop = 0;
+            lightboxFrame.scrollLeft = 0;
+
+            // Scroll sperren
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('is-open');
+            lightbox.setAttribute('aria-hidden', 'true');
+
+            // Bildquelle leeren (verhindert "kurzes Aufblitzen" beim nächsten Öffnen)
+            lightboxImg.src = '';
+            lightboxCaption.textContent = '';
+
+            // Scroll wieder erlauben
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.gallery-thumb').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const img = btn.querySelector('img');
+                const full = btn.getAttribute('data-full') || img.getAttribute('src');
+                const caption = btn.getAttribute('data-caption') || img.getAttribute('alt') || '';
+                const alt = img.getAttribute('alt') || caption || 'Bild';
+                openLightbox(full, caption, alt);
             });
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+
+        // Klick auf den dunklen Hintergrund schließt (aber nicht, wenn man aufs Bild/Frame klickt)
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // ESC schließt
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
+                closeLightbox();
+            }
         });
     </script>
 </body>
 </html>
-    
-    

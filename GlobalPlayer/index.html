@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Fallbeispiel – McDonald’s als Global Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind & Fonts & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    body{
+      font-family:'Montserrat',sans-serif;
+      background:#F3F4F6;
+      color:#111827;
+    }
+    .content-font{ font-family:'Raleway',sans-serif; }
+
+    .section-card{
+      background:#FFFFFF;
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .nav { display:flex; gap:.5rem; justify-content:flex-end; }
+    .btn-nav { display:inline-flex; align-items:center; gap:.45rem; background:#166534; color:#fff; padding:.35rem .8rem; border-radius:999px; font-size:.85rem; font-weight:700; border:none; cursor:pointer; text-decoration:none; }
+    .btn-nav:hover { background:#15803D; }
+
+
+    .mini-heading{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:#6B7280;
+    }
+    .badge{
+      display:inline-block;
+      padding:0.1rem 0.5rem;
+      border-radius:999px;
+      font-size:0.7rem;
+      font-weight:700;
+      background:#064E3B;
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      padding:.25rem .6rem;
+      border-radius:999px;
+      font-size:.8rem;
+      background:#F3F4F6;
+      border:1px solid #E5E7EB;
+      color:#374151;
+      user-select:none;
+    }
+    .btn{
+      border-radius:0.75rem;
+      padding:.55rem .8rem;
+      font-weight:700;
+      border:1px solid #E5E7EB;
+      background:#fff;
+      transition:transform .05s ease, box-shadow .12s ease, background .12s ease;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 6px 14px rgba(0,0,0,.08);
+      background:#F9FAFB;
+    }
+    .btn-primary{
+      background:#064E3B;
+      border-color:#064E3B;
+      color:#fff;
+    }
+    .btn-primary:hover{ background:#05543a; }
+
+    .callout{
+      background:#ECFDF5;
+      border:1px solid #A7F3D0;
+      border-radius:0.75rem;
+      padding:.75rem;
+    }
+    .callout-warning{
+      background:#FFFBEB;
+      border:1px solid #FDE68A;
+    }
+    .callout-danger{
+      background:#FEF2F2;
+      border:1px solid #FECACA;
+    }
+
+    .grid-2{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .grid-3{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+    .grid-4{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; }
+
+    .card-head{
+      display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+      padding:.85rem 1rem;
+      border-bottom:1px solid #E5E7EB;
+      background:#F9FAFB;
+    }
+    .card-body{ padding:1rem; }
+
+    .kpi{
+      border:1px solid #E5E7EB;
+      border-radius:0.75rem;
+      padding:.6rem .75rem;
+      background:#fff;
+    }
+    .kpi .label{ font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:#6B7280; }
+    .kpi .value{ font-size:1.05rem; font-weight:800; color:#064E3B; line-height:1.2; }
+    .kpi .hint{ font-size:.78rem; color:#6B7280; }
+
+    .accordion-btn{
+      width:100%;
+      text-align:left;
+      border:1px solid #E5E7EB;
+      background:#fff;
+      border-radius:0.75rem;
+      padding:.7rem .8rem;
+      font-weight:800;
+      color:#064E3B;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:.75rem;
+    }
+    .accordion-btn:hover{ background:#F9FAFB; }
+    .accordion-panel{
+      border:1px solid #E5E7EB;
+      border-top:none;
+      border-radius:0 0 0.75rem 0.75rem;
+      padding:.75rem .8rem;
+      background:#fff;
+      display:none;
+      margin-top:-0.45rem;
+    }
+
+    /* Aufgabenblock */
+    .task-section{
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #064E3B;
+      border-radius:0.85rem;
+      padding:1rem;
+    }
+    .task-label{
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#064E3B;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:999px;
+      font-weight:800;
+      font-size:.85rem;
+    }
+
+    @media (max-width:980px){
+      .grid-2,.grid-3,.grid-4{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-green-900 text-white px-8 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">Fallbeispiel: McDonald’s als Global Player</h1>
+        <div class="h-1 w-24 bg-yellow-400 mt-2 rounded"></div>
+      </div>
+      <div class="text-xs md:text-sm text-right">
+        Global Player &amp; Globalisierung<br/>
+        Geographie – Sek I/II
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 md:px-10 py-6 space-y-6 content-font">
+
+      <!-- 1) Einstieg + Kerndaten + Bild -->
+      <!-- 1) Einstieg + Kerndaten + Bild -->
+<section class="section-card">
+  <div class="card-head">
+    <div class="flex items-center gap-3">
+      <span class="badge">M1</span>
+      <div>
+        <div class="text-lg md:text-xl font-semibold text-green-900">Einstieg: „Golden Arches“ überall?</div>
+        <div class="mini-heading">Kerndaten &amp; weltweite Präsenz (vereinfacht)</div>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-2">
+      <span class="pill"><i class="fa-solid fa-earth-europe"></i> 100+ Länder</span>
+      <span class="pill"><i class="fa-solid fa-store"></i> 40.000+ Filialen</span>
+    </div>
+  </div>
+
+  <div class="card-body space-y-4">
+    <div class="grid-2 items-stretch">
+      <!-- links -->
+      <div class="space-y-3 text-sm text-gray-800">
+        <p>
+          McDonald’s ist nicht nur Fast Food, sondern ein typisches Beispiel für Globalisierung:
+          ein standardisiertes Geschäftsmodell, eine extrem starke Marke – und eine Präsenz in sehr vielen Staaten.
+        </p>
+
+        <div class="grid-2">
+          <div class="kpi">
+            <div class="label">Hauptsitz</div>
+            <div class="value">Chicago (USA)</div>
+            <div class="hint">Konzernzentrale</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Standorte</div>
+            <div class="value">41.822</div>
+            <div class="hint">(Angabe 2023)</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Länder/Regionen</div>
+            <div class="value">119+</div>
+            <div class="hint">Weltweiter Markt</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Umsatz / Gewinn</div>
+            <div class="value">25,49 Mrd. $ / 8,47 Mrd. $</div>
+            <div class="hint">(Angaben 2023)</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Betriebsvermögen</div>
+            <div class="value">56,15 Mrd. $</div>
+            <div class="hint">(Angaben 2023)</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Mitarbeiterzahl</div>
+            <div class="value">ca. 150 000</div>
+            <div class="hint">(Angaben 2023)</div>
+          </div>
+        </div>
+
+        <div class="callout text-xs text-gray-800">
+          <div class="font-semibold text-green-900 mb-1">Denkanstöße:</div>
+          <ul class="list-disc list-inside space-y-1">
+            <li>Warum funktioniert ein (fast) gleiches Restaurant-Konzept in so vielen Ländern?</li>
+            <li>Wo muss McDonald’s sich trotzdem anpassen (Religion, Kultur, Gesetze)?</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- rechts (Bild) -->
+      <div class="section-card p-3 border border-gray-200 h-full flex flex-col">
+        <div class="mini-heading mb-2">McDonald's-Restaurant in Shanghai</div>
+
+        <div class="flex-1 rounded-lg border border-dashed border-gray-300 bg-gray-50 overflow-hidden flex items-center justify-center">
+          <img
+            src="https://officialwebsitestorage.blob.core.chinacloudapi.cn/public/upload/photo_db/2025/12/22/202512221114081434/202512221114081434_640_480.jpg?&rand=0827"
+            alt="McDonald's-Restaurant (Beispielbild)"
+            class="w-full h-full object-contain block"
+          />
+        </div>
+
+        <div class="text-xs text-gray-500 mt-2">
+          Hinweis: Bild kann durch ein eigenes oder frei lizenziertes Wikimedia-Bild ersetzt werden.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      <!-- 2) Weltkarte: Länder mit McDonald's -->
+      <section class="section-card">
+        <div class="card-head">
+          <div class="flex items-center gap-3">
+            <span class="badge">M2</span>
+            <div>
+              <div class="text-lg md:text-xl font-semibold text-green-900">Verbreitung: McDonald’s in der Welt</div>
+              <div class="mini-heading">Karte: Länder mit McDonald’s + ungefähres Eröffnungsjahr</div>
+            </div>
+          </div>
+          <a class="text-xs font-semibold text-green-900 underline"
+             href="https://commons.wikimedia.org/wiki/File:McDonaldsWorldLocations(v2).svg" target="_blank" rel="noopener">
+            Quelle (Wikimedia)
+          </a>
+        </div>
+
+        <div class="card-body">
+          <div class="grid-2">
+
+            <!-- LINKS: Chart + Text -->
+            <div class="space-y-3">
+              <div class="section-card p-3 border border-gray-200">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <div class="mini-heading">Balkendiagramm</div>
+                    <div class="text-sm font-semibold text-green-900" style="font-family:'Montserrat',sans-serif;">
+                      Anzahl McDonald’s-Filialen je Land
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      Top 20 Länder (Stand: Dez. 2022)
+                    </div>
+                  </div>
+                  <a class="text-xs font-semibold text-green-900 underline"
+                     href="https://de.wikipedia.org/wiki/McDonald%E2%80%99s#L%C3%A4nder" target="_blank" rel="noopener">
+                    Quelle (Wikipedia)
+                  </a>
+                </div>
+
+                <div class="mt-2" style="height:360px;">
+                  <canvas id="mcdCountryChart" aria-label="Balkendiagramm: McDonald's Filialen nach Land" role="img"></canvas>
+                </div>
+
+                <div class="text-xs text-gray-500 mt-2">
+                  Hinweis: Wegen der vielen Länder werden hier die in Wikipedia gelisteten Top-20 gezeigt.
+                </div>
+              </div>
+
+              <div class="text-sm text-gray-800 space-y-2">
+                <p>
+                  Die Karte zeigt, in welchen Ländern McDonald’s vertreten ist – und wann ungefähr der erste Standort
+                  eröffnet wurde. Daran kann man gut erkennen, wie sich ein Unternehmen aus den USA global ausbreitet.
+                </p>
+                <ul class="list-disc list-inside text-sm space-y-1">
+                  <li><strong>Frühe Ausbreitung</strong> zuerst in wirtschaftsstarken Regionen und Großstädten.</li>
+                  <li><strong>Netzwerkeffekt</strong>: Bekanntheit + Franchise-System erleichtern weiteres Wachstum.</li>
+                  <li><strong>Politik &amp; Wirtschaft</strong>: In manchen Ländern gibt es Einschränkungen oder Rückzüge.</li>
+                </ul>
+
+                <div class="callout callout-warning text-xs">
+                  <div class="font-semibold mb-1"><i class="fa-solid fa-lightbulb"></i> Arbeitsauftrag (kurz)</div>
+                  Beschreibe 3 Regionen, in denen McDonald’s besonders dicht vertreten ist, und vermute Gründe.
+                </div>
+              </div>
+            </div>
+
+            <!-- RECHTS: Karte -->
+            <div class="section-card p-3 border border-gray-200">
+              <div class="mini-heading mb-2">Karte (eingebettet)</div>
+              <img
+                class="w-full h-auto rounded-lg border border-gray-200 bg-white"
+                src="https://commons.wikimedia.org/wiki/Special:FilePath/McDonaldsWorldLocations(v2).svg"
+                alt="Karte: Länder mit McDonald's und ungefähres Eröffnungsjahr"/>
+              <div class="text-xs text-gray-500 mt-2">
+                Tipp: In der Datei-Ansicht (Link oben) kann man weitere Infos/Legenden finden.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) KULTUR – ersetzt durch 2 Line-Charts -->
+      <!-- 3) M3 – Unternehmensentwicklung (2 Line-Charts) -->
+<section class="section-card">
+  <div class="card-head">
+    <div class="flex items-center gap-3">
+      <span class="badge">M3</span>
+      <div>
+        <div class="text-lg md:text-xl font-semibold text-green-900">Unternehmensentwicklung (Zeitreihe)</div>
+        <div class="mini-heading">Standorte sowie Umsatz &amp; Gewinn im Zeitverlauf</div>
+      </div>
+    </div>
+    <a class="text-xs font-semibold text-green-900 underline"
+       href="https://de.wikipedia.org/wiki/McDonald%E2%80%99s#Unternehmen" target="_blank" rel="noopener">
+      Quelle (Wikipedia)
+    </a>
+  </div>
+
+  <div class="card-body">
+    <div class="grid-2">
+      <!-- (1) Standorte -->
+      <div class="section-card p-3 border border-gray-200">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="mini-heading">Liniendiagramm 1</div>
+            <div class="text-sm font-semibold text-green-900" style="font-family:'Montserrat',sans-serif;">
+              Anzahl Standorte weltweit
+            </div>
+            <div class="text-xs text-gray-500">2000–2023</div>
+          </div>
+          <span class="pill"><i class="fa-solid fa-store"></i> Standorte</span>
+        </div>
+
+        <div class="mt-2" style="height:320px;">
+          <canvas id="mcdLocationsChart" aria-label="Liniendiagramm: Standorte im Zeitverlauf" role="img"></canvas>
+        </div>
+
+        <div class="text-xs text-gray-500 mt-2">
+          Auftrag: Beschreibe Phasen mit besonders starkem Wachstum und nenne mögliche Gründe.
+        </div>
+      </div>
+
+      <!-- (2) Umsatz & Gewinn -->
+      <div class="section-card p-3 border border-gray-200">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="mini-heading">Liniendiagramm 2</div>
+            <div class="text-sm font-semibold text-green-900" style="font-family:'Montserrat',sans-serif;">
+              Umsatz &amp; Gewinn (in Mrd. US-$)
+            </div>
+            <div class="text-xs text-gray-500">2000–2023 (fehlende Werte möglich)</div>
+          </div>
+          <span class="pill"><i class="fa-solid fa-chart-line"></i> Finanzen</span>
+        </div>
+
+        <div class="mt-2" style="height:320px;">
+          <canvas id="mcdFinanceChart" aria-label="Liniendiagramm: Umsatz und Gewinn im Zeitverlauf" role="img"></canvas>
+        </div>
+
+        <div class="text-xs text-gray-500 mt-2">
+          Auftrag: Vergleiche Umsatz- und Gewinnentwicklung. Wann steigt der Gewinn stärker als der Umsatz?
+        </div>
+      </div>
+    </div>
+
+    <div class="text-xs text-gray-600 mt-3">
+      Hinweis: Werte aus Wikipedia (Abschnitt „Unternehmen“ / Geschäftszahlen). Dezimal-Kommas wurden als Dezimalpunkte übernommen.
+    </div>
+  </div>
+</section>
+
+
+      
+
+      <!-- 5)  Textblock  -->
+<section class="section-card">
+  <div class="card-head">
+    <div class="flex items-center gap-3">
+      <span class="badge">M4</span>
+      <div>
+        <div class="text-lg md:text-xl font-semibold text-green-900">McDonald’s und die Verbreitung amerikanischer Kultur</div>
+        <div class="mini-heading">American Way of Life · Standardisierung · Glokalisierung</div>
+      </div>
+    </div>
+    <span class="pill"><i class="fa-solid fa-flag-usa"></i> Kultur</span>
+  </div>
+
+  <div class="card-body">
+    <div class="text-sm text-gray-800 leading-relaxed space-y-3 content-font">
+      <p>
+        Die Marke McDonald's ist eng mit dem Bild der Vereinigten Staaten verbunden. Das Unternehmen hat es geschafft, die
+        für Amerika typische Kultur des schnellen Konsums, der Effizienz und der Standardisierung weltweit zu verbreiten.
+        In vielen Ländern markierte die Eröffnung eines McDonald's-Restaurants einen Wendepunkt in der Anpassung an westliche
+        Konsumgewohnheiten. Besonders in der zweiten Hälfte des 20. Jahrhunderts, als sich nach dem Zweiten Weltkrieg die
+        wirtschaftliche und kulturelle Vormachtstellung der USA festigte, wurde McDonald's zu einem Botschafter des
+        „American Way of Life“. Dies zeigt sich nicht nur in der Verbreitung von Burgern und Pommes frites als global
+        akzeptierte Mahlzeiten, sondern auch in den typischen Merkmalen der McDonald's-Kultur: Selbstbedienung, schnelle
+        Abwicklung von Bestellungen, standardisierte Portionsgrößen und ein Design, das in jeder Filiale der Welt vertraut wirkt.
+      </p>
+
+      <p>
+        Dies hat dazu geführt, dass McDonald's oft als Symbol der Amerikanisierung betrachtet wird – also als eine Kraft, die lokale
+        Esskulturen und traditionelle Ernährungsweisen zurückdrängt oder zumindest tiefgreifend beeinflusst. Besonders deutlich zeigt
+        sich dies in Ländern mit starken kulinarischen Traditionen. In Frankreich beispielsweise, einem Land mit stolzem gastronomischem
+        Erbe, stieß McDonald's zunächst auf großen Widerstand. Dennoch wurde das Unternehmen im Laufe der Jahrzehnte auch dort zu einem
+        festen Bestandteil der Esskultur.
+      </p>
+
+      <p>
+        Ähnliches gilt für China, Indien oder Japan, wo McDonald's lokale Geschmacksrichtungen integriert hat – zum Beispiel mit dem
+        McSpicy Paneer in Indien oder dem Teriyaki Burger in Japan –, ohne jedoch das amerikanische Grundkonzept aufzugeben.
+        Die Verbreitung von McDonald's bedeutet daher nicht nur, dass Menschen weltweit ähnliche Produkte konsumieren, sondern auch,
+        dass sich ihre Essgewohnheiten und ihr Verhältnis zu Nahrung verändern.
+      </p>
+
+      <p>
+        Die schnelle Verfügbarkeit von standardisiertem Essen fördert eine Kultur der Bequemlichkeit und Individualisierung – Aspekte,
+        die besonders in urbanen, westlich geprägten Gesellschaften als Selbstverständlichkeiten gelten, in vielen traditionellen
+        Gesellschaften jedoch einen Bruch mit bisherigen Werten darstellen.
+      </p>
+
+      <div class="callout callout-warning text-xs mt-4">
+        <div class="font-semibold mb-1"><i class="fa-solid fa-pen-to-square"></i> Arbeitsauftrag</div>
+        Markiere im Text (a) Beispiele für <strong>Amerikanisierung</strong> und (b) Beispiele für <strong>Glokalisierung</strong>.
+        Formuliere anschließend ein kurzes Fazit (3–4 Sätze): Überwiegt Standardisierung oder Anpassung?
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 4) Wirtschaft: Big Mac Index (interaktiv) -->
+      <section class="section-card">
+        <div class="card-head">
+          <div class="flex items-center gap-3">
+            <span class="badge">M5</span>
+            <div>
+              <div class="text-lg md:text-xl font-semibold text-green-900">McDonald’s als wirtschaftlicher Indikator</div>
+              <div class="mini-heading">Big Mac Index (Kaufkraft / Währungs-Vergleich)</div>
+            </div>
+          </div>
+          <span class="pill"><i class="fa-solid fa-chart-line"></i> Volkswirtschaftslehre</span>
+        </div>
+
+
+
+        <div class="card-body">
+
+<div class="text-sm text-gray-800 leading-relaxed space-y-3 content-font">
+      <p>
+        McDonald's ist nicht nur ein kulturelles, sondern auch ein wirtschaftliches Phänomen. Der Konzern steht exemplarisch
+        für die Prinzipien der modernen Unternehmensführung: Skaleneffekte, vertikale Integration und ein hoch optimiertes
+        Franchisemodell. Darüber hinaus spielt McDonald's eine Rolle in der volkswirtschaftlichen Analyse, insbesondere in der
+        Berechnung von Kaufkraftparitäten und Inflation.
+      </p>
+
+      <p>
+        Ein besonders bekanntes Beispiel ist der <strong>Big Mac Index</strong>, der seit 1986 von der britischen Zeitschrift
+        <em>The Economist</em> verwendet wird, um die Kaufkraftparität zwischen verschiedenen Währungen zu vergleichen.
+        Die Grundidee: Da ein Big Mac überall auf der Welt nach denselben Standards produziert wird und weitgehend identische
+        Zutaten enthält, kann sein Preis als Vergleichswert für die relative Stärke einer Währung dienen.
+        Wenn ein Big Mac in den USA beispielsweise 5 Dollar kostet, in China aber umgerechnet nur 3 Dollar, dann deutet dies
+        darauf hin, dass die chinesische Währung unterbewertet sein könnte.
+      </p>
+
+      <p>
+        Darüber hinaus wird McDonald's auch als Indikator für wirtschaftliche Entwicklung und Inflation betrachtet.
+        Die Preisentwicklung von McDonald's-Produkten gibt Hinweise darauf, wie sich Lebensmittelpreise, Lohnkosten und Mieten
+        in verschiedenen Ländern verändern. In vielen Ländern gehören McDonald's-Mitarbeiter zu den Niedriglohnarbeitern,
+        und steigende Mindestlöhne schlagen sich direkt in den Produktpreisen nieder – ein Grund, warum McDonald's-Preise oft
+        als Frühindikator für Inflationsentwicklungen gelten.
+      </p></div><br><br>
+
+
+          <div class="grid-2 gap-4">
+            <div class="text-sm text-gray-800 space-y-2">
+              <p>
+                &rarr; Weil ein Big Mac weltweit nach ähnlichen Standards verkauft wird, kann sein Preis als
+                <strong>einfacher Vergleich</strong> dienen: Wie viel „Wert“ hat Geld in verschiedenen Ländern?
+                (In der Realität ist das nur ein grober Indikator.)
+              </p>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li><strong>Kaufkraftparität (PPP):</strong> Was kann man sich für Geld leisten?</li>
+                <li><strong>Währungsbewertung:</strong> Ist eine Währung eher über- oder unterbewertet?</li>
+                <li><strong>Inflation/Löhne:</strong> Preisänderungen spiegeln oft Kostenentwicklungen.</li>
+              </ul>
+
+              <div class="callout callout-warning text-xs">
+                <div class="font-semibold mb-1"><i class="fa-solid fa-triangle-exclamation"></i> Wichtig</div>
+                Der Big Mac Index ist ein anschauliches Unterrichtsbeispiel – aber keine „exakte“ Wirtschaftsrechnung.
+              </div>
+            </div>
+
+            <div class="section-card p-4 border border-gray-200">
+              <div class="mini-heading mb-2">Mini-Rechner (didaktisch)</div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div>
+                  <label class="text-xs font-semibold text-gray-700">Big-Mac-Preis Land A (in Lokalwährung)</label>
+                  <input id="pLocal" type="number" step="0.01" class="w-full border rounded px-2 py-1" placeholder="z. B. 120.00"/>
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-gray-700">Big-Mac-Preis USA (in USD)</label>
+                  <input id="pUSD" type="number" step="0.01" class="w-full border rounded px-2 py-1" placeholder="z. B. 5.50"/>
+                </div>
+                <div class="md:col-span-2">
+                  <label class="text-xs font-semibold text-gray-700">Wechselkurs (Lokalwährung pro 1 USD)</label>
+                  <input id="fx" type="number" step="0.0001" class="w-full border rounded px-2 py-1" placeholder="z. B. 20.00"/>
+                </div>
+              </div>
+
+              <div class="flex gap-2 mt-3">
+                <button id="btnCalc" class="btn btn-primary" type="button">
+                  <i class="fa-solid fa-calculator"></i> Berechnen
+                </button>
+                <button id="btnResetCalc" class="btn" type="button">
+                  <i class="fa-solid fa-rotate-right"></i> Zurücksetzen
+                </button>
+              </div>
+
+              <div id="calcOut" class="mt-3 text-sm text-gray-800 callout" style="display:none;">
+                <div class="font-semibold text-green-900 mb-1">Ergebnis</div>
+                <div id="calcText"></div>
+              </div>
+
+              <div class="text-xs text-gray-500 mt-2">
+                Interpretation: Wenn der umgerechnete Preis in USD deutlich <em>unter</em> dem US-Preis liegt,
+                wirkt die Lokalwährung (sehr grob!) <strong>unterbewertet</strong> – und umgekehrt.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5) (NEU) Textblock – ersetzt das bisherige M5 komplett -->
+<section class="section-card">
+  <div class="card-head">
+    <div class="flex items-center gap-3">
+      <span class="badge">M5</span>
+      <div>
+        <div class="text-lg md:text-xl font-semibold text-green-900">Kritik an McDonald's</div>
+        <div class="mini-heading">Kultur · Gesundheit · Ökologie</div>
+      </div>
+    </div>
+    <span class="pill"><i class="fa-solid fa-chart-line"></i> Wirtschaft</span>
+  </div>
+
+  <div class="card-body">
+    <div class="text-sm text-gray-800 leading-relaxed space-y-3 content-font">
+       <p>
+        McDonald's steht häufig für die sogenannte <strong>„McJob“-Kultur</strong> – ein Begriff, der schlecht bezahlte,
+        monotone und wenig perspektivreiche Arbeitsplätze beschreibt. In vielen Ländern sind McDonald's-Mitarbeiter einem
+        hohen Druck ausgesetzt: Sie müssen Bestellungen in Sekunden abwickeln, gleichzeitig Kunden bedienen und für Sauberkeit
+        sorgen. Gewerkschaften und Arbeitnehmerorganisationen kritisieren die niedrigen Löhne und die prekären Arbeitsverhältnisse.
+        Insbesondere in den USA hat die Bewegung <strong>„Fight for 15“</strong> (für einen Mindestlohn von 15 Dollar pro Stunde)
+        dazu geführt, dass McDonald's immer wieder im Zentrum arbeitsrechtlicher Debatten steht.
+      </p>
+
+      <p>
+        McDonald's-Produkte sind bekannt für ihren hohen Kaloriengehalt, viel Fett, Zucker und Salz. Gesundheitsexperten sehen
+        in Fast Food einen wichtigen Faktor für die weltweite Zunahme von Fettleibigkeit, Diabetes und Herz-Kreislauf-Erkrankungen.
+        Besonders problematisch ist, dass McDonald's gezielt Kinder anspricht – etwa durch Happy Meals mit Spielzeug und durch
+        farbenfrohe Werbekampagnen. Kritiker werfen dem Unternehmen vor, eine ungesunde Ernährungsweise zu fördern und die langfristigen
+        Folgen für die öffentliche Gesundheit zu ignorieren.
+      </p>
+
+      <p>
+        McDonald's hat in den letzten Jahrzehnten massive Umweltprobleme verursacht – von Plastikmüll bis hin zur Rodung von Regenwäldern
+        für die Fleischproduktion. Die Menge an Einwegverpackungen, die durch McDonald's-Produkte entsteht, ist enorm und belastet vielerorts
+        die Abfallentsorgung. Zwar hat das Unternehmen in den letzten Jahren verstärkt auf Recycling- und Nachhaltigkeitsmaßnahmen gesetzt,
+        doch Kritiker bemängeln, dass diese oft nicht weit genug gehen.
+      </p>
+
+      <p>
+        Die weltweite Präsenz von McDonald's wird nicht nur als wirtschaftlicher, sondern auch als kultureller Eingriff gesehen. Die Ersetzung
+        traditioneller Esskulturen durch standardisierte Fast-Food-Produkte wird vielerorts als Bedrohung lokaler Identitäten wahrgenommen.
+        Während McDonald's in einigen Ländern lokale Spezialitäten integriert, bleibt der Grundgedanke dennoch der eines hochoptimierten,
+        amerikanisierten Gastronomiekonzepts, das sich gegenüber traditionellen Restaurants und Garküchen oft durchsetzt.
+      </p>
+
+         </div>
+  </div>
+</section>
+
+
+      <!-- 7) Aufgaben -->
+      <section class="task-section">
+        <div class="task-label">Aufgaben</div>
+        <ol class="list-decimal list-inside text-sm text-gray-800 mt-2 space-y-2">
+          <li><strong>Beschreibe </strong> die Bedeutung von McDonald’s für volkswirtschaftliche Betrachtungen.</li>
+          <li><strong>Charakterisiere</strong> McDonald’s als Global Player, indem du die Merkmale eines Global Players mit den im Material gegebenen Informationen über das Unternehmen vergleichst.</li>
+          <li>„McDonald’s ist der Inbegriff für die dekadente und zerstörerische Seite der Globalisierung, die es zu vermeiden gilt.“ <strong>Diskutiere</strong> diese kritische These zur weltweiten Bedeutung von McDonald’s. <i>Optional (Partnerarbeit):</i> Entwickelt drei Maßnahmen, wie McDonald’s nachhaltiger werden könnte.</li>
+        </ol>
+      </section>
+
+    </main>
+
+      <div class="nav">
+        <a class="btn-nav" href="Seite4.html"><i class="fa-solid fa-arrow-left"></i> Zurück</a>
+        <a class="btn-nav" href="Seite6.html"><i class="fa-solid fa-arrow-right"></i> Weiter</a>
+      </div>
+
+    <!-- Footer -->
+    <footer class="px-8 py-3 text-xs text-gray-500 flex justify-between content-font">
+      <span>Arbeitsblatt – Fallbeispiel McDonald’s (Global Player)</span>
+      <span>Geographie</span>
+    </footer>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <script>
+    // ----------------------------
+    // Big-Mac-Mini-Rechner
+    // ----------------------------
+    const elPLocal = document.getElementById("pLocal");
+    const elPUsd = document.getElementById("pUSD");
+    const elFx = document.getElementById("fx");
+    const btnCalc = document.getElementById("btnCalc");
+    const btnResetCalc = document.getElementById("btnResetCalc");
+    const out = document.getElementById("calcOut");
+    const outText = document.getElementById("calcText");
+
+    function fmt(n){
+      return (Math.round(n * 100) / 100).toFixed(2);
+    }
+
+    btnCalc.addEventListener("click", () => {
+      const pLocal = Number(elPLocal.value);
+      const pUsd = Number(elPUsd.value);
+      const fx = Number(elFx.value);
+
+      if(!pLocal || !pUsd || !fx || pLocal <= 0 || pUsd <= 0 || fx <= 0){
+        out.style.display = "block";
+        outText.innerHTML = `<span class="font-semibold text-red-700">Bitte gültige Werte eingeben.</span>`;
+        return;
+      }
+
+      const impliedUsd = pLocal / fx;
+      const diffPct = ((impliedUsd - pUsd) / pUsd) * 100;
+
+      let interpretation = "";
+      if (diffPct < -10){
+        interpretation = "Der umgerechnete Preis ist deutlich niedriger als in den USA → die Lokalwährung wirkt (sehr grob) <strong>unterbewertet</strong> oder das Preisniveau ist niedriger.";
+      } else if (diffPct > 10){
+        interpretation = "Der umgerechnete Preis ist deutlich höher als in den USA → die Lokalwährung wirkt (sehr grob) <strong>überbewertet</strong> oder das Preisniveau ist höher.";
+      } else {
+        interpretation = "Der umgerechnete Preis liegt nahe am US-Preis → grob <strong>ähnliche Kaufkraft</strong> (oder zufällig ähnlich).";
+      }
+
+      out.style.display = "block";
+      outText.innerHTML =
+        `<div>Umgerechneter Big-Mac-Preis in Land A: <strong>${fmt(impliedUsd)} USD</strong></div>` +
+        `<div>Abweichung zum US-Preis: <strong>${fmt(diffPct)} %</strong></div>` +
+        `<div class="mt-2">${interpretation}</div>`;
+    });
+
+    btnResetCalc.addEventListener("click", () => {
+      elPLocal.value = "";
+      elPUsd.value = "";
+      elFx.value = "";
+      out.style.display = "none";
+      outText.innerHTML = "";
+    });
+
+    // ----------------------------
+  // ----------------------------
+// Akkordeon (Merkmale) – nur ausführen, wenn Elemente existieren
+// ----------------------------
+const accBtns = [...document.querySelectorAll(".accordion-btn")];
+const toggleAllBtn = document.getElementById("btnToggleAll");
+let allOpen = false;
+
+function setAcc(id, open){
+  const panel = document.getElementById(id);
+  if(!panel) return;
+  panel.style.display = open ? "block" : "none";
+}
+
+if (accBtns.length) {
+  accBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-acc");
+      const panel = document.getElementById(id);
+      const isOpen = panel && panel.style.display === "block";
+      setAcc(id, !isOpen);
+    });
+  });
+}
+
+if (toggleAllBtn) {
+  toggleAllBtn.addEventListener("click", () => {
+    allOpen = !allOpen;
+    for (let i=1;i<=10;i++){
+      setAcc("a"+i, allOpen);
+    }
+    toggleAllBtn.innerHTML = allOpen
+      ? '<i class="fa-solid fa-compress"></i> Alle einklappen'
+      : '<i class="fa-solid fa-up-right-and-down-left-from-center"></i> Alle ausklappen';
+  });
+}
+
+
+    // ----------------------------
+    // M2: Balkendiagramm – Filialen je Land (Top 20)
+    // ----------------------------
+    const mcdCountries = [
+      "Vereinigte Staaten","Volksrepublik China","Japan","Frankreich","Kanada",
+      "Deutschland","Vereinigtes Königreich","Brasilien","Australien","Philippinen",
+      "Italien","Spanien","Polen","Indien","Taiwan",
+      "Südkorea","Saudi-Arabien","Mexiko","Südafrika","Malaysia"
+    ];
+
+    const mcdStores = [
+      13436, 4978, 2968, 1536, 1462,
+      1425, 1397, 1084, 1028, 705,
+      669, 580, 517, 512, 409,
+      399, 371, 366, 346, 341
+    ];
+
+   (function renderM2Chart(){
+  const canvas = document.getElementById("mcdCountryChart");
+  if(!canvas) return;
+
+  new Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: mcdCountries,
+      datasets: [{
+        label: "Anzahl Restaurants",
+        data: mcdStores,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: "y",
+      layout: {
+        padding: { left: 16, right: 8, top: 0, bottom: 0 } // mehr Platz für Länder
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (context) => ` ${context.raw.toLocaleString("de-DE")} Restaurants`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { callback: (v) => Number(v).toLocaleString("de-DE") },
+          grid: { drawBorder: false }
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            autoSkip: false,    // <- WICHTIG: zeigt alle Länder
+            maxRotation: 0,
+            minRotation: 0,
+            padding: 6,
+            font: { size: 11 }
+          }
+        }
+      }
+    }
+  });
+})();
+
+
+    // ----------------------------
+   // ----------------------------
+// M3: Liniendiagramme – Geschäftszahlen (Wikipedia)
+// ----------------------------
+const m3Years = [
+  2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,
+  2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023
+];
+
+// Anzahl Standorte (weltweit)
+const m3Locations = [
+  28603,29916,30876,30824,31152,31397,31667,31377,31967,32478,32737,33510,
+  34480,35429,36258,36525,36899,37241,37855,38695,39198,40021,40275,41822
+];
+
+// Umsatz (Mrd. US-$)
+const m3RevenueBn = [
+  14.172,14.738,15.201,16.825,18.594,19.832,21.586,22.787,23.522,22.745,24.075,27.006,
+  27.567,28.105,27.441,25.413,24.622,22.820,21.364,21.258,19.208,23.223,23.183,25.494
+];
+
+// Gewinn (Mrd. US-$) – falls ein Jahr in Wikipedia fehlt: null (Linie unterbricht)
+const m3ProfitBn = [
+  1.977,1.637,0.893,1.471,2.279,2.602,3.544,2.395,4.313,4.551,4.946,5.503,
+  5.464,5.585,4.757,4.529,4.687,5.192,5.924,6.025,4.731,7.545,6.177,8.469
+];
+
+function bnLabel(val){
+  if (val === null || val === undefined) return "–";
+  return `${val.toLocaleString("de-DE", {minimumFractionDigits: 3, maximumFractionDigits: 3})} Mrd. US-$`;
+}
+
+(function renderM3Charts(){
+  const cLoc = document.getElementById("mcdLocationsChart");
+  const cFin = document.getElementById("mcdFinanceChart");
+  if(!cLoc || !cFin) return;
+
+  // Chart 1: Standorte
+  new Chart(cLoc.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: m3Years,
+      datasets: [{
+        label: "Standorte",
+        data: m3Locations,
+        borderWidth: 2,
+        tension: 0.25,
+        pointRadius: 2,
+        pointHoverRadius: 4,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${Number(ctx.raw).toLocaleString("de-DE")} Standorte`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          grid: { drawBorder: false },
+          ticks: {
+            callback: (v) => Number(v).toLocaleString("de-DE")
+          }
+        }
+      }
+    }
+  });
+
+  // Chart 2: Umsatz & Gewinn
+  new Chart(cFin.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: m3Years,
+      datasets: [
+        {
+          label: "Umsatz (Mrd. US-$)",
+          data: m3RevenueBn,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 2,
+          pointHoverRadius: 4,
+          fill: false
+        },
+        {
+          label: "Gewinn (Mrd. US-$)",
+          data: m3ProfitBn,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 2,
+          pointHoverRadius: 4,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${ctx.dataset.label}: ${bnLabel(ctx.raw)}`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          grid: { drawBorder: false },
+          ticks: {
+            callback: (v) => Number(v).toLocaleString("de-DE")
+          }
+        }
+      }
+    }
+  });
+})();
+
+  </script>
+</body>
+</html>

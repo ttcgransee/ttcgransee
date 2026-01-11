@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Corioliskraft (NHK) – Spiralbahn im Tiefdruckgebiet (Canvas)</title>
+
+  <!-- Tailwind & Fonts & Icons wie Vorlage -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <!-- Stil (übernommen/angelehnt an beigefügter Vorlage) -->
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:110px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+      align-items:stretch;
+    }
+
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      min-height: 0;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.0rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; min-height:0; }
+    .tiny { font-size:.9rem; color:#4B5563; }
+
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.6rem;
+      margin-top:.4rem;
+    }
+    .info-box {
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:8px;
+      padding:.6rem .75rem;
+    }
+    .info-box.full { grid-column:1 / -1; }
+    .info-label {
+      font-size:.72rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#374151;
+      margin-bottom:.25rem;
+    }
+    .info-box p,
+    .info-box ul,
+    .info-box ol {
+      font-size:.92rem;
+      line-height:1.55;
+      margin:0;
+    }
+    .info-box ul { margin-left:1rem; list-style:disc; }
+    .info-box ol { margin-left:1.1rem; list-style:decimal; }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.6rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:700;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1.2rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
+
+    .footer {
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+
+    /* --- Simulation specific --- */
+    .sim-wrap{ display:flex; flex-direction:column; gap:.65rem; min-height:0; }
+    .canvas-shell{
+      flex:1 1 auto;
+      min-height: 360px;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      overflow:hidden;
+      background:#0b1220;
+      position:relative;
+    }
+    canvas{ width:100%; height:100%; display:block; }
+    .controls{ display:grid; grid-template-columns: 1fr 1fr; gap:.6rem; }
+    .controls .info-box{ background:#fff; }
+    .btn{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.5rem .7rem;
+      border:1px solid #E5E7EB;
+      background:#fff;
+      border-radius:10px;
+      font-weight:700;
+      font-family:'Montserrat',sans-serif;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow:0 10px 20px rgba(0,0,0,.08); background:#F9FAFB; }
+    .btn.primary{ border-color: rgba(230,180,0,.7); background: rgba(230,180,0,.10); }
+    .btn.danger{ border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.08); }
+    .toggle{
+      display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+      font-family:'Raleway',sans-serif; font-size:.92rem; color:#374151;
+    }
+    .toggle input{ transform: scale(1.05); }
+    .slider-row{
+      display:grid; grid-template-columns: 1fr auto;
+      gap:.6rem; align-items:center;
+      margin-top:.35rem; font-size:.9rem; color:#374151;
+    }
+    input[type="range"]{ width:100%; }
+    .mono{
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
+    @media (max-width: 980px){
+      .materials-grid{ grid-template-columns:1fr; }
+      .controls{ grid-template-columns:1fr; }
+      .canvas-shell{ min-height: 420px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slide-container">
+    <div class="slide-header">
+      <div>
+        <h1 class="title"><i>Simulation:</i> Drehsinn und Spiralbahnen in Tiefdruckgebieten</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Geographie | Klasse 10</p>
+    </div>
+
+    <div class="slide-content">
+
+      <div class="materials-grid">
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">A</span>
+            <div class="mat-title">Simulation</div>
+          </div>
+
+          <div class="mat-body sim-wrap">
+            <div class="canvas-shell" aria-label="Simulation">
+              <canvas id="sim"></canvas>
+            </div>
+
+            <div class="controls">
+              <div class="info-box">
+                <div class="info-label">Steuerung</div>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <button class="btn primary" id="play"><i class="fas fa-play"></i> Start</button>
+                  <button class="btn" id="step"><i class="fas fa-redo"></i> 1 Schritt</button>
+                  <button class="btn danger" id="reset"><i class="fas fa-undo"></i> Reset</button>
+                </div>
+                <div class="mt-3 grid gap-2">
+                  <div class="toggle">
+                    <span><i class="fas fa-hand-paper mr-2"></i>Reibung an</span>
+                    <input type="checkbox" id="fric" checked>
+                  </div>
+                  <div class="toggle">
+                    <span><i class="fas fa-vector-square mr-2"></i>Resultierende anzeigen</span>
+                    <input type="checkbox" id="showRes" checked>
+                  </div>
+                  <div class="toggle">
+                    <span><i class="fas fa-circle-notch mr-2"></i>Isobaren anzeigen</span>
+                    <input type="checkbox" id="isobars" checked>
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Parameter (verändern die Bahn)</div>
+
+                <div class="slider-row">
+                  <div>PGF (Druckgefälle)</div><div><span class="mono" id="pgfVal"></span></div>
+                </div>
+                <input type="range" id="pgf" min="0.3" max="3.0" step="0.05" value="1.40">
+
+                <div class="slider-row">
+                  <div>Coriolis-Faktor (∝ |v|)</div><div><span class="mono" id="corVal"></span></div>
+                </div>
+                <input type="range" id="cor" min="0.00" max="2.2" step="0.05" value="1.10">
+
+                <div class="slider-row">
+                  <div>Reibung (∝ |v|)</div><div><span class="mono" id="frVal"></span></div>
+                </div>
+                <input type="range" id="fr" min="0.00" max="2.2" step="0.05" value="0.55">
+
+                <div class="slider-row">
+                  <div>Zeitschritt dt</div><div><span class="mono" id="dtVal"></span></div>
+                </div>
+                <input type="range" id="dt" min="0.002" max="0.030" step="0.001" value="0.010">
+
+                <p class="tiny mt-3" style="margin:0;">
+                  Tipp: Für „fast isobarenparallel“ → <strong>Reibung aus</strong> und <strong>PGF ≈ Coriolis</strong>.
+                  Für Spiral-in → <strong>Reibung an</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">B</span>
+            <div class="mat-title">Erklärung (NHK)</div>
+          </div>
+
+          <div class="mat-body">
+            <div class="info-grid">
+              <div class="info-box">
+                <div class="info-label">Zeichnen (Kräfte)</div>
+                <ol>
+                  <li>Tief (Kreis) + Isobaren (Abstand ~1&nbsp;cm).</li>
+                  <li>Wähle einen Punkt auf einer äußeren Isobare.</li>
+                  <li>Zeichne <strong>PGF</strong> radial <strong>zum Zentrum</strong>.</li>
+                  <li>Zeichne die momentane <strong>Bewegung v</strong> (tangential).</li>
+                  <li><strong>Coriolis</strong>: 90° <strong>rechts</strong> von v (NHK).</li>
+                  <li><strong>Reibung</strong>: genau <strong>entgegen v</strong> (bremst).</li>
+                  <li>Addiere Pfeile (Parallelogramm) → Resultierende → neuer Schritt.</li>
+                </ol>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Warum gegen den Uhrzeigersinn?</div>
+                <p>
+                  Um ein Tief strömt Luft aufgrund des Druckgefälles ein, wird aber auf der NHK durch Coriolis
+                  nach rechts abgelenkt. Damit stellt sich eine <strong>gegen den Uhrzeigersinn</strong> gerichtete
+                  Zirkulation ein. Bodennah sorgt Reibung dafür, dass die Bahn <strong>spiralig nach innen</strong>
+                  verläuft.
+                </p>
+              </div>
+
+              <div class="info-box full">
+                <div class="info-label">Merksätze</div>
+                <ul>
+                  <li><strong>Druckgefälle treibt</strong> (zum Tief).</li>
+                  <li><strong>Coriolis lenkt</strong> (NHK: nach rechts).</li>
+                  <li><strong>Reibung bremst</strong> (entgegen der Bewegung) → Coriolis wird schwächer → Spirale.</li>
+                </ul>
+              </div>
+            </div>
+
+            <a href="10.html"><div class="task-section">
+              <div class="task-label"><i class="fas fa-bullseye mr-2"></i>Aufgaben</div>
+              <ol>
+                <li>1. Stellt in der Simulation <strong>Reibung aus</strong>: Wie verläuft die Bahn im Vergleich zu den Isobaren?</li>
+                <li>2. Schaltet <strong>Reibung an</strong>: Was ändert sich? (Warum entsteht Spiral-in?)</li>
+                <li>3. Findet eine Einstellung, bei der „fast isobarenparallel“ sichtbar wird (Hinweis: <strong>PGF ≈ Coriolis</strong>).</li>
+              </ol>
+            </div></a>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <p>Theo Schierbaum - Corioliskraft</p>
+      <p>Seite 9</p>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('sim');
+  const ctx = canvas.getContext('2d');
+
+  const ui = {
+    play: document.getElementById('play'),
+    step: document.getElementById('step'),
+    reset: document.getElementById('reset'),
+    fric: document.getElementById('fric'),
+    showRes: document.getElementById('showRes'),
+    isobars: document.getElementById('isobars'),
+    pgf: document.getElementById('pgf'),
+    cor: document.getElementById('cor'),
+    fr: document.getElementById('fr'),
+    dt: document.getElementById('dt'),
+    pgfVal: document.getElementById('pgfVal'),
+    corVal: document.getElementById('corVal'),
+    frVal: document.getElementById('frVal'),
+    dtVal: document.getElementById('dtVal'),
+  };
+
+  // World coords: x right, y up. Screen: y down.
+  const state = {
+    running: false,
+    centerS: {x: 0, y: 0},
+    r0: 260,
+    p: {x: 0, y: 0},
+    v: {x: 0, y: 0},
+    path: [],
+    arrowScale: 55,
+  };
+
+  function setCanvasSize(){
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+    canvas.width  = Math.floor(rect.width  * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+
+    // map logical pixels
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    state.centerS.x = rect.width / 2;
+    state.centerS.y = rect.height / 2;
+    state.r0 = Math.min(rect.width, rect.height) * 0.33;
+  }
+
+  window.addEventListener('resize', () => {
+    setCanvasSize();
+    reset();
+  });
+
+  function fmt(n){ return (Math.round(n*100)/100).toFixed(2); }
+  function updateLabels(){
+    ui.pgfVal.textContent = fmt(+ui.pgf.value);
+    ui.corVal.textContent = fmt(+ui.cor.value);
+    ui.frVal.textContent  = fmt(+ui.fr.value);
+    ui.dtVal.textContent  = fmt(+ui.dt.value) + ' s';
+  }
+
+  // vector helpers
+  function len(a){ return Math.hypot(a.x, a.y); }
+  function norm(a){
+    const L = len(a) || 1;
+    return {x: a.x/L, y: a.y/L};
+  }
+  function add(a,b){ return {x:a.x+b.x, y:a.y+b.y}; }
+  function mul(a,k){ return {x:a.x*k, y:a.y*k}; }
+
+  // right rotation by 90°: (vx,vy) -> (vy, -vx)
+  function right90(v){ return {x: v.y, y: -v.x}; }
+
+  function toScreen(w){
+    return {
+      x: state.centerS.x + w.x,
+      y: state.centerS.y - w.y
+    };
+  }
+
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  function drawArrow(originW, vecW, color, label){
+    const o = toScreen(originW);
+    const endW = add(originW, mul(vecW, state.arrowScale));
+    const e = toScreen(endW);
+
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(o.x, o.y);
+    ctx.lineTo(e.x, e.y);
+    ctx.stroke();
+
+    const ang = Math.atan2(e.y - o.y, e.x - o.x);
+    const head = 10;
+    ctx.beginPath();
+    ctx.moveTo(e.x, e.y);
+    ctx.lineTo(e.x - head*Math.cos(ang - Math.PI/7), e.y - head*Math.sin(ang - Math.PI/7));
+    ctx.lineTo(e.x - head*Math.cos(ang + Math.PI/7), e.y - head*Math.sin(ang + Math.PI/7));
+    ctx.closePath();
+    ctx.fill();
+
+    if(label){
+      ctx.font = '12px Montserrat, sans-serif';
+      ctx.fillStyle = 'rgba(245,245,245,.92)';
+      ctx.strokeStyle = 'rgba(0,0,0,.35)';
+      ctx.lineWidth = 4;
+      const tx = e.x + 10;
+      const ty = e.y + 4;
+      ctx.strokeText(label, tx, ty);
+      ctx.fillText(label, tx, ty);
+    }
+
+    ctx.restore();
+  }
+
+  function reset(){
+    state.running = false;
+    ui.play.innerHTML = '<i class="fas fa-play"></i> Start';
+
+    const r = state.r0;
+    // start at east of low
+    state.p.x = r; state.p.y = 0;
+
+    // Start tangential for a "nice" counterclockwise motion (NHK low)
+    // at east point, CCW tangential is north (positive y)
+    state.v.x = 0;
+    state.v.y = 120;
+
+    state.path = [{x: state.p.x, y: state.p.y}];
+    draw();
+  }
+
+  function draw(){
+    const rect = canvas.getBoundingClientRect();
+    const W = rect.width, H = rect.height;
+
+    ctx.clearRect(0,0,W,H);
+
+    // subtle grid
+    ctx.save();
+    ctx.globalAlpha = 0.14;
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    const step = 40;
+    for(let x=0; x<=W; x+=step){
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+    }
+    for(let y=0; y<=H; y+=step){
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+    ctx.restore();
+
+    const cS = {x: state.centerS.x, y: state.centerS.y};
+
+    // isobars: ~1cm
+    const pxPerCm = 37.8;
+    if(ui.isobars.checked){
+      ctx.save();
+      ctx.strokeStyle = 'rgba(230,180,0,.35)';
+      ctx.lineWidth = 2;
+      for(let r = pxPerCm; r <= state.r0*1.05; r += pxPerCm){
+        ctx.beginPath();
+        ctx.arc(cS.x, cS.y, r, 0, Math.PI*2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // outer reference circle
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,.22)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(cS.x, cS.y, state.r0, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+
+    // low marker
+    ctx.save();
+    ctx.fillStyle = 'rgba(230,180,0,.96)';
+    ctx.beginPath();
+    ctx.arc(cS.x, cS.y, 16, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#111827';
+    ctx.font = '800 16px Montserrat, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('T', cS.x, cS.y+1);
+    ctx.restore();
+
+    // path
+    ctx.save();
+    ctx.strokeStyle = 'rgba(229,231,235,.88)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for(let i=0;i<state.path.length;i++){
+      const s = toScreen(state.path[i]);
+      if(i===0) ctx.moveTo(s.x, s.y);
+      else ctx.lineTo(s.x, s.y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // particle
+    const pS = toScreen(state.p);
+    ctx.save();
+    ctx.fillStyle = 'rgba(34,211,238,.95)';
+    ctx.beginPath();
+    ctx.arc(pS.x, pS.y, 7, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
+    // forces (dimensionless for drawing)
+    const rVec = mul(state.p, -1);
+    const rHat = norm(rVec);
+
+    const pgfStrength = +ui.pgf.value;
+    const corFactor   = +ui.cor.value;
+    const frFactor    = +ui.fr.value;
+    const useFric     = ui.fric.checked;
+
+    const vHat = norm(state.v);
+    const speed = len(state.v);
+    const speedScaled = speed / 120;
+
+    const a_pgf = mul(rHat, pgfStrength);
+    const a_cor = mul(norm(right90(vHat)), corFactor * speedScaled);
+    const a_fric = useFric ? mul(mul(vHat, -1), frFactor * speedScaled) : {x:0,y:0};
+    const a_res = add(add(a_pgf, a_cor), a_fric);
+
+    drawArrow(state.p, a_pgf, '#34d399', 'PGF');
+    drawArrow(state.p, a_cor, '#22d3ee', 'Coriolis');
+    if(useFric) drawArrow(state.p, a_fric, '#fb7185', 'Reibung');
+    if(ui.showRes.checked) drawArrow(state.p, a_res, '#f472b6', 'Res');
+
+    // info box bottom-left
+    ctx.save();
+    const txt = [
+      `v = ${Math.round(speed)} (arb.)`,
+      `PGF = ${fmt(pgfStrength)} (zum Zentrum)`,
+      `Coriolis = ${fmt(corFactor)} · |v| (rechts von v)`,
+      `Reibung = ${useFric ? fmt(frFactor) : '0.00'} · |v| (gegen v)`
+    ];
+    const bx = 14, by = H - (18*txt.length + 18) - 14;
+    const bw = 320, bh = 18*txt.length + 18;
+    ctx.fillStyle = 'rgba(17,24,39,.78)';
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    ctx.lineWidth = 1;
+    roundRect(bx, by, bw, bh, 12);
+    ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle = 'rgba(245,245,245,.92)';
+    ctx.font = '12px Raleway, sans-serif';
+    for(let i=0;i<txt.length;i++){
+      ctx.fillText(txt[i], bx+12, by+10 + i*18);
+    }
+    ctx.restore();
+  }
+
+  function stepSim(){
+    const dt = +ui.dt.value;
+
+    const pgfStrength = +ui.pgf.value;
+    const corFactor   = +ui.cor.value;
+    const frFactor    = +ui.fr.value;
+    const useFric     = ui.fric.checked;
+
+    const rVec = mul(state.p, -1);
+    const rHat = norm(rVec);
+
+    const speed = len(state.v);
+    const vHat = norm(state.v);
+    const speedScaled = speed / 120;
+
+    // scale accelerations for visible curvature
+    const scale = 80;
+
+    const a_pgf = mul(rHat, pgfStrength * scale);
+    const a_cor = mul(norm(right90(vHat)), corFactor * speedScaled * scale);
+    const a_fric = useFric ? mul(mul(vHat, -1), frFactor * speedScaled * scale) : {x:0,y:0};
+    const a = add(add(a_pgf, a_cor), a_fric);
+
+    state.v.x += a.x * dt;
+    state.v.y += a.y * dt;
+    state.p.x += state.v.x * dt;
+    state.p.y += state.v.y * dt;
+
+    state.path.push({x: state.p.x, y: state.p.y});
+    if(state.path.length > 2500) state.path.shift();
+
+    if(len(state.p) < 12){
+      state.running = false;
+      ui.play.innerHTML = '<i class="fas fa-play"></i> Start';
+    }
+  }
+
+  function tick(){
+    if(state.running){
+      for(let i=0;i<2;i++) stepSim();
+    }
+    draw();
+    requestAnimationFrame(tick);
+  }
+
+  ui.play.addEventListener('click', () => {
+    state.running = !state.running;
+    ui.play.innerHTML = state.running ? '<i class="fas fa-pause"></i> Pause' : '<i class="fas fa-play"></i> Start';
+  });
+
+  ui.step.addEventListener('click', () => {
+    state.running = false;
+    ui.play.innerHTML = '<i class="fas fa-play"></i> Start';
+    stepSim();
+    draw();
+  });
+
+  ui.reset.addEventListener('click', reset);
+
+  [ui.pgf, ui.cor, ui.fr, ui.dt, ui.fric, ui.showRes, ui.isobars].forEach(el => {
+    el.addEventListener('input', () => { updateLabels(); draw(); });
+    el.addEventListener('change', () => { updateLabels(); draw(); });
+  });
+
+  setCanvasSize();
+  updateLabels();
+  reset();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

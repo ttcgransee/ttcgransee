@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Corioliskraft – Erklärung & Versuch</title>
+
+  <!-- Tailwind & Fonts & Icons wie Vorlage (2.html) -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    /* Stil: 1:1 an beigefügter Folie (2.html) angelehnt */
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:110px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+    .formula {
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+      align-items:stretch;
+    }
+
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .material:hover{
+      transform: translateY(-3px);
+      box-shadow:0 14px 28px rgba(0,0,0,.10);
+    }
+
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.0rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny { font-size:.9rem; color:#4B5563; }
+
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.6rem;
+      margin-top:.4rem;
+    }
+    .info-box {
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:8px;
+      padding:.6rem .75rem;
+    }
+    .info-box.full { grid-column:1 / -1; }
+    .info-label {
+      font-size:.72rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#374151;
+      margin-bottom:.25rem;
+    }
+    .info-box p,
+    .info-box ul,
+    .info-box ol {
+      font-size:.9rem;
+      line-height:1.5;
+      margin:0;
+    }
+    .info-box ul { margin-left:1rem; list-style:disc; }
+    .info-box ol { margin-left:1.1rem; list-style:decimal; }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.25rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:700;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1.2rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
+
+    /* GIF block (200×280) */
+    .gif-row{
+      display:flex;
+      gap:.8rem;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-top:.6rem;
+    }
+    .gif-box{
+      width:200px; height:280px;
+      border-radius:10px;
+      border:1px solid #E5E7EB;
+      background:#fff;
+      overflow:hidden;
+      flex: 0 0 auto;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .gif-box img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .gif-placeholder{
+      text-align:center;
+      color:#6B7280;
+      font-size:.85rem;
+      padding:.6rem;
+      font-family:'Raleway',sans-serif;
+    }
+    .formula {
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
+    .footer {
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+      .gif-row{ flex-direction:column; }
+      .gif-box{ width:100%; max-width:260px; height:280px; }
+    }
+
+    @media print {
+      html, body { background:#fff; }
+      .slide-header, .footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .material, .task-section { box-shadow:none; }
+    }
+  
+    .action-btn{ transition: transform .18s ease, box-shadow .18s ease; }
+    .action-btn:hover{
+      transform: translateY(-2px);
+      box-shadow:0 10px 18px rgba(0,0,0,.10);
+    }
+    /* Tabelle (wie in 2.html) */
+    table.measure-table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.85rem;
+      margin-top:.4rem;
+      table-layout:fixed;
+    }
+    table.measure-table th, table.measure-table td {
+      border:1px solid #d1d5db;
+      padding:.45rem .35rem;
+      text-align:center;
+      vertical-align:middle;
+      word-wrap:break-word;
+    }
+    table.measure-table th {
+      background:#f3f4f6;
+      font-weight:700;
+    }
+    table.measure-table .rowhead {
+      text-align:left;
+      font-weight:700;
+      padding-left:.6rem;
+      background:#fafafa;
+    }
+    table.measure-table td {
+      height:2.0rem;
+      background:#fff;
+    }
+</style>
+</head>
+
+<body>
+  <div class="slide-container">
+
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title"><i>Experiment:</i> Corioliskraft verstehen</h1>
+        <div class="divider"></div>
+      </div>
+      <strong><i><h2>Zeit: 15–20 min</h2></i></strong>
+    </div>
+
+    <div class="slide-content">
+
+      <div class="materials-grid">
+
+        <!-- LINKS: Erklärung -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">A</span>
+            <div class="mat-title">Theorie</div>
+          </div>
+
+          <div class="mat-body">
+            <div class="info-grid">
+              <div class="info-box full">
+                <p>
+                  Die Corioliskraft ist eine <strong>Scheinkraft</strong> im <strong>rotierenden Bezugssystem</strong> (Erde).
+                  Sie wirkt <strong>immer senkrecht</strong> zur Bewegungsrichtung und lenkt Bewegungen ab:
+                </p>
+              </div>
+
+              <div class="info-box" id="InfoPanel" style="display:none;">
+                <div class="info-label">Physikalische Abhängigkeit</div>
+                <ul>
+                  <li>stärker bei <strong>... Geschwindigkeit</strong></li>
+                  <li>stärker Richtung <strong>...</strong></li>
+                  <li>am Äquator: <strong>...</strong> (...)</li>
+                  <li>stärker bei ... drehenden Körpern (<i>aber: Drehung der Erde konstant</i>)</li>
+                </ul><br>
+                <p>&rarr; <strong>Coriolisbeschleunigung <span class="formula">...</span></strong></p>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Ursache</div>
+                <ul>
+                  <li>...</li>
+                  <li>...</li>
+                  <li>...</li>
+                </ul>
+              </div>
+            </div>
+
+            
+
+<!-- Separates Kästchen UNTER Mini-Check: Button + (bei Klick) GIF + Erklärung -->
+<div class="info-box full" style="margin-top:.6rem;">
+  <div class="info-label">Animation ansehen</div>
+
+  <div style="display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;">
+    <button id="toggleGifBtn" type="button"
+            class="inline-flex items-center px-3 py-2 rounded-lg font-semibold action-btn"
+            style="background:#2A3B32; color:#fff; border:1px solid rgba(0,0,0,.08);">
+      <i class="fas fa-play mr-2"></i> GIF anzeigen
+    </button>
+
+  </div>
+
+  <div id="gifPanel" style="display:none; margin-top:.75rem;">
+    <div class="gif-row" style="margin-top:0;">
+      <!-- 200×280 GIF -->
+      <div class="gif-box" aria-label="GIF (200×280)">
+        <img id="coriolisGif" src="coriolis.gif" alt="GIF: Corioliskraft"
+             onerror="this.style.display='none'; document.getElementById('gifFallback').style.display='block';"/>
+        <div id="gifFallback" class="gif-placeholder" style="display:none;">
+          <i class="fas fa-image" style="font-size:1.4rem; margin-bottom:.25rem;"></i><br/>
+          <strong>GIF fehlt</strong><br/>
+          200 × 280 px<br/>
+          <span style="font-size:.8rem;">Dateiname: <code>coriolis.gif</code></span>
+        </div>
+      </div>
+
+      <!-- Erklärung neben dem GIF -->
+      <div class="info-box" style="flex:1 1 auto;">
+        <div class="info-label">Erklärung zur Perspektive</div>
+        <p>Im <strong>inertialen Bezugssystem</strong> (oberer Teil der Abbildung) bewegt sich die schwarze Kugel auf einer <strong>geraden</strong> Bahn. Der Beobachter (roter Punkt), der sich im <strong>rotierenden / nicht‑inertialen Bezugssystem</strong> (unterer Teil der Abbildung) befindet, nimmt das Objekt jedoch als <strong>gekrümmt</strong> wahr – verursacht durch die <strong>Coriolis‑</strong> und <strong>Zentrifugalkraft</strong>, die in diesem Bezugssystem auftreten.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+          </div>
+        </section>
+
+        <!-- RECHTS: Versuch -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">B</span>
+            <div class="mat-title">Partnerversuch mit <i>Erdscheibe</i></div>
+          </div>
+
+          <div class="mat-body">
+              <div class="info-box full">
+                <div class="info-label">Ziel:</div>
+                <ul>
+                  <li>1. Ablenkrichtung auf NHK &amp; SHK bestimmen bei Bewegung (a) <i>Pol &rarr; Äquator</i> und (b) <i>Äquator &rarr; Pol</i> bestimmen</li>
+                  <li>3. Abhängigkeit der Ablenkung von (a) <i>Bewegungsgeschwindkeit der Luft</i> und (b) <i>Drehgeschwindigkeit der Erde</i> bestimmen</li>
+		  <li>4. Abhängigkeit der Ablenkung von der geographischen Breite bestimmen</li>
+                </ul>
+              </div><br>
+
+
+            <div class="task-section">
+              <div class="task-label"><i class="fas fa-flask mr-2"></i>Durchführung</div>
+              <ol>
+                <li><strong>1. Bewegung Pol &rarr; Äquator (<i>blauer Stift</i>) und Bewegung Äquator &rarr; Pol (<i>roter Stift</i>)</strong><br/>
+                      <strong><i>(a)</strong></i> Scheibe (NHK+SHK) auf den Tisch legen. Partner A fixiert den <i>Pol</i> (Mitte) mit einem Finger.
+                      Partner B dreht die Scheibe leicht in Erddrehrichtung und zeichnet eine
+                      gerade Linie (bezogen auf den Tisch) vom Pol Richtung Äquator.<br>
+                      <strong><i>(b)</strong></i> Markiert einen Punkt am <i>Äquator</i> und fixiert ihn mit einem Finger.
+                      Rotiert die Scheibe in Erddrehrichtung um diesen Fixpunkt und zeichnet eine gerade Linie
+                      vom Äquator in Richtung der <i>anfänglichen</i> Pol‑Position.
+                <li><strong>2. Bewegungsgeschwindigkeit der Luftteilchen und Drehgeschwindigkeit (Rotation) der Erde</strong><br/>
+                  <strong><i>(a)</strong></i> Wählt einen neuen Startpunkt und wiederholt die Versuche 1 und 2 je zweimal von diesem neuen Startpunkt. Bei gleicher Drehgeschwindigkeit der Erde bewegen sich die Luftmassen einmal schneller (<i>Strich schnell ziehen</i>), einmal langsamer (<i>Strich langsam ziehen</i>).<br>
+                  <strong><i>(b)</strong></i> Wählt einen neuen Startpunkt und wiederholt die Versuche 1 und 2 je zweimal von diesem neuen Startpunkt. Bei gleicher Bewegungsgeschwindigkeit der Luft soll sich die Erde einmal schneller drehen und einmal langsamer.
+                </li>
+                <li><strong>4. Abhängigkeit der Ablenkung von der geographischen Breite</strong><br/>
+                  Messt die Strecken der Ost-West-Ablenkung zwischen zwei Breitenkreisen <i>in Äquatornähe</i> und <i>in Polnähe</i> (in cm) und vergleicht die Werte miteinander.
+                </li>
+
+              </ol>
+            </div>
+
+            <a href="4.html"><div class="info-box full" style="margin-top:.6rem;">
+              <div class="info-label">Auswertung</div>
+              <div style="overflow-x:auto; padding-bottom:.25rem;">
+                <table class="measure-table" aria-label="Messwertetabelle Corioliskraft (transponiert)">
+                  <colgroup>
+                    <col style="width: 6rem;">
+		    <col style="width: 7rem;">
+                    <col style="width: 5rem;">
+                    <col style="width: 8rem;">
+                    <col style="width: 8rem;">
+                    <col style="width: 8rem;">
+                    <col style="width: 8rem;">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th colspan="3"></th>
+                      <th colspan="2">Nordhalbkugel</th>
+                      <th colspan="2">Südhalbkugel</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th  colspan="3" class="rowhead">Bewegungsrichtung der Luftteilchen</th>
+                      <td><span style="font-weight:600; color:#374151;">Pol → Äquator</span></td>
+                      <td><span style="font-weight:600; color:#374151;">Äquator → Pol</span></td>
+                      <td><span style="font-weight:600; color:#374151;">Pol → Äquator</span></td>
+                      <td><span style="font-weight:600; color:#374151;">Äquator → Pol</span></td>
+                    </tr>
+                    <tr>
+                      <th  colspan="3" class="rowhead">Richtung der Ablenkung (rechts/links)</th>
+                      <td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                      <th rowspan="4" class="rowhead">Stärke der Ablenkung</th>
+                      <td rowspan="2">Luftbewegung</td><td>schnell</td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                      <td>langsam</td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2">Rotations- geschwindigkeit</td><td>schnell</td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                      <td>langsam</td><td></td><td></td><td></td><td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div></a>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <p>Theo Schierbaum – Corioliskraft</p>
+      <p>Seite 3</p>
+    </div>
+  </div>
+
+<script>
+  (function(){
+    const btn = document.getElementById('toggleGifBtn');
+    const panel = document.getElementById('gifPanel');
+    if(!btn || !panel) return;
+
+    let open = false;
+
+    function render(){
+      panel.style.display = open ? 'block' : 'none';
+      btn.innerHTML = open
+        ? '<i class="fas fa-times mr-2"></i> GIF ausblenden'
+        : '<i class="fas fa-play mr-2"></i> GIF anzeigen';
+    }
+
+    btn.addEventListener('click', function(){
+      open = !open;
+      render();
+    });
+
+    render();
+  })();
+
+(function(){
+    const btn = document.getElementById('toggleGifBtn');
+    const panel = document.getElementById('InfoPanel');
+    if(!btn || !panel) return;
+
+    let open = false;
+
+    function render(){
+      panel.style.display = open ? 'block' : 'none';
+      btn.innerHTML = open
+        ? '<i class="fas fa-times mr-2"></i> GIF ausblenden'
+        : '<i class="fas fa-play mr-2"></i> GIF anzeigen';
+    }
+
+    btn.addEventListener('click', function(){
+      open = !open;
+      render();
+    });
+
+    render();
+  })();
+
+</script>
+
+</body>
+</html>

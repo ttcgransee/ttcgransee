@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Zirkulation im Zeitraffer</title>
+
+  <!-- Tailwind & Fonts & Icons (wie deine Folien) -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    /* Stil: angelehnt an die beigefügte Folie */
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+
+    /* EIN Kästchen */
+    .single-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
+      justify-items:center;
+      align-items:start;
+    }
+    .material {
+      width:min(1100px, 100%);
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .material:hover{
+      transform: translateY(-3px);
+      box-shadow:0 14px 28px rgba(0,0,0,.10);
+    }
+    .mat-head{
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge{
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.2rem;
+      text-align:center;
+    }
+    .mat-title{ font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body{ padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny{ font-size:.9rem; color:#6B7280; }
+
+    /* Responsive Video (16:9) */
+    .video-wrap{
+      position:relative;
+      width:100%;
+      background:#111827;
+      aspect-ratio: 16 / 9;
+    }
+    video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:#111827;
+    }
+
+    .note{
+      margin:.9rem;
+      padding:.75rem .9rem;
+      border-radius:10px;
+      border:1px solid rgba(42,59,50,.18);
+      background:rgba(42,59,50,.06);
+      color:#374151;
+      font-family:'Raleway',sans-serif;
+    }
+    .note code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: rgba(17,24,39,.06);
+      padding:.1rem .35rem;
+      border-radius:6px;
+      white-space:nowrap;
+    }
+
+    .footer{
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slide-container">
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Zirkulation im Zeitraffer</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Geographie | Klasse 10</p>
+    </div>
+
+    <!-- Content -->
+    <div class="slide-content">
+      <div class="single-grid">
+        <section class="material" aria-label="Lokales Video">
+          <div class="mat-head">
+            <span class="badge">V1</span>
+            <div class="mat-title">Satellitenaufnahmen von Ostasien (April-November 2025)</div>
+          </div>
+
+          <div class="video-wrap">
+            <!-- Wichtig: Datei muss im selben Ordner wie diese HTML liegen -->
+            <video controls preload="metadata">
+              <source src="Erde.mp4" type="video/mp4"/>
+              Dein Browser kann dieses Video nicht abspielen.
+            </video>
+          </div>
+
+          <a href="3.html"><div class="note">
+            Himawari Satellite Images: Northern Hemisphere Animation, 10‑Minute Interval (April–December 2025). https://www.youtube.com/watch?v=KrBOkqQR7fw &rarr; beachtenswert ist der Polartag und die Wanderung des Zenitstandes der Sonne
+          </div></a>
+
+
+        </section>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Theo Schierbaum – Corioliskraft</p>
+      <p>Seite 2</p>
+    </div>
+  </div>
+</body>
+</html>

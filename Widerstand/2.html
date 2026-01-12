@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Abhängigkeiten ohmscher Widerstände – Messblatt</title>
+
+  <!-- Tailwind & Fonts & Icons wie Vorlage -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:110px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+    }
+
+    /* Tabellen */
+    table.measure-table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.85rem;
+      margin-top:.4rem;
+      table-layout:fixed;
+    }
+    table.measure-table th, table.measure-table td {
+      border:1px solid #d1d5db;
+      padding:.45rem .35rem;
+      text-align:center;
+      vertical-align:middle;
+      word-wrap:break-word;
+    }
+    table.measure-table th {
+      background:#f3f4f6;
+      font-weight:700;
+    }
+    table.measure-table .subhead {
+      background:#fafafa;
+      font-weight:600;
+    }
+    table.measure-table .rowhead {
+      text-align:left;
+      font-weight:700;
+      padding-left:.6rem;
+      background:#fafafa;
+    }
+    table.measure-table td {
+      height:2.05rem;
+      background:#fff;
+    }
+ 
+    table.measure-table tr.rowhighlight {background:#f0f800;}
+
+    /* Zeilen-Hervorhebungen (grau) */
+    table.measure-table tr.rowgrey td,
+    table.measure-table tr.rowgrey th { background:#F0F0F2 !important; }
+    table.measure-table tr.rowgreydark td,
+    table.measure-table tr.rowgreydark th { background:#E5E7EB !important; }
+    table.measure-table .cellgrey { background:#F3F4F6 !important; }
+
+
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.0rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny { font-size:.9rem; color:#4B5563; }
+
+    /* Unter-Kästchen */
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.6rem;
+      margin-top:.4rem;
+    }
+    .info-box {
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:8px;
+      padding:.6rem .75rem;
+    }
+    .info-box.full { grid-column:1 / -1; }
+    .info-label {
+      font-size:.72rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#374151;
+      margin-bottom:.25rem;
+    }
+    .info-box p,
+    .info-box ul,
+    .info-box ol {
+      font-size:.9rem;
+      line-height:1.5;
+      margin:0;
+    }
+    .info-box ul { margin-left:1rem; list-style:disc; }
+    .info-box ol { margin-left:1.1rem; list-style:decimal; }
+
+    /* Layout-Anpassung für Kasten A */
+    .intro-grid{
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: auto;
+      align-items: stretch;
+    }
+    .setup-img{
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      display:flex;
+      flex-direction:column;
+    }
+    .setup-img-inner{
+      flex:1 1 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:8px;
+      padding:.5rem;
+      min-height: 7.2rem;
+    }
+    .setup-img-inner img{
+      max-width:100%;
+      max-height:100%;
+      height:auto;
+      width:auto;
+    }
+
+    .formula {
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.25rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:700;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1.2rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
+
+    .footer {
+      padding:0 2rem 1rem 2rem;
+      display:flex; justify-content:space-between;
+      color:#666; font-size:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+
+    details.teacher {
+      border:1px dashed #cbd5e1;
+      background:#fff;
+      border-radius:10px;
+      padding:.75rem .9rem;
+    }
+    details.teacher summary {
+      cursor:pointer;
+      font-weight:700;
+      color:#2A3B32;
+      list-style:none;
+    }
+    details.teacher summary::-webkit-details-marker { display:none; }
+    details.teacher p, details.teacher ul {
+      font-family:'Raleway',sans-serif;
+      margin:.5rem 0 0 0;
+      color:#374151;
+    }
+    details.teacher ul { margin-left:1.1rem; list-style:disc; }
+
+    /* Diagramm */
+    .img-wrap {
+      width:100%;
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      padding:.75rem;
+    }
+    .img-wrap img {
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      border:1px solid #E5E7EB;
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+    }
+
+    @media print {
+      html, body { background:#fff; }
+      .slide-header, .footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .material, .img-wrap, .task-section { box-shadow:none; }
+      a { color:inherit; text-decoration:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title"><i>Messung:</i> Abhängigkeiten ohmscher Widerstände</h1>
+        <div class="divider"></div>
+      </div>
+      <strong><i><h2>Zeit: 20 min</h2></strong></i>
+    </div>
+
+    <div class="slide-content">
+
+      <p class="tiny">
+        <strong>Aufgabe:</strong> Untersucht, ob und wie der Widerstand <strong>R</strong> eines Drahtes von folgenden Größen abhängt:
+        <strong>Material</strong>, <strong>Länge</strong> und <strong>Querschnitt</strong>.
+        Messt die <strong>Spannung U</strong> und die <strong>Stromstärke I</strong> und berechnet daraus den <strong>Widerstand R</strong>. 
+      </p>
+
+      <div class="materials-grid">
+
+        <!-- Karte 1: Aufbau + Merksätze -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">A</span>
+            <div class="mat-title">Vorgehen</div>
+          </div>
+          <div class="mat-body">
+                        <div class="info-grid intro-grid">
+
+              <a href="3.html"><div class="info-box">
+                <div class="info-label">Material</div>
+                <ul>
+                  <li>Spannungsquelle</li>
+                  <li>Spannungs-und Strommessgerät (<i>Anzeige an der Spannungsquelle</i></li>
+                  <li>Verbindungsleitungen</li>
+		  <li>Steckbrett</li>
+                  <li>Widerstände/Drähte: <strong>Kupfer</strong>, <strong>Eisen</strong>, <i><strong>Zusatz: Konstantan</strong></i></li>
+                </ul>
+              </div></a>
+
+              <div class="info-box setup-img">
+                <div class="info-label">Aufbau</div>
+                <div class="setup-img-inner">
+                  <img src="Aufbau.png" alt="Schaltaufbau (Aufbau.png)"/>
+                </div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Durchführung</div>
+                <ul>
+                  <li>Schaltung mit Widerstand (Material, Länge, Querschnitt) aufbauen.</li>
+                  <li>beliebige (Klein-)Spannung <strong>U</strong> einstellen <strong>(maximal 1 V!)</strong>.</li>
+                  <li>Stromstärke <strong>I</strong> ablesen.</li>
+                  <li>Widerstand <strong><span class="formula">R = U / I</span></strong> berechnen.</li>
+                </ul>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Sicherheit &amp; Tipps</div>
+                <ul>
+		  <li>Stecker der Versorgungsgeräte nur bei ausgeschalteter Tischversorgung einstecken bzw. rausziehen.</li>
+                  <li>Arbeitet nur mit <strong>Kleinspannungen und -strömen</strong> (U maximal 1 V; I maximal 1 A!).</li>
+                  <li><strong>Kurzschlüsse</strong> unbedingt vermeiden.</li>
+                  <li>Spannung am Versorgungsgerät vor jedem Widerstandswechsel auf 0 drehen, dann Versorgungsgerät ausschalten &rarr; Versorgungsgerät erst nach erfolgtem Wechsel der Widerstände wieder einschalten und Spannung langsam hochdrehen.</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Karte 2: Messwertetabelle -->
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">B</span>
+            <div class="mat-title">Messwertetabelle</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny" style="margin-bottom:.35rem;">
+              Tragt eure Messwerte ein. Danach berechnet ihr für jede Zeile den Widerstand:
+              <strong><span class="formula">R = U / I</span></strong>.
+            </p>
+
+            <div class="info-box full" style="padding:.65rem;">
+
+                            <div style="overflow-x:auto; padding-bottom:.25rem;">
+                <table class="measure-table" aria-label="Messwertetabelle ohmsche Widerstände (transponiert)">
+                  <colgroup>
+                    <col style="width:9rem;">
+                    <col style="width:5rem;">
+                    <col style="width:5rem;">
+                    <col style="width:5.5rem;">
+                    <col style="width:5.5rem;">
+                    <col style="width:5.5rem;">
+                  </colgroup>
+
+                  <tr>
+                    <th rowspan="2">Material</th>
+                    <th rowspan="2">Länge</th>
+                    <th rowspan="2">Ø</th>
+                    <th colspan="3">Messwerte</th>
+                  </tr>
+                  <tr class="subhead">
+                    <th>U in V</th>
+                    <th>I in A</th>
+                    <th>R in Ω</th>
+                  </tr>
+
+                  <!-- Kupfer -->
+                  <tr>
+                    <th class="rowhead" rowspan="4">Kupfer</th>
+                    <td rowspan="2">1 m</td><td>einfach</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td>doppelt</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td rowspan="2">2 m</td><td>einfach</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="rowgrey">
+                    <td>doppelt</td><td></td><td></td><td></td>
+                  </tr>
+
+                  <!-- Eisen -->
+                  <tr>
+                    <th class="rowhead" rowspan="4">Eisen</th>
+                    <td rowspan="2">1 m</td><td>einfach</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td>doppelt</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td rowspan="2">2 m</td><td>einfach</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="rowgrey">
+                    <td>doppelt</td><td></td><td></td><td></td>
+                  </tr>
+
+                  <!-- Konstantan -->
+                  <tr class="rowgrey">
+                    <th class="rowhead cellgrey" rowspan="4"><i>Zusatz:<br>Konstantan</i></th>
+                    <td rowspan="2">1 m</td><td>einfach</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="rowgrey">
+                    <td>doppelt</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="rowgrey">
+                    <td rowspan="2">2 m</td><td>einfach</td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="rowgrey">
+                    <td>doppelt</td><td></td><td></td><td></td>
+                  </tr>
+
+                </table>
+              </div>
+
+              <p class="tiny" style="margin-top:.5rem; color:#6B7280;">
+                Hinweis: Die <strong>Länge 2 m</strong> erreicht ihr durch <strong><i>Reihenschaltung</i></strong> zweier gleicher Drähte/Widerstände.
+                Den <strong>doppelten Querschnitt</strong> erreicht ihr durch <strong><i>Parallelschaltung</i></strong>.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+      </div><!-- /materials-grid -->
+
+      <!-- Diagramm (optional) -->
+      
+
+    </div><!-- /slide-content -->
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Messblatt – Ohmsche Widerstände (Material • Länge • Querschnitt)</p>
+      <p>Seite 2</p>
+    </div>
+  </div>
+</body>
+</html>

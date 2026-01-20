@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hongkong – Global City Rallye | Musterlösung</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .pill { display:inline-flex; align-items:center; gap:.35rem; background:#E9F0EC; border:1px solid #C7D4CC; color:#2A3B32; padding:.25rem .55rem; border-radius:999px; font-size:.82rem; font-weight:600; margin:.12rem .25rem .12rem 0; }
+
+    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content { flex:1 1 auto; padding:1.25rem 2rem 1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+
+    .materials-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .material { background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,05); overflow:hidden; display:flex; flex-direction:column; }
+    .mat-head { display:flex; align-items:center; gap:.6rem; padding:.7rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+    .badge { background:#2A3B32; color:#fff; font-weight:700; font-size:.9rem; padding:.15rem .55rem; border-radius:6px; min-width:4.6rem; text-align:center; }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny { font-size:.85rem; color:#6B7280; }
+    .small { font-size:.96rem; }
+
+    .task-section { position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:1rem; font-family:'Raleway',sans-serif; margin-top:.2rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px; font-weight:600; font-size:.9rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
+
+    .footer { padding:0 2rem 1rem 2rem; display:flex; justify-content:space-between; color:#666; font-size:.9rem; font-family:'Raleway',sans-serif; }
+    .nav { display:flex; gap:.5rem; justify-content:flex-end; flex-wrap:wrap; }
+    .btn-nav { display:inline-flex; align-items:center; gap:.45rem; background:#166534; color:#fff; padding:.38rem .85rem; border-radius:999px; font-size:.85rem; font-weight:700; border:none; cursor:pointer; text-decoration:none; }
+    .btn-nav:hover { background:#15803D; }
+    .btn-secondary { background:#334155; }
+    .btn-secondary:hover { background:#1f2937; }
+    .btn-link { background:#0f766e; }
+    .btn-link:hover { background:#0d9488; }
+    .btn-danger { background:#b91c1c; }
+    .btn-danger:hover { background:#dc2626; }
+    .muted-box { border:1px solid #E5E7EB; border-radius:12px; padding:.75rem .85rem; background:#fff; }
+    .q-list { margin-left:1.15rem; }
+    .q-list li { margin:.35rem 0; }
+    .ans { margin-left:1.15rem; }
+    .ans li { margin:.35rem 0; line-height:1.55; }
+    .hl { font-weight:700; color:#2A3B32; }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slide-container">
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Hongkong als Global City</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Musterlösung | Street-View-Rallye | Erdkunde | Klasse 12</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="materials-grid">
+        <section class="material" style="grid-column:1 / -1;">
+          <div class="mat-head">
+            <span class="badge" id="badgeStop">Stopp 1/12</span>
+            <div style="display:flex; flex-direction:column; gap:.1rem;">
+              <div class="mat-title" id="placeTitle">—</div>
+              <div class="tiny" id="placeCategory">—</div>
+            </div>
+          </div>
+
+          <div class="mat-body">
+            <div class="muted-box mb-3">
+              <div class="tiny mb-1"><strong>Kurzbeschreibung</strong></div>
+              <div class="small" id="placeDesc">—</div>
+              <div class="mt-2" id="pillRow"></div>
+              <div class="tiny mt-2">
+                <span class="hl">Hinweis:</span> Street-View-Perspektiven können je nach Kamerapunkt variieren. Die folgenden Punkte sind als <strong>Beispielantworten</strong> und <strong>Erwartungshorizont</strong> formuliert.
+              </div>
+            </div>
+
+            <div class="task-section mb-3">
+              <div class="task-label">Musterlösung (Erwartungshorizont)</div>
+              <div class="tiny mb-2"><span class="hl">Zuordnung / Merkmal:</span> <span id="merkmalText">—</span></div>
+
+              <div class="muted-box mb-3">
+                <div class="tiny mb-2"><strong>Mögliche sichtbare Belege in Street View</strong> (Auswahl)</div>
+                <ul class="ans" id="evidenceList"></ul>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <a class="btn-nav btn-link" id="streetLink" href="#" target="_blank" rel="noopener">
+                  <i class="fa-solid fa-street-view"></i> Street View öffnen
+                </a>
+                <button class="btn-nav btn-secondary" id="copyBtn" type="button">
+                  <i class="fa-solid fa-copy"></i> Link kopieren
+                </button>
+              </div>
+              <div class="tiny mt-2" id="linkHint"></div>
+            </div>
+
+            <div class="muted-box mb-3">
+              <div class="tiny mb-2"><strong>Leitfragen</strong></div>
+              <ol class="q-list" id="questionList"></ol>
+            </div>
+
+            <div class="muted-box mb-3">
+              <div class="tiny mb-2"><strong>Musterantworten zu den Leitfragen</strong></div>
+              <ol class="q-list" id="answerList"></ol>
+            </div>
+
+            <div class="nav">
+              <button class="btn-nav btn-secondary" id="prevBtn" type="button"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+              <button class="btn-nav" id="nextBtn" type="button">Weiter <i class="fa-solid fa-arrow-right"></i></button>
+              <button class="btn-nav btn-danger" id="resetBtn" type="button"><i class="fa-solid fa-rotate-left"></i> Neu starten</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <p>Musterlösung zur Global-City-Rallye (Street View)</p>
+        <p id="pageInfo">Hongkong</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+const stops = [
+  {
+    id: "airport",
+    category: "Technologische Infrastruktur",
+    pills: [{ icon:"fa-plane", text:"Airport-Hub" }, { icon:"fa-globe", text:"globale Vernetzung" }],
+    title: "Hong Kong International Airport – Terminalbereich (Außenbereich/Anfahrt)",
+    desc: "Der Flughafen steht für weltweite Erreichbarkeit und die technische Grundlage globaler Mobilität und Logistik.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3132,113.9363",
+    merkmal: "Verkehrsdrehscheibe / globale Vernetzung (Connectivity) als Standortfaktor einer Global City.",
+    evidence: [
+      "Mehrsprachige Beschilderung und international standardisierte Piktogramme (z. B. Abflug/Ankunft, Gepäck, Transit).",
+      "Mehrspurige Zufahrten, Absetz-/Abholzonen, getrennte Verkehrsströme (Bus/Taxi/Privatverkehr).",
+      "Hinweise auf Fracht-/Servicefunktionen (z. B. Cargo/Servicebereiche, Lieferverkehr, Technikzonen).",
+      "Großmaßstäbliche Terminal-Architektur und Leitsysteme, die hohe Passagierzahlen ermöglichen."
+    ],
+    questions: [
+      "Welche Hinweise zeigen, dass dieser Ort international genutzt wird (Sprachen, Symbole, Zielgruppen, Serviceangebote)?",
+      "Woran erkennen Sie die Funktion als Knotenpunkt (Zufahrten, Ebenen, Beschilderung, Verkehrsfluss)?",
+      "Welche Infrastruktur ist sichtbar, die einen reibungslosen Ablauf ermöglicht (Kontrolle, Trennung von Strömen, Leitsysteme)?",
+      "Welche Vorteile bringt ein globaler Flughafenstandort für eine Global City?"
+    ],
+    answers: [
+      "Typisch sind mehrsprachige Schilder, international verständliche Symbole und Angebote für Transit/Reisende (z. B. Orientierung, Service, Verkehrsanbindung).",
+      "Die Knotenfunktion zeigt sich durch systematische Wegweisung, verschiedene Zubringer (Taxi/Bus/Privat), klare Zu- und Abfahrten sowie mehrere Ebenen/Spuren.",
+      "Leitsysteme, getrennte Bereiche (z. B. Abflug/Ankunft), Sicherheits- und Kontrolllogik sowie bauliche Führung der Personen- und Verkehrsströme unterstützen den Ablauf.",
+      "Ein globaler Flughafen erhöht Erreichbarkeit, erleichtert Geschäftsreisen und Tourismus, unterstützt internationale Unternehmensvernetzung und Luftfrachtlogistik."
+    ]
+  },
+  {
+    id: "wkl",
+    category: "Technologische Infrastruktur",
+    pills: [{ icon:"fa-train", text:"HSR-Anbindung" }, { icon:"fa-route", text:"Gateway-Funktion" }],
+    title: "West Kowloon Station – Hochgeschwindigkeitsbahn (Außenraum)",
+    desc: "Die Station steht für die Einbindung in regionale Netzwerke und schnelle Verbindungen (Pendeln, Geschäftsmobilität, Integration in Wirtschaftsräume).",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3041,114.1647",
+    merkmal: "Intermodale Großinfrastruktur / regionale Vernetzung (Greater Bay Area) und Beschleunigung von Strömen.",
+    evidence: [
+      "Großräumige Bahnhofsanlagen mit klarer Wegeführung und repräsentativer Architektur.",
+      "Sicherheits- und Zugangssysteme (z. B. Absperrungen, kontrollierte Eingänge, Ticket-/Gate-Logik).",
+      "Anbindung an weitere Verkehrsmittel (Zubringerstraßen, Bus/Taxi, Fußwege, ggf. MTR-Nähe).",
+      "Dienstleistungsumfeld: Orientierung, Service, urbane Verdichtung in der Umgebung."
+    ],
+    questions: [
+      "Welche Merkmale sprechen für eine großräumige, überregionale Verkehrsfunktion (Dimensionen, Zuwegungen, Umsteigelogik)?",
+      "Wie wirkt der Ort im Hinblick auf Sicherheit und Zugang (Kontrolle, Barrieren, klare Wegeführung)?",
+      "Welche städtischen Funktionen (Handel, Dienstleistungen, Mobilität) sind in der Umgebung erkennbar?",
+      "Inwiefern verändert eine schnelle Schienenanbindung die Wettbewerbsfähigkeit einer Global City?"
+    ],
+    answers: [
+      "Größe, klare Zugänge, Vorplätze und Umsteigewege deuten auf überregionale Bedeutung und hohe Kapazität hin.",
+      "Kontrollierte Eingänge, Barrieren und gerichtete Wege zeigen Sicherheits- und Ordnungssysteme typischer Knotenpunkte.",
+      "In Bahnhofsnähe bündeln sich Mobilität, Dienstleistungen und häufig Handel (z. B. Serviceangebote, orientierungsstarke Räume).",
+      "HSR verkürzt Reisezeiten, erweitert Arbeits- und Absatzmärkte, stärkt Standortattraktivität und integriert die Stadt in regionale Wirtschaftsräume."
+    ]
+  },
+  {
+    id: "port",
+    category: "Wirtschaftskraft",
+    pills: [{ icon:"fa-ship", text:"Welthandel" }, { icon:"fa-boxes-stacked", text:"Containerlogistik" }],
+    title: "Kwai Tsing – Containerhafen / Port Area (Straßenraum)",
+    desc: "Der Containerhafen ist Kerninfrastruktur für Warenströme und internationale Handelsverflechtungen.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3370,114.1263",
+    merkmal: "Globale Warenströme / Logistikdrehscheibe (Gateway) als wirtschaftliche Funktion.",
+    evidence: [
+      "Hinweise auf Containerlogistik (Containerflächen, Terminalzäune, Krananlagen im Hintergrund, Wegweisung zu Terminals).",
+      "Schwerverkehr und großräumige Straßeninfrastruktur (breite Fahrspuren, Wendeflächen, LKW-Führung).",
+      "Sicherheitsinfrastruktur (Zäune, Zugangskontrollen, Warnhinweise) für kritische Infrastruktur.",
+      "Industrie-/Logistikcharakter (Lagerhallen, Serviceflächen, geringe Aufenthaltsqualität für Fußgänger)."
+    ],
+    questions: [
+      "Welche Elemente deuten auf Logistik und Warenumschlag hin (Container, Zufahrten, Verkehrszeichen, Lagerflächen)?",
+      "Welche Anforderungen stellt ein Hafen an Raum und Infrastruktur (Straßenbreite, Sicherung, Spezialflächen)?",
+      "Welche Belastungen können für Stadt und Umwelt entstehen (Lärm, Verkehr, Emissionen) – was sehen Sie dafür als Hinweise?",
+      "Warum sind solche Funktionen für eine Global City zentral, obwohl sie nicht „repräsentativ“ wirken?"
+    ],
+    answers: [
+      "Containerflächen, Terminalhinweise, LKW-Verkehr und logistiktypische Beschilderung sind klare Indizien für Warenumschlag.",
+      "Häfen benötigen große Spezialflächen, robuste Straßen, Sicherheitszonen und klare Trennung von Verkehrs- und Betriebsbereichen.",
+      "Hinweise sind u. a. intensiver LKW-Verkehr, Industrieumfeld, mögliche Lärmschutzmaßnahmen und große versiegelte Flächen.",
+      "Sie sichern die Einbindung in globale Lieferketten und sind Grundlage für Handel, Versorgung und wirtschaftliche Stellung – auch ohne „Schauseite“."
+    ]
+  },
+  {
+    id: "ifc",
+    category: "Wirtschaftskraft",
+    pills: [{ icon:"fa-building", text:"CBD" }, { icon:"fa-chart-line", text:"Dienstleistungen" }],
+    title: "Central – IFC/Waterfront (CBD und Hochhauscluster)",
+    desc: "Das CBD bündelt Unternehmenssitze und wissensintensive Dienstleistungen (Steuerung, Koordination, Kapital).",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2847,114.1582",
+    merkmal: "Command-&-Control-Funktionen: Finanz- und Unternehmensdienstleistungen, hohe Bodenwerte, repräsentative City-Lage.",
+    evidence: [
+      "Hochhauscluster mit Bürotypologien (Glasfassaden, Corporate-Architektur).",
+      "Dichte von Premium-Dienstleistungen (z. B. Banken, Hotels, Business-Services, hochwertige Einzelhandelsflächen).",
+      "Verkehrs- und Fußgängerinfrastruktur für starke Pendlerströme (Unterführungen/Brücken, breite Gehwege).",
+      "Sicherheits- und Zugangselemente (z. B. kontrollierte Eingänge, Kameras, private Plätze)."
+    ],
+    questions: [
+      "Welche Hinweise sprechen für hochwertige Dienstleistungen (Banken, Hotels, Business-Infrastruktur, Sicherheit, Corporate-Design)?",
+      "Welche Rolle spielt die vertikale Bauweise für Flächennutzung und Prestige?",
+      "Wie beeinflusst die Lage (Wasserfront, Verkehrsanbindung) die Attraktivität für Unternehmen?",
+      "Welche „unsichtbaren Ströme“ werden hier vermutlich gesteuert (Kapital, Entscheidungen, Daten)?"
+    ],
+    answers: [
+      "Typisch sind Bürohochhäuser, repräsentative Eingangsbereiche, Business-Services und Hinweise auf Finanz-/Unternehmensfunktionen.",
+      "Vertikalität kompensiert Flächenknappheit und signalisiert Prestige; sie ermöglicht hohe Dichte von Arbeitsplätzen.",
+      "Zentrale Lage, Erreichbarkeit und Image (z. B. Waterfront, Landmarken) erhöhen Standortwert und Sichtbarkeit.",
+      "Gesteuert werden u. a. Finanztransaktionen, Unternehmensentscheidungen, Beratung/Koordination sowie informationsbasierte Prozesse."
+    ]
+  },
+  {
+    id: "hkex",
+    category: "Wirtschaftskraft",
+    pills: [{ icon:"fa-money-bill-trend-up", text:"Finanzplatz" }, { icon:"fa-handshake", text:"Dienstleistungscluster" }],
+    title: "Exchange Square – Umfeld der Hong Kong Exchanges (HKEX)",
+    desc: "Finanzplätze zeigen sich als Cluster: Dichte von Büros, Services, Erreichbarkeit und kontrollierte Räume.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2830,114.1588",
+    merkmal: "Finanzzentrum / Agglomerationsvorteile (Nähe von Börse, Banken, Kanzleien, Beratung).",
+    evidence: [
+      "Bürohochhäuser und Corporate-Umfeld (lobbyartige Eingänge, Beschriftungen, gepflegte Plätze).",
+      "Zentralität: starke Fußgängerströme, ÖPNV-Zugänge, strukturierte Wegeführung.",
+      "Sicherheits-/Zutrittslogik (private/public spaces, Kameras, Zugangskontrollen).",
+      "Internationalisierung: globale Marken, mehrsprachige Hinweise, standardisierte Geschäftsarchitektur."
+    ],
+    questions: [
+      "Welche Zeichen deuten auf Finanz- und Unternehmensfunktionen hin (Gebäudetypen, Beschriftungen, Services)?",
+      "Woran erkennen Sie internationale Orientierung (Sprache, Marken, Zielgruppen, Gestaltung)?",
+      "Wie wird der öffentliche Raum organisiert (Zugänge, Überwachung, Abgrenzungen)?",
+      "Warum bündeln sich Finanzfunktionen räumlich in einem Cluster?"
+    ],
+    answers: [
+      "Bürohochhäuser, Beschilderung/Unternehmensnamen, Business-Services und repräsentative Eingänge deuten auf Unternehmensfunktionen.",
+      "Mehrsprachigkeit, internationale Marken und uniformierte Service-/Sicherheitslogik weisen auf globale Zielgruppen.",
+      "Zugänge sind häufig gelenkt: klare Wege, private Plätze, Überwachung und bauliche Abgrenzungen.",
+      "Cluster bieten schnelle Abstimmung, Zugang zu spezialisierten Dienstleistungen und profitieren von hoher Erreichbarkeit und Image."
+    ]
+  },
+  {
+    id: "gov",
+    category: "Politische Bedeutung",
+    pills: [{ icon:"fa-landmark", text:"Regierung" }, { icon:"fa-scale-balanced", text:"Institutionen" }],
+    title: "Tamar/Admiralty – Central Government Complex & LegCo-Umfeld",
+    desc: "Politische Institutionen prägen den Stadtraum und sind häufig in unmittelbarer Nähe zu Wirtschaft und Verkehr angeordnet.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2817,114.1656",
+    merkmal: "Politisches Zentrum / Steuerungsfunktion (Governance) und symbolische Repräsentation.",
+    evidence: [
+      "Monumentale bzw. klar erkennbare öffentliche Gebäude mit institutioneller Beschilderung.",
+      "Vorplätze, Flaggen/Symbole, geordnete Platzgestaltung (Repräsentation).",
+      "Sicherheitsmaßnahmen (Absperrungen, definierte Zugänge, Überwachung).",
+      "Lagebezug: Nähe zu CBD und Verkehrsachsen (Admiralty als Knoten)."
+    ],
+    questions: [
+      "Welche Elemente wirken repräsentativ und welche funktional (Zugänge, Sicherheitslogik, Platzgestaltung)?",
+      "Warum ist die räumliche Nähe zum CBD aus Sicht der Stadtentwicklung plausibel?",
+      "Wie zeigt sich die Rolle des Staates im Stadtraum (Beschilderung, Gebäudeform, Absperrungen)?",
+      "Welche Interessenkonflikte können in solchen zentralen politischen Räumen entstehen (öffentlicher Raum, Sicherheit, Zugriff)?"
+    ],
+    answers: [
+      "Repräsentativ sind Symbole/Plätze/Architektur; funktional sind kontrollierte Zugänge, Sicherheitszonen und klare Wegeführung.",
+      "Nähe erleichtert Abstimmung zwischen Politik, Wirtschaft und Verwaltung; außerdem ist die Erreichbarkeit für Pendler/Entscheidungsträger hoch.",
+      "Staatliche Präsenz zeigt sich durch institutionelle Zeichen, Ordnungssysteme, Sicherheitslogik und öffentliche Raumgestaltung.",
+      "Konflikte betreffen u. a. Nutzung des öffentlichen Raums, Demonstrationsfreiheit vs. Sicherheitsinteressen und Zugangsbeschränkungen."
+    ]
+  },
+  {
+    id: "victoriapark",
+    category: "Politische Bedeutung / Stadtgesellschaft",
+    pills: [{ icon:"fa-tree", text:"öffentlicher Raum" }, { icon:"fa-users", text:"Stadtgesellschaft" }],
+    title: "Victoria Park – großer innerstädtischer Park (Causeway Bay)",
+    desc: "Öffentliche Freiräume sind in hochverdichteten Global Cities funktional (Erholung) und gesellschaftlich bedeutsam (Begegnung/Öffentlichkeit).",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2762,114.1872",
+    merkmal: "Öffentlicher Raum in der Metropole: Ausgleichsfläche, Alltagsnutzung und potenzieller Ort gesellschaftlicher Öffentlichkeit.",
+    evidence: [
+      "Wege, Sportflächen, Sitzgelegenheiten, organisierte Grünräume (geplante Stadtfreiräume).",
+      "Hohe Nutzungsintensität in zentraler Lage (umgeben von dichter Bebauung/Verkehr).",
+      "Regeln/Ordnung: Beschilderung, geregelte Bereiche, ggf. Präsenz von Kontrolle/Management.",
+      "Funktion als Treffpunkt: Gruppenaktivitäten, Sport, Erholung (je nach Aufnahmezeitpunkt)."
+    ],
+    questions: [
+      "Welche Nutzungen des Parks sind erkennbar (Sport, Erholung, Wege, Treffpunkte)?",
+      "Warum sind Freiräume in einer hochverdichteten Global City besonders wichtig?",
+      "Welche Regeln/Strukturen zur Steuerung des öffentlichen Raums erkennen Sie (Wegeführung, Beschilderung, Ordnung)?",
+      "Welche Rolle kann ein solcher Ort für Stadtgesellschaft und Öffentlichkeit spielen?"
+    ],
+    answers: [
+      "Erkennbar sind typischerweise Sport- und Erholungsflächen, Wege, Sitzbereiche sowie unterschiedliche Zonen der Nutzung.",
+      "Freiräume verbessern Lebensqualität, bieten Klimaausgleich, Aufenthaltsqualität und kompensieren Enge durch Dichte.",
+      "Steuerung erfolgt über Wegeführung, Zonen, Beschilderung und teils ordnungsbezogene Elemente.",
+      "Der Park kann soziale Begegnung fördern und als wichtiger öffentlicher Raum auch gesellschaftliche Öffentlichkeit ermöglichen."
+    ]
+  },
+  {
+    id: "mplus",
+    category: "Kulturelle Bedeutung",
+    pills: [{ icon:"fa-museum", text:"Kulturmetropole" }, { icon:"fa-city", text:"Standortfaktor" }],
+    title: "West Kowloon Cultural District – M+ Museum (Außenraum)",
+    desc: "Kulturprojekte dienen in Global Cities häufig der Imagebildung, der Aufwertung und der internationalen Sichtbarkeit.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3006,114.1597",
+    merkmal: "Kultur als Standortfaktor: internationale Ausstrahlung, Stadtimage, Aufwertung durch Großprojekte.",
+    evidence: [
+      "Zeitgenössische, ikonische Architektur und gestaltete Freiräume (repräsentative Wirkung).",
+      "Wegeführung/Orientierung für Besucherströme, Beschilderung und Service-Infrastruktur.",
+      "Städtische Aufwertung: neue Promenaden, Plätze, hochwertige Gestaltung im öffentlichen Raum.",
+      "Tourismus-/Eventbezug: Hinweise auf Ausstellungen/Veranstaltungen (je nach Sichtbarkeit)."
+    ],
+    questions: [
+      "Welche Hinweise sprechen für einen international ausgerichteten Kulturstandort (Architektur, Beschilderung, Besucherführung)?",
+      "Wie wirken Freiräume, Plätze und Wege – eher alltagsnah oder repräsentativ?",
+      "Inwiefern kann Kultur zur Aufwertung und zum Stadtimage beitragen?",
+      "Welche Zielgruppen werden hier vermutlich angesprochen (Tourismus, lokale Bevölkerung, internationale Gäste)?"
+    ],
+    answers: [
+      "Ikonische Architektur, professionelle Besucherführung und mehrsprachige Information sind typische Indizien internationaler Ausrichtung.",
+      "Die Gestaltung wirkt häufig repräsentativ: weite Plätze, klare Sichtachsen, hochwertige Materialien; alltagsnahe Nutzungen sind möglich, aber oft sekundär.",
+      "Kultur erhöht Attraktivität, stärkt die Marke der Stadt, zieht Besucher und kann Investitionen sowie Quartiersentwicklung unterstützen.",
+      "Adressiert werden meist mehrere Gruppen: lokale Bevölkerung, Touristen und internationale Kultur-/Geschäftsbesucher."
+    ]
+  },
+  {
+    id: "avenue",
+    category: "Kulturelle Bedeutung / Stadtimage",
+    pills: [{ icon:"fa-camera", text:"Tourismus" }, { icon:"fa-star", text:"Stadtmarke" }],
+    title: "Tsim Sha Tsui – Waterfront/Promenade (Avenue of Stars – Umfeld)",
+    desc: "Der Ort zeigt Stadtmarketing und touristische Inszenierung – ein typisches Element globaler Metropolen.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2951,114.1722",
+    merkmal: "Stadtimage / globale Sichtbarkeit: Skyline als Symbol, Tourismus- und Erlebnisraum.",
+    evidence: [
+      "Promenadegestaltung mit Blickbezug auf die Skyline (Blickachsen, Geländer, Aufenthaltsflächen).",
+      "Orientierung und touristische Infrastruktur (Beschilderung, Karten, Fotopunkte, Attraktionshinweise).",
+      "Hoher Anteil an Freizeit-/Erlebnisnutzung (Flanieren, Aussichtspunkte).",
+      "Kontrast zu Funktionsräumen: weniger Logistik/Arbeit, stärker Repräsentation/Erlebnis."
+    ],
+    questions: [
+      "Welche Elemente dienen der Inszenierung der Stadt (Blickachsen, Promenade, Orientierung, Fotopunkte)?",
+      "Wie wird die Skyline als „Marke“ genutzt? Welche Botschaft über Hongkong vermittelt sie?",
+      "Welche Hinweise auf touristische Nutzung erkennen Sie (Sprachen, Angebote, Ticket-/Serviceangebote)?",
+      "Wie unterscheidet sich dieser Ort von Funktionsräumen wie Hafen oder CBD?"
+    ],
+    answers: [
+      "Inszenierung erfolgt durch Promenadenführung, Aussichtspunkte, Aufenthaltsbereiche und Orientierungselemente.",
+      "Die Skyline signalisiert Modernität, wirtschaftliche Stärke und globale Einbindung; sie dient als Wiedererkennungszeichen.",
+      "Touristische Hinweise sind z. B. mehrsprachige Information, Wegweiser zu Attraktionen und serviceorientierte Gestaltung.",
+      "Im Unterschied zu Hafen/CBD steht hier Erlebnis, Aufenthalt und Imagebildung im Vordergrund, nicht Produktion/Logistik/Entscheidung."
+    ]
+  },
+  {
+    id: "mongkok",
+    category: "Demografische Faktoren (Dichte/Alltag)",
+    pills: [{ icon:"fa-people-group", text:"Dichte" }, { icon:"fa-store", text:"Alltag & Konsum" }],
+    title: "Mong Kok – Nathan Road (verdichteter Stadtraum)",
+    desc: "Mong Kok steht für extreme Verdichtung, Nutzungsdurchmischung und intensiven Alltags- und Konsumraum.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3168,114.1691",
+    merkmal: "Hohe Dichte und Funktionsmischung: vertikale Stadt, intensiver Konsum- und Verkehrsraum.",
+    evidence: [
+      "Hohe Bebauungsdichte (enge Straßenschluchten, viele Geschosse, geringe Abstände).",
+      "Intensive Nutzung: zahlreiche Geschäfte/Schilder, Lieferverkehr, starke Fußgängerströme (situationsabhängig).",
+      "Funktionsmischung: Handel im EG, Wohnen/Büros darüber (typische vertikale Nutzung).",
+      "Stadtmanagement: Ampeln, Absperrungen, Leitsysteme zur Steuerung von Verkehrs- und Fußgängerströmen."
+    ],
+    questions: [
+      "Woran erkennen Sie hohe Dichte (Bebauung, Straßenraum, Nutzungsintensität, Menschenströme)?",
+      "Welche Funktionen liegen sehr eng beieinander (Wohnen, Handel, Verkehr, Dienstleistungen)?",
+      "Welche Herausforderungen ergeben sich aus Dichte (Lärm, Sicherheit, Verkehrsführung, Aufenthaltsqualität)?",
+      "Welche Vorteile kann Dichte für eine Global City haben (Erreichbarkeit, Arbeitsmarkt, Vielfalt)?"
+    ],
+    answers: [
+      "Dichte wird sichtbar durch enge Straßenräume, hohe Gebäude, viele Nutzungen und (oft) starke Ströme von Menschen und Verkehr.",
+      "Typisch ist die räumliche Nähe von Handel, Wohnen, Dienstleistungen und Verkehrsinfrastruktur.",
+      "Herausforderungen sind Lärm, Konflikte zwischen Verkehr und Fußgängern, begrenzte Aufenthaltsflächen und Sicherheits-/Ordnungsthemen.",
+      "Vorteile sind kurze Wege, hoher Arbeitskräftepool, gute Erreichbarkeit, Vielfalt an Angeboten und effiziente Flächennutzung."
+    ]
+  },
+  {
+    id: "choihung",
+    category: "Demografische Faktoren (Wohnen/Sozialstruktur)",
+    pills: [{ icon:"fa-house", text:"Wohnen" }, { icon:"fa-layer-group", text:"Verdichtung" }],
+    title: "Choi Hung Estate – öffentlicher Wohnungsbau (Außenraum)",
+    desc: "Die Wohnanlage steht für großmaßstäblichen Wohnungsbau, Infrastruktur des Alltags und die soziale Dimension globaler Metropolen.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3340,114.2040",
+    merkmal: "Wohnraumversorgung/Sozialstruktur in der Global City: verdichteter Wohnungsbau als Antwort auf Flächenknappheit und hohe Nachfrage.",
+    evidence: [
+      "Großmaßstäbliche Wohnblöcke mit wiederkehrender Bauform (Massierung).",
+      "Innenhöfe/öffentliche Bereiche innerhalb der Anlage (Alltagsräume, Wege, Plätze).",
+      "Infrastrukturelemente für den Alltag (Spielbereiche, Versorgung, Haltestellenumfeld – je nach Blick).",
+      "Kontrast zur CBD-Architektur: stärker funktional, weniger repräsentativ."
+    ],
+    questions: [
+      "Welche Merkmale deuten auf eine großmaßstäbliche Wohnanlage hin (Bauform, Wiederholung, Innenhöfe, Wege)?",
+      "Welche Infrastruktur für den Alltag ist erkennbar (Spielplätze, Einkaufsmöglichkeiten, Haltestellen, Schulen)?",
+      "Welche Chancen und Risiken sind mit verdichteten Wohnformen verbunden (Versorgung, Gemeinschaft, Enge, Privatsphäre)?",
+      "Wie passt Wohnen als Thema in das Gesamtbild „Global City“ (Arbeitskräfte, Wohnkosten, soziale Ungleichheit)?"
+    ],
+    answers: [
+      "Wiederholung der Gebäudetypen, hohe Geschosszahlen und klar strukturierte Innenräume/Höfe weisen auf großmaßstäbliche Anlage hin.",
+      "Alltagsinfrastruktur zeigt sich in Wegen, Plätzen, Freizeit-/Spielangeboten und Versorgungselementen im Umfeld (situationsabhängig).",
+      "Chancen: effiziente Flächennutzung, gute Erreichbarkeit, Gemeinschaft; Risiken: Enge, geringe Privatsphäre, soziale Segregation.",
+      "Wohnraum ist zentral für die Funktionsfähigkeit der Global City (Arbeitskräfteversorgung). Hohe Wohnkosten können Ungleichheit und Verdrängung verstärken."
+    ]
+  },
+  {
+    id: "finish",
+    category: "Auswertung",
+    pills: [{ icon:"fa-clipboard-check", text:"Transfer" }, { icon:"fa-scale-balanced", text:"Bewertung" }],
+    title: "Abschluss: Global City – Belege und Bewertung",
+    desc: "Die Auswertung verbindet Beobachtungen mit den Merkmalen einer Global City und reflektiert Zielkonflikte.",
+    link: "https://www.google.com/maps",
+    merkmal: "Zusammenführung: Connectivity (Vernetzung), Command & Control (Steuerung), Culture (Image), Density/Disparity (Dichte und soziale Dimension).",
+    evidence: [
+      "Connectivity: Flughafen/HSR als Infrastruktur für globale und regionale Ströme.",
+      "Command & Control: CBD/Finanzcluster als Entscheidungs- und Dienstleistungsraum.",
+      "Gateway/Trade: Hafenlogistik als Knoten globaler Warenströme.",
+      "Culture/Density: Imageorte und Dichtequartiere als Ergänzung (Stadtmarketing, Lebensrealitäten)."
+    ],
+    questions: [
+      "Nennen Sie drei Merkmale einer Global City, die Sie in der Rallye eindeutig belegen konnten. Notieren Sie je Merkmal mindestens einen sichtbaren Beleg.",
+      "Welche Zielkonflikte wurden sichtbar (z. B. Wirtschaftserfolg vs. Wohnraum/Umwelt/öffentlicher Raum)? Begründen Sie mit Beobachtungen.",
+      "Bewerten Sie: Inwiefern ist Hongkong eine „Steuerungszentrale“ (Command & Control) im globalen System? Nennen Sie zwei Argumente.",
+      "Formulieren Sie ein kurzes Fazit (3–4 Sätze): Welche Stärken und welche Herausforderungen kennzeichnen Hongkong als Global City?"
+    ],
+    answers: [
+      "Beispiel: (1) Vernetzung: Flughafen/HSR mit Leitsystemen und hoher Kapazität. (2) Steuerung/Finanzen: CBD/HKEX-Umfeld mit Büroclustern und Business-Infrastruktur. (3) Welthandel: Hafenlogistik mit Schwerverkehr und Terminalinfrastruktur.",
+      "Beispiel: Wirtschaft/Handel erfordert Infrastruktur und Flächen (Hafen, Verkehr) – gleichzeitig entstehen Belastungen (Verkehr, Emissionen). Hohe Bodenwerte im CBD stehen in Spannung zu bezahlbarem Wohnraum (Dichtewohnformen).",
+      "Argumente: (1) räumliche Bündelung von Finanz- und Unternehmensdienstleistungen im CBD/Finanzcluster; (2) hohe Erreichbarkeit über globale/regionale Verkehrsnetze, die Entscheidungs- und Geschäftsprozesse unterstützen.",
+      "Fazit-Beispiel: Hongkong zeigt starke globale Vernetzung und ein ausgeprägtes Finanz- und Dienstleistungszentrum. Gleichzeitig machen dichte Wohnformen und der Flächendruck Zielkonflikte sichtbar. Kultur- und Imageorte stärken internationale Sichtbarkeit, während Logistik- und Verkehrsinfrastruktur die Einbindung in globale Warenströme sichern."
+    ]
+  }
+];
+
+let idx = 0;
+
+function render() {
+  const stop = stops[idx];
+
+  document.getElementById("badgeStop").textContent = "Stopp " + (idx+1) + "/" + stops.length;
+  document.getElementById("placeTitle").textContent = stop.title;
+  document.getElementById("placeCategory").textContent = stop.category;
+  document.getElementById("placeDesc").textContent = stop.desc;
+  document.getElementById("merkmalText").textContent = stop.merkmal;
+
+  const pillRow = document.getElementById("pillRow");
+  pillRow.innerHTML = "";
+  (stop.pills || []).forEach(p => {
+    const span = document.createElement("span");
+    span.className = "pill";
+    span.innerHTML = `<i class="fa-solid ${p.icon}"></i> ${p.text}`;
+    pillRow.appendChild(span);
+  });
+
+  const evidenceList = document.getElementById("evidenceList");
+  evidenceList.innerHTML = "";
+  stop.evidence.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    evidenceList.appendChild(li);
+  });
+
+  const a = document.getElementById("streetLink");
+  a.href = stop.link;
+  document.getElementById("linkHint").innerHTML =
+    `<span class="tiny"><strong>Link:</strong> <span style="word-break:break-all;">${stop.link}</span></span>`;
+
+  const q = document.getElementById("questionList");
+  q.innerHTML = "";
+  stop.questions.forEach(text => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    q.appendChild(li);
+  });
+
+  const ans = document.getElementById("answerList");
+  ans.innerHTML = "";
+  stop.answers.forEach(text => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    ans.appendChild(li);
+  });
+
+  const prevBtn = document.getElementById("prevBtn");
+  prevBtn.disabled = (idx === 0);
+  prevBtn.style.opacity = (idx === 0) ? "0.55" : "1";
+  prevBtn.style.cursor = (idx === 0) ? "not-allowed" : "pointer";
+
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.innerHTML = (idx === stops.length - 1)
+    ? `Fertig <i class="fa-solid fa-flag-checkered"></i>`
+    : `Weiter <i class="fa-solid fa-arrow-right"></i>`;
+
+  window.location.hash = "#stopp-" + (idx+1);
+}
+
+function next() { if (idx < stops.length - 1) { idx += 1; render(); } else { idx = 0; render(); } }
+function prev() { if (idx > 0) { idx -= 1; render(); } }
+function resetAll() { idx = 0; render(); }
+
+function initFromHash() {
+  const m = (window.location.hash || "").match(/stopp-(\d+)/);
+  if (m) {
+    const n = parseInt(m[1], 10);
+    if (!isNaN(n) && n >= 1 && n <= stops.length) idx = n - 1;
+  }
+}
+
+document.getElementById("nextBtn").addEventListener("click", next);
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const stop = stops[idx];
+  try {
+    await navigator.clipboard.writeText(stop.link);
+    const btn = document.getElementById("copyBtn");
+    btn.innerHTML = `<i class="fa-solid fa-check"></i> Kopiert`;
+    setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-copy"></i> Link kopieren`; }, 1200);
+  } catch(e) {
+    alert("Kopieren war nicht möglich. Bitte markieren und kopieren Sie den Link manuell.");
+  }
+});
+
+window.addEventListener("hashchange", () => { initFromHash(); render(); });
+
+initFromHash();
+render();
+</script>
+</body>
+</html>

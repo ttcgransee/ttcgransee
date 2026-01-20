@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hongkong – Global City Rallye (Street View)</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .pill { display:inline-flex; align-items:center; gap:.35rem; background:#E9F0EC; border:1px solid #C7D4CC; color:#2A3B32; padding:.25rem .55rem; border-radius:999px; font-size:.82rem; font-weight:600; margin:.12rem .25rem .12rem 0; }
+
+    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content { flex:1 1 auto; padding:1.25rem 2rem 1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+
+    .materials-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .material { background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,05); overflow:hidden; display:flex; flex-direction:column; }
+    .mat-head { display:flex; align-items:center; gap:.6rem; padding:.7rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+    .badge { background:#2A3B32; color:#fff; font-weight:700; font-size:.9rem; padding:.15rem .55rem; border-radius:6px; min-width:4.6rem; text-align:center; }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny { font-size:.85rem; color:#6B7280; }
+    .small { font-size:.96rem; }
+
+    .task-section { position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:1rem; font-family:'Raleway',sans-serif; margin-top:.2rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px; font-weight:600; font-size:.9rem; }
+    .task-section ul { margin-left:1.05rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
+
+    .footer { padding:0 2rem 1rem 2rem; display:flex; justify-content:space-between; color:#666; font-size:.9rem; font-family:'Raleway',sans-serif; }
+    .nav { display:flex; gap:.5rem; justify-content:flex-end; flex-wrap:wrap; }
+    .btn-nav { display:inline-flex; align-items:center; gap:.45rem; background:#166534; color:#fff; padding:.38rem .85rem; border-radius:999px; font-size:.85rem; font-weight:700; border:none; cursor:pointer; text-decoration:none; }
+    .btn-nav:hover { background:#15803D; }
+    .btn-secondary { background:#334155; }
+    .btn-secondary:hover { background:#1f2937; }
+    .btn-link { background:#0f766e; }
+    .btn-link:hover { background:#0d9488; }
+    .btn-danger { background:#b91c1c; }
+    .btn-danger:hover { background:#dc2626; }
+    .muted-box { border:1px solid #E5E7EB; border-radius:12px; padding:.75rem .85rem; background:#fff; }
+
+    .q-list { margin-left:1.15rem; }
+    .q-list li { margin:.35rem 0; }
+
+    .note { width:100%; min-height:120px; border:1px solid #E5E7EB; border-radius:10px; padding:.6rem .7rem; font-family:'Raleway',sans-serif; font-size:.95rem; }
+    .mini-input { width:100%; border:1px solid #E5E7EB; border-radius:10px; padding:.45rem .6rem; font-family:'Raleway',sans-serif; font-size:.95rem; }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slide-container">
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Hongkong als Global City</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Street-View-Rallye | Erdkunde | Klasse 12</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="materials-grid">
+        <section class="material" style="grid-column:1 / -1;">
+          <div class="mat-head">
+            <span class="badge" id="badgeStop">Stopp 1/12</span>
+            <div style="display:flex; flex-direction:column; gap:.1rem;">
+              <div class="mat-title" id="placeTitle">—</div>
+              <div class="tiny" id="placeCategory">—</div>
+            </div>
+          </div>
+
+          <div class="mat-body">
+            <div class="muted-box mb-3">
+              <div class="tiny mb-1"><strong>Kurzbeschreibung</strong></div>
+              <div class="small" id="placeDesc">—</div>
+              <div class="mt-2" id="pillRow"></div>
+            </div>
+
+            <div class="task-section mb-3">
+              <div class="task-label">Arbeitsauftrag vor Ort</div>
+              <div class="tiny mb-2">
+                Öffnen Sie den Link in einem neuen Tab. Untersuchen Sie die Umgebung in Street View (Drehen/Zoomen, ggf. die Straße entlanglaufen).
+                Notieren Sie <strong>mindestens zwei sichtbare Belege</strong>, die zum Merkmal „Global City“ passen.
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <a class="btn-nav btn-link" id="streetLink" href="#" target="_blank" rel="noopener">
+                  <i class="fa-solid fa-street-view"></i> Street View öffnen
+                </a>
+                <button class="btn-nav btn-secondary" id="copyBtn" type="button">
+                  <i class="fa-solid fa-copy"></i> Link kopieren
+                </button>
+              </div>
+              <div class="tiny mt-2" id="linkHint"></div>
+            </div>
+
+            <div class="muted-box mb-3">
+              <div class="tiny mb-2"><strong>Leitfragen</strong></div>
+              <ol class="q-list" id="questionList"></ol>
+            </div>
+
+            <div class="muted-box mb-3">
+              <div class="tiny mb-2"><strong>Notizen (optional)</strong></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <div class="tiny mb-1">Merkmal / Zuordnung</div>
+                  <input class="mini-input" id="merkmalInput" placeholder="z. B. Finanzzentrum, Verkehrsdrehscheibe, kultureller Standortfaktor …"/>
+                </div>
+                <div>
+                  <div class="tiny mb-1">Belege aus Street View (Stichpunkte)</div>
+                  <textarea class="note" id="noteArea" placeholder="Beobachtungen: Schilder, Gebäudetypen, Nutzung, Verkehr, Sicherheits-/Zutrittslogik, Symbole, Konsum, Dichte …"></textarea>
+                </div>
+              </div>
+              <div class="tiny mt-2" id="saveHint">Ihre Eingaben werden auf diesem Gerät im Browser gespeichert.</div>
+            </div>
+
+            <div class="nav">
+              <button class="btn-nav btn-secondary" id="prevBtn" type="button"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+              <button class="btn-nav" id="nextBtn" type="button">Weiter <i class="fa-solid fa-arrow-right"></i></button>
+              <button class="btn-nav btn-danger" id="resetBtn" type="button"><i class="fa-solid fa-rotate-left"></i> Neu starten</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <p>Global City – Street-View-Exkursion (Schüler-Rallye) - Theo Schierbaum</p>
+        <p id="pageInfo">Hongkong</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+/*
+  Hinweise:
+  - Links sind als Street-View-Panorama-Startpunkte (api=1, map_action=pano) gesetzt.
+  - Street View kann je nach Schule/Netzwerk oder Google-Einstellungen eingeschränkt sein.
+*/
+
+const stops = [
+  {
+    id: "airport",
+    category: "Technologische Infrastruktur",
+    pills: [
+      { icon: "fa-plane", text: "Airport-Hub" },
+      { icon: "fa-globe", text: "globale Vernetzung" }
+    ],
+    title: "Hong Kong International Airport – Terminalbereich (Außenbereich/Anfahrt)",
+    desc: "Untersuchen Sie den Flughafen als internationalen Verkehrsknoten: Organisation, Beschilderung, Service- und Logistikfunktionen.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3154924,113.9356111",
+    questions: [
+      "Welche Hinweise zeigen, dass dieser Ort international genutzt wird (Sprachen, Symbole, Zielgruppen, Serviceangebote)?",
+      "Woran erkennen Sie die Funktion als Knotenpunkt (Zufahrten, Ebenen, Beschilderung, Verkehrsfluss)?",
+      "Welche Infrastruktur ist sichtbar, die einen reibungslosen Ablauf ermöglicht (Kontrolle, Trennung von Strömen, Leitsysteme)?",
+      "Welche Vorteile bringt ein globaler Flughafenstandort für eine Global City?"
+    ]
+  },
+  {
+    id: "wkl",
+    category: "Technologische Infrastruktur",
+    pills: [
+      { icon: "fa-train", text: "HSR-Anbindung" },
+      { icon: "fa-route", text: "Gateway-Funktion" }
+    ],
+    title: "West Kowloon Station – Hochgeschwindigkeitsbahn (Außenraum)",
+    desc: "Analysieren Sie die Rolle der Hochgeschwindigkeitsbahn für Erreichbarkeit, Pendlerströme und die Einbindung Hongkongs in regionale Netzwerke.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3041,114.1647",
+    questions: [
+      "Welche Merkmale sprechen für eine großräumige, überregionale Verkehrsfunktion (Dimensionen, Zuwegungen, Umsteigelogik)?",
+      "Wie wirkt der Ort im Hinblick auf Sicherheit und Zugang (Kontrolle, Barrieren, klare Wegeführung)?",
+      "Welche städtischen Funktionen (Handel, Dienstleistungen, Mobilität) sind in der Umgebung erkennbar?",
+      "Inwiefern verändert eine schnelle Schienenanbindung die Wettbewerbsfähigkeit einer Global City?"
+    ]
+  },
+  {
+    id: "port",
+    category: "Wirtschaftskraft",
+    pills: [
+      { icon: "fa-ship", text: "Welthandel" },
+      { icon: "fa-boxes-stacked", text: "Containerlogistik" }
+    ],
+    title: "Kwai Tsing – Containerhafen / Port Area (Straßenraum)",
+    desc: "Untersuchen Sie den Containerhafen als Schlüsselinfrastruktur des Welthandels: Logistik, Schwerverkehr, Flächenbedarf und Standortfaktoren.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3342914,114.1267722",
+    questions: [
+      "Welche Elemente deuten auf Logistik und Warenumschlag hin (Container, Zufahrten, Verkehrszeichen, Lagerflächen)?",
+      "Welche Anforderungen stellt ein Hafen an Raum und Infrastruktur (Straßenbreite, Sicherung, Spezialflächen)?",
+      "Welche Belastungen können für Stadt und Umwelt entstehen (Lärm, Verkehr, Emissionen) – was sehen Sie dafür als Hinweise?",
+      "Warum sind solche Funktionen für eine Global City zentral, obwohl sie nicht „repräsentativ“ wirken?"
+    ]
+  },
+  {
+    id: "ifc",
+    category: "Wirtschaftskraft",
+    pills: [
+      { icon: "fa-building", text: "CBD" },
+      { icon: "fa-chart-line", text: "Dienstleistungen" }
+    ],
+    title: "Central – IFC/Waterfront (CBD und Hochhauscluster)",
+    desc: "Analysieren Sie das Central Business District als Steuerungs- und Entscheidungsraum (Firmenzentralen, Finanzdienstleistungen, repräsentative Architektur).",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2853696,114.160008",
+    questions: [
+      "Welche Hinweise sprechen für hochwertige Dienstleistungen (Banken, Hotels, Business-Infrastruktur, Sicherheit, Corporate-Design)?",
+      "Welche Rolle spielt die vertikale Bauweise für Flächennutzung und Prestige?",
+      "Wie beeinflusst die Lage (Wasserfront, Verkehrsanbindung) die Attraktivität für Unternehmen?",
+      "Welche „unsichtbaren Ströme“ werden hier vermutlich gesteuert (Kapital, Entscheidungen, Daten)?"
+    ]
+  },
+  {
+    id: "hkex",
+    category: "Wirtschaftskraft",
+    pills: [
+      { icon: "fa-money-bill-trend-up", text: "Finanzplatz" },
+      { icon: "fa-handshake", text: "Dienstleistungscluster" }
+    ],
+    title: "Exchange Square – Umfeld der Hong Kong Exchanges (HKEX)",
+    desc: "Untersuchen Sie, wie sich ein Finanzplatz im Stadtraum zeigt: Bürohochhäuser, Erreichbarkeit, Sicherheits- und Zugangssysteme, internationale Ausrichtung.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2830,114.1588",
+    questions: [
+      "Welche Zeichen deuten auf Finanz- und Unternehmensfunktionen hin (Gebäudetypen, Beschriftungen, Services)?",
+      "Woran erkennen Sie internationale Orientierung (Sprache, Marken, Zielgruppen, Gestaltung)?",
+      "Wie wird der öffentliche Raum organisiert (Zugänge, Überwachung, Abgrenzungen)?",
+      "Warum bündeln sich Finanzfunktionen räumlich in einem Cluster?"
+    ]
+  },
+  {
+    id: "gov",
+    category: "Politische Bedeutung",
+    pills: [
+      { icon: "fa-landmark", text: "Regierung" },
+      { icon: "fa-scale-balanced", text: "Institutionen" }
+    ],
+    title: "Tamar/Admiralty – Central Government Complex & LegCo-Umfeld",
+    desc: "Analysieren Sie politische Steuerung und Institutionen im Stadtzentrum: Architektur, Platzgestaltung, Nähe zu Wirtschaft und Verkehr.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2817,114.1656",
+    questions: [
+      "Welche Elemente wirken repräsentativ und welche funktional (Zugänge, Sicherheitslogik, Platzgestaltung)?",
+      "Warum ist die räumliche Nähe zum CBD aus Sicht der Stadtentwicklung plausibel?",
+      "Wie zeigt sich die Rolle des Staates im Stadtraum (Beschilderung, Gebäudeform, Absperrungen)?",
+      "Welche Interessenkonflikte können in solchen zentralen politischen Räumen entstehen (öffentlicher Raum, Sicherheit, Zugriff)?"
+    ]
+  },
+  {
+    id: "victoriapark",
+    category: "Politische Bedeutung / Stadtgesellschaft",
+    pills: [
+      { icon: "fa-tree", text: "öffentlicher Raum" },
+      { icon: "fa-users", text: "Stadtgesellschaft" }
+    ],
+    title: "Victoria Park – großer innerstädtischer Park (Causeway Bay)",
+    desc: "Untersuchen Sie die Funktion großer Parks in hochverdichteten Metropolen: Erholung, Alltagsnutzung, soziale Begegnung und potenziell politische Öffentlichkeit.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2820778,114.1875502",
+    questions: [
+      "Welche Nutzungen des Parks sind erkennbar (Sport, Erholung, Wege, Treffpunkte)?",
+      "Warum sind Freiräume in einer hochverdichteten Global City besonders wichtig?",
+      "Welche Regeln/Strukturen zur Steuerung des öffentlichen Raums erkennen Sie (Wegeführung, Beschilderung, Ordnung)?",
+      "Welche Rolle kann ein solcher Ort für Stadtgesellschaft und Öffentlichkeit spielen?"
+    ]
+  },
+  {
+    id: "mplus",
+    category: "Kulturelle Bedeutung",
+    pills: [
+      { icon: "fa-museum", text: "Kulturmetropole" },
+      { icon: "fa-city", text: "Standortfaktor" }
+    ],
+    title: "West Kowloon Cultural District – M+ Museum (Außenraum)",
+    desc: "Analysieren Sie Kultur als Standortfaktor einer Global City: Architektur, öffentliche Räume, Aufwertung und internationale Ausstrahlung.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3002583,114.157485",
+    questions: [
+      "Welche Hinweise sprechen für einen international ausgerichteten Kulturstandort (Architektur, Beschilderung, Besucherführung)?",
+      "Wie wirken Freiräume, Plätze und Wege – eher alltagsnah oder repräsentativ?",
+      "Inwiefern kann Kultur zur Aufwertung und zum Stadtimage beitragen?",
+      "Welche Zielgruppen werden hier vermutlich angesprochen (Tourismus, lokale Bevölkerung, internationale Gäste)?"
+    ]
+  },
+  {
+    id: "avenue",
+    category: "Kulturelle Bedeutung / Stadtimage",
+    pills: [
+      { icon: "fa-camera", text: "Tourismus" },
+      { icon: "fa-star", text: "Stadtmarke" }
+    ],
+    title: "Tsim Sha Tsui – Waterfront/Promenade (Avenue of Stars – Umfeld)",
+    desc: "Untersuchen Sie die Inszenierung der Skyline und die Rolle von Tourismus und Imagebildung im Stadtraum.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.2929601,114.1732911",
+    questions: [
+      "Welche Elemente dienen der Inszenierung der Stadt (Blickachsen, Promenade, Orientierung, Fotopunkte)?",
+      "Wie wird die Skyline als „Marke“ genutzt? Welche Botschaft über Hongkong vermittelt sie?",
+      "Welche Hinweise auf touristische Nutzung erkennen Sie (Sprachen, Angebote, Ticket-/Serviceangebote)?",
+      "Wie unterscheidet sich dieser Ort von Funktionsräumen wie Hafen oder CBD?"
+    ]
+  },
+  {
+    id: "mongkok",
+    category: "Demografische Faktoren (Dichte/Alltag)",
+    pills: [
+      { icon: "fa-people-group", text: "Dichte" },
+      { icon: "fa-store", text: "Alltag & Konsum" }
+    ],
+    title: "Mong Kok – Nathan Road (verdichteter Stadtraum)",
+    desc: "Analysieren Sie städtische Dichte im Alltag: Passantenströme, kleinteiliger Handel, vertikale Nutzung, Verkehr und Beschilderung.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3168,114.1691",
+    questions: [
+      "Woran erkennen Sie hohe Dichte (Bebauung, Straßenraum, Nutzungsintensität, Menschenströme)?",
+      "Welche Funktionen liegen sehr eng beieinander (Wohnen, Handel, Verkehr, Dienstleistungen)?",
+      "Welche Herausforderungen ergeben sich aus Dichte (Lärm, Sicherheit, Verkehrsführung, Aufenthaltsqualität)?",
+      "Welche Vorteile kann Dichte für eine Global City haben (Erreichbarkeit, Arbeitsmarkt, Vielfalt)?"
+    ]
+  },
+  {
+    id: "choihung",
+    category: "Demografische Faktoren (Wohnen/Sozialstruktur)",
+    pills: [
+      { icon: "fa-house", text: "Wohnen" },
+      { icon: "fa-layer-group", text: "Verdichtung" }
+    ],
+    title: "Choi Hung Estate – öffentlicher Wohnungsbau (Außenraum)",
+    desc: "Untersuchen Sie Wohnformen und soziale Dimensionen der Global City: Massierung, öffentliche Infrastruktur, Alltagsräume und mögliche Segregation.",
+    link: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=22.3340,114.2040",
+    questions: [
+      "Welche Merkmale deuten auf eine großmaßstäbliche Wohnanlage hin (Bauform, Wiederholung, Innenhöfe, Wege)?",
+      "Welche Infrastruktur für den Alltag ist erkennbar (Spielplätze, Einkaufsmöglichkeiten, Haltestellen, Schulen)?",
+      "Welche Chancen und Risiken sind mit verdichteten Wohnformen verbunden (Versorgung, Gemeinschaft, Enge, Privatsphäre)?",
+      "Wie passt Wohnen als Thema in das Gesamtbild „Global City“ (Arbeitskräfte, Wohnkosten, soziale Ungleichheit)?"
+    ]
+  },
+  {
+    id: "finish",
+    category: "Auswertung",
+    pills: [
+      { icon: "fa-clipboard-check", text: "Transfer" },
+      { icon: "fa-scale-balanced", text: "Bewertung" }
+    ],
+    title: "Abschluss: Global City – Belege und Bewertung",
+    desc: "Fassen Sie Ihre Ergebnisse zusammen und bewerten Sie Hongkong anhand der Merkmale einer Global City.",
+    link: "https://www.google.com/maps",
+    questions: [
+      "Nennen Sie drei Merkmale einer Global City, die Sie in der Rallye eindeutig belegen konnten. Notieren Sie je Merkmal mindestens einen sichtbaren Beleg.",
+      "Welche Zielkonflikte wurden sichtbar (z. B. Wirtschaftserfolg vs. Wohnraum/Umwelt/öffentlicher Raum)? Begründen Sie mit Beobachtungen.",
+      "Bewerten Sie: Inwiefern ist Hongkong eine „Steuerungszentrale“ (Command & Control) im globalen System? Nennen Sie zwei Argumente.",
+      "Formulieren Sie ein kurzes Fazit (3–4 Sätze): Welche Stärken und welche Herausforderungen kennzeichnen Hongkong als Global City?"
+    ]
+  }
+];
+
+let idx = 0;
+
+function saveFields() {
+  const stop = stops[idx];
+  if (!stop) return;
+  const key = "hk_gc_rallye_" + stop.id;
+  const data = {
+    merkmal: document.getElementById("merkmalInput").value || "",
+    notes: document.getElementById("noteArea").value || ""
+  };
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function loadFields() {
+  const stop = stops[idx];
+  if (!stop) return;
+  const key = "hk_gc_rallye_" + stop.id;
+  const raw = localStorage.getItem(key);
+  let data = { merkmal:"", notes:"" };
+  if (raw) {
+    try { data = Object.assign(data, JSON.parse(raw)); } catch(e) {}
+  }
+  document.getElementById("merkmalInput").value = data.merkmal || "";
+  document.getElementById("noteArea").value = data.notes || "";
+}
+
+function render() {
+  const stop = stops[idx];
+
+  document.getElementById("badgeStop").textContent = "Stopp " + (idx+1) + "/" + stops.length;
+  document.getElementById("placeTitle").textContent = stop.title;
+  document.getElementById("placeCategory").textContent = stop.category;
+  document.getElementById("placeDesc").textContent = stop.desc;
+
+  const pillRow = document.getElementById("pillRow");
+  pillRow.innerHTML = "";
+  (stop.pills || []).forEach(p => {
+    const span = document.createElement("span");
+    span.className = "pill";
+    span.innerHTML = `<i class="fa-solid ${p.icon}"></i> ${p.text}`;
+    pillRow.appendChild(span);
+  });
+
+  const a = document.getElementById("streetLink");
+  a.href = stop.link;
+  document.getElementById("linkHint").innerHTML =
+    `<span class="tiny"><strong>Link:</strong> <span style="word-break:break-all;">${stop.link}</span></span>`;
+
+  const q = document.getElementById("questionList");
+  q.innerHTML = "";
+  stop.questions.forEach(text => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    q.appendChild(li);
+  });
+
+  const prevBtn = document.getElementById("prevBtn");
+  prevBtn.disabled = (idx === 0);
+  prevBtn.style.opacity = (idx === 0) ? "0.55" : "1";
+  prevBtn.style.cursor = (idx === 0) ? "not-allowed" : "pointer";
+
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.innerHTML = (idx === stops.length - 1)
+    ? `Fertig <i class="fa-solid fa-flag-checkered"></i>`
+    : `Weiter <i class="fa-solid fa-arrow-right"></i>`;
+
+  loadFields();
+  window.location.hash = "#stopp-" + (idx+1);
+}
+
+function next() {
+  saveFields();
+  if (idx < stops.length - 1) {
+    idx += 1;
+    render();
+  } else {
+    idx = 0;
+    render();
+  }
+}
+
+function prev() {
+  saveFields();
+  if (idx > 0) {
+    idx -= 1;
+    render();
+  }
+}
+
+function resetAll() {
+  const ok = confirm("Möchten Sie die Rallye wirklich neu starten und alle gespeicherten Notizen löschen?");
+  if (!ok) return;
+  stops.forEach(s => localStorage.removeItem("hk_gc_rallye_" + s.id));
+  idx = 0;
+  render();
+}
+
+function initFromHash() {
+  const m = (window.location.hash || "").match(/stopp-(\d+)/);
+  if (m) {
+    const n = parseInt(m[1], 10);
+    if (!isNaN(n) && n >= 1 && n <= stops.length) {
+      idx = n - 1;
+    }
+  }
+}
+
+document.getElementById("nextBtn").addEventListener("click", next);
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+document.getElementById("merkmalInput").addEventListener("input", saveFields);
+document.getElementById("noteArea").addEventListener("input", saveFields);
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const stop = stops[idx];
+  try {
+    await navigator.clipboard.writeText(stop.link);
+    const btn = document.getElementById("copyBtn");
+    btn.innerHTML = `<i class="fa-solid fa-check"></i> Kopiert`;
+    setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-copy"></i> Link kopieren`; }, 1200);
+  } catch(e) {
+    alert("Kopieren war nicht möglich. Bitte markieren und kopieren Sie den Link manuell.");
+  }
+});
+
+window.addEventListener("hashchange", () => {
+  initFromHash();
+  render();
+});
+
+initFromHash();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tischtennis Spielpläne – Einzel & Doppel (Best of Five, Rangliste, JSON Import/Export)</title>
+  <style>
+    :root { --b:#ddd; --bg:#fafafa; --card:#fff; --txt:#111; --muted:#666; --okbg:#eaffea; --badbg:#ffecec; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; color: var(--txt); background: var(--bg); }
+    header { padding: 16px; border-bottom: 1px solid var(--b); background: #fff; position: sticky; top: 0; z-index: 10; }
+    h1 { font-size: 18px; margin: 0 0 10px; }
+    .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    button { padding: 10px 12px; border: 1px solid var(--b); background: #fff; border-radius: 10px; cursor: pointer; }
+    button.primary { background: #111; color: #fff; border-color: #111; }
+    button:active { transform: translateY(1px); }
+    input[type="text"], input[type="number"] { padding: 9px 10px; border: 1px solid var(--b); border-radius: 10px; background: #fff; }
+    select { padding: 8px 10px; border: 1px solid var(--b); border-radius: 10px; background: #fff; }
+    .status { color: var(--muted); font-size: 13px; }
+    main { padding: 16px; max-width: 1200px; margin: 0 auto; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 16px; }
+    .tab { padding: 10px 12px; border: 1px solid var(--b); border-radius: 999px; background: #fff; cursor: pointer; font-size: 14px; }
+    .tab.active { background: #111; color: #fff; border-color: #111; }
+    .grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 980px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .card { background: var(--card); border: 1px solid var(--b); border-radius: 16px; padding: 14px; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .card h2 { margin: 0 0 10px; font-size: 16px; }
+    .card h3 { margin: 14px 0 8px; font-size: 14px; }
+    .muted { color: var(--muted); font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid var(--b); padding: 6px 8px; vertical-align: top; }
+    th { background: #f5f5f5; font-weight: 600; }
+    .small { font-size: 12px; }
+    .nowrap { white-space: nowrap; }
+    .round { margin: 12px 0; }
+    .matchRow {
+      display: grid;
+      grid-template-columns: 1fr 210px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-radius: 14px;
+      margin: 8px 0;
+      background: #fff;
+    }
+    .matchRow.done { background: var(--okbg); border-color: #cfeccc; }
+    .matchRow.invalid { background: var(--badbg); border-color: #f1c0c0; }
+    .matchLabel { font-size: 14px; }
+    .scoreBox { display:flex; gap: 8px; align-items:center; justify-content: center; }
+    .scoreBox .sep { color: var(--muted); font-weight: 700; }
+    .scoreMini { font-size: 12px; color: var(--muted); text-align: center; margin-top: 4px; }
+    .pill { display: inline-block; padding: 2px 8px; border: 1px solid var(--b); border-radius: 999px; font-size: 12px; color: var(--muted); background: #fff; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    details summary { cursor: pointer; }
+    .teamGrid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .teamGrid { grid-template-columns: 1fr 1fr; } }
+    .teamRow { border: 1px solid var(--b); border-radius: 14px; padding: 10px; background: #fff; }
+    .teamRow label { display:block; font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .teamRow .title { display:flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .teamRow .title strong { font-size: 14px; }
+    .hint { font-size: 12px; color: var(--muted); }
+    .right { text-align: right; }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Tischtennis Spielpläne (Einzel & Doppel) – Best of Five, Rangliste, JSON Export/Import</h1>
+  <div class="bar">
+    <button class="primary" id="btnExport">Export (JSON herunterladen)</button>
+
+    <input type="file" id="fileImport" accept="application/json" style="display:none" />
+    <button id="btnImport">Import (JSON auswählen)</button>
+
+    <button id="btnReset">Zurücksetzen</button>
+
+    <span class="status" id="status">Bereit.</span>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Ansicht">
+    <button class="tab active" id="tabSingles">Einzel</button>
+    <button class="tab" id="tabDoubles">Doppel</button>
+  </div>
+</header>
+
+<main>
+  <!-- EINZEL -->
+  <section id="viewSingles">
+    <div class="grid">
+      <div class="card">
+        <h2>Einzel – Teilnehmer</h2>
+        <div class="muted">Du kannst hier (optional) Namen anpassen. Spielplan, Matrix und Rangliste aktualisieren automatisch.</div>
+        <div id="singlesParticipants"></div>
+        <div class="muted" style="margin-top:8px;">19 Teilnehmende ⇒ 19 Runden, pro Runde 1× spielfrei.</div>
+      </div>
+
+      <div class="card">
+        <h2>Einzel – Rangliste</h2>
+        <div class="muted">Sortierung: Punkte (Sieg = 1), dann Satzverhältnis, dann direkter Vergleich.</div>
+        <div style="overflow:auto; margin-top:10px;" id="singlesTable"></div>
+        <div class="hint" style="margin-top:8px;">
+          Satzverhältnis = Sätze gewonnen / Sätze verloren (bei 0 verlorenen Sätzen = „∞“).
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px;">
+      <div class="card">
+        <h2>Einzel – Spielplan (Runden)</h2>
+        <div class="controls" style="margin-bottom:8px;">
+          <button id="btnRegenSingles">Einzel neu generieren</button>
+          <span class="pill" id="singlesMeta"></span>
+        </div>
+        <details>
+          <summary class="muted">Eingabeformat</summary>
+          <div class="muted" style="margin-top:8px;">
+            Best of Five: Erlaubt sind nur 3:0, 3:1, 3:2 (oder umgekehrt). Leere Auswahl = Ergebnis löschen.
+          </div>
+        </details>
+        <div id="singlesRounds" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Einzel – Matrix</h2>
+        <div class="muted">Die Matrix übernimmt automatisch die Ergebnisse aus dem Spielplan.</div>
+        <div style="overflow:auto; margin-top:10px;" id="singlesMatrix"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOPPEL -->
+  <section id="viewDoubles" style="display:none;">
+    <div class="grid">
+      <div class="card">
+        <h2>Doppel – Teams (Namen eintragen)</h2>
+        <div class="muted">Team-Mitglieder werden mit exportiert und beim Import wiederhergestellt.</div>
+
+        <div class="controls" style="margin-top:10px;">
+          <label class="muted">Anzahl Teams:</label>
+          <input type="number" id="dblTeamCount" min="2" max="40" step="1" value="10" />
+          <button id="btnApplyTeamCount">Übernehmen</button>
+          <button id="btnRegenDoubles">Doppel neu generieren</button>
+          <span class="pill" id="doublesMeta"></span>
+        </div>
+
+        <div style="margin-top:12px;" class="teamGrid" id="doublesTeams"></div>
+      </div>
+
+      <div class="card">
+        <h2>Doppel – Rangliste</h2>
+        <div class="muted">Sortierung: Punkte (Sieg = 1), dann Satzverhältnis, dann direkter Vergleich.</div>
+        <div style="overflow:auto; margin-top:10px;" id="doublesTable"></div>
+        <div class="hint" style="margin-top:8px;">
+          Ungerade Teamzahl ⇒ pro Runde 1× spielfrei.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px;">
+      <div class="card">
+        <h2>Doppel – Spielplan (Runden)</h2>
+        <details>
+          <summary class="muted">Eingabeformat</summary>
+          <div class="muted" style="margin-top:8px;">
+            Best of Five: Erlaubt sind nur 3:0, 3:1, 3:2 (oder umgekehrt). Leere Auswahl = Ergebnis löschen.
+          </div>
+        </details>
+        <div id="doublesRounds" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Doppel – Matrix</h2>
+        <div class="muted">Die Matrix übernimmt automatisch die Ergebnisse aus dem Spielplan.</div>
+        <div style="overflow:auto; margin-top:10px;" id="doublesMatrix"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* -----------------------------
+   Helpers
+------------------------------*/
+const $ = (id) => document.getElementById(id);
+const statusEl = $("status");
+
+function setStatus(msg) { statusEl.textContent = msg; }
+function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: "application/json;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result || ""));
+    r.onerror = () => reject(new Error("Datei konnte nicht gelesen werden."));
+    r.readAsText(file);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function fmtRatio(forSets, againstSets) {
+  if (againstSets === 0) return forSets > 0 ? "∞" : "0.00";
+  return (forSets / againstSets).toFixed(2);
+}
+
+/* -----------------------------
+   Round robin (circle method)
+------------------------------*/
+function roundRobin(ids) {
+  const list = ids.slice();
+  const isOdd = (list.length % 2 === 1);
+  if (isOdd) list.push(null); // BYE
+
+  const n = list.length;
+  const rounds = n - 1;
+  const half = n / 2;
+
+  let arr = list.slice();
+  const out = [];
+
+  for (let r = 1; r <= rounds; r++) {
+    const pairs = [];
+    for (let i = 0; i < half; i++) {
+      const a = arr[i];
+      const b = arr[n - 1 - i];
+      pairs.push([a, b]);
+    }
+    out.push({ round: r, pairs });
+
+    const fixed = arr[0];
+    const rest = arr.slice(1);
+    rest.unshift(rest.pop());
+    arr = [fixed, ...rest];
+  }
+  return out;
+}
+
+/* -----------------------------
+   Best-of-Five validation
+------------------------------*/
+function parseScoreValue(v) {
+  // "" -> null, else int
+  if (v === "" || v == null) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function isValidBo5(aSets, bSets) {
+  if (aSets == null && bSets == null) return true; // empty means cleared
+  if (aSets == null || bSets == null) return false;
+
+  // allow only 3:x or x:3 with x in [0..2]
+  const okA = (aSets === 3 && (bSets === 0 || bSets === 1 || bSets === 2));
+  const okB = (bSets === 3 && (aSets === 0 || aSets === 1 || aSets === 2));
+  return okA || okB;
+}
+
+function winnerOf(aSets, bSets) {
+  if (!isValidBo5(aSets, bSets)) return null;
+  if (aSets == null && bSets == null) return null;
+  return aSets > bSets ? "A" : "B"; // since valid => one is 3
+}
+
+/* -----------------------------
+   State (results are NUMBERS)
+   results key "min-max": { aSets: number|null, bSets: number|null, notes: string }
+------------------------------*/
+const DEFAULT_STATE = {
+  version: 2,
+  savedAt: "",
+  singles: {
+    title: "Einzel",
+    participants: [
+      { id: 1, name: "Aschenbrenner Marlon" },
+      { id: 2, name: "Brandt Eric" },
+      { id: 3, name: "Brandt Adrian" },
+      { id: 4, name: "Szymanski Viktor" },
+      { id: 5, name: "Dräger Jannis Paul" },
+      { id: 6, name: "Granzow Anton" },
+      { id: 7, name: "Hübbe Leonard" },
+      { id: 8, name: "Kapustin Lukas" },
+      { id: 9, name: "Kovalovs Roman" },
+      { id: 10, name: "Lochow Arjen" },
+      { id: 11, name: "Mashkouk Teim" },
+      { id: 12, name: "Mayen Felix Holger Bodo" },
+      { id: 13, name: "Nix Aaron" },
+      { id: 14, name: "Raudszus Niclas" },
+      { id: 15, name: "Schonig Jonas Konstantin" },
+      { id: 16, name: "Schweimanns Sascha" },
+      { id: 17, name: "Steude Ted" },
+      { id: 18, name: "Wulff Tim Luca" },
+      { id: 19, name: "Zander Annelie" }
+    ],
+    rounds: [],
+    results: {}
+  },
+  doubles: {
+    title: "Doppel",
+    teamCount: 10,
+    teams: [],
+    rounds: [],
+    results: {}
+  }
+};
+
+let state = deepClone(DEFAULT_STATE);
+
+/* -----------------------------
+   Generators
+------------------------------*/
+function regenSinglesRounds() {
+  const ids = state.singles.participants.map(p => p.id);
+  const rr = roundRobin(ids);
+  state.singles.rounds = rr.map(r => ({
+    round: r.round,
+    matches: r.pairs.map(([a,b]) => ({ a, b }))
+  }));
+}
+
+function ensureDoublesTeams() {
+  const n = Number(state.doubles.teamCount) || 10;
+  const safeN = Math.max(2, Math.min(40, n));
+  state.doubles.teamCount = safeN;
+
+  const old = new Map((state.doubles.teams || []).map(t => [t.id, t]));
+  const teams = [];
+  for (let i = 1; i <= safeN; i++) {
+    const prev = old.get(i);
+    teams.push({ id: i, p1: prev?.p1 ?? "", p2: prev?.p2 ?? "" });
+  }
+  state.doubles.teams = teams;
+}
+
+function regenDoublesRounds() {
+  ensureDoublesTeams();
+  const ids = state.doubles.teams.map(t => t.id);
+  const rr = roundRobin(ids);
+  state.doubles.rounds = rr.map(r => ({
+    round: r.round,
+    matches: r.pairs.map(([a,b]) => ({ a, b }))
+  }));
+}
+
+/* -----------------------------
+   Result helpers
+------------------------------*/
+function keyAB(a, b) {
+  if (a == null || b == null) return null;
+  const x = Math.min(a, b);
+  const y = Math.max(a, b);
+  return `${x}-${y}`;
+}
+
+function getResult(mode, a, b) {
+  const k = keyAB(a,b);
+  if (!k) return { aSets: null, bSets: null, notes: "" };
+  const dict = (mode === "singles") ? state.singles.results : state.doubles.results;
+  return dict[k] ?? { aSets: null, bSets: null, notes: "" };
+}
+
+function setResult(mode, a, b, patch) {
+  const k = keyAB(a,b);
+  if (!k) return;
+  const dict = (mode === "singles") ? state.singles.results : state.doubles.results;
+  const cur = dict[k] ?? { aSets: null, bSets: null, notes: "" };
+  dict[k] = { ...cur, ...patch };
+}
+
+function clearResult(mode, a, b) {
+  const k = keyAB(a,b);
+  if (!k) return;
+  const dict = (mode === "singles") ? state.singles.results : state.doubles.results;
+  delete dict[k];
+}
+
+/* -----------------------------
+   Labels
+------------------------------*/
+function nameByIdSingles(id) {
+  if (id == null) return "SPIELFREI";
+  const p = state.singles.participants.find(x => x.id === id);
+  return p ? p.name : `#${id}`;
+}
+
+function teamLabel(id) {
+  const t = state.doubles.teams.find(x => x.id === id);
+  const p1 = (t?.p1 ?? "").trim();
+  const p2 = (t?.p2 ?? "").trim();
+  if (!p1 && !p2) return `Team ${id}`;
+  if (p1 && !p2) return `Team ${id}: ${p1} / ____`;
+  if (!p1 && p2) return `Team ${id}: ____ / ${p2}`;
+  return `Team ${id}: ${p1} / ${p2}`;
+}
+
+/* -----------------------------
+   Standings calculation
+------------------------------*/
+function calcStandings(mode) {
+  const isSingles = (mode === "singles");
+  const entities = isSingles
+    ? state.singles.participants.map(p => ({ id: p.id, name: p.name }))
+    : state.doubles.teams.map(t => ({ id: t.id, name: teamLabel(t.id) }));
+
+  const rounds = isSingles ? state.singles.rounds : state.doubles.rounds;
+  const resultsDict = isSingles ? state.singles.results : state.doubles.results;
+
+  // init stats
+  const stats = new Map();
+  for (const e of entities) {
+    stats.set(e.id, {
+      id: e.id,
+      name: e.name,
+      played: 0,
+      won: 0,
+      lost: 0,
+      points: 0,
+      setsFor: 0,
+      setsAgainst: 0
+    });
+  }
+
+  // helper: get result for a match a vs b where stored as min-max with "aSets/bSets" relative to min/max
+  function getMatchOutcome(a, b) {
+    const k = keyAB(a,b);
+    if (!k) return null;
+    const r = resultsDict[k];
+    if (!r) return null;
+    const aSets = r.aSets;
+    const bSets = r.bSets;
+    if (!isValidBo5(aSets, bSets) || (aSets == null && bSets == null)) return null;
+
+    // Interpret score relative to actual order a vs b:
+    // r.aSets is "minId sets", r.bSets is "maxId sets" (because key uses min-max)
+    const [minId, maxId] = k.split("-").map(Number);
+    let setsA, setsB;
+    if (a === minId && b === maxId) {
+      setsA = aSets; setsB = bSets;
+    } else if (a === maxId && b === minId) {
+      // swap
+      setsA = bSets; setsB = aSets;
+    } else {
+      return null;
+    }
+    if (!isValidBo5(setsA, setsB)) return null;
+    const w = winnerOf(setsA, setsB); // "A" or "B"
+    return { setsA, setsB, winnerId: (w === "A" ? a : b) };
+  }
+
+  // aggregate all played matches
+  for (const r of rounds) {
+    for (const m of r.matches) {
+      if (m.a == null || m.b == null) continue;
+      const out = getMatchOutcome(m.a, m.b);
+      if (!out) continue;
+
+      const A = stats.get(m.a);
+      const B = stats.get(m.b);
+
+      A.played++; B.played++;
+      A.setsFor += out.setsA; A.setsAgainst += out.setsB;
+      B.setsFor += out.setsB; B.setsAgainst += out.setsA;
+
+      if (out.winnerId === m.a) {
+        A.won++; A.points++;
+        B.lost++;
+      } else {
+        B.won++; B.points++;
+        A.lost++;
+      }
+    }
+  }
+
+  const arr = Array.from(stats.values()).map(s => ({
+    ...s,
+    setRatio: (s.setsAgainst === 0) ? (s.setsFor > 0 ? Infinity : 0) : (s.setsFor / s.setsAgainst)
+  }));
+
+  // Head-to-head result: return 1 if x beats y, -1 if y beats x, 0 if none/unknown
+  function headToHeadCompare(xId, yId) {
+    const k = keyAB(xId, yId);
+    if (!k) return 0;
+    const r = resultsDict[k];
+    if (!r) return 0;
+    let xSets, ySets;
+
+    const [minId, maxId] = k.split("-").map(Number);
+    if (xId === minId && yId === maxId) { xSets = r.aSets; ySets = r.bSets; }
+    else if (xId === maxId && yId === minId) { xSets = r.bSets; ySets = r.aSets; }
+    else return 0;
+
+    if (!isValidBo5(xSets, ySets) || xSets == null || ySets == null) return 0;
+    if (xSets > ySets) return 1;
+    if (ySets > xSets) return -1;
+    return 0;
+  }
+
+  // Sort with tie-break blocks:
+  // 1) points desc
+  // 2) setRatio desc
+  // then for equal blocks:
+  // - if 2 tied: direct head-to-head
+  // - if >2 tied: mini-table among tied (points, setRatio), then fallback to head-to-head if still pairs, else id
+  arr.sort((a,b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    if (b.setRatio !== a.setRatio) return b.setRatio - a.setRatio;
+    return a.id - b.id;
+  });
+
+  // refine ties
+  let i = 0;
+  while (i < arr.length) {
+    let j = i + 1;
+    while (j < arr.length && arr[j].points === arr[i].points && arr[j].setRatio === arr[i].setRatio) j++;
+    const block = arr.slice(i, j);
+
+    if (block.length === 2) {
+      const [p, q] = block;
+      const h = headToHeadCompare(p.id, q.id);
+      if (h < 0) { arr[i] = q; arr[i+1] = p; }
+    } else if (block.length > 2) {
+      // mini table inside block
+      const ids = block.map(x => x.id);
+      const mini = new Map();
+      for (const id of ids) mini.set(id, { id, pts: 0, sf: 0, sa: 0 });
+
+      for (let a = 0; a < ids.length; a++) {
+        for (let b = a+1; b < ids.length; b++) {
+          const idA = ids[a], idB = ids[b];
+          const cmp = headToHeadCompare(idA, idB);
+          // also need sets for ratio: read exact sets if valid
+          const k = keyAB(idA, idB);
+          const r = resultsDict[k];
+          if (r) {
+            let setsA, setsB;
+            const [minId, maxId] = k.split("-").map(Number);
+            if (idA === minId && idB === maxId) { setsA = r.aSets; setsB = r.bSets; }
+            else { setsA = r.bSets; setsB = r.aSets; }
+
+            if (isValidBo5(setsA, setsB) && setsA != null && setsB != null) {
+              mini.get(idA).sf += setsA; mini.get(idA).sa += setsB;
+              mini.get(idB).sf += setsB; mini.get(idB).sa += setsA;
+            }
+          }
+          if (cmp === 1) mini.get(idA).pts += 1;
+          else if (cmp === -1) mini.get(idB).pts += 1;
+        }
+      }
+
+      const sortedBlock = block.slice().sort((x,y) => {
+        const mx = mini.get(x.id), my = mini.get(y.id);
+        if (my.pts !== mx.pts) return my.pts - mx.pts;
+        const rx = (mx.sa === 0) ? (mx.sf > 0 ? Infinity : 0) : (mx.sf / mx.sa);
+        const ry = (my.sa === 0) ? (my.sf > 0 ? Infinity : 0) : (my.sf / my.sa);
+        if (ry !== rx) return ry - rx;
+        // if still tied, use direct head-to-head (pairwise) as extra nudge
+        const h = headToHeadCompare(x.id, y.id);
+        if (h !== 0) return -h;
+        return x.id - y.id;
+      });
+
+      for (let k = 0; k < sortedBlock.length; k++) arr[i + k] = sortedBlock[k];
+    }
+
+    i = j;
+  }
+
+  return arr;
+}
+
+/* -----------------------------
+   Rendering: Tabs
+------------------------------*/
+function setTab(which) {
+  const isSingles = (which === "singles");
+  $("viewSingles").style.display = isSingles ? "" : "none";
+  $("viewDoubles").style.display = isSingles ? "none" : "";
+  $("tabSingles").classList.toggle("active", isSingles);
+  $("tabDoubles").classList.toggle("active", !isSingles);
+}
+
+/* -----------------------------
+   UI components: Score select
+------------------------------*/
+function scoreSelectHTML(dataAttr, value) {
+  const v = (value == null) ? "" : String(value);
+  const opts = ["", "0", "1", "2", "3"].map(o => {
+    const label = (o === "") ? "—" : o;
+    const sel = (o === v) ? "selected" : "";
+    return `<option value="${o}" ${sel}>${label}</option>`;
+  }).join("");
+  return `<select ${dataAttr}>${opts}</select>`;
+}
+
+function scoreTextFromResult(mode, a, b) {
+  const res = getResult(mode, a, b);
+  if (!isValidBo5(res.aSets, res.bSets) || (res.aSets == null && res.bSets == null)) return "";
+  // Need text in orientation a vs b:
+  const k = keyAB(a,b);
+  const [minId, maxId] = k.split("-").map(Number);
+  let setsA, setsB;
+  if (a === minId && b === maxId) { setsA = res.aSets; setsB = res.bSets; }
+  else { setsA = res.bSets; setsB = res.aSets; }
+  if (!isValidBo5(setsA, setsB)) return "";
+  return `${setsA}:${setsB}`;
+}
+
+/* -----------------------------
+   Render: Singles participants
+------------------------------*/
+function renderSinglesParticipants() {
+  const wrap = $("singlesParticipants");
+  const parts = state.singles.participants;
+
+  const html = [];
+  html.push(`<table class="small"><thead><tr><th class="nowrap">Nr</th><th>Name</th></tr></thead><tbody>`);
+  for (const p of parts) {
+    html.push(`
+      <tr>
+        <td class="nowrap">${p.id}</td>
+        <td><input type="text" data-s-part="${p.id}" value="${escapeHtml(p.name)}" style="width:100%"></td>
+      </tr>
+    `);
+  }
+  html.push(`</tbody></table>`);
+  wrap.innerHTML = html.join("");
+
+  wrap.querySelectorAll("input[data-s-part]").forEach(inp => {
+    inp.addEventListener("input", (e) => {
+      const id = Number(e.target.dataset.sPart);
+      const p = state.singles.participants.find(x => x.id === id);
+      if (p) p.name = e.target.value;
+      // update everything that shows names
+      renderSinglesRounds();
+      renderSinglesMatrix();
+      renderSinglesTable();
+      setStatus("Änderungen (Namen) – exportiere, um zu speichern.");
+    });
+  });
+}
+
+/* -----------------------------
+   Render: Singles rounds + live highlight
+------------------------------*/
+function renderSinglesRounds() {
+  const el = $("singlesRounds");
+  const rounds = state.singles.rounds;
+
+  const totalMatches = rounds.reduce((sum, r) => sum + r.matches.filter(m => m.a!=null && m.b!=null).length, 0);
+  $("singlesMeta").textContent = `${state.singles.participants.length} TN · ${rounds.length} Runden · ${totalMatches} Spiele`;
+
+  const html = [];
+  for (const r of rounds) {
+    const bye = r.matches.find(m => (m.a == null) !== (m.b == null));
+    const byeId = bye ? (bye.a ?? bye.b) : null;
+
+    html.push(`<div class="round">`);
+    html.push(`<h3>Runde ${r.round} ${byeId ? `<span class="pill">spielfrei: ${escapeHtml(nameByIdSingles(byeId))}</span>` : ""}</h3>`);
+
+    const matches = r.matches.filter(m => m.a != null && m.b != null);
+    matches.forEach((m, idx) => {
+      const resRaw = getResult("singles", m.a, m.b);
+
+      // oriented to a vs b:
+      const k = keyAB(m.a, m.b);
+      const [minId, maxId] = k.split("-").map(Number);
+      const aSetsOriented = (m.a === minId) ? resRaw.aSets : resRaw.bSets;
+      const bSetsOriented = (m.b === maxId) ? resRaw.bSets : resRaw.aSets;
+
+      const valid = isValidBo5(aSetsOriented, bSetsOriented);
+      const done = valid && (aSetsOriented != null && bSetsOriented != null);
+
+      const rowClass = `matchRow${done ? " done" : ""}${(!valid && (aSetsOriented != null || bSetsOriented != null)) ? " invalid" : ""}`;
+
+      html.push(`
+        <div class="${rowClass}" data-s-row="${r.round}-${idx}">
+          <div class="matchLabel">${escapeHtml(nameByIdSingles(m.a))} <span class="muted">vs.</span> ${escapeHtml(nameByIdSingles(m.b))}</div>
+
+          <div>
+            <div class="scoreBox">
+              ${scoreSelectHTML(`data-s-r="${r.round}" data-s-idx="${idx}" data-side="A"`, aSetsOriented)}
+              <span class="sep">:</span>
+              ${scoreSelectHTML(`data-s-r="${r.round}" data-s-idx="${idx}" data-side="B"`, bSetsOriented)}
+            </div>
+            <div class="scoreMini">Best of Five (gültig: 3:0 / 3:1 / 3:2)</div>
+          </div>
+
+          <input class="scoreInput" type="text" data-s-note-r="${r.round}" data-s-note-idx="${idx}" value="${escapeHtml(resRaw.notes || "")}" placeholder="Notizen" />
+        </div>
+      `);
+    });
+
+    html.push(`</div>`);
+  }
+
+  el.innerHTML = html.join("");
+
+  // Bind score selects
+  el.querySelectorAll(`select[data-s-r]`).forEach(sel => {
+    sel.addEventListener("change", (e) => {
+      const roundNo = Number(e.target.dataset.sR);
+      const idx = Number(e.target.dataset.sIdx);
+      const side = e.target.dataset.side; // "A" or "B"
+      const val = parseScoreValue(e.target.value);
+
+      const round = state.singles.rounds.find(x => x.round === roundNo);
+      const matches = round.matches.filter(mm => mm.a != null && mm.b != null);
+      const m = matches[idx];
+
+      const k = keyAB(m.a, m.b);
+      const [minId, maxId] = k.split("-").map(Number);
+
+      // get current stored (min/max)
+      const cur = getResult("singles", m.a, m.b);
+      let minSets = cur.aSets;
+      let maxSets = cur.bSets;
+
+      // update oriented input -> store back to min/max
+      if (side === "A") {
+        if (m.a === minId) minSets = val; else maxSets = val;
+      } else {
+        if (m.b === maxId) maxSets = val; else minSets = val;
+      }
+
+      // if both empty => clear
+      if (minSets == null && maxSets == null) {
+        clearResult("singles", m.a, m.b);
+        setStatus("Ergebnis gelöscht.");
+      } else {
+        // Validate in oriented form:
+        const aOr = (m.a === minId) ? minSets : maxSets;
+        const bOr = (m.b === maxId) ? maxSets : minSets;
+
+        if (!isValidBo5(aOr, bOr)) {
+          // keep partial inputs (so user can finish), but mark invalid
+          setResult("singles", m.a, m.b, { aSets: minSets, bSets: maxSets });
+          setStatus("Ungültiges Ergebnis – erlaubt nur 3:0 / 3:1 / 3:2 (oder umgekehrt).");
+        } else {
+          setResult("singles", m.a, m.b, { aSets: minSets, bSets: maxSets });
+          setStatus("Änderungen (Einzel) – exportiere, um zu speichern.");
+        }
+      }
+
+      // Live update (no page reload)
+      renderSinglesRounds();
+      renderSinglesMatrix();
+      renderSinglesTable();
+    });
+  });
+
+  // Bind notes
+  el.querySelectorAll(`input[data-s-note-r]`).forEach(inp => {
+    inp.addEventListener("input", (e) => {
+      const roundNo = Number(e.target.dataset.sNoteR);
+      const idx = Number(e.target.dataset.sNoteIdx);
+
+      const round = state.singles.rounds.find(x => x.round === roundNo);
+      const matches = round.matches.filter(mm => mm.a != null && mm.b != null);
+      const m = matches[idx];
+
+      // Ensure result record exists if notes typed, even if empty score
+      const cur = getResult("singles", m.a, m.b);
+      setResult("singles", m.a, m.b, { aSets: cur.aSets, bSets: cur.bSets, notes: e.target.value });
+
+      setStatus("Änderungen (Einzel Notizen) – exportiere, um zu speichern.");
+    });
+  });
+}
+
+/* -----------------------------
+   Render: Singles matrix
+------------------------------*/
+function renderSinglesMatrix() {
+  const el = $("singlesMatrix");
+  const parts = state.singles.participants;
+
+  const html = [];
+  html.push(`<table class="small">`);
+  html.push(`<thead><tr><th class="nowrap">#</th>`);
+  for (const p of parts) html.push(`<th class="nowrap">${p.id}</th>`);
+  html.push(`</tr></thead><tbody>`);
+
+  for (const row of parts) {
+    html.push(`<tr><th class="nowrap">${row.id}</th>`);
+    for (const col of parts) {
+      if (row.id === col.id) {
+        html.push(`<td style="text-align:center; background:#f9f9f9;">X</td>`);
+      } else {
+        const txt = scoreTextFromResult("singles", row.id, col.id);
+        html.push(`<td>${escapeHtml(txt)}</td>`);
+      }
+    }
+    html.push(`</tr>`);
+  }
+  html.push(`</tbody></table>`);
+  el.innerHTML = html.join("");
+}
+
+/* -----------------------------
+   Render: Singles standings table
+------------------------------*/
+function renderSinglesTable() {
+  const el = $("singlesTable");
+  const rows = calcStandings("singles");
+
+  const html = [];
+  html.push(`<table class="small">`);
+  html.push(`<thead><tr>
+      <th class="nowrap">Pl.</th>
+      <th>Name</th>
+      <th class="right nowrap">Sp</th>
+      <th class="right nowrap">S</th>
+      <th class="right nowrap">N</th>
+      <th class="right nowrap">Pkt</th>
+      <th class="right nowrap">Sätze</th>
+      <th class="right nowrap">Verh.</th>
+    </tr></thead><tbody>`);
+
+  rows.forEach((r, idx) => {
+    html.push(`<tr>
+      <td class="right nowrap">${idx+1}</td>
+      <td>${escapeHtml(r.name)}</td>
+      <td class="right nowrap">${r.played}</td>
+      <td class="right nowrap">${r.won}</td>
+      <td class="right nowrap">${r.lost}</td>
+      <td class="right nowrap"><strong>${r.points}</strong></td>
+      <td class="right nowrap">${r.setsFor}:${r.setsAgainst}</td>
+      <td class="right nowrap">${escapeHtml(fmtRatio(r.setsFor, r.setsAgainst))}</td>
+    </tr>`);
+  });
+
+  html.push(`</tbody></table>`);
+  el.innerHTML = html.join("");
+}
+
+/* -----------------------------
+   Render: Doubles teams
+------------------------------*/
+function renderDoublesTeams() {
+  const el = $("doublesTeams");
+  const teams = state.doubles.teams;
+
+  const html = [];
+  for (const t of teams) {
+    html.push(`
+      <div class="teamRow">
+        <div class="title">
+          <strong>Team ${t.id}</strong>
+          <span class="pill" id="teamPill${t.id}">${escapeHtml(teamLabel(t.id))}</span>
+        </div>
+        <label>Spieler/in 1</label>
+        <input type="text" data-team="${t.id}" data-k="p1" value="${escapeHtml(t.p1)}" style="width:100%" placeholder="Name" />
+        <label>Spieler/in 2</label>
+        <input type="text" data-team="${t.id}" data-k="p2" value="${escapeHtml(t.p2)}" style="width:100%" placeholder="Name" />
+      </div>
+    `);
+  }
+  el.innerHTML = html.join("");
+
+  el.querySelectorAll("input[data-team]").forEach(inp => {
+    inp.addEventListener("input", (e) => {
+      const id = Number(e.target.dataset.team);
+      const key = e.target.dataset.k;
+      const t = state.doubles.teams.find(x => x.id === id);
+      if (t) t[key] = e.target.value;
+
+      const pill = document.getElementById(`teamPill${id}`);
+      if (pill) pill.textContent = teamLabel(id);
+
+      // Names affect rounds labels / table
+      renderDoublesRounds();
+      renderDoublesMatrix();
+      renderDoublesTable();
+      setStatus("Änderungen (Doppel Teams) – exportiere, um zu speichern.");
+    });
+  });
+}
+
+/* -----------------------------
+   Render: Doubles rounds + highlight
+------------------------------*/
+function renderDoublesRounds() {
+  const el = $("doublesRounds");
+  const rounds = state.doubles.rounds;
+  const teamCount = state.doubles.teamCount;
+
+  const totalMatches = rounds.reduce((sum, r) => sum + r.matches.filter(m => m.a!=null && m.b!=null).length, 0);
+  $("doublesMeta").textContent = `${teamCount} Teams · ${rounds.length} Runden · ${totalMatches} Spiele`;
+
+  const html = [];
+  for (const r of rounds) {
+    const bye = r.matches.find(m => (m.a == null) !== (m.b == null));
+    const byeId = bye ? (bye.a ?? bye.b) : null;
+
+    html.push(`<div class="round">`);
+    html.push(`<h3>Runde ${r.round} ${byeId ? `<span class="pill">spielfrei: ${escapeHtml(teamLabel(byeId))}</span>` : ""}</h3>`);
+
+    const matches = r.matches.filter(m => m.a != null && m.b != null);
+    matches.forEach((m, idx) => {
+      const resRaw = getResult("doubles", m.a, m.b);
+
+      const k = keyAB(m.a, m.b);
+      const [minId, maxId] = k.split("-").map(Number);
+      const aSetsOriented = (m.a === minId) ? resRaw.aSets : resRaw.bSets;
+      const bSetsOriented = (m.b === maxId) ? resRaw.bSets : resRaw.aSets;
+
+      const valid = isValidBo5(aSetsOriented, bSetsOriented);
+      const done = valid && (aSetsOriented != null && bSetsOriented != null);
+      const rowClass = `matchRow${done ? " done" : ""}${(!valid && (aSetsOriented != null || bSetsOriented != null)) ? " invalid" : ""}`;
+
+      html.push(`
+        <div class="${rowClass}" data-d-row="${r.round}-${idx}">
+          <div class="matchLabel">${escapeHtml(teamLabel(m.a))} <span class="muted">vs.</span> ${escapeHtml(teamLabel(m.b))}</div>
+
+          <div>
+            <div class="scoreBox">
+              ${scoreSelectHTML(`data-d-r="${r.round}" data-d-idx="${idx}" data-side="A"`, aSetsOriented)}
+              <span class="sep">:</span>
+              ${scoreSelectHTML(`data-d-r="${r.round}" data-d-idx="${idx}" data-side="B"`, bSetsOriented)}
+            </div>
+            <div class="scoreMini">Best of Five (gültig: 3:0 / 3:1 / 3:2)</div>
+          </div>
+
+          <input class="scoreInput" type="text" data-d-note-r="${r.round}" data-d-note-idx="${idx}" value="${escapeHtml(resRaw.notes || "")}" placeholder="Notizen" />
+        </div>
+      `);
+    });
+
+    html.push(`</div>`);
+  }
+
+  el.innerHTML = html.join("");
+
+  el.querySelectorAll(`select[data-d-r]`).forEach(sel => {
+    sel.addEventListener("change", (e) => {
+      const roundNo = Number(e.target.dataset.dR);
+      const idx = Number(e.target.dataset.dIdx);
+      const side = e.target.dataset.side;
+      const val = parseScoreValue(e.target.value);
+
+      const round = state.doubles.rounds.find(x => x.round === roundNo);
+      const matches = round.matches.filter(mm => mm.a != null && mm.b != null);
+      const m = matches[idx];
+
+      const k = keyAB(m.a, m.b);
+      const [minId, maxId] = k.split("-").map(Number);
+
+      const cur = getResult("doubles", m.a, m.b);
+      let minSets = cur.aSets;
+      let maxSets = cur.bSets;
+
+      if (side === "A") {
+        if (m.a === minId) minSets = val; else maxSets = val;
+      } else {
+        if (m.b === maxId) maxSets = val; else minSets = val;
+      }
+
+      if (minSets == null && maxSets == null) {
+        clearResult("doubles", m.a, m.b);
+        setStatus("Ergebnis gelöscht.");
+      } else {
+        const aOr = (m.a === minId) ? minSets : maxSets;
+        const bOr = (m.b === maxId) ? maxSets : minSets;
+
+        if (!isValidBo5(aOr, bOr)) {
+          setResult("doubles", m.a, m.b, { aSets: minSets, bSets: maxSets });
+          setStatus("Ungültiges Ergebnis – erlaubt nur 3:0 / 3:1 / 3:2 (oder umgekehrt).");
+        } else {
+          setResult("doubles", m.a, m.b, { aSets: minSets, bSets: maxSets });
+          setStatus("Änderungen (Doppel) – exportiere, um zu speichern.");
+        }
+      }
+
+      renderDoublesRounds();
+      renderDoublesMatrix();
+      renderDoublesTable();
+    });
+  });
+
+  el.querySelectorAll(`input[data-d-note-r]`).forEach(inp => {
+    inp.addEventListener("input", (e) => {
+      const roundNo = Number(e.target.dataset.dNoteR);
+      const idx = Number(e.target.dataset.dNoteIdx);
+
+      const round = state.doubles.rounds.find(x => x.round === roundNo);
+      const matches = round.matches.filter(mm => mm.a != null && mm.b != null);
+      const m = matches[idx];
+
+      const cur = getResult("doubles", m.a, m.b);
+      setResult("doubles", m.a, m.b, { aSets: cur.aSets, bSets: cur.bSets, notes: e.target.value });
+
+      setStatus("Änderungen (Doppel Notizen) – exportiere, um zu speichern.");
+    });
+  });
+}
+
+/* -----------------------------
+   Render: Doubles matrix
+------------------------------*/
+function renderDoublesMatrix() {
+  const el = $("doublesMatrix");
+  const teams = state.doubles.teams;
+
+  const html = [];
+  html.push(`<table class="small">`);
+  html.push(`<thead><tr><th class="nowrap">#</th>`);
+  for (const t of teams) html.push(`<th class="nowrap">${t.id}</th>`);
+  html.push(`</tr></thead><tbody>`);
+
+  for (const row of teams) {
+    html.push(`<tr><th class="nowrap">${row.id}</th>`);
+    for (const col of teams) {
+      if (row.id === col.id) {
+        html.push(`<td style="text-align:center; background:#f9f9f9;">X</td>`);
+      } else {
+        const txt = scoreTextFromResult("doubles", row.id, col.id);
+        html.push(`<td>${escapeHtml(txt)}</td>`);
+      }
+    }
+    html.push(`</tr>`);
+  }
+  html.push(`</tbody></table>`);
+  el.innerHTML = html.join("");
+}
+
+/* -----------------------------
+   Render: Doubles standings table
+------------------------------*/
+function renderDoublesTable() {
+  const el = $("doublesTable");
+  const rows = calcStandings("doubles");
+
+  const html = [];
+  html.push(`<table class="small">`);
+  html.push(`<thead><tr>
+      <th class="nowrap">Pl.</th>
+      <th>Team</th>
+      <th class="right nowrap">Sp</th>
+      <th class="right nowrap">S</th>
+      <th class="right nowrap">N</th>
+      <th class="right nowrap">Pkt</th>
+      <th class="right nowrap">Sätze</th>
+      <th class="right nowrap">Verh.</th>
+    </tr></thead><tbody>`);
+
+  rows.forEach((r, idx) => {
+    html.push(`<tr>
+      <td class="right nowrap">${idx+1}</td>
+      <td>${escapeHtml(r.name)}</td>
+      <td class="right nowrap">${r.played}</td>
+      <td class="right nowrap">${r.won}</td>
+      <td class="right nowrap">${r.lost}</td>
+      <td class="right nowrap"><strong>${r.points}</strong></td>
+      <td class="right nowrap">${r.setsFor}:${r.setsAgainst}</td>
+      <td class="right nowrap">${escapeHtml(fmtRatio(r.setsFor, r.setsAgainst))}</td>
+    </tr>`);
+  });
+
+  html.push(`</tbody></table>`);
+  el.innerHTML = html.join("");
+}
+
+/* -----------------------------
+   Full render
+------------------------------*/
+function renderAll() {
+  // Singles
+  renderSinglesParticipants();
+  renderSinglesRounds();
+  renderSinglesMatrix();
+  renderSinglesTable();
+
+  // Doubles
+  $("dblTeamCount").value = String(state.doubles.teamCount);
+  renderDoublesTeams();
+  renderDoublesRounds();
+  renderDoublesMatrix();
+  renderDoublesTable();
+}
+
+/* -----------------------------
+   Init / Reset
+------------------------------*/
+function resetAll() {
+  state = deepClone(DEFAULT_STATE);
+  regenSinglesRounds();
+  ensureDoublesTeams();
+  regenDoublesRounds();
+  setStatus("Zurückgesetzt. Bereit.");
+  renderAll();
+}
+
+regenSinglesRounds();
+ensureDoublesTeams();
+regenDoublesRounds();
+renderAll();
+
+/* -----------------------------
+   UI events
+------------------------------*/
+$("tabSingles").addEventListener("click", () => setTab("singles"));
+$("tabDoubles").addEventListener("click", () => setTab("doubles"));
+
+$("btnRegenSingles").addEventListener("click", () => {
+  regenSinglesRounds();
+  setStatus("Einzel-Spielplan neu generiert.");
+  renderSinglesRounds();
+  renderSinglesMatrix();
+  renderSinglesTable();
+});
+
+$("btnApplyTeamCount").addEventListener("click", () => {
+  const n = Number($("dblTeamCount").value);
+  state.doubles.teamCount = n;
+  ensureDoublesTeams();
+  regenDoublesRounds();
+  setStatus("Teamanzahl übernommen & Doppel-Spielplan erzeugt.");
+  renderDoublesTeams();
+  renderDoublesRounds();
+  renderDoublesMatrix();
+  renderDoublesTable();
+});
+
+$("btnRegenDoubles").addEventListener("click", () => {
+  regenDoublesRounds();
+  setStatus("Doppel-Spielplan neu generiert.");
+  renderDoublesRounds();
+  renderDoublesMatrix();
+  renderDoublesTable();
+});
+
+$("btnReset").addEventListener("click", () => {
+  if (!confirm("Wirklich alles zurücksetzen? (Nicht exportierte Änderungen gehen verloren)")) return;
+  resetAll();
+});
+
+$("btnExport").addEventListener("click", () => {
+  state.savedAt = new Date().toISOString();
+  const json = JSON.stringify(state, null, 2);
+  downloadText("tt-spielplaene.json", json);
+  setStatus("Export gespeichert: tt-spielplaene.json");
+});
+
+$("btnImport").addEventListener("click", () => {
+  $("fileImport").click();
+});
+
+$("fileImport").addEventListener("change", async (e) => {
+  try {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const text = await readFileAsText(file);
+    const imported = JSON.parse(text);
+
+    if (!imported || typeof imported !== "object") throw new Error("Ungültige JSON-Struktur.");
+    if (!imported.singles || !imported.doubles) throw new Error("JSON enthält keine singles/doubles Daten.");
+
+    state = imported;
+
+    // Defensive normalization (older exports etc.)
+    if (!Array.isArray(state.singles.participants) || state.singles.participants.length < 2) {
+      throw new Error("Einzel-Teilnehmerliste fehlt/ist ungültig.");
+    }
+    if (!Array.isArray(state.singles.rounds) || state.singles.rounds.length === 0) regenSinglesRounds();
+    if (!state.singles.results || typeof state.singles.results !== "object") state.singles.results = {};
+
+    if (typeof state.doubles.teamCount !== "number") state.doubles.teamCount = 10;
+    ensureDoublesTeams();
+    if (!Array.isArray(state.doubles.rounds) || state.doubles.rounds.length === 0) regenDoublesRounds();
+    if (!state.doubles.results || typeof state.doubles.results !== "object") state.doubles.results = {};
+
+    setStatus("Import erfolgreich geladen.");
+    renderAll();
+  } catch (err) {
+    setStatus("Import-Fehler: " + err.message);
+  } finally {
+    e.target.value = "";
+  }
+});
+</script>
+</body>
+</html>

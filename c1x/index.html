@@ -2,397 +2,206 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Deutsch–Chinesisch Übersetzungstrainer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Übersetzungstrainer</title>
   <style>
-    :root {
-      --bg: #0b1020;
-      --card: rgba(255,255,255,0.06);
-      --card2: rgba(255,255,255,0.09);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.70);
-      --line: rgba(255,255,255,0.16);
-      --accent: #7dd3fc;
-      --accent2: #a78bfa;
-      --danger: #fb7185;
-      --ok: #34d399;
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
-      --radius: 18px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    :root{
+      --bg:#0b0c10;
+      --panel:#111318;
+      --panel2:#0f1116;
+      --text:#e9edf1;
+      --muted:#aab3bd;
+      --line:#222735;
+      --btn:#1b2333;
+      --btn2:#22314a;
+      --ok:#1f6feb;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
     }
-    body {
-      margin: 0;
-      font-family: var(--sans);
-      color: var(--text);
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(167,139,250,0.18), transparent 70%),
-                  radial-gradient(900px 500px at 70% 10%, rgba(125,211,252,0.16), transparent 72%),
-                  radial-gradient(1000px 700px at 30% 100%, rgba(52,211,153,0.10), transparent 70%),
-                  var(--bg);
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background:linear-gradient(180deg, #0b0c10 0%, #07080b 100%);
+      color:var(--text);
+      font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      padding:18px;
     }
-    .wrap {
-      width: min(980px, 100%);
-      display: grid;
-      gap: 16px;
-    }
-    header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: baseline;
-    }
-    header h1 {
-      font-size: 20px;
-      margin: 0;
-      letter-spacing: 0.2px;
-    }
-    header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    @media (min-width: 860px) {
-      .grid { grid-template-columns: 360px 1fr; }
-    }
-    .card {
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.03));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .card .hd {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    .card .hd strong {
-      font-size: 13px;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .card .bd { padding: 16px; }
-    .pill {
-      font-size: 12px;
-      border: 1px solid var(--line);
-      padding: 6px 10px;
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(0,0,0,0.12);
-      font-family: var(--mono);
-      white-space: nowrap;
+    .wrap{
+      max-width:920px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
     }
 
-    .cats {
-      display: grid;
-      gap: 10px;
+    /* TOP: sentence area (no title) */
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
     }
-    .cats .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+    .sentence{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
     }
-    .btn {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: transform 0.05s ease, background 0.2s ease, border-color 0.2s ease;
-      user-select: none;
+    .de{
+      font-size:1.15rem;
+      letter-spacing:.1px;
     }
-    .btn:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.24); }
-    .btn:active { transform: translateY(1px); }
-    .btn.primary {
-      border-color: rgba(125,211,252,0.45);
-      background: rgba(125,211,252,0.12);
+    .zh{
+      display:none;
+      padding-top:12px;
+      border-top:1px dashed rgba(255,255,255,.12);
+      color:#d7f3ff;
+      font-size:1.08rem;
     }
-    .btn.primary:hover {
-      background: rgba(125,211,252,0.18);
-      border-color: rgba(125,211,252,0.65);
+    .meta{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-top:2px;
     }
-    .btn.ghost {
-      background: transparent;
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      color:var(--muted);
+      background:rgba(255,255,255,.03);
+      font-size:.92rem;
+      user-select:none;
     }
-    .btn.danger {
-      border-color: rgba(251,113,133,0.5);
-      background: rgba(251,113,133,0.10);
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
-    .btn.danger:hover {
-      background: rgba(251,113,133,0.16);
-      border-color: rgba(251,113,133,0.72);
+    button{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.10);
+      background:var(--btn);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:0.98rem;
+      cursor:pointer;
+      transition:.15s transform ease, .15s background ease, .15s border-color ease;
+      user-select:none;
     }
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    button:hover{ background:var(--btn2); border-color:rgba(255,255,255,.16); }
+    button:active{ transform:translateY(1px); }
+    .primary{
+      background:rgba(31,111,235,.18);
+      border-color:rgba(31,111,235,.40);
     }
-    .toggle {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(0,0,0,0.10);
-    }
-    .toggle input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--accent);
-      cursor: pointer;
-    }
-    .toggle label {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      flex: 1;
-    }
-    .toggle label span {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.1px;
-    }
-    .toggle label small {
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
+    .primary:hover{
+      background:rgba(31,111,235,.26);
+      border-color:rgba(31,111,235,.55);
     }
 
-    .trainer {
-      display: grid;
-      gap: 14px;
+    /* BOTTOM: category selection box */
+    .controls{
+      background:var(--panel2);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:14px 16px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
     }
-    .sentence {
-      background: rgba(0,0,0,0.14);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
-      display: grid;
-      gap: 12px;
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
     }
-    .sentence .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: space-between;
+    .hint{
+      color:var(--muted);
+      font-size:.95rem;
     }
-    .sentence .meta .left {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
+    .cats{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
     }
-    .tag {
-      font-size: 12px;
-      border: 1px solid var(--line);
-      padding: 5px 9px;
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.05);
-      font-family: var(--mono);
+    label.cb{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      background:rgba(255,255,255,.03);
+      user-select:none;
+      cursor:pointer;
     }
-    .tag.accent { border-color: rgba(167,139,250,0.45); background: rgba(167,139,250,0.10); }
-    .tag.ok { border-color: rgba(52,211,153,0.45); background: rgba(52,211,153,0.10); }
-    .tag.warn { border-color: rgba(251,191,36,0.45); background: rgba(251,191,36,0.10); }
+    label.cb input{
+      width:18px;
+      height:18px;
+      accent-color:var(--ok);
+      cursor:pointer;
+    }
+    .danger{
+      color:#ffb4b4;
+      border-color:rgba(255,80,80,.28);
+      background:rgba(255,80,80,.08);
+    }
 
-    .de {
-      font-size: 20px;
-      line-height: 1.35;
-      letter-spacing: 0.1px;
-    }
-    .zh {
-      font-size: 20px;
-      line-height: 1.45;
-      letter-spacing: 0.2px;
-      font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", var(--sans);
-    }
-    .zh.hidden { filter: blur(6px); opacity: 0.55; user-select: none; }
-    .divider {
-      border-top: 1px dashed rgba(255,255,255,0.20);
-      margin: 2px 0;
-    }
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .stats {
-      display: grid;
-      gap: 10px;
-    }
-    .statline {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      font-family: var(--mono);
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(0,0,0,0.10);
-    }
-    .small {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-    .footer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-      padding: 12px 16px;
-      border-top: 1px solid var(--line);
-      background: rgba(0,0,0,0.10);
-    }
-    .kbd {
-      font-family: var(--mono);
-      border: 1px solid var(--line);
-      border-bottom-color: rgba(255,255,255,0.28);
-      padding: 2px 6px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      font-size: 12px;
+    @media (max-width:520px){
+      body{ padding:12px; }
+      .de{ font-size:1.05rem; }
+      .zh{ font-size:1.02rem; }
+      button{ width:100%; }
+      .btns{ width:100%; }
     }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>Deutsch–Chinesisch Übersetzungstrainer</h1>
-      <p>Kategorien wählen → zufälliger Satz → „Auflösung“ zeigt 中文. (Für fortgeschrittene Lernende.)</p>
+  <div class="wrap">
+
+    <!-- Top: sentences (no title) -->
+    <div class="card sentence" id="sentenceCard" aria-live="polite">
+      <div class="de" id="deText">—</div>
+      <div class="zh" id="zhText">—</div>
+
+      <div class="meta">
+        <div class="chip" id="catChip">Kategorie: —</div>
+        <div class="btns">
+          <button class="primary" id="revealBtn" type="button">Auflösung</button>
+          <button id="nextBtn" type="button">Nächster Satz</button>
+        </div>
+      </div>
     </div>
-    <div class="pill" id="poolInfo">Pool: …</div>
-  </header>
 
-  <div class="grid">
-    <!-- LEFT: categories -->
-    <section class="card">
-      <div class="hd">
-        <strong>Kategorien</strong>
-        <button class="btn ghost" id="selectAllBtn" type="button">Alle</button>
-      </div>
-      <div class="bd">
-        <div class="cats" id="categoryList"></div>
-
-        <div style="height: 14px"></div>
-
-        <div class="stats">
-          <div class="statline">
-            <span>Aktive Kategorien</span>
-            <span id="activeCats">…</span>
-          </div>
-          <div class="statline">
-            <span>Sätze im Pool</span>
-            <span id="poolCount">…</span>
-          </div>
-          <div class="statline">
-            <span>Aktueller Satz-ID</span>
-            <span id="currentId">–</span>
-          </div>
-        </div>
-
-        <div style="height: 12px"></div>
-        <div class="hint">
-          Tipp: Du kannst jederzeit neue Satzpaare ergänzen, indem du in <span class="kbd">SENTENCES</span>
-          einfach ein weiteres Objekt hinzufügst (siehe Kommentar im Code).
+    <!-- Bottom: category selection (separate box) -->
+    <div class="controls" aria-label="Bereichsauswahl">
+      <div class="row">
+        <div class="hint">Bereiche auswählen (wenn nichts ausgewählt ist: alle).</div>
+        <div class="btns">
+          <button id="selectAllBtn" type="button">Alle</button>
+          <button id="selectNoneBtn" type="button">Keine</button>
         </div>
       </div>
-      <div class="footer">
-        <span class="small">Shortcuts:</span>
-        <span class="small">
-          <span class="kbd">N</span> nächster Satz · <span class="kbd">A</span> Auflösung · <span class="kbd">R</span> Reset
-        </span>
+
+      <div class="cats" id="categoryList">
+        <!-- Checkboxes injected by JS -->
       </div>
-    </section>
 
-    <!-- RIGHT: trainer -->
-    <main class="card">
-      <div class="hd">
-        <strong>Trainer</strong>
-        <span class="pill" id="statusPill">Bereit</span>
-      </div>
-      <div class="bd trainer">
+      <div class="hint" id="statusHint">—</div>
+    </div>
 
-        <div class="sentence">
-          <div class="meta">
-            <div class="left">
-              <span class="tag accent" id="catTag">Kategorie: –</span>
-              <span class="tag" id="lenTag">Länge: –</span>
-            </div>
-            <span class="tag ok" id="modeTag">Modus: Zufall</span>
-          </div>
-
-          <div class="de" id="deText">Wähle Kategorien links und klicke auf „Nächster Satz“.</div>
-
-          <div class="divider"></div>
-
-          <div class="zh hidden" id="zhText">（这里会显示中文翻译。）</div>
-
-          <div class="controls">
-            <button class="btn primary" id="nextBtn" type="button">Nächster Satz</button>
-            <button class="btn" id="revealBtn" type="button" disabled>Auflösung</button>
-            <button class="btn danger" id="resetBtn" type="button">Reset</button>
-          </div>
-
-          <div class="small" id="noteLine">
-            Hinweis: Die Übersetzung bleibt verborgen, bis du „Auflösung“ klickst.
-          </div>
-        </div>
-
-        <div class="card" style="box-shadow:none; background: rgba(255,255,255,0.04);">
-          <div class="hd" style="border-bottom:1px solid rgba(255,255,255,0.12);">
-            <strong>Pflegeleicht erweitern</strong>
-            <span class="pill">im Code: SENTENCES</span>
-          </div>
-          <div class="bd">
-            <div class="small">
-              Neue Einträge sehen so aus:
-            </div>
-            <pre style="margin:10px 0 0; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,0.16); background: rgba(0,0,0,0.14); overflow:auto; color: rgba(255,255,255,0.85); font-family: var(--mono); font-size: 12px; line-height:1.45;">{
-  cat: "Technik",
-  de: "Obwohl der Patch auf dem Staging-System stabil lief, brach die Produktion unter Last ein.",
-  zh: "尽管补丁在预发布环境中运行稳定，但在高负载下生产系统还是崩溃了。"
-}</pre>
-          </div>
-        </div>
-
-      </div>
-    </main>
   </div>
-</div>
 
-<script>
+  <script>
 /**
  * ==========================
  *   DATENSTRUKTUR (pflegeleicht)
@@ -3392,241 +3201,894 @@ const SENTENCES = [
 { cat:"Bildung", de:"Am Ende zeigt sich Bildung nicht im Zitatenschatz, sondern darin, ob man mit komplexen Situationen reflektiert umgehen kann.", zh:"教育最终不体现在引经据典，而体现在能否反思性地处理复杂情境。" },
 
 
+// Wirtschaft – 100 Satzpaare (zum Einfügen in SENTENCES)
+
+{ cat:"Wirtschaft", de:"Wenn die Inflation schneller steigt als die Löhne, sinkt die reale Kaufkraft trotz nominaler Gehaltserhöhungen.", zh:"如果通胀上涨速度快于工资增长，即使名义工资提高，实际购买力也会下降。" },
+{ cat:"Wirtschaft", de:"Eine Zinserhöhung dämpft oft die Nachfrage, weil Kredite teurer werden und Investitionen sich später rechnen.", zh:"加息往往会抑制需求，因为贷款变贵，投资回本周期变长。" },
+{ cat:"Wirtschaft", de:"Niedrige Zinsen können Vermögenspreise treiben, ohne dass die Produktivität im gleichen Maß wächst.", zh:"低利率可能推高资产价格，而生产率未必同步增长。" },
+{ cat:"Wirtschaft", de:"Wenn Unternehmen die Preise anheben, kann das teils Kostenkompensation und teils Marktmacht sein.", zh:"企业提价可能一部分是抵消成本，一部分是市场力量所致。" },
+{ cat:"Wirtschaft", de:"Marktmacht zeigt sich oft darin, dass Firmen Preiserhöhungen durchsetzen können, ohne viele Kunden zu verlieren.", zh:"市场力量常体现为企业能提价而不大量流失客户。" },
+{ cat:"Wirtschaft", de:"Wettbewerb senkt nicht automatisch Preise, wenn Märkte stark konzentriert oder Eintrittsbarrieren hoch sind.", zh:"当市场高度集中或进入壁垒很高时，竞争并不会自动降低价格。" },
+{ cat:"Wirtschaft", de:"Ein Oligopol erzeugt andere Dynamiken als ein Polypol, weil wenige Akteure sich indirekt koordinieren können.", zh:"寡头市场与完全竞争不同，因为少数参与者可能形成隐性协调。" },
+{ cat:"Wirtschaft", de:"Wenn eine Branche von Netzwerkeffekten geprägt ist, gewinnt oft der Anbieter mit der größten Nutzerbasis.", zh:"在网络效应显著的行业，往往拥有最大用户基础的提供者会占优势。" },
+{ cat:"Wirtschaft", de:"Netzwerkeffekte können Innovation fördern, aber auch Monopoltendenzen verstärken.", zh:"网络效应既可能促进创新，也可能强化垄断倾向。" },
+{ cat:"Wirtschaft", de:"Skaleneffekte senken Stückkosten, doch sie können kleine Anbieter aus dem Markt drängen.", zh:"规模经济降低单位成本，但也可能挤压小企业。" },
+{ cat:"Wirtschaft", de:"Wenn ein Staat Subventionen vergibt, muss er abwägen, ob er Zukunftsindustrien fördert oder ineffiziente Strukturen konserviert.", zh:"国家发放补贴时必须权衡：是扶持未来产业，还是固化低效率结构。" },
+{ cat:"Wirtschaft", de:"Industriepolitik ist wirksam, wenn Ziele klar sind und Fehlanreize früh korrigiert werden.", zh:"产业政策在目标清晰且能及时纠正激励扭曲时才有效。" },
+{ cat:"Wirtschaft", de:"Ein Budgetdefizit ist nicht per se schlecht, entscheidend ist, ob Schulden produktive Investitionen finanzieren oder nur Konsum.", zh:"预算赤字本身并非一定不好，关键在于债务是用于生产性投资还是仅用于消费。" },
+{ cat:"Wirtschaft", de:"Wenn Schulden in Rezessionen steigen, kann das stabilisieren, solange die langfristige Tragfähigkeit stimmt.", zh:"衰退期债务上升可能起到稳定作用，只要长期可持续性成立。" },
+{ cat:"Wirtschaft", de:"Staatsanleihen gelten als sicher, aber ihr Risiko hängt von Wachstum, Inflation und Glaubwürdigkeit der Politik ab.", zh:"国债常被视为安全资产，但其风险取决于增长、通胀以及政策可信度。" },
+{ cat:"Wirtschaft", de:"Eine unabhängige Zentralbank kann Glaubwürdigkeit stärken, doch sie muss demokratisch eingebettet bleiben.", zh:"独立央行能增强可信度，但仍需置于民主框架之内。" },
+{ cat:"Wirtschaft", de:"Preisniveaustabilität ist ein Ziel, aber zu aggressive Bremsung kann Beschäftigung und Investitionen beschädigen.", zh:"物价稳定是目标，但过度紧缩会损害就业与投资。" },
+{ cat:"Wirtschaft", de:"Wenn Arbeitslosigkeit steigt, sinken nicht nur Einkommen, sondern auch Verhandlungsmacht der Beschäftigten.", zh:"失业上升不仅降低收入，也削弱劳动者的议价能力。" },
+{ cat:"Wirtschaft", de:"Vollbeschäftigung bedeutet nicht null Arbeitslosigkeit, sondern dass offene Stellen und Suchprozesse im Gleichgewicht sind.", zh:"充分就业不意味着零失业，而是职位空缺与求职匹配过程相对平衡。" },
+{ cat:"Wirtschaft", de:"Ein Mindestlohn kann Armut senken, aber seine Wirkung hängt von Produktivität, Branchenstruktur und Kontrolle ab.", zh:"最低工资能减贫，但效果取决于生产率、行业结构与执行力度。" },
+{ cat:"Wirtschaft", de:"Wenn Mindestlöhne zu niedrig sind, subventioniert der Staat indirekt Niedriglohnmodelle über Sozialleistungen.", zh:"最低工资过低时，国家会通过社会福利间接补贴低薪模式。" },
+{ cat:"Wirtschaft", de:"Ein gut gestaltetes Steuersystem sollte effizient sein und zugleich als Instrument der Umverteilung funktionieren.", zh:"设计良好的税制应兼具效率，并作为再分配工具发挥作用。" },
+{ cat:"Wirtschaft", de:"Progressive Steuern können Ungleichheit begrenzen, doch zu komplexe Regeln erzeugen Schlupflöcher.", zh:"累进税能限制不平等，但规则过复杂会产生漏洞。" },
+{ cat:"Wirtschaft", de:"Steuervermeidung ist oft legal, aber sie kann das Vertrauen in Fairness und Staatlichkeit untergraben.", zh:"避税往往合法，但可能削弱对公平与国家能力的信任。" },
+{ cat:"Wirtschaft", de:"Wenn multinationale Konzerne Gewinne verschieben, geraten Staaten in einen Wettbewerb um niedrigere Steuersätze.", zh:"跨国公司转移利润会让各国陷入压低税率的竞争。" },
+{ cat:"Wirtschaft", de:"Globalisierung senkt Preise für Konsumenten, aber sie verteilt Gewinne und Verluste ungleich.", zh:"全球化降低消费者价格，但收益与损失分配不均。" },
+{ cat:"Wirtschaft", de:"Wenn Lieferketten zu fragil sind, wird Effizienz zur Verwundbarkeit, besonders bei geopolitischen Schocks.", zh:"供应链过于脆弱时，效率会变成脆弱性，尤其在地缘冲击下。" },
+{ cat:"Wirtschaft", de:"Resilienz kostet kurzfristig, kann aber langfristig Ausfälle verhindern, die viel teurer wären.", zh:"韧性短期有成本，但长期可避免更昂贵的中断。" },
+{ cat:"Wirtschaft", de:"Eine Diversifizierung von Zulieferern reduziert Risiko, erhöht aber oft Koordinationsaufwand.", zh:"供应商多元化降低风险，但往往增加协调成本。" },
+{ cat:"Wirtschaft", de:"Wenn Energiepreise steigen, wirkt das wie eine Steuer, die besonders Haushalte mit geringem Einkommen trifft.", zh:"能源价格上涨像一种税，尤其冲击低收入家庭。" },
+{ cat:"Wirtschaft", de:"Klimapolitik beeinflusst Wettbewerbsfähigkeit, weil CO₂-Preise Kostenstrukturen verändern.", zh:"气候政策影响竞争力，因为碳价会改变成本结构。" },
+{ cat:"Wirtschaft", de:"Ein CO₂-Preis ist effizient, wenn er verlässlich steigt und durch Rückverteilung soziale Härten abfedert.", zh:"碳价在可预期上升并通过返还缓解社会压力时更有效率。" },
+{ cat:"Wirtschaft", de:"Wenn Unternehmen externe Kosten nicht zahlen, wirken ihre Produkte billiger, obwohl die Gesellschaft draufzahlt.", zh:"企业不承担外部成本时，产品看似便宜，但社会在埋单。" },
+{ cat:"Wirtschaft", de:"Externalitäten erklären, warum Märkte ohne Regeln Umweltprobleme selten allein lösen.", zh:"外部性说明为何没有规则的市场很难自行解决环境问题。" },
+{ cat:"Wirtschaft", de:"In der Gesundheitsökonomie zeigt sich oft, dass Nachfrage nicht vollständig preissensitiv ist, weil Menschen nicht warten können.", zh:"健康经济学常显示需求并非完全对价格敏感，因为人不能等。" },
+{ cat:"Wirtschaft", de:"Wenn Informationen asymmetrisch sind, können Märkte versagen, etwa wenn Qualität schwer zu beurteilen ist.", zh:"信息不对称会导致市场失灵，例如质量难以判断时。" },
+{ cat:"Wirtschaft", de:"Qualitätssiegel helfen, aber sie müssen glaubwürdig sein, sonst werden sie zu Marketing ohne Inhalt.", zh:"质量认证有用，但必须可信，否则只是空洞营销。" },
+{ cat:"Wirtschaft", de:"Ein Unternehmenswert hängt nicht nur von heutigen Gewinnen ab, sondern von Erwartungen über zukünftige Cashflows.", zh:"企业估值不仅取决于当前利润，还取决于对未来现金流的预期。" },
+{ cat:"Wirtschaft", de:"Wenn die Risikoprämie steigt, sinken Bewertungen, weil Investoren höhere Rendite fordern.", zh:"风险溢价上升时估值下降，因为投资者要求更高回报。" },
+{ cat:"Wirtschaft", de:"Volatilität ist nicht nur Gefahr, sondern auch ein Signal für Unsicherheit und neue Informationen.", zh:"波动不仅是风险，也是在传递不确定性与新信息。" },
+{ cat:"Wirtschaft", de:"Wenn Märkte nervös sind, kann Liquidität verschwinden, und dann werden selbst gute Assets schwer verkäuflich.", zh:"市场紧张时流动性会消失，届时连优质资产也难以卖出。" },
+{ cat:"Wirtschaft", de:"Bankenkrisen sind gefährlich, weil sie über Kreditklemmen die Realwirtschaft treffen.", zh:"银行危机危险在于通过信贷收缩冲击实体经济。" },
+{ cat:"Wirtschaft", de:"Einlagenversicherung schafft Vertrauen, aber sie kann auch moralisches Risiko erhöhen, wenn Kontrolle schwach ist.", zh:"存款保险能建立信任，但监管薄弱时也会增加道德风险。" },
+{ cat:"Wirtschaft", de:"Wenn Unternehmen zu groß zum Scheitern sind, werden Verluste sozialisiert und Gewinne privatisiert.", zh:"当企业“大到不能倒”，损失会社会化、利润却私有化。" },
+{ cat:"Wirtschaft", de:"Wettbewerbspolitik versucht, solche Machtkonzentration zu begrenzen, doch sie hinkt oft technologischen Entwicklungen hinterher.", zh:"竞争政策试图限制权力集中，但常落后于技术发展。" },
+{ cat:"Wirtschaft", de:"Innovation entsteht nicht nur in Garagen, sondern auch durch institutionelle Förderung und stabile Rahmenbedingungen.", zh:"创新不仅源自车库，也依赖制度支持与稳定环境。" },
+{ cat:"Wirtschaft", de:"Wenn Patentschutz zu stark ist, kann er Innovation bremsen, weil Wissen zu lange eingeschlossen bleibt.", zh:"专利保护过强会抑制创新，因为知识被封锁太久。" },
+{ cat:"Wirtschaft", de:"Wenn Patentschutz zu schwach ist, sinken Anreize, weil Investitionen sich schwerer amortisieren.", zh:"专利保护过弱会降低激励，因为投资更难回收。" },
+{ cat:"Wirtschaft", de:"Produktivität steigt langfristig, wenn Bildung, Infrastruktur und Technologie zusammenspielen.", zh:"长期生产率提升需要教育、基础设施与技术共同作用。" },
+{ cat:"Wirtschaft", de:"Wenn die Produktivität stagniert, wird Umverteilung politisch konfliktreicher, weil es weniger Wachstum zu verteilen gibt.", zh:"生产率停滞会让再分配更具政治冲突，因为可分的增长更少。" },
+{ cat:"Wirtschaft", de:"Arbeitsmigration kann Engpässe lindern, aber sie erfordert Integration, Anerkennung von Abschlüssen und faire Arbeitsstandards.", zh:"劳务移民可缓解短缺，但需要融入、学历认可与公平劳动标准。" },
+{ cat:"Wirtschaft", de:"Wenn Fachkräfte fehlen, steigen Löhne in bestimmten Branchen schneller als im Durchschnitt.", zh:"当专业人才短缺时，某些行业工资涨得比平均更快。" },
+{ cat:"Wirtschaft", de:"Demografischer Wandel belastet Rentensysteme, wenn weniger Beitragszahler mehr Rentner finanzieren müssen.", zh:"人口老龄化会给养老金体系带来压力，因为更少缴费者要供养更多退休者。" },
+{ cat:"Wirtschaft", de:"Ein Kapitaldeckungsverfahren verteilt Risiken anders als ein Umlageverfahren, aber es löst demografische Probleme nicht magisch.", zh:"积累制与现收现付分配风险不同，但并不会“魔法般”解决人口问题。" },
+{ cat:"Wirtschaft", de:"Wenn Immobilienpreise stark steigen, profitieren Eigentümer, während Mieter einen wachsenden Anteil ihres Einkommens abgeben.", zh:"房价大涨时，业主受益，租户则要拿出更大收入比例。" },
+{ cat:"Wirtschaft", de:"Wohnungsmärkte reagieren träge, weil Bauen Zeit braucht und Boden knapp ist.", zh:"住房市场反应迟缓，因为建造需要时间且土地稀缺。" },
+{ cat:"Wirtschaft", de:"Mietregulierung kann kurzfristig schützen, aber wenn sie Investitionen verhindert, verschärft sie langfristig Knappheit.", zh:"租金管制可短期保护，但若阻碍投资，长期会加剧短缺。" },
+{ cat:"Wirtschaft", de:"Wenn Städte wachsen, steigen Pendelkosten, und damit wird Verkehrspolitik zur Standortpolitik.", zh:"城市扩张会提高通勤成本，交通政策因此成为区位政策。" },
+{ cat:"Wirtschaft", de:"Arbeitszeitmodelle beeinflussen Produktivität und Zufriedenheit, weil sie Gesundheit und Betreuungspflichten berühren.", zh:"工时制度影响生产率与满意度，因为它关系到健康和照护责任。" },
+{ cat:"Wirtschaft", de:"Wenn unbezahlte Care-Arbeit unsichtbar bleibt, wirkt die Wirtschaftsleistung größer, als sie im Alltag tatsächlich getragen wird.", zh:"无偿照护劳动被忽视时，经济表现看似更强，而日常支撑的真实负担被遮蔽。" },
+{ cat:"Wirtschaft", de:"Das Bruttoinlandsprodukt misst Aktivität, aber es misst weder Verteilung noch ökologische Kosten.", zh:"GDP衡量活动量，但不衡量分配也不衡量生态成本。" },
+{ cat:"Wirtschaft", de:"Wenn man Wohlstand verstehen will, muss man neben BIP auch Gesundheit, Bildung, Sicherheit und Umweltqualität betrachten.", zh:"要理解福祉，除GDP外还需看健康、教育、安全与环境质量。" },
+{ cat:"Wirtschaft", de:"Unternehmensgewinne können steigen, während Reallöhne stagnieren, wenn Produktivitätsgewinne ungleich verteilt werden.", zh:"若生产率收益分配不均，企业利润可上涨而实际工资停滞。" },
+{ cat:"Wirtschaft", de:"Ein Tarifvertrag kann Lohnfindung stabilisieren, aber er muss flexibel genug sein, um Branchenunterschiede zu berücksichtigen.", zh:"集体合同能稳定薪酬形成，但也要足够灵活以考虑行业差异。" },
+{ cat:"Wirtschaft", de:"Wenn Gewerkschaften schwächer werden, verschiebt sich die Verhandlungsmacht oft zugunsten von Kapital.", zh:"工会变弱时，议价权往往向资本倾斜。" },
+{ cat:"Wirtschaft", de:"Unternehmerisches Risiko ist real, aber in Krisen zeigt sich, wer Verluste tatsächlich trägt.", zh:"企业风险真实存在，但危机时会暴露谁真正承担损失。" },
+{ cat:"Wirtschaft", de:"Wenn ein Unternehmen nur auf kurzfristige Quartalszahlen optimiert, vernachlässigt es häufig Forschung und Mitarbeiterentwicklung.", zh:"企业若只优化短期季度数据，往往会忽视研发与员工发展。" },
+{ cat:"Wirtschaft", de:"Langfristige Strategie ist schwer, weil ihre Erfolge unsichtbar bleiben, bis sie plötzlich sichtbar werden.", zh:"长期战略很难，因为成效在突然显现前往往看不见。" },
+{ cat:"Wirtschaft", de:"Wenn ein Markt stark reguliert ist, kann das Stabilität schaffen, aber auch Innovation verlangsamen, wenn Regeln veralten.", zh:"强监管可带来稳定，但规则陈旧时也会拖慢创新。" },
+{ cat:"Wirtschaft", de:"Regulatorische Sandboxes können helfen, Neues zu testen, ohne gleich das ganze System zu riskieren.", zh:"监管沙盒能在不冒系统性风险的情况下测试新事物。" },
+{ cat:"Wirtschaft", de:"Wenn Daten zur neuen Ressource werden, entstehen neue Fragen: Wem gehören sie, wer darf sie nutzen, und wer profitiert?", zh:"当数据成为新资源，就会出现新问题：归谁所有、谁可使用、谁受益？" },
+{ cat:"Wirtschaft", de:"Plattformökonomien verändern Arbeitsmärkte, weil sie Aufgaben in Mikroaufträge zerlegen und Risiken auslagern.", zh:"平台经济改变劳动力市场，因为它把工作拆成微任务并外包风险。" },
+{ cat:"Wirtschaft", de:"Wenn Selbstständigkeit erzwungen ist, fehlt soziale Absicherung, obwohl die Arbeit faktisch abhängig ist.", zh:"被迫“自雇”会缺乏社保，即便工作事实上是依附性的。" },
+{ cat:"Wirtschaft", de:"Ein effizientes Sozialsystem sollte Anreize zur Arbeit setzen, ohne Menschen in Armut zu halten.", zh:"高效社保体系应在鼓励工作与避免陷入贫困之间取得平衡。" },
+{ cat:"Wirtschaft", de:"Wenn Transfers abrupt entfallen, entstehen Armutsfallen, weil sich zusätzlicher Lohn kaum lohnt.", zh:"补贴若突然取消，会形成贫困陷阱，因为多挣的钱几乎不划算。" },
+{ cat:"Wirtschaft", de:"Steuer- und Transfersysteme sollten so gestaltet sein, dass sich Mehrarbeit auch nach Abgaben lohnt.", zh:"税收与转移支付应设计为：多工作在扣除税费后仍值得。" },
+{ cat:"Wirtschaft", de:"In Krisen zeigt sich, wie wichtig automatische Stabilisatoren sind, etwa Arbeitslosenversicherung und progressive Steuern.", zh:"危机时会显示自动稳定器的重要性，如失业保险与累进税。" },
+{ cat:"Wirtschaft", de:"Wenn die Nachfrage einbricht, können staatliche Investitionen Lücken füllen, aber sie müssen schnell umsetzbar sein.", zh:"需求崩塌时，政府投资可填补缺口，但必须可快速落地。" },
+{ cat:"Wirtschaft", de:"Infrastrukturprojekte scheitern oft an Planungskapazitäten, nicht nur am Geld.", zh:"基础设施项目常卡在规划能力，而不只是资金。" },
+{ cat:"Wirtschaft", de:"Wenn Bürokratie zu langsam ist, verpufft Konjunkturpolitik, weil Effekte zu spät kommen.", zh:"官僚流程过慢会让刺激政策失效，因为效果来得太晚。" },
+{ cat:"Wirtschaft", de:"Öffentliche Beschaffung kann Innovation fördern, wenn der Staat als erster Kunde neue Lösungen nachfragt.", zh:"公共采购若国家作为首批客户采购新方案，可促进创新。" },
+{ cat:"Wirtschaft", de:"Wenn der Staat nur den billigsten Preis wählt, sinken oft Qualität und langfristiger Wert.", zh:"国家若只选最低价，质量与长期价值往往下降。" },
+{ cat:"Wirtschaft", de:"Kosten-Nutzen-Analysen sind hilfreich, aber sie hängen an Annahmen, die politisch umstritten sein können.", zh:"成本收益分析有用，但依赖的假设可能在政治上有争议。" },
+{ cat:"Wirtschaft", de:"Wenn man zukünftige Nutzen stark abdiskontiert, erscheinen Klimainvestitionen unattraktiv, obwohl sie langfristig existenziell sind.", zh:"如果对未来收益折现过高，气候投资会显得不划算，尽管长期关乎生存。" },
+{ cat:"Wirtschaft", de:"Ein Wechselkurs beeinflusst Exportpreise und Importkosten, daher wirkt er wie ein Hebel auf die Wettbewerbsfähigkeit.", zh:"汇率影响出口价格与进口成本，因此像竞争力的杠杆。" },
+{ cat:"Wirtschaft", de:"Wenn die Währung abwertet, werden Exporte billiger, aber Importe teurer, was Inflation treiben kann.", zh:"货币贬值会让出口更便宜，但进口更贵，可能推高通胀。" },
+{ cat:"Wirtschaft", de:"Handelsbilanzen spiegeln nicht nur Handel, sondern auch Ersparnis- und Investitionsunterschiede wider.", zh:"贸易差额不仅反映贸易，也反映储蓄与投资差异。" },
+{ cat:"Wirtschaft", de:"Wenn ein Land dauerhaft mehr importiert als exportiert, muss es das durch Kapitalzuflüsse oder Schulden finanzieren.", zh:"一个国家若长期进口大于出口，就必须用资本流入或债务融资。" },
+{ cat:"Wirtschaft", de:"Kapitalmärkte können Wachstum finanzieren, aber sie können auch Blasen erzeugen, wenn Erwartungen sich entkoppeln.", zh:"资本市场能为增长融资，但预期脱离现实时也会产生泡沫。" },
+{ cat:"Wirtschaft", de:"Eine Blase platzt oft nicht wegen schlechter Nachrichten, sondern weil Käufer ausgehen, die noch höhere Preise akzeptieren.", zh:"泡沫破裂常不是因为坏消息，而是因为愿意接受更高价格的买家耗尽。" },
+{ cat:"Wirtschaft", de:"Wenn Spekulation dominiert, wird Preisfindung lauter, aber nicht unbedingt informativer.", zh:"投机占主导时，价格发现更喧闹，但未必更有信息含量。" },
+{ cat:"Wirtschaft", de:"Corporate Governance ist wichtig, weil Eigentümer und Management unterschiedliche Interessen haben können.", zh:"公司治理很重要，因为所有者与管理层可能利益不同。" },
+{ cat:"Wirtschaft", de:"Wenn Boni nur an Umsatz hängen, steigt das Risiko von Fehlverhalten, weil Qualität und Nachhaltigkeit ignoriert werden.", zh:"若奖金只与销售额挂钩，违规风险会上升，因为质量与可持续性被忽视。" },
+{ cat:"Wirtschaft", de:"Nachhaltigkeitsberichte sind nur dann nützlich, wenn Kennzahlen vergleichbar und geprüft sind.", zh:"可持续报告只有在指标可比且经审计时才有用。" },
+{ cat:"Wirtschaft", de:"Greenwashing entsteht, wenn Marketing grüner wirkt als die tatsächliche Transformation der Prozesse.", zh:"“漂绿”发生在营销比真实流程转型更绿色时。" },
+{ cat:"Wirtschaft", de:"Wenn CO₂-Bilanzen nur indirekte Emissionen ausblenden, sieht ein Unternehmen sauberer aus, als es ist.", zh:"碳核算若排除间接排放，企业看起来会比实际更“干净”。" },
+{ cat:"Wirtschaft", de:"Eine Kreislaufwirtschaft spart Ressourcen, aber sie erfordert Designänderungen, damit Produkte reparierbar und recycelbar werden.", zh:"循环经济节约资源，但需要改变设计，使产品可修可回收。" },
+{ cat:"Wirtschaft", de:"Wenn Reparaturen teurer sind als Neukauf, liegt das oft an Ersatzteilpreisen und fehlender Standardisierung.", zh:"维修比买新还贵，往往是因配件价格与缺乏标准化。" },
+{ cat:"Wirtschaft", de:"Arbeitsproduktivität ist nicht nur Technik, sondern auch Organisation, Motivation und Wissenstransfer.", zh:"劳动生产率不仅是技术，也与组织、激励和知识转移有关。" },
+{ cat:"Wirtschaft", de:"Wenn Wissenssilos wachsen, sinkt Effizienz, weil Teams dieselben Fehler wiederholen.", zh:"知识孤岛扩大时效率下降，因为团队会重复同样的错误。" },
+{ cat:"Wirtschaft", de:"Ein guter Onboarding-Prozess ist eine Investition, weil er Fluktuation senkt und schneller Wertschöpfung ermöglicht.", zh:"良好的入职流程是一种投资，因为它降低流失并更快创造价值。" },
+{ cat:"Wirtschaft", de:"Wenn Mitarbeiter kündigen, sind die Kosten oft höher als das Gehalt, weil Know-how und Beziehungen verloren gehen.", zh:"员工离职的成本常高于工资，因为知识与关系会流失。" },
+{ cat:"Wirtschaft", de:"Preissetzung ist Psychologie: Ein Preis signalisiert Qualität, aber zu hohe Preise schrecken ab.", zh:"定价是心理学：价格传递质量信号，但过高会劝退。" },
+{ cat:"Wirtschaft", de:"Wenn Rabatte zur Gewohnheit werden, erziehen Unternehmen Kunden dazu, nur noch im Sale zu kaufen.", zh:"折扣成习惯会把顾客“教育”成只在打折时购买。" },
+{ cat:"Wirtschaft", de:"Ein Abo-Modell stabilisiert Einnahmen, aber es kann Frust erzeugen, wenn Kündigung künstlich erschwert wird.", zh:"订阅模式能稳定收入，但若人为设置取消障碍，会引发反感。" },
+{ cat:"Wirtschaft", de:"Wenn Konsumenten Vertrauen verlieren, sinkt Nachfrage, selbst wenn Einkommen nicht stark fällt.", zh:"消费者信心下降时，即便收入未大幅下降，需求也会减少。" },
+{ cat:"Wirtschaft", de:"Erwartungen beeinflussen Verhalten: Wer Rezession erwartet, spart mehr, und genau das kann Rezession verstärken.", zh:"预期影响行为：预期衰退的人会更储蓄，而这本身会加剧衰退。" },
+{ cat:"Wirtschaft", de:"Eine glaubwürdige Politik kommuniziert nicht nur Ziele, sondern auch, welche Opfer und Übergänge damit verbunden sind.", zh:"可信政策不仅说明目标，也说明伴随的代价与过渡。" },
+{ cat:"Wirtschaft", de:"Wenn Reformen nur Verlierer produzieren, ohne Kompensation, werden sie politisch instabil.", zh:"改革若只制造输家而无补偿，就会在政治上不稳定。" },
+{ cat:"Wirtschaft", de:"Wirtschaftswachstum kann Lebensqualität erhöhen, aber ohne Grenzen kann es ökologische Kipppunkte überschreiten.", zh:"经济增长能提升生活质量，但无边界可能越过生态临界点。" },
+{ cat:"Wirtschaft", de:"Die Herausforderung besteht darin, Produktivität zu steigern und Emissionen zu senken, ohne soziale Spaltung zu vertiefen.", zh:"挑战在于提高生产率并降低排放，同时不加深社会分裂。" },
+{ cat:"Wirtschaft", de:"Wenn Unternehmen Gewinne reinvestieren, steigt oft die Wettbewerbsfähigkeit, aber Aktionäre verlangen häufig kurzfristige Ausschüttungen.", zh:"企业把利润再投资常能提升竞争力，但股东往往要求短期分红。" },
+{ cat:"Wirtschaft", de:"Ein stabiles Rechtssystem senkt Transaktionskosten, weil Verträge durchsetzbar sind und Unsicherheit sinkt.", zh:"稳定的法治降低交易成本，因为合同可执行且不确定性减少。" },
+{ cat:"Wirtschaft", de:"Wenn Korruption steigt, werden Investitionen riskanter, und Unternehmen kalkulieren höhere „Schattenkosten“ ein.", zh:"腐败上升会使投资更风险化，企业会计入更高的“隐形成本”。" },
+{ cat:"Wirtschaft", de:"Wirtschaftliche Entwicklung ist selten linear; sie hat Phasen, Rückschläge und unerwartete Sprünge.", zh:"经济发展很少线性推进；它有阶段、挫折与意外跃迁。" },
+{ cat:"Wirtschaft", de:"Wer Konjunktur versteht, erkennt, dass Boom und Krise oft aus denselben Mechanismen entstehen.", zh:"理解景气周期的人会发现：繁荣与危机常源自同样机制。" },
+// Wirtschaft – weitere 100 Satzpaare (gehobener Sprachgebrauch, praxisnah: Geld, Finanzen, Volkswirtschaft)
+
+{ cat:"Wirtschaft", de:"Viele Haushalte merken erst beim Blick auf den Kontoauszug, wie sehr kleine Abos das Monatsbudget unbemerkt aushöhlen.", zh:"很多家庭直到查看银行流水才意识到，小额订阅如何在不知不觉中掏空月度预算。" },
+{ cat:"Wirtschaft", de:"Wer seine Ausgaben nicht trackt, verwechselt oft Zufriedenheit mit kurzfristiger Belohnung und wundert sich am Monatsende.", zh:"不记录开销的人常把满足感误当成短期奖励，到了月底才纳闷。" },
+{ cat:"Wirtschaft", de:"Ein finanzielles Polster schafft nicht Luxus, sondern Handlungsspielraum, wenn das Leben plötzlich teurer wird.", zh:"财务缓冲带来的不是奢侈，而是在生活突然变贵时的行动空间。" },
+{ cat:"Wirtschaft", de:"Wenn die Miete steigt, ist das nicht nur ein Posten, sondern ein Einschnitt, der den ganzen Alltag neu sortiert.", zh:"房租上涨不仅是一个支出项，而是会迫使整个日常重新排序的冲击。" },
+{ cat:"Wirtschaft", de:"Viele Menschen unterschätzen, wie stark Zinseszins wirkt, weil er leise ist und erst spät laut wird.", zh:"许多人低估复利的力量，因为它悄无声息，直到很晚才显得惊人。" },
+{ cat:"Wirtschaft", de:"Wer nur den nominalen Zinssatz betrachtet, vergisst, dass Inflation den realen Ertrag auffressen kann.", zh:"只看名义利率的人会忽略通胀可能吞噬实际收益。" },
+{ cat:"Wirtschaft", de:"Wenn Lebensmittelpreise schneller steigen als andere Ausgaben, trifft das besonders Familien mit wenig Spielraum.", zh:"当食品价格涨得比其他支出更快时，受冲击最大的是余地很小的家庭。" },
+{ cat:"Wirtschaft", de:"Ein Preis ist nicht nur eine Zahl, sondern eine Botschaft darüber, was knapp ist und was als wertvoll gilt.", zh:"价格不只是数字，也是关于稀缺性与价值判断的信号。" },
+{ cat:"Wirtschaft", de:"Wenn Energie teurer wird, zahlen nicht nur Haushalte mehr, sondern auch Betriebe, die diese Kosten weiterreichen.", zh:"能源变贵不只家庭多花钱，企业也会增加成本并转嫁。" },
+{ cat:"Wirtschaft", de:"Wer seine Fixkosten senkt, gewinnt Freiheit, weil er weniger Einkommen braucht, um stabil zu bleiben.", zh:"降低固定开支的人更自由，因为维持稳定所需收入更少。" },
+
+{ cat:"Wirtschaft", de:"Viele Kredite scheitern nicht an der Rate, sondern an den Nebenkosten, die man zu optimistisch einplant.", zh:"很多贷款并非还不起月供，而是低估了各种附加费用。" },
+{ cat:"Wirtschaft", de:"Wenn man eine Finanzierung vergleicht, sollte man nicht nur auf den Zinssatz schauen, sondern auf den effektiven Jahreszins.", zh:"比较贷款时不应只看利率，而要看实际年化利率。" },
+{ cat:"Wirtschaft", de:"Ein zu knapp kalkulierter Kredit wird zur Dauerbelastung, weil jede unerwartete Rechnung sofort Druck macht.", zh:"贷款算得太紧会变成长期负担，因为任何意外账单都会立刻施压。" },
+{ cat:"Wirtschaft", de:"Wer Rücklagen bildet, bezahlt sich selbst zuerst, statt am Ende zu sparen, was übrig bleibt.", zh:"建立储蓄的人是在先给自己“付工资”，而不是月底看剩多少再存。" },
+{ cat:"Wirtschaft", de:"Viele Versicherungen sind sinnvoll, aber doppelte Absicherung ist oft nur teure Beruhigung.", zh:"很多保险有必要，但重复保障常只是昂贵的心理安慰。" },
+{ cat:"Wirtschaft", de:"Wenn man Verträge jährlich prüft, entdeckt man oft stille Preiserhöhungen, die sonst einfach weiterlaufen.", zh:"每年检查合同，常能发现悄悄涨价，否则就会自动继续。" },
+{ cat:"Wirtschaft", de:"Ein Haushalt wird nicht reich durch große Sprünge, sondern durch stabile Routinen und wenige wirklich gute Entscheidungen.", zh:"家庭致富不是靠大跃进，而是靠稳定习惯和少数真正好的决策。" },
+{ cat:"Wirtschaft", de:"Wer Konsum aufschiebt, kauft oft klüger, weil der erste Impuls selten der beste Berater ist.", zh:"延迟消费的人往往买得更聪明，因为第一冲动很少是好顾问。" },
+{ cat:"Wirtschaft", de:"Wenn man etwas unbedingt sofort haben will, ist das oft ein Zeichen, dass man es nicht unbedingt braucht.", zh:"特别想立刻拥有某物，往往说明并非真的需要。" },
+{ cat:"Wirtschaft", de:"Ein Budget ist kein Käfig, sondern ein Plan, der verhindert, dass Geld ohne Richtung verschwindet.", zh:"预算不是牢笼，而是防止钱无方向流失的计划。" },
+
+{ cat:"Wirtschaft", de:"Viele Menschen verwechseln Einkommen mit Vermögen, obwohl Vermögen das ist, was bleibt, wenn das Einkommen ausfällt.", zh:"很多人把收入当成资产，但资产是收入中断时仍然留下的东西。" },
+{ cat:"Wirtschaft", de:"Wenn man sein Vermögen diversifiziert, verteilt man nicht nur Chancen, sondern auch Risiken.", zh:"资产多元化不仅分散机会，也分散风险。" },
+{ cat:"Wirtschaft", de:"Wer nur auf eine Anlage setzt, hofft auf Glück; wer streut, baut auf Wahrscheinlichkeiten.", zh:"只押注一种资产是在赌运气；分散配置是在依靠概率。" },
+{ cat:"Wirtschaft", de:"An der Börse ist Geduld oft profitabler als Nervosität, weil häufiges Handeln Kosten und Fehler erhöht.", zh:"股市里耐心常比焦虑更赚钱，因为频繁交易会增加成本和错误。" },
+{ cat:"Wirtschaft", de:"Wenn Kurse fallen, ist das emotional schmerzhaft, aber es ist nicht automatisch ein Grund, panisch zu verkaufen.", zh:"价格下跌很痛，但不一定就该恐慌抛售。" },
+{ cat:"Wirtschaft", de:"Wer in guten Zeiten Rücklagen bildet, muss in schlechten Zeiten weniger drastische Entscheidungen treffen.", zh:"景气时储蓄的人，在困难时就不必做那么激烈的决定。" },
+{ cat:"Wirtschaft", de:"Viele Haushalte geraten in Stress, weil sie Liquidität mit Wohlstand verwechseln und alles im Monat verplanen.", zh:"很多家庭陷入压力，是因为把流动性当成富裕，把每一分钱都排满。" },
+{ cat:"Wirtschaft", de:"Wenn unerwartete Ausgaben kommen, zeigt sich, ob ein Finanzplan robust oder nur schön geschrieben war.", zh:"意外支出出现时，才看出财务计划是稳健还是只是写得好看。" },
+{ cat:"Wirtschaft", de:"Ein Notgroschen ist kein Investment, sondern eine Versicherung gegen Pech und Timing.", zh:"应急金不是投资，而是对霉运和时机不佳的保险。" },
+{ cat:"Wirtschaft", de:"Wer seine Steuern versteht, kann legal sparen, ohne sich in riskante Konstruktionen zu verirren.", zh:"懂税的人能合法节税，而不必陷入高风险操作。" },
+
+{ cat:"Wirtschaft", de:"Wenn eine Rechnung offen bleibt, wird sie selten kleiner, sondern meistens nur unangenehmer.", zh:"账单拖着不付很少会变小，通常只会更难受。" },
+{ cat:"Wirtschaft", de:"Viele Mahngebühren sind vermeidbar, wenn man Zahlungsfristen konsequent in den Kalender schreibt.", zh:"把付款期限写进日历，很多催款费用都能避免。" },
+{ cat:"Wirtschaft", de:"Ein seriöser Vertrag ist transparent bei Kosten, Laufzeit und Kündigung, nicht kreativ im Kleingedruckten.", zh:"靠谱合同在费用、期限和解约上透明，而不是在小字条款里“创意十足”。" },
+{ cat:"Wirtschaft", de:"Wenn Banken Gebühren anheben, lohnt sich oft ein Vergleich, weil Loyalität selten verzinst wird.", zh:"银行提手续费时值得比较，因为忠诚很少得到利息回报。" },
+{ cat:"Wirtschaft", de:"Ein Konto ist ein Werkzeug; wenn es teuer wird, darf man es wechseln wie jeden anderen Dienstleister.", zh:"账户是工具；变贵了就该像换其他服务商一样更换。" },
+{ cat:"Wirtschaft", de:"Viele Menschen überschätzen ihren Risikohunger, bis sie den ersten echten Verlust erleben.", zh:"很多人高估自己承受风险的能力，直到经历第一次真正亏损。" },
+{ cat:"Wirtschaft", de:"Risikomanagement ist nicht pessimistisch, sondern realistisch, weil es das Unwahrscheinliche mitdenkt.", zh:"风险管理不是悲观，而是现实，因为它会考虑不太可能的情况。" },
+{ cat:"Wirtschaft", de:"Wenn man Finanzprodukte nicht versteht, sollte man nicht investieren, nur weil andere es tun.", zh:"不懂金融产品就不该因为别人都买而跟着投。" },
+{ cat:"Wirtschaft", de:"Ein guter Berater erklärt Risiken so, dass man sie nüchtern abwägen kann, statt sie wegzulächeln.", zh:"好的顾问会把风险解释得让人能冷静权衡，而不是一笑带过。" },
+{ cat:"Wirtschaft", de:"Transparenz in Gebühren ist entscheidend, weil kleine Prozentwerte über Jahre große Summen werden.", zh:"费用透明很关键，因为小小的百分比多年后会变成大数目。" },
+
+{ cat:"Wirtschaft", de:"Wenn Unternehmen Preise erhöhen, spürt man das zuerst bei Alltagsartikeln, weil sie ständig gekauft werden.", zh:"企业提价，最先在日用品上被感觉到，因为它们购买频率高。" },
+{ cat:"Wirtschaft", de:"Eine Rezession ist nicht nur ein abstrakter Begriff, sondern zeigt sich in Auftragsmangel, Kurzarbeit und Unsicherheit.", zh:"衰退不只是抽象概念，它体现在订单减少、缩短工时与不确定性。" },
+{ cat:"Wirtschaft", de:"Wenn die Stimmung kippt, verschieben Menschen Anschaffungen, und genau dadurch wird der Abschwung stärker.", zh:"情绪转差时，人们推迟购买，这反过来会加深下行。" },
+{ cat:"Wirtschaft", de:"Konjunktur ist auch Psychologie: Vertrauen kann Nachfrage stabilisieren, Angst kann sie ersticken.", zh:"经济周期也关乎心理：信任能稳定需求，恐惧能让需求窒息。" },
+{ cat:"Wirtschaft", de:"Wenn ein Land stark exportabhängig ist, hängt sein Wachstum empfindlich an der Weltkonjunktur.", zh:"一个国家出口依赖高，其增长就会对全球景气非常敏感。" },
+{ cat:"Wirtschaft", de:"Steigende Zinsen treffen nicht alle gleich: Schuldner spüren sie sofort, Sparer oft erst später.", zh:"加息对人影响不一：借款人立刻感到压力，储蓄者往往更晚才体会到收益。" },
+{ cat:"Wirtschaft", de:"Wer eine Hypothek hat, beobachtet Zentralbankentscheidungen plötzlich mit sehr persönlichem Interesse.", zh:"有房贷的人会以非常个人的兴趣关注央行决策。" },
+{ cat:"Wirtschaft", de:"Wenn der Staat spart, während die Wirtschaft schwächelt, kann das die Erholung verzögern.", zh:"经济疲弱时政府紧缩，可能拖延复苏。" },
+{ cat:"Wirtschaft", de:"Umgekehrt kann übermäßiges Geldausgeben Inflation befeuern, wenn Angebot nicht schnell genug nachzieht.", zh:"反过来，若供给跟不上，过度支出可能助长通胀。" },
+{ cat:"Wirtschaft", de:"Eine gute Wirtschaftspolitik versucht, die Balance zu halten: Stabilität, Wachstum und soziale Abfederung.", zh:"好的经济政策要维持平衡：稳定、增长与社会缓冲。" },
+
+{ cat:"Wirtschaft", de:"Wenn Löhne steigen, ist das für Beschäftigte gut, aber Unternehmen achten dann stärker auf Automatisierung und Effizienz.", zh:"工资上涨对员工是好事，但企业会更关注自动化与效率。" },
+{ cat:"Wirtschaft", de:"Produktivitätsfortschritt ist der nachhaltigste Weg zu höheren Löhnen, weil er Wertschöpfung vergrößert.", zh:"生产率进步是提高工资最可持续的方式，因为它扩大价值创造。" },
+{ cat:"Wirtschaft", de:"Wenn der Arbeitsmarkt angespannt ist, können Arbeitgeber nicht mehr nur „stellen“, sondern müssen überzeugen.", zh:"劳动力市场紧时，雇主不再只是“招聘”，而必须“说服”。" },
+{ cat:"Wirtschaft", de:"Ein Mangel an Fachkräften treibt nicht nur Löhne, sondern kann auch Projekte verzögern und Qualität gefährden.", zh:"专业人才短缺不仅推高工资，也会拖延项目并危及质量。" },
+{ cat:"Wirtschaft", de:"Wenn Personal fehlt, steigt die Belastung der verbleibenden Teams, und das erhöht wiederum die Kündigungsrate.", zh:"缺人会加重留下团队的负担，进而提高离职率。" },
+{ cat:"Wirtschaft", de:"In vielen Branchen ist Weiterbildung kein Bonus mehr, sondern Voraussetzung, um mithalten zu können.", zh:"在很多行业，继续教育不再是加分项，而是跟得上的前提。" },
+{ cat:"Wirtschaft", de:"Wer seine Karriere plant, sollte nicht nur auf Titel schauen, sondern auf Fähigkeiten, die auch in fünf Jahren noch tragen.", zh:"规划职业时不应只看头衔，而要看五年后仍管用的能力。" },
+{ cat:"Wirtschaft", de:"Wenn die Lebenshaltungskosten steigen, wird Gehaltstransparenz wichtiger, weil Ungleichheit sichtbarer wird.", zh:"生活成本上升时，薪酬透明更重要，因为不平等更显眼。" },
+{ cat:"Wirtschaft", de:"Gehalt ist nicht nur Geld, sondern auch ein Signal für Wertschätzung und Machtverhältnisse.", zh:"薪酬不仅是钱，也是对价值与权力关系的信号。" },
+{ cat:"Wirtschaft", de:"Wer verhandelt, sollte sich vorbereiten: Marktwerte kennen, Leistungen benennen und Alternativen prüfen.", zh:"谈薪要准备：了解市场价、明确贡献、评估备选方案。" },
+
+{ cat:"Wirtschaft", de:"Viele Menschen wollen sparen, aber ohne konkretes Ziel wird Sparen schnell zur Disziplinprobe ohne Sinn.", zh:"很多人想存钱，但没有具体目标，储蓄很快就变成无意义的自律考验。" },
+{ cat:"Wirtschaft", de:"Ein Sparziel wirkt realistischer, wenn man es in Monatsraten übersetzt und im Alltag sichtbar macht.", zh:"把储蓄目标换算成每月额度并在日常可视化，会更现实。" },
+{ cat:"Wirtschaft", de:"Wenn man große Anschaffungen plant, lohnt es sich, Total Cost of Ownership zu betrachten und nicht nur den Kaufpreis.", zh:"计划大件时，值得看总持有成本，而不只看买入价。" },
+{ cat:"Wirtschaft", de:"Ein günstiges Auto kann teuer werden, wenn Wartung, Versicherung und Verbrauch schlecht kalkuliert sind.", zh:"便宜的车可能很贵，如果保养、保险和油耗算得不好。" },
+{ cat:"Wirtschaft", de:"Wer ein Haus kauft, unterschätzt häufig die laufenden Kosten für Instandhaltung und kleine Reparaturen.", zh:"买房的人常低估维护和小修小补的持续费用。" },
+{ cat:"Wirtschaft", de:"Wenn Handwerker knapp sind, steigen Preise, und Wartezeiten werden zum versteckten Teil der Rechnung.", zh:"工匠紧缺时价格上升，等待时间成了账单的隐性部分。" },
+{ cat:"Wirtschaft", de:"Ein Vergleich ist nicht nur Preis, sondern auch Qualität, Garantie und die Zuverlässigkeit des Anbieters.", zh:"比较不只是价格，也包括质量、保修和商家的可靠性。" },
+{ cat:"Wirtschaft", de:"Wenn man bei Technik spart, zahlt man manchmal später doppelt, weil Reparatur und Ärger den Vorteil auffressen.", zh:"电子产品省钱有时会后面加倍付出，因为维修和麻烦会吞掉优势。" },
+{ cat:"Wirtschaft", de:"Gebrauchtkauf ist effizient, wenn man Zustand, Herkunft und mögliche Folgekosten ehrlich prüft.", zh:"二手购买在诚实检查状态、来源和后续成本时才高效。" },
+{ cat:"Wirtschaft", de:"Viele Rabatte sind nur psychologisch, weil der Ausgangspreis vorher künstlich hoch gesetzt wurde.", zh:"很多折扣只是心理效应，因为原价事先被人为抬高。" },
+
+{ cat:"Wirtschaft", de:"Wenn Unternehmen von „Kostendruck“ sprechen, steckt dahinter oft eine Mischung aus Energiepreisen, Löhnen und Finanzierungskosten.", zh:"企业说“成本压力”时，背后常是能源、工资与融资成本的混合。" },
+{ cat:"Wirtschaft", de:"Kostensenkung klingt simpel, aber ohne Qualitätsverlust zu sparen ist eine anspruchsvolle Managementaufgabe.", zh:"降成本听起来简单，但在不牺牲质量的前提下节约是高难度管理任务。" },
+{ cat:"Wirtschaft", de:"Wenn man nur Personal kürzt, spart man kurzfristig, aber man riskiert langfristig Know-how und Kundenservice.", zh:"只裁员能短期省钱，却可能长期损失知识和服务。" },
+{ cat:"Wirtschaft", de:"Eine Preiserhöhung ist leichter durchzusetzen, wenn man den Mehrwert klar macht und nicht nur die Kosten beklagt.", zh:"要顺利提价，就要讲清增值，而不是只抱怨成本。" },
+{ cat:"Wirtschaft", de:"Viele Kunden akzeptieren höhere Preise eher, wenn Lieferzuverlässigkeit und Qualität sichtbar steigen.", zh:"若交付可靠性和质量明显提升，客户更愿意接受涨价。" },
+{ cat:"Wirtschaft", de:"Wenn Lieferzeiten unsicher sind, binden Unternehmen mehr Lagerbestand, und das kostet Kapital.", zh:"交期不稳时，企业会囤更多库存，而库存占用资金。" },
+{ cat:"Wirtschaft", de:"Lagerhaltung ist eine Wette: zu wenig heißt Stillstand, zu viel heißt Geld, das nicht arbeitet.", zh:"库存是一场赌注：太少会停摆，太多则是资金闲置。" },
+{ cat:"Wirtschaft", de:"Wenn eine Firma schnell wächst, wird Liquiditätsplanung wichtiger als schöne PowerPoint-Folien.", zh:"公司快速增长时，现金流规划比漂亮PPT更重要。" },
+{ cat:"Wirtschaft", de:"Umsatz ist nicht gleich Gewinn, und Gewinn ist nicht gleich Cashflow; diese Unterscheidung rettet Firmen.", zh:"营收不等于利润，利润不等于现金流；分清这一点能救企业。" },
+{ cat:"Wirtschaft", de:"Wenn Kunden später zahlen, kann selbst ein profitables Unternehmen in Schwierigkeiten geraten.", zh:"客户付款拖延时，即便盈利企业也可能陷入困境。" },
+{ cat:"Wirtschaft", de:"Ein gutes Forderungsmanagement ist nicht aggressiv, sondern klar, konsequent und professionell.", zh:"良好的应收管理不是咄咄逼人，而是清晰、坚定、专业。" },
+
+{ cat:"Wirtschaft", de:"Wenn die Zentralbank glaubwürdig ist, reagieren Märkte schon auf Worte, bevor Maßnahmen umgesetzt werden.", zh:"央行若可信，市场会对言论先反应，甚至早于措施落地。" },
+{ cat:"Wirtschaft", de:"Viele Menschen spüren Geldpolitik indirekt, etwa über Kreditzinsen, Mieten und die Stimmung am Arbeitsmarkt.", zh:"很多人是间接感受货币政策的，比如通过贷款利率、房租和就业市场情绪。" },
+{ cat:"Wirtschaft", de:"Wenn die Inflation sinkt, heißt das nicht automatisch, dass Preise fallen, sondern dass sie langsamer steigen.", zh:"通胀下降并不意味着价格下跌，而是上涨变慢。" },
+{ cat:"Wirtschaft", de:"Deflation klingt für Verbraucher gut, kann aber gefährlich sein, weil sie Investitionen bremst und Schulden real schwerer macht.", zh:"通缩听起来对消费者有利，但可能危险，因为它抑制投资并让债务实际负担加重。" },
+{ cat:"Wirtschaft", de:"Wenn Menschen erwarten, dass alles morgen billiger ist, verschieben sie Käufe, und die Wirtschaft kühlt weiter ab.", zh:"人们若预期明天更便宜，就会推迟购买，经济会更降温。" },
+{ cat:"Wirtschaft", de:"Ein stabiler Preisrahmen erleichtert Planung, weil Unternehmen und Haushalte verlässlicher kalkulieren können.", zh:"价格环境稳定便于规划，因为企业和家庭能更可靠地计算。" },
+{ cat:"Wirtschaft", de:"Wenn Wechselkurse stark schwanken, wird Importieren und Exportieren zu einem Spiel mit zusätzlicher Unsicherheit.", zh:"汇率大幅波动会让进出口变成额外不确定性的游戏。" },
+{ cat:"Wirtschaft", de:"Reisen werden teurer, wenn die eigene Währung schwächer ist, auch wenn die Preise im Zielland gleich bleiben.", zh:"本币走弱时，旅行会更贵，即便目的地价格不变。" },
+{ cat:"Wirtschaft", de:"Viele Menschen unterschätzen, wie sehr geopolitische Krisen über Energie und Lieferketten ihren Geldbeutel treffen.", zh:"很多人低估地缘危机会通过能源和供应链影响自己的钱包。" },
+{ cat:"Wirtschaft", de:"Wenn Transportkosten steigen, wird plötzlich sichtbar, wie global und zugleich fragil unser Alltag organisiert ist.", zh:"运输成本上升时才显现：我们的日常既全球化又脆弱。" },
+
+{ cat:"Wirtschaft", de:"Wer finanziell ruhig schlafen will, sollte nicht nur Rendite jagen, sondern auch Risiken begrenzen, die das Leben sprengen.", zh:"想财务上睡得安稳，不仅要追收益，也要限制会毁掉生活的风险。" },
+{ cat:"Wirtschaft", de:"Ein solides Portfolio ist langweilig, und genau deshalb ist es in Krisen oft das robusteste.", zh:"稳健的组合往往很无聊，也正因此在危机里最抗打。" },
+{ cat:"Wirtschaft", de:"Wenn man sich bei einer Anlage schämt, Fragen zu stellen, ist das ein Warnsignal, nicht eine Bildungslücke.", zh:"投资时如果你不好意思提问，那是警讯而不是“知识欠缺”。" },
+{ cat:"Wirtschaft", de:"Viele Finanzprodukte verkaufen Komplexität als Mehrwert, obwohl Einfachheit für Anleger oft besser wäre.", zh:"许多金融产品把复杂当卖点，但对投资者来说简单往往更好。" },
+{ cat:"Wirtschaft", de:"Wer Gebühren, Laufzeiten und Risiken nicht klar benennen kann, sollte den Vertrag nicht unterschreiben.", zh:"说不清费用、期限和风险的人不该签合同。" },
+{ cat:"Wirtschaft", de:"Wenn man über Geld spricht, geht es selten nur um Zahlen, sondern auch um Sicherheit, Freiheit und Status.", zh:"谈钱很少只是数字，也关乎安全、自由和地位。" },
+{ cat:"Wirtschaft", de:"Familien streiten oft nicht über Geld, sondern über Prioritäten, die Geld sichtbar macht.", zh:"家庭争吵往往不是为钱本身，而是为钱凸显的优先级。" },
+{ cat:"Wirtschaft", de:"Ein gemeinsames Konto kann funktionieren, wenn Regeln klar sind und niemand das Gefühl hat, kontrolliert zu werden.", zh:"共同账户可以运作，只要规则清晰且没人觉得被控制。" },
+{ cat:"Wirtschaft", de:"Wenn Ausgaben transparent sind, sinkt Misstrauen, weil Überraschungen seltener werden.", zh:"支出透明会减少不信任，因为“惊喜”更少。" },
+{ cat:"Wirtschaft", de:"Wer seine Ziele teilt, kann besser planen: sparen, investieren, konsumieren – aber in einer Reihenfolge, die Sinn ergibt.", zh:"分享目标后更好规划：储蓄、投资、消费——按合理顺序进行。" },
+
+// Alltag & Orientierung – 100 Satzpaare (Kategorie: "Alltag")
+
+{ cat:"Alltag", de:"Wenn ich in einer fremden Stadt ankomme, suche ich zuerst eine ruhige Ecke, um die Karte zu öffnen, statt mitten im Strom stehen zu bleiben.", zh:"到陌生城市时，我会先找个安静角落再打开地图，而不是站在人流中间。" },
+{ cat:"Alltag", de:"Ich orientiere mich gern an markanten Punkten wie Türmen oder Flüssen, weil Straßennamen allein selten im Kopf bleiben.", zh:"我喜欢用塔楼或河流等显著地标来定位，因为光靠街名很难记住。" },
+{ cat:"Alltag", de:"Wenn das GPS spinnt, hilft es, kurz stehen zu bleiben und die Umgebung zu lesen, statt hektisch weiterzulaufen.", zh:"导航出错时，停一下观察周围比慌张继续走更有效。" },
+{ cat:"Alltag", de:"In großen Bahnhöfen verliere ich weniger Zeit, wenn ich erst die Gleisnummer prüfe und dann die Anzeigetafel, nicht andersherum.", zh:"在大火车站，我先确认站台号再看显示屏会更省时间。" },
+{ cat:"Alltag", de:"Wenn ein Zug Verspätung hat, lohnt sich ein Blick auf alternative Verbindungen, bevor der Bahnsteig sich füllt.", zh:"火车晚点时，趁站台还没挤满先看替代线路很值得。" },
+{ cat:"Alltag", de:"Ich speichere wichtige Adressen offline, weil mobile Daten genau dann ausfallen, wenn man sie am dringendsten braucht.", zh:"我会离线保存重要地址，因为移动网络往往在最需要时掉链子。" },
+{ cat:"Alltag", de:"Wenn ich jemanden abhole, verabrede ich einen klaren Treffpunkt, nicht nur „irgendwo am Ausgang“.", zh:"接人时我会约定明确集合点，而不是只说“出口附近”。" },
+{ cat:"Alltag", de:"Bei Umstiegen plane ich lieber zehn Minuten Puffer ein, weil Stress oft mehr Zeit frisst als die Wartezeit.", zh:"换乘我宁愿多预留十分钟，因为压力常比等待更耗时间。" },
+{ cat:"Alltag", de:"Wenn ich mich verlaufe, versuche ich zuerst, zur letzten sicheren Stelle zurückzugehen, statt neue Abkürzungen zu erfinden.", zh:"迷路时我先回到最后一个确定的位置，而不是临时发明捷径。" },
+{ cat:"Alltag", de:"Eine Adresse ist nur dann hilfreich, wenn man auch weiß, auf welcher Straßenseite die Hausnummern steigen.", zh:"地址只有在你知道门牌号在哪一侧递增时才真正有用。" },
+
+{ cat:"Alltag", de:"In vielen Städten sind ungerade Hausnummern auf einer Seite, gerade auf der anderen; das spart Sucherei.", zh:"很多城市里单号在一边、双号在另一边，这能省去不少寻找。" },
+{ cat:"Alltag", de:"Wenn ich eine Wegbeschreibung gebe, nenne ich lieber konkrete Schritte als nur Himmelsrichtungen.", zh:"我给路线时更愿意讲具体步骤，而不是只讲东南西北。" },
+{ cat:"Alltag", de:"Himmelsrichtungen helfen, aber in Straßenschluchten zwischen hohen Häusern sieht man die Sonne manchmal gar nicht.", zh:"方向有用，但高楼间的街谷里有时根本看不到太阳。" },
+{ cat:"Alltag", de:"Ich frage im Zweifel nach dem nächsten großen Knotenpunkt, weil man von dort aus wieder neu planen kann.", zh:"拿不准时我会问最近的交通枢纽，因为从那里可以重新规划。" },
+{ cat:"Alltag", de:"Wenn ich ein neues Viertel erkunde, merke ich mir zwei Dinge: wo ich herkam und wo das Wasser hinfließt.", zh:"探索新街区时我记两点：我从哪来，以及水流向哪里。" },
+{ cat:"Alltag", de:"Ein Fluss oder ein Kanal ist ein guter Orientierungspunkt, weil er sich nicht plötzlich „verlegt“.", zh:"河流或运河是很好的地标，因为它不会突然“搬家”。" },
+{ cat:"Alltag", de:"Wenn die Straßenführung verwirrend ist, hilft es, sich an der Nummerierung der Buslinien zu orientieren.", zh:"街道走向复杂时，可以用公交线路编号来辅助定位。" },
+{ cat:"Alltag", de:"Ich mache vor langen Fußwegen kurz die Schuhe nach, weil eine kleine Druckstelle später den ganzen Tag ruinieren kann.", zh:"长走前我会把鞋带重新系紧，因为小小压点可能毁掉一天。" },
+{ cat:"Alltag", de:"Wenn man mit Kindern unterwegs ist, sollte man Toilette und Wasser nicht dem Zufall überlassen.", zh:"带孩子出门，厕所和水不能靠运气。" },
+{ cat:"Alltag", de:"Ich packe immer ein kleines Pflaster ein, weil Blasen und Schrammen erstaunlich zuverlässig auftauchen.", zh:"我总带小创可贴，因为水泡和擦伤出奇地“准时”。" },
+
+{ cat:"Alltag", de:"Wenn ich in einer fremden Gegend parke, fotografiere ich das Straßenschild, damit ich später nicht im Kreis laufe.", zh:"在陌生地方停车，我会拍下路牌，免得之后绕圈找车。" },
+{ cat:"Alltag", de:"Bei großen Parkhäusern merke ich mir nicht nur die Ebene, sondern auch die Farbzone oder ein Symbol.", zh:"在大型停车场我不只记楼层，还记颜色区或标志。" },
+{ cat:"Alltag", de:"Wenn ich Rad fahre, schaue ich kurz voraus, ob die Route wirklich durchgehend ist oder plötzlich an einer Baustelle endet.", zh:"骑车前我会确认路线是否连贯，免得突然在工地断掉。" },
+{ cat:"Alltag", de:"Baustellen sind für Navigation tückisch, weil sie Karten langsamer aktualisieren als die Realität sich ändert.", zh:"工地对导航很棘手，因为地图更新往往慢于现实变化。" },
+{ cat:"Alltag", de:"Ich vertraue dem Navigationspfeil, aber ich prüfe den Straßennamen, damit ich nicht die falsche Abzweigung nehme.", zh:"我信导航箭头，但也会核对路名，避免走错岔口。" },
+{ cat:"Alltag", de:"Wenn eine Straße mehrere Spuren hat, entscheide ich früh, welche ich brauche, weil spätes Einordnen Stress macht.", zh:"多车道时我会提前选好车道，因为临时并线很紧张。" },
+{ cat:"Alltag", de:"Ich lasse mich nicht von Hupen treiben, weil sie selten die beste Grundlage für gute Entscheidungen sind.", zh:"我不会被喇叭催着走，因为它很少是做出好决定的基础。" },
+{ cat:"Alltag", de:"Wenn ich zu spät bin, informiere ich lieber früh, statt am Ende eine Entschuldigung zu improvisieren.", zh:"要迟到我宁愿早点通知，而不是最后临时编借口。" },
+{ cat:"Alltag", de:"Ein klarer Zeitrahmen wirkt entspannend, weil er Erwartungen synchronisiert.", zh:"明确时间范围能让人放松，因为它同步了期待。" },
+{ cat:"Alltag", de:"Ich plane bei Terminen in der Innenstadt extra Zeit für Fußwege ein, weil Parkplätze selten dort sind, wo man sie braucht.", zh:"市中心约会我会多算步行时间，因为停车位很少在你需要的地方。" },
+
+{ cat:"Alltag", de:"Wenn ich in eine neue Wohnung ziehe, markiere ich zuerst die wichtigsten Wege: Müll, Post, Keller und nächster Supermarkt.", zh:"搬到新住所，我先摸清关键路线：垃圾、信箱、地下室和最近超市。" },
+{ cat:"Alltag", de:"Ich lerne eine Umgebung schneller kennen, wenn ich sie zu Fuß erkunde statt nur durch Fenster zu sehen.", zh:"我步行探索环境会比只从窗里看更快熟悉。" },
+{ cat:"Alltag", de:"Wenn ich mich orientieren will, hilft es, die Straße einmal in beide Richtungen anzuschauen, statt sofort loszurennen.", zh:"想定位时，先左右看看街道比立刻冲出去更好。" },
+{ cat:"Alltag", de:"In Einkaufszentren merke ich mir den Eingang, weil alle Gänge irgendwann gleich aussehen.", zh:"在商场我会记住入口，因为走廊最终都会长得一样。" },
+{ cat:"Alltag", de:"Ich mache vor dem Einkaufen eine kurze Liste, damit ich nicht aus Orientierungslosigkeit Dinge kaufe, die ich nicht brauche.", zh:"购物前我列个简短清单，避免因为迷糊而买不需要的东西。" },
+{ cat:"Alltag", de:"Wenn ich im Supermarkt nichts finde, frage ich nach der Regalnummer, weil das schneller ist als zielloses Suchen.", zh:"超市找不到东西时我会问货架号，比瞎找快。" },
+{ cat:"Alltag", de:"Ich weiß, dass ich gestresst bin, wenn ich dreimal denselben Gang entlanglaufe und trotzdem nichts im Korb landet.", zh:"我如果紧张，就会在同一条过道走三遍还什么都没拿。" },
+{ cat:"Alltag", de:"Wenn ich im Wald wandere, prüfe ich am Anfang die Markierungen und fotografiere sie, falls sie später fehlen.", zh:"徒步进林子前我会确认标记并拍照，以防后面缺失。" },
+{ cat:"Alltag", de:"Eine Wegmarkierung ist nur dann beruhigend, wenn man weiß, wie die nächste aussieht.", zh:"路标只有在你知道下一个长什么样时才安心。" },
+{ cat:"Alltag", de:"Ich verlasse mich nicht darauf, dass ein Pfad immer weitergeht, weil er manchmal in einer Wiese verschwindet.", zh:"我不假设小路一定继续，因为有时会在草地里消失。" },
+
+{ cat:"Alltag", de:"Wenn ich mit dem Auto im Ausland fahre, informiere ich mich vorher über Mautsysteme, damit es keine bösen Überraschungen gibt.", zh:"在国外开车前我会了解收费系统，避免意外。" },
+{ cat:"Alltag", de:"Ich halte Kleingeld oder eine passende Karte bereit, weil Mautstationen nicht immer alle Zahlungsmittel akzeptieren.", zh:"我会准备零钱或合适的卡，因为收费站不一定什么都收。" },
+{ cat:"Alltag", de:"Wenn ich im Dunkeln laufe, gehe ich lieber eine beleuchtete Hauptstraße als eine vermeintliche Abkürzung.", zh:"夜里走路我宁走亮的大路，也不走所谓捷径。" },
+{ cat:"Alltag", de:"Gute Orientierung ist auch Sicherheitsgefühl: Ich möchte wissen, wie ich schnell zurückkomme.", zh:"好的定位也带来安全感：我希望知道如何快速返回。" },
+{ cat:"Alltag", de:"Wenn ich einen Ort nicht finde, prüfe ich, ob es zwei Straßen mit ähnlichem Namen gibt, bevor ich die Schuld bei mir suche.", zh:"找不到地点时我先看是否有相似路名，而不是立刻怪自己。" },
+{ cat:"Alltag", de:"Ich kontrolliere Postleitzahl und Stadtteil, weil Navigationssysteme manchmal nur den Straßennamen erkennen.", zh:"我会核对邮编和区名，因为导航有时只识别街名。" },
+{ cat:"Alltag", de:"Wenn ich jemanden telefoniere, der mich lotst, sage ich nicht nur „ich bin hier“, sondern beschreibe, was ich sehe.", zh:"打电话让人指路时，我不会只说“我在这儿”，而会描述我看到的东西。" },
+{ cat:"Alltag", de:"Ein gutes Merkmal ist etwas Dauerhaftes wie eine Bankfiliale oder ein Brunnen, nicht ein Lieferwagen, der gleich weg ist.", zh:"好地标应是银行网点或喷泉这种固定物，而不是马上就开走的货车。" },
+{ cat:"Alltag", de:"Wenn ich den ÖPNV nutze, schaue ich nicht nur auf die Liniennummer, sondern auch auf die Endstation, weil sie die Richtung zeigt.", zh:"坐公交地铁我不只看线路号，也看终点站，因为它显示方向。" },
+{ cat:"Alltag", de:"Ich steige lieber eine Station später aus, als im falschen Moment zu springen und dann auf der falschen Seite zu stehen.", zh:"我宁愿晚一站下车，也不在错误时机冲下去，结果站在反方向。" },
+
+{ cat:"Alltag", de:"Wenn ich eine neue Strecke lerne, wiederhole ich sie zwei- oder dreimal bewusst, damit sie zur Routine wird.", zh:"学习新路线时我会有意识地走两三遍，让它变成惯例。" },
+{ cat:"Alltag", de:"Orientierung wird leichter, wenn man Muster erkennt, zum Beispiel dass Hauptstraßen oft parallel verlaufen.", zh:"发现规律会让定位更容易，比如主干道常平行。" },
+{ cat:"Alltag", de:"In vielen Städten laufen die wichtigsten Linien entlang von Flüssen, Bahntrassen oder Ringstraßen.", zh:"很多城市的主线路沿河、铁路或环路展开。" },
+{ cat:"Alltag", de:"Wenn ich in einer Gegend wohne, merke ich mir die nächstgelegenen Haltestellen in zwei Richtungen, falls eine ausfällt.", zh:"住在某地区时，我会记住两个方向最近的站点，以防其中一个停运。" },
+{ cat:"Alltag", de:"Ich halte einen kleinen Stadtplan im Kopf: Zentrum, Rand, und die Achsen dazwischen.", zh:"我脑中会有个小城市地图：中心、边缘以及它们之间的轴线。" },
+{ cat:"Alltag", de:"Wenn ich Kinder begleite, erkläre ich ihnen Orientierung spielerisch, damit sie nicht nur folgen, sondern verstehen.", zh:"带孩子时我会用游戏方式讲定位，让他们不是只跟着走，而是懂得路线。" },
+{ cat:"Alltag", de:"Wir üben, Straßenschilder zu lesen und Ampelphasen zu beobachten, weil das Selbstständigkeit fördert.", zh:"我们练习读路牌、观察红绿灯节奏，因为这能培养独立性。" },
+{ cat:"Alltag", de:"Wenn ein Kind den Weg mitbestimmen darf, ist es aufmerksamer und verliert weniger schnell die Geduld.", zh:"孩子能参与决定路线时会更专注，也更不容易不耐烦。" },
+{ cat:"Alltag", de:"Ich nutze oft die „Nord oben“-Ansicht in Karten, weil sie dauerhaft konsistent ist und weniger verwirrt.", zh:"我常用地图“北向上”视图，因为它更一致、不易混淆。" },
+{ cat:"Alltag", de:"Die „Fahrtrichtung oben“-Ansicht ist bequem, aber sie kann verwirren, wenn man sich dreht oder stehen bleibt.", zh:"“行进方向朝上”很方便，但停下或转身时容易让人混乱。" },
+
+{ cat:"Alltag", de:"Wenn ich im Regen unterwegs bin, wähle ich lieber eine Route mit Arkaden oder Unterführungen, auch wenn sie etwas länger ist.", zh:"下雨出行我宁走有廊檐或地下通道的路线，即使稍长。" },
+{ cat:"Alltag", de:"Ich prüfe bei längeren Wegen, ob es unterwegs Bänke gibt, weil Pausen Planung sind, nicht Schwäche.", zh:"长路我会看沿途有没有长椅，因为休息是规划，不是软弱。" },
+{ cat:"Alltag", de:"Wenn ich den Bus knapp verpasse, atme ich bewusst aus, weil Hektik selten den nächsten Bus schneller macht.", zh:"差一步错过公交时我会刻意呼气，因为慌张不会让下一班更快。" },
+{ cat:"Alltag", de:"Ich speichere wichtige Orte als Favoriten, aber ich benenne sie eindeutig, damit ich nicht fünfmal „Zuhause“ habe.", zh:"我会收藏重要地点，但会取明确名字，避免出现五个“家”。" },
+{ cat:"Alltag", de:"Wenn ein Ort mehrere Eingänge hat, vereinbare ich den Treffpunkt mit einem spezifischen Eingang, nicht nur mit der Adresse.", zh:"地点有多个入口时，我会约定具体入口，而不只给地址。" },
+{ cat:"Alltag", de:"Ich erkenne eine gute Wegbeschreibung daran, dass sie sowohl Entfernungen als auch Abzweigungen nennt.", zh:"好的路线说明会同时给出距离和转弯点。" },
+{ cat:"Alltag", de:"Wenn jemand sagt „gleich hinter der Ecke“, frage ich nach Metern oder Minuten, weil „gleich“ subjektiv ist.", zh:"有人说“转角就到”时我会问多少米或几分钟，因为“很快”很主观。" },
+{ cat:"Alltag", de:"Ich notiere mir bei neuen Routen ein bis zwei „Kontrollpunkte“, an denen ich sicher weiß, dass ich richtig bin.", zh:"新路线我会记一两个“检查点”，在那里我能确定方向没错。" },
+{ cat:"Alltag", de:"Wenn ein Kontrollpunkt fehlt, drehe ich lieber um, statt weiter zu hoffen, dass es schon stimmen wird.", zh:"检查点没出现时，我宁可掉头，也不继续侥幸前行。" },
+{ cat:"Alltag", de:"Orientierung heißt für mich auch: zu wissen, wann man fragen sollte, statt Stolz und Zeit zu verlieren.", zh:"对我来说定位也意味着：知道何时该问路，而不是为面子浪费时间。" },
+{ cat:"Alltag", de:"Wenn ich nach dem Weg frage, bedanke ich mich klar und kurz, weil Freundlichkeit Türen öffnet, auch im Kleinen.", zh:"问路后我会简短明确地道谢，因为友善在小事上也能打开门。" },
+
+{ cat:"Alltag", de:"Ich nehme lieber die Treppe, wenn ich mich orientieren muss, weil man oben oft besser sieht, wohin es geht.", zh:"需要定位时我更愿意走楼梯，因为到高处往往更看得清方向。" },
+{ cat:"Alltag", de:"Wenn ich aus einer U-Bahn-Station komme, schaue ich zuerst, auf welcher Seite ich aussteige, damit ich nicht falsch „auftauche“.", zh:"从地铁站出来前我会先看出口方向，免得从错误的一侧“冒出来”。" },
+{ cat:"Alltag", de:"Viele Stationen haben mehrere Ausgänge; wenn man den falschen nimmt, wirkt der Weg plötzlich doppelt so lang.", zh:"很多站有多个出口，走错一个，路程就会像翻倍。" },
+{ cat:"Alltag", de:"Ich lese Schilder bis zum Ende, weil das entscheidende Wort oft erst nach dem Pfeil kommt.", zh:"我会把指示牌读完，因为关键字常在箭头后面。" },
+{ cat:"Alltag", de:"Wenn ich einen Termin suche, achte ich auf die Hausnummernfolge, statt mich nur an Schaufenstern zu orientieren.", zh:"找地址时我看门牌号递进，而不只看橱窗。" },
+{ cat:"Alltag", de:"Bei starkem Wind wähle ich gern eine Route, die zwischen Häusern geschützt ist, auch wenn sie weniger direkt ist.", zh:"风很大时我会走楼间更避风的路，即使没那么直。" },
+{ cat:"Alltag", de:"Ich plane bei neuen Wegen die Rückroute gleich mit, weil der Rückweg im Kopf oft schwieriger ist.", zh:"走新路我会同时想好回程，因为回路在脑中往往更难。" },
+{ cat:"Alltag", de:"Wenn ich mich in einem Gebäude orientiere, merke ich mir Treppenhausnummern und Flügelbezeichnungen.", zh:"在楼里定位时，我会记楼梯间编号和楼翼名称。" },
+{ cat:"Alltag", de:"In Krankenhäusern und Universitäten ist es hilfreich, den Buchstaben des Gebäudeteils zu kennen, nicht nur die Raumzahl.", zh:"在医院和大学里，知道楼区字母比只知道房间号更有用。" },
+{ cat:"Alltag", de:"Wenn ich ein Paket abhole, prüfe ich vorher Öffnungszeiten und Standort, weil „Filiale“ nicht immer gleich „um die Ecke“ ist.", zh:"取包裹前我会查营业时间和地点，因为“网点”不一定就在附近。" },
+
+// Technik – 200 Satzpaare (Grundlagen der Mechanik; gebildeter Alltagssprachgebrauch)
+// Kategorie: "Technik"
+
+// 1–25
+{ cat:"Technik", de:"Wenn man einen schweren Koffer zieht, merkt man sofort den Unterschied zwischen Rollen, die gut laufen, und Rollen, die Reibung fressen.", zh:"拉沉重的行李箱时，会立刻感觉到顺滑的轮子和“吃”摩擦的轮子的区别。" },
+{ cat:"Technik", de:"Reibung ist manchmal lästig, aber ohne Reibung könnten wir weder gehen noch einen Schraubenzieher sicher halten.", zh:"摩擦有时很烦，但没有摩擦我们既走不了路，也握不住螺丝刀。" },
+{ cat:"Technik", de:"Je glatter eine Oberfläche ist, desto weniger Haftung gibt es oft, weshalb Eis so gefährlich rutschig wirkt.", zh:"表面越光滑往往附着力越小，所以冰面才会那么危险地滑。" },
+{ cat:"Technik", de:"Wenn zwei Materialien aneinander reiben, wird Energie in Wärme umgewandelt, selbst wenn man das kaum spürt.", zh:"两种材料相互摩擦时，能量会转化为热，即便你几乎感觉不到。" },
+{ cat:"Technik", de:"Ein gutes Kugellager reduziert Reibung, weil es Gleiten durch Rollen ersetzt.", zh:"好的滚珠轴承能降低摩擦，因为它用滚动替代滑动。" },
+{ cat:"Technik", de:"Wenn ein Einkaufswagen quietscht, liegt das oft daran, dass ein Lager trocken oder verschmutzt ist.", zh:"购物车吱吱响，多半是轴承干了或脏了。" },
+{ cat:"Technik", de:"Ein Hebel macht Arbeit nicht magisch kleiner, aber er verteilt sie so, dass man mit weniger Kraft mehr Weg macht.", zh:"杠杆不会把工作量变没，但会重新分配：用更小力气走更长路。" },
+{ cat:"Technik", de:"Mit einem langen Schraubenschlüssel bekommt man festsitzende Muttern leichter los, weil der Hebelarm größer ist.", zh:"用更长的扳手更容易拧松紧固螺母，因为力臂更大。" },
+{ cat:"Technik", de:"Wenn man am Türgriff drückt, nutzt man automatisch einen Hebel: weit weg vom Scharnier ist es einfacher.", zh:"按门把手其实就在用杠杆：离铰链越远越省力。" },
+{ cat:"Technik", de:"Ein Flaschenöffner ist ein klassisches Beispiel dafür, wie Hebel Alltag müheloser machen.", zh:"开瓶器是杠杆让日常更省力的经典例子。" },
+{ cat:"Technik", de:"Wenn man eine Schere benutzt, arbeitet man mit zwei Hebeln gleichzeitig.", zh:"用剪刀其实是在同时使用两根杠杆。" },
+{ cat:"Technik", de:"Drehmoment bedeutet vereinfacht: Wie stark eine Kraft etwas verdrehen will, abhängig davon, wie weit sie vom Drehpunkt angreift.", zh:"扭矩简单说就是：力想把东西拧动的程度，取决于离转轴有多远。" },
+{ cat:"Technik", de:"Wenn ein Schraubdeckel nicht aufgeht, hilft oft ein Gummihandschuh, weil er die Reibung erhöht.", zh:"瓶盖拧不开时，戴橡胶手套常有用，因为摩擦更大。" },
+{ cat:"Technik", de:"Eine Rampe ist im Grunde ein Trick, um schwere Dinge mit weniger Kraft hochzubekommen, indem man den Weg verlängert.", zh:"斜坡本质上是把路变长来省力，从而更轻松把重物抬高。" },
+{ cat:"Technik", de:"Eine Treppe ist eine Abfolge kleiner Rampen, die den Höhenunterschied in Portionen aufteilt.", zh:"楼梯就是一连串小斜坡，把高度差分成小份。" },
+{ cat:"Technik", de:"Wenn man ein Auto aufbockt, ist der Wagenheber eine Maschine, die Kraft über Mechanik vervielfacht.", zh:"把车顶起来时，千斤顶是一种通过机械放大力量的装置。" },
+{ cat:"Technik", de:"Ein Flaschenzug hilft beim Heben, weil er die Last auf mehrere Seilstücke verteilt.", zh:"滑轮组能省力提重，因为把重量分摊到多段绳子上。" },
+{ cat:"Technik", de:"Je mehr tragende Seilstränge ein Flaschenzug hat, desto weniger Kraft braucht man – aber man muss mehr Seil ziehen.", zh:"滑轮组承重绳段越多越省力，但需要拉更长的绳子。" },
+{ cat:"Technik", de:"Gewicht ist die Kraft, mit der die Erde an einem Körper zieht; Masse ist, wie viel „Stoff“ er hat.", zh:"重量是地球对物体的拉力；质量是物体含有多少“物质”。" },
+{ cat:"Technik", de:"Auf dem Mond wäre die Masse gleich, aber das Gewicht deutlich kleiner, weil die Anziehung schwächer ist.", zh:"在月球质量不变，但重量会小很多，因为引力更弱。" },
+{ cat:"Technik", de:"Trägheit bedeutet, dass ein Körper seinen Bewegungszustand beibehalten will, solange keine Kraft ihn ändert.", zh:"惯性意味着：没有外力改变时，物体会保持原来的运动状态。" },
+{ cat:"Technik", de:"Wenn ein Bus bremst und man nach vorne kippt, ist das Trägheit: Der Körper will weiterfahren.", zh:"公交刹车你往前倾，是惯性：身体还想继续前进。" },
+{ cat:"Technik", de:"Sicherheitsgurte sind so wichtig, weil sie Trägheitskräfte kontrolliert auf den Körper übertragen.", zh:"安全带重要在于它能把惯性力以可控方式传递到身体上。" },
+{ cat:"Technik", de:"Eine Knautschzone ist sinnvoll, weil sie die Bremszeit verlängert und so Spitzenkräfte reduziert.", zh:"溃缩区有用，因为它延长减速时间，从而降低峰值冲击力。" },
+{ cat:"Technik", de:"Wenn man ein Glas auf einem Tisch schiebt, sieht man, wie Reibung die Bewegung langsam abbaut.", zh:"把杯子在桌上推滑，就能看到摩擦让运动慢慢衰减。" },
+
+// 26–50
+{ cat:"Technik", de:"Kraft ist nicht nur „Anstrengung“, sondern eine Größe, die Beschleunigung oder Verformung verursachen kann.", zh:"力不只是“费劲”，而是一种能造成加速度或形变的量。" },
+{ cat:"Technik", de:"Beschleunigung heißt nicht nur schneller werden, sondern auch langsamer werden oder die Richtung ändern.", zh:"加速度不只表示变快，也包括减速或改变方向。" },
+{ cat:"Technik", de:"Wenn ein Auto in eine Kurve fährt, spürt man eine Seitkraft, weil die Richtung der Bewegung geändert wird.", zh:"汽车过弯时会感觉到侧向力，因为运动方向在改变。" },
+{ cat:"Technik", de:"Die Zentripetalkraft hält ein Objekt auf Kreisbahn; ohne sie würde es tangential weiterfliegen.", zh:"向心力让物体沿圆轨道运动；没有它就会沿切线飞出去。" },
+{ cat:"Technik", de:"Dass Wasser im Eimer bleibt, wenn man ihn schnell im Kreis schwingt, hat mit Trägheit und Kreisbewegung zu tun.", zh:"快速转圈甩水桶水不洒，是惯性和圆周运动的结果。" },
+{ cat:"Technik", de:"In Kurven sollte man nicht plötzlich bremsen, weil Reifen dann weniger Reserven für Seitenführung haben.", zh:"过弯时不宜突然刹车，因为轮胎留给侧向抓地的余量会变少。" },
+{ cat:"Technik", de:"Reifen haben Grip, weil Gummi sich mikroskopisch an den Asphalt anpasst und Reibung erzeugt.", zh:"轮胎有抓地力，是因为橡胶微观上贴合沥青并产生摩擦。" },
+{ cat:"Technik", de:"Wenn der Reifendruck zu niedrig ist, verformt sich der Reifen stärker, was Wärme erzeugt und den Verbrauch erhöht.", zh:"胎压过低会让轮胎更形变，产生热并增加油耗。" },
+{ cat:"Technik", de:"Eine Feder speichert Energie, wenn man sie zusammendrückt, und gibt sie wieder ab, wenn man loslässt.", zh:"弹簧被压缩会储能，放开后又释放能量。" },
+{ cat:"Technik", de:"Stoßdämpfer sind wichtig, weil eine Feder allein zu lange nachschwingen würde.", zh:"减震器重要在于：仅靠弹簧会振动太久。" },
+{ cat:"Technik", de:"Wenn ein Fahrrad über Kopfsteinpflaster hoppelt, merkt man, wie Federung und Dämpfung den Komfort bestimmen.", zh:"自行车过鹅卵石路会感到：悬挂和阻尼决定舒适度。" },
+{ cat:"Technik", de:"Elastisch heißt, dass ein Material nach der Verformung wieder in seine ursprüngliche Form zurückkehrt.", zh:"弹性意味着材料变形后能恢复原状。" },
+{ cat:"Technik", de:"Plastisch heißt, dass eine Verformung bleibt, etwa wenn man eine Büroklammer dauerhaft verbiegt.", zh:"塑性意味着变形会留下，比如把回形针掰弯后不再回去。" },
+{ cat:"Technik", de:"Wenn man eine Dose zerdrückt, sieht man plastische Verformung: Sie bleibt eingedellt.", zh:"压扁易拉罐就是塑性变形：凹痕会保留。" },
+{ cat:"Technik", de:"Zug bedeutet, dass man an einem Material zieht; Druck bedeutet, dass man es zusammendrückt.", zh:"拉伸是把材料往外拉；压缩是把它往里挤。" },
+{ cat:"Technik", de:"Ein Seil ist gut in Zug, aber schlecht in Druck, weil es sich dann einfach durchhängt.", zh:"绳子擅长受拉，不擅长受压，因为受压就会塌软。" },
+{ cat:"Technik", de:"Ein Pfeiler ist gut in Druck, weshalb Brücken oft Pfeiler nutzen, um Lasten abzuleiten.", zh:"柱子擅长受压，所以桥梁常用桥墩来传递荷载。" },
+{ cat:"Technik", de:"Eine Brücke muss nicht nur Gewicht tragen, sondern auch Wind, Temperaturänderungen und Schwingungen aushalten.", zh:"桥不仅要承重，还要承受风、温差和振动。" },
+{ cat:"Technik", de:"Metall dehnt sich bei Wärme aus; deshalb gibt es Dehnfugen in Brücken und Schienen.", zh:"金属受热会膨胀，所以桥和铁轨要有伸缩缝。" },
+{ cat:"Technik", de:"Wenn Schienen keine Dehnfugen hätten, könnten sie sich bei Hitze verziehen und gefährlich werden.", zh:"铁轨若没有伸缩缝，高温会拱起变形并变得危险。" },
+{ cat:"Technik", de:"Eine Schraube funktioniert, weil das Gewinde eine Rampe ist, die Drehbewegung in Vorschub umsetzt.", zh:"螺丝之所以有效，是因为螺纹是一条斜坡，把旋转变成前进。" },
+{ cat:"Technik", de:"Je feiner das Gewinde, desto genauer kann man einstellen, aber desto empfindlicher ist es gegen Schmutz.", zh:"螺纹越细调节越精确，但也更怕污垢。" },
+{ cat:"Technik", de:"Wenn eine Schraube sich löst, helfen Sicherungsscheiben oder Schraubensicherung, weil Vibrationen sie sonst herausarbeiten.", zh:"螺丝松动时，垫圈或螺纹胶有用，因为振动会把它“抖”出来。" },
+{ cat:"Technik", de:"Vibrationen sind nicht nur lästig, sie können auch Material ermüden und Schrauben lockern.", zh:"振动不只是烦，也会导致材料疲劳并松动螺丝。" },
+
+// 51–75
+{ cat:"Technik", de:"Materialermüdung bedeutet, dass ein Material durch viele kleine Belastungen irgendwann bricht, auch ohne riesige Kraft.", zh:"材料疲劳指材料在许多小负荷作用下最终断裂，即使没有巨力。" },
+{ cat:"Technik", de:"Man sieht das bei Büroklammern: Biegt man sie oft hin und her, bricht sie irgendwann.", zh:"回形针就是例子：反复掰来掰去，迟早会断。" },
+{ cat:"Technik", de:"Ein stabiler Stuhl wirkt einfach, aber seine Konstruktion muss Kräfte in verschiedene Richtungen aufnehmen.", zh:"椅子看似简单，但结构要承受多方向的力。" },
+{ cat:"Technik", de:"Dreiecke sind im Bau beliebt, weil sie sich unter Last kaum verformen, im Gegensatz zu Vierecken.", zh:"建筑中常用三角形，因为受力时不易变形，而四边形更容易变形。" },
+{ cat:"Technik", de:"Ein Regal wird wackelig, wenn es keine diagonale Aussteifung hat, weil es sonst seitlich „ausweicht“.", zh:"书架没有斜撑会晃，因为会侧向“跑形”。" },
+{ cat:"Technik", de:"Wenn man ein Regal an der Wand verankert, verhindert man Kippen, weil der Schwerpunkt nicht mehr so leicht über die Kante wandert.", zh:"把书架固定在墙上能防倾倒，因为重心不易越过边缘。" },
+{ cat:"Technik", de:"Der Schwerpunkt ist der Punkt, an dem man sich das Gewicht konzentriert vorstellen kann.", zh:"重心是可以把重量想象为集中于一点的位置。" },
+{ cat:"Technik", de:"Ein voller Einkaufsbeutel kippt leichter, wenn schwere Sachen oben liegen, weil der Schwerpunkt höher ist.", zh:"购物袋重物放上面更易翻，因为重心更高。" },
+{ cat:"Technik", de:"Stabilität heißt oft: Schwerpunkt niedrig und Standfläche groß.", zh:"稳定往往意味着：重心低、支撑面大。" },
+{ cat:"Technik", de:"Eine Leiter ist gefährlich, wenn der Winkel zu steil oder zu flach ist, weil dann entweder Kippen oder Wegrutschen droht.", zh:"梯子角度过陡或过平都危险：要么易翻，要么易滑。" },
+{ cat:"Technik", de:"Wenn man eine Leiter benutzt, ist es klug, drei Kontaktpunkte zu halten, also zwei Füße und eine Hand.", zh:"用梯子时保持三点接触更安全：两脚一手。" },
+{ cat:"Technik", de:"Beim Heben schwerer Dinge hilft es, nah am Körper zu bleiben, weil sonst das Drehmoment auf den Rücken wächst.", zh:"搬重物时靠近身体更省力，因为离得远会增大对背部的扭矩。" },
+{ cat:"Technik", de:"Ein Rucksack trägt sich leichter als eine Tasche, weil das Gewicht näher an der Körperachse bleibt.", zh:"背包比手提包更省力，因为重量更接近身体轴线。" },
+{ cat:"Technik", de:"Wenn man einen Wagen schiebt statt zieht, hat man oft mehr Kontrolle, weil die Kraftlinie besser durch den Körper geht.", zh:"推车往往比拉车更好控制，因为力的方向更容易通过身体传递。" },
+{ cat:"Technik", de:"Druck verteilt sich besser, wenn die Kontaktfläche größer ist; deshalb sinkt man im Schnee mit Schneeschuhen weniger ein.", zh:"接触面积越大压力分布越小；所以穿雪鞋在雪里不易陷。" },
+{ cat:"Technik", de:"Ein Nagel dringt ins Holz, weil die Spitze die Kraft auf eine winzige Fläche konzentriert und so der Druck groß wird.", zh:"钉子能进木头，是因为尖端把力集中在极小面积上，压力就很大。" },
+{ cat:"Technik", de:"Ein stumpfes Messer ist gefährlicher als ein scharfes, weil man mehr Kraft braucht und leichter abrutscht.", zh:"钝刀比利刀更危险，因为要用更大力，更容易打滑。" },
+{ cat:"Technik", de:"Mechanische Arbeit ist Kraft mal Weg; das erklärt, warum man mit einer Rampe weniger Kraft braucht, aber länger schiebt.", zh:"机械功等于力乘以位移；这解释了斜坡为何省力却要走更长。" },
+{ cat:"Technik", de:"Leistung beschreibt, wie schnell Arbeit verrichtet wird; zwei Menschen können dieselbe Arbeit leisten, aber unterschiedlich schnell.", zh:"功率描述做功的速度；两个人能做同样的功，但用时不同。" },
+{ cat:"Technik", de:"Ein Fahrrad im niedrigen Gang erleichtert Anfahren am Berg, weil man mehr Drehmoment am Rad bekommt.", zh:"爬坡用低档更好起步，因为车轮获得更大扭矩。" },
+{ cat:"Technik", de:"Schalten verändert nicht die Arbeit, die man leisten muss, aber es passt Kraft und Geschwindigkeit besser an.", zh:"变速不改变总功，但能更好匹配力和速度。" },
+{ cat:"Technik", de:"Eine Übersetzung ist wie ein Hebel in drehender Form: mehr Kraft bedeutet weniger Geschwindigkeit und umgekehrt.", zh:"传动比就像旋转的杠杆：更大力意味着更小速度，反之亦然。" },
+{ cat:"Technik", de:"Wenn eine Kette am Fahrrad springt, ist sie oft zu locker oder die Zähne sind abgenutzt.", zh:"自行车链条跳链，多半是太松或齿轮磨损。" },
+{ cat:"Technik", de:"Ein gut gespannter Keilriemen überträgt Kraft zuverlässig; ist er zu locker, rutscht er und erzeugt Wärme.", zh:"V带张紧得当能可靠传力；太松会打滑并生热。" },
+{ cat:"Technik", de:"Rutschen ist verlorene Energie: Man hört es oft quietschen und riecht manchmal sogar verbranntes Gummi.", zh:"打滑就是能量损失：常能听到尖叫声，有时还闻到橡胶焦味。" },
+
+// 76–100
+{ cat:"Technik", de:"Eine Schraubzwinge zeigt, wie man mit einem Gewinde große Kräfte erzeugen kann, ohne viel Muskelkraft.", zh:"螺旋夹展示了螺纹如何在不费太多肌肉的情况下产生大夹紧力。" },
+{ cat:"Technik", de:"Wenn man einen Korken herauszieht, merkt man, wie stark Reibung halten kann und wie plötzlich sie nachgibt.", zh:"拔软木塞时能感觉摩擦有多能“咬住”，又会突然松开。" },
+{ cat:"Technik", de:"Schmiermittel reduzieren Reibung, aber sie können auch Haftung verringern, weshalb Öl auf Bremsbelägen problematisch ist.", zh:"润滑剂能降摩擦，但也会降低附着力，所以刹车片沾油很麻烦。" },
+{ cat:"Technik", de:"Ein Bremsweg hängt stark von Geschwindigkeit ab; doppelte Geschwindigkeit bedeutet deutlich mehr als doppelten Bremsweg.", zh:"刹车距离强烈依赖速度；速度翻倍，刹车距离远不止翻倍。" },
+{ cat:"Technik", de:"Man spürt das auch zu Fuß: Wenn man rennt, braucht man mehr Platz zum Anhalten als beim Gehen.", zh:"走路也一样：跑步停下需要的距离比走路长。" },
+{ cat:"Technik", de:"Stoß ist Kraft über Zeit: Je länger die Abbremsung dauert, desto kleiner ist die Spitzenkraft.", zh:"冲击与力和时间有关：减速时间越长，峰值力越小。" },
+{ cat:"Technik", de:"Helme wirken, weil sie den Kopf nicht „unverwundbar“ machen, sondern die Verzögerung über Material verlangsamen.", zh:"头盔的作用不是让头“刀枪不入”，而是通过材料延长减速过程。" },
+{ cat:"Technik", de:"Ein Airbag ist ein Beispiel für kontrolliertes Abbremsen: Er vergrößert die Zeit, in der der Körper zum Stillstand kommt.", zh:"安全气囊是受控减速的例子：它延长身体停下的时间。" },
+{ cat:"Technik", de:"Wenn eine Kugel auf den Boden fällt und zurückspringt, zeigt das, dass ein Teil der Energie elastisch gespeichert und zurückgegeben wird.", zh:"球落地反弹说明能量一部分被弹性储存并释放。" },
+{ cat:"Technik", de:"Ein weicher Ball springt weniger, weil mehr Energie in Wärme und innere Verformung geht.", zh:"软球弹得少，因为更多能量变成热和内部形变。" },
+{ cat:"Technik", de:"Wenn Holz knackt, verteilt sich Spannung; das ist oft ein Hinweis auf innere Belastungen.", zh:"木头咔咔响是在释放应力，常提示内部受力。" },
+{ cat:"Technik", de:"Spannung im Material ist wie unsichtbarer Druck oder Zug im Inneren, der bei Belastung wächst.", zh:"材料应力像内部看不见的压或拉，受载时会增大。" },
+{ cat:"Technik", de:"Ein Glas bricht leicht, weil es spröde ist: Es verformt sich kaum, bevor es reißt.", zh:"玻璃易碎因为它脆：几乎不变形就会裂。" },
+{ cat:"Technik", de:"Gummi ist zäh und elastisch; es kann sich stark dehnen, bevor es versagt.", zh:"橡胶韧且弹，可以大幅拉伸后才失效。" },
+{ cat:"Technik", de:"Wenn eine Plastiktüte reißt, sieht man oft, dass kleine Kerben zu Rissen wachsen.", zh:"塑料袋一撕破，常能看到小缺口如何扩展成裂口。" },
+{ cat:"Technik", de:"Kerben sind kritisch, weil sie Spannung konzentrieren, ähnlich wie eine scharfe Ecke beim Papierreißen.", zh:"缺口危险在于会集中应力，就像纸在尖角处更易撕。" },
+{ cat:"Technik", de:"Darum haben viele Bauteile abgerundete Ecken: Sie reduzieren Spannungsspitzen.", zh:"因此很多零件做圆角：能减少应力尖峰。" },
+{ cat:"Technik", de:"Wenn ein Metalllineal leicht gebogen ist, wird es unter Druck eher ausweichen als ein dickeres Profil.", zh:"金属尺子薄且略弯时受压更易屈曲，比厚型材更容易变形。" },
+{ cat:"Technik", de:"Profile wie I-Träger sind effizient, weil sie Material dort haben, wo es für Biegung am meisten bringt.", zh:"工字梁效率高，因为把材料放在对抗弯曲最有效的位置。" },
+{ cat:"Technik", de:"Biegung bedeutet, dass eine Seite eines Balkens auf Zug und die andere auf Druck belastet wird.", zh:"弯曲意味着梁的一侧受拉，另一侧受压。" },
+{ cat:"Technik", de:"Wenn man ein Buch an der Kante biegt, merkt man, wie schnell Papier unter Druck knickt.", zh:"把书页在边上弯折，会感觉纸在受压时很快起皱。" },
+{ cat:"Technik", de:"Eine Schraube hält besser, wenn sie in tragfähigem Material sitzt; in porösem Putz braucht man Dübel.", zh:"螺丝在牢固材料里更稳；在疏松墙灰中需要膨胀塞。" },
+{ cat:"Technik", de:"Ein Dübel verteilt die Kräfte im Material, damit die Schraube nicht einfach herausgezogen wird.", zh:"膨胀塞把力分散到材料里，避免螺丝被直接拔出。" },
+{ cat:"Technik", de:"Wenn ein Regal aus der Wand kommt, war oft die Last unterschätzt oder der Untergrund ungeeignet.", zh:"书架掉下来，多半是低估了重量或墙体不合适。" },
+
+// 101–125
+{ cat:"Technik", de:"Bei Mechanik hilft es, Kräfte als Pfeile zu denken: Richtung und Größe sind entscheidend.", zh:"理解力学时，把力当成箭头很有用：方向和大小都关键。" },
+{ cat:"Technik", de:"Zwei Kräfte können sich ausgleichen, wenn sie gleich groß sind und in entgegengesetzte Richtungen wirken.", zh:"两股力大小相等方向相反时可以相互抵消。" },
+{ cat:"Technik", de:"Ein Gegenstand ruht nicht „weil keine Kräfte da sind“, sondern weil die Summe der Kräfte null ist.", zh:"物体静止并非“没有力”，而是合力为零。" },
+{ cat:"Technik", de:"Wenn man eine Kiste schiebt und sie nicht bewegt, ist die Schubkraft kleiner als die maximale Haftreibung.", zh:"推箱子不动，说明推力小于最大静摩擦。" },
+{ cat:"Technik", de:"Sobald die Kiste rutscht, wirkt meist geringere Gleitreibung, weshalb sie plötzlich leichter weitergeht.", zh:"箱子一旦滑动，动摩擦通常更小，所以会突然更好推。" },
+{ cat:"Technik", de:"Ein Flaschenzug ist ein Beispiel dafür, dass man Kraft gegen Weg tauscht, nicht gegen „kostenlose“ Energie.", zh:"滑轮组说明：你用距离换力量，而不是换来“免费”能量。" },
+{ cat:"Technik", de:"Energie geht nicht verloren, sie wandelt sich; bei Reibung endet sie oft als Wärme.", zh:"能量不会消失，只会转化；摩擦中常变成热。" },
+{ cat:"Technik", de:"Wenn man Hände aneinander reibt, spürt man diese Umwandlung direkt.", zh:"双手互搓就能直接感到这种转化。" },
+{ cat:"Technik", de:"Bei einem Pendel sieht man, wie potenzielle Energie in kinetische und wieder zurück wechselt.", zh:"摆能展示势能与动能如何相互转换。" },
+{ cat:"Technik", de:"Ein Pendel bleibt nicht ewig in Bewegung, weil Luftwiderstand und Reibung Energie abziehen.", zh:"摆不会永远摆动，因为空气阻力和摩擦会耗能。" },
+{ cat:"Technik", de:"Luftwiderstand wächst oft stark mit der Geschwindigkeit; deshalb kostet schnelles Fahren unverhältnismäßig mehr Energie.", zh:"空气阻力常随速度显著增加，所以高速行驶耗能不成比例地大。" },
+{ cat:"Technik", de:"Wenn man mit dem Fahrrad gegen Wind fährt, merkt man, dass man plötzlich „mehr leisten“ muss.", zh:"逆风骑车会感觉必须“更用力做功”。" },
+{ cat:"Technik", de:"Ein Fallschirm wirkt, weil er die Fläche vergrößert und so den Luftwiderstand stark erhöht.", zh:"降落伞有效是因为增大面积，从而大幅增加空气阻力。" },
+{ cat:"Technik", de:"Wasserwiderstand ist noch größer als Luftwiderstand; deshalb ist Schwimmen anstrengend.", zh:"水阻比空气阻大得多，所以游泳更费力。" },
+{ cat:"Technik", de:"Auftrieb erklärt, warum Schiffe schwimmen: Sie verdrängen Wasser, und das Wasser drückt zurück.", zh:"浮力解释船为何能浮：它排开水，水就向上托。" },
+{ cat:"Technik", de:"Ein schweres Schiff kann schwimmen, wenn es viel Volumen hat und dadurch genug Wasser verdrängt.", zh:"船即使很重也能浮，只要体积大、排水足够。" },
+{ cat:"Technik", de:"Ein Stein sinkt, weil er bei gleichem Volumen mehr Masse hat und die Auftriebskraft nicht reicht.", zh:"石头下沉是因为同体积质量更大，浮力不够。" },
+{ cat:"Technik", de:"Dichte ist Masse pro Volumen; sie hilft zu verstehen, warum manche Dinge schwimmen und andere nicht.", zh:"密度是单位体积质量；它帮助理解浮沉。" },
+{ cat:"Technik", de:"Wenn Öl auf Wasser schwimmt, liegt das daran, dass Öl eine geringere Dichte hat.", zh:"油浮在水上，是因为油的密度更小。" },
+{ cat:"Technik", de:"Eine Waage misst Gewichtskraft, aber im Alltag sagen wir oft einfach „Gewicht“, auch wenn wir Masse meinen.", zh:"秤测的是重力，但日常常说“重量”，其实指质量。" },
+{ cat:"Technik", de:"Wenn man einen Rucksack wiegt, ist es egal, ob man ihn „Masse“ nennt, solange man die Belastung einschätzen kann.", zh:"称背包时叫“质量”还是“重量”无所谓，只要能估算负担。" },
+{ cat:"Technik", de:"Mechanik ist oft die Kunst, Kräfte zu lenken, statt sie nur zu erhöhen.", zh:"力学常是引导力的艺术，而非单纯放大力。" },
+{ cat:"Technik", de:"Eine Umlenkrolle ändert die Richtung der Kraft, was das Heben bequemer machen kann.", zh:"定滑轮改变力的方向，让抬起更顺手。" },
+{ cat:"Technik", de:"Wenn man etwas mit beiden Händen trägt, verteilt sich die Last, und die Arme ermüden langsamer.", zh:"双手提物能分担负载，手臂更不易疲劳。" },
+{ cat:"Technik", de:"Ein Tragegurt funktioniert wie eine Kraftverteilung: Er legt Gewicht auf Schultern statt nur auf die Hände.", zh:"背带相当于分配力：把重量转移到肩膀而非手上。" },
+
+// 126–150
+{ cat:"Technik", de:"Wenn man eine Schublade zu voll packt, steigt die Reibung, und plötzlich fühlt sie sich „schwer“ an.", zh:"抽屉塞太满摩擦就大，会突然感觉“很重”。" },
+{ cat:"Technik", de:"Gute Schienenführungen nutzen Rollen oder gleitfähige Kunststoffe, damit Bewegung leicht bleibt.", zh:"好的滑轨用滚轮或低摩擦塑料，让运动更轻。" },
+{ cat:"Technik", de:"Ein Wagenheber ist stabiler, wenn der Untergrund fest ist; auf weichem Boden kann er einsinken.", zh:"千斤顶在坚硬地面更稳；软地会下陷。" },
+{ cat:"Technik", de:"Eine breite Unterlage verteilt Druck und verhindert, dass ein Wagenheber im Boden verschwindet.", zh:"垫块增大接触面积，分散压力，防止千斤顶陷进去。" },
+{ cat:"Technik", de:"Wenn man eine Glasplatte trägt, sollte man sie nicht nur am Rand drücken, weil punktuelle Kräfte zu Brüchen führen können.", zh:"搬玻璃板不要只在边缘点压，因为局部力可能导致破裂。" },
+{ cat:"Technik", de:"Punktlasten sind kritischer als Flächenlasten, weil sie Spannung stark konzentrieren.", zh:"点载荷比面载荷更危险，因为应力高度集中。" },
+{ cat:"Technik", de:"Ein Spanngurt hält, wenn er richtig vorgespannt ist; lose Gurte lassen Ladung rutschen.", zh:"捆绑带要预紧才牢；松的会让货物滑动。" },
+{ cat:"Technik", de:"Ladungssicherung ist Mechanik in der Praxis: Reibung, Vorspannung und Kräfte beim Bremsen.", zh:"货物固定是实践中的力学：摩擦、预紧以及制动时的力。" },
+{ cat:"Technik", de:"Wenn ein Karton im Kofferraum verrutscht, liegt das oft an zu glatter Oberfläche und zu wenig Anpressdruck.", zh:"后备箱纸箱滑动，多因表面太滑且压紧不足。" },
+{ cat:"Technik", de:"Eine Antirutschmatte erhöht die Reibung und macht Transporte deutlich sicherer.", zh:"防滑垫能增大摩擦，让运输更安全。" },
+{ cat:"Technik", de:"Mechanische Schwingungen können angenehm sein, wie bei Musik, oder schädlich, wie bei lockeren Schrauben.", zh:"机械振动可以很美妙（音乐），也可能有害（松螺丝）。" },
+{ cat:"Technik", de:"Ein Glas kann bei einem hohen Ton klirren, weil der Ton es zu Resonanzschwingungen anregt.", zh:"高音让玻璃叮当，是因为声波激起共振。" },
+{ cat:"Technik", de:"Resonanz bedeutet, dass ein System bei einer bestimmten Frequenz besonders stark schwingt.", zh:"共振指系统在某一频率下会特别强烈地振动。" },
+{ cat:"Technik", de:"Darum können Brücken bei Wind gefährlich schwingen, wenn die Anregung die Eigenfrequenz trifft.", zh:"因此桥在风中可能危险振动，当外界激励碰上固有频率时。" },
+{ cat:"Technik", de:"Dämpfer reduzieren Resonanz, indem sie Schwingungsenergie in Wärme umwandeln.", zh:"阻尼器通过把振动能转成热来减弱共振。" },
+{ cat:"Technik", de:"Wenn eine Waschmaschine „wandert“, ist das oft eine Unwucht, die Schwingungen verstärkt.", zh:"洗衣机“走路”多半是偏心导致振动增强。" },
+{ cat:"Technik", de:"Eine Unwucht entsteht, wenn Masse ungleich verteilt ist, etwa wenn ein großes Handtuch allein schleudert.", zh:"偏心来自质量分布不均，比如单独甩一个大浴巾。" },
+{ cat:"Technik", de:"Gleichmäßiges Beladen reduziert Schwingungen und schont die Lager.", zh:"均匀装载能减少振动并保护轴承。" },
+{ cat:"Technik", de:"Mechanik erklärt auch, warum man auf glatten Böden vorsichtiger sein muss: weniger Reibung bedeutet weniger Kontrolle.", zh:"力学也解释了为什么光滑地面要更小心：摩擦少，控制就少。" },
+{ cat:"Technik", de:"Wenn Schuhe eine profilierte Sohle haben, erhöht das den Grip, besonders auf nassem Untergrund.", zh:"鞋底有纹路能增加抓地力，尤其在湿地面上。" },
+{ cat:"Technik", de:"Ein Keil ist eine Art bewegliche Rampe; mit ihm kann man Holz spalten oder Dinge fixieren.", zh:"楔子是一种可移动的斜坡，可用来劈木或固定物体。" },
+{ cat:"Technik", de:"Ein Schraubendreher setzt Drehmoment um; er ist nur so effektiv wie sein Griff und die passende Spitze.", zh:"螺丝刀传递扭矩；效果取决于手柄和合适的刀头。" },
+{ cat:"Technik", de:"Wenn der Bit nicht passt, rutscht er aus und beschädigt den Schraubenkopf – das ist Mechanik plus Frust.", zh:"批头不匹配会打滑并损坏螺丝头——力学加烦恼。" },
+{ cat:"Technik", de:"Ein passender Inbusschlüssel überträgt Kräfte sauberer, weil die Kontaktflächen größer sind.", zh:"合适的内六角能更好传力，因为接触面更大。" },
+
+// 151–175
+{ cat:"Technik", de:"Wenn man einen Koffer hebt, ist die Körperhaltung entscheidend: Beine arbeiten, Rücken stabilisiert.", zh:"抬箱子时姿势很关键：腿发力，背稳定。" },
+{ cat:"Technik", de:"Viele Rückenschmerzen entstehen, weil man Lasten weit vom Körper weghebt und so das Drehmoment erhöht.", zh:"很多腰背痛源于把重物离身体太远地抬起，从而增大扭矩。" },
+{ cat:"Technik", de:"Mechanische Übersetzungen sind überall: Fahrrad, Türgriff, Zange – sie alle verändern Kraft und Weg.", zh:"机械传动比无处不在：自行车、门把手、钳子——都在改变力和位移。" },
+{ cat:"Technik", de:"Eine Kombizange verstärkt die Handkraft, weil ihr Drehpunkt nahe an den Backen sitzt.", zh:"老虎钳能放大手力，因为转轴靠近钳口。" },
+{ cat:"Technik", de:"Wenn man einen Nagel mit einem Hammer zieht, nutzt man die Klaue als Hebel und den Nagelkopf als Angriffspunkt.", zh:"用羊角锤拔钉时，是用锤爪作杠杆，以钉头为受力点。" },
+{ cat:"Technik", de:"Ein Hammer wirkt einfach, aber seine Wirksamkeit hängt von Masse, Geschwindigkeit und Kontaktzeit ab.", zh:"锤子看似简单，但效果取决于质量、速度和接触时间。" },
+{ cat:"Technik", de:"Ein weicher Hammerkopf schont Oberflächen, weil er den Stoß über eine längere Zeit verteilt.", zh:"软锤头保护表面，因为它把冲击分摊到更长时间。" },
+{ cat:"Technik", de:"Wenn ein Ballon platzt, ist das keine Mechanik des Schlagens, sondern der plötzliche Bruch einer gespannten Membran.", zh:"气球爆裂不是“被打碎”，而是拉伸膜瞬间破裂的结果。" },
+{ cat:"Technik", de:"Druck in einem Reifen ist ein Beispiel dafür, wie ein Gas Kräfte auf Wände ausübt und Form stabilisiert.", zh:"轮胎气压说明气体如何对壁施力并稳定形状。" },
+{ cat:"Technik", de:"Wenn man einen Reifen aufpumpt, erhöht man den Innendruck, und damit wird die Seitenwand steifer.", zh:"给轮胎打气会提高内部压力，侧壁就更硬。" },
+{ cat:"Technik", de:"Ein zu hoher Druck kann jedoch Komfort verringern und die Aufstandsfläche verkleinern.", zh:"但气压过高会降低舒适性并缩小接地面积。" },
+{ cat:"Technik", de:"Die Aufstandsfläche beeinflusst Grip: zu klein heißt weniger Reibungspotenzial, zu groß kann walken und erwärmen.", zh:"接地面积影响抓地：太小摩擦潜力低，太大则易形变发热。" },
+{ cat:"Technik", de:"Mechanische Systeme altern: Schmierstoff trocknet, Kunststoff wird spröde, und Toleranzen verändern sich.", zh:"机械系统会老化：润滑剂干涸、塑料变脆、公差变化。" },
+{ cat:"Technik", de:"Wartung bedeutet oft, kleine Reibung und Spiel im Griff zu behalten, bevor daraus Schäden werden.", zh:"维护往往是把小摩擦和间隙控制住，避免变成损伤。" },
+{ cat:"Technik", de:"Spiel ist nicht nur „Wackeln“, sondern ein Maß dafür, wie viel Bewegung ohne Kraftübertragung möglich ist.", zh:"间隙不只是“晃”，而是无传力情况下可动的程度。" },
+{ cat:"Technik", de:"Zu viel Spiel in der Lenkung fühlt sich schwammig an, weil die Bewegung nicht sofort am Rad ankommt.", zh:"转向间隙过大会感觉发飘，因为动作不能立刻传到车轮。" },
+{ cat:"Technik", de:"Wenn Türen klappern, kann eine einfache Justierung der Scharniere das Problem lösen.", zh:"门响动时，简单调一下铰链就可能解决。" },
+{ cat:"Technik", de:"Ein Türschließer nutzt Federn und Dämpfung, damit die Tür leise und kontrolliert zufällt.", zh:"闭门器利用弹簧和阻尼，让门安静可控地关上。" },
+{ cat:"Technik", de:"Mechanik ist auch im Alltag sichtbar, wenn ein Einkaufsbeutel reißt: Zugkraft wird zu groß für das Material.", zh:"购物袋裂开时就能看到力学：拉力超过材料承受。" },
+{ cat:"Technik", de:"Je dünner ein Material, desto schneller erreicht es kritische Spannungen, besonders an kleinen Rissen.", zh:"材料越薄越容易达到临界应力，尤其在小裂口处。" },
+{ cat:"Technik", de:"Wenn man Klebeband abzieht, spürt man, wie Adhäsion und Ablösewinkel bestimmen, wie leicht es sich lösen lässt.", zh:"撕胶带能感觉到：粘附力和剥离角度决定它多容易脱开。" },
+{ cat:"Technik", de:"Ein flacher Ablösewinkel fühlt sich oft leichter an als ein senkrechter, weil die Kräfte anders verteilt sind.", zh:"小角度剥离往往更省力，因为力的分布不同。" },
+{ cat:"Technik", de:"Eine gute Mechanik-Erklärung ist oft ein gutes Bild: Hebel, Rampe, Feder – das sind verständliche Modelle.", zh:"好的力学解释常来自好比喻：杠杆、斜坡、弹簧——都是易懂模型。" },
+
+// 176–200
+{ cat:"Technik", de:"Wenn man eine Schublade zuwirft, wirkt ein Stoß; Soft-Close-Systeme verlängern die Bremszeit und schonen das Material.", zh:"抽屉猛关会产生冲击；缓冲闭合通过延长减速时间来保护材料。" },
+{ cat:"Technik", de:"Soft-Close ist im Grunde Dämpfungstechnik, die Energie kontrolliert abbaut.", zh:"缓冲闭合本质上是阻尼技术，把能量可控消耗掉。" },
+{ cat:"Technik", de:"Wenn ein Kinderstuhl wackelt, hilft oft, Schrauben nachzuziehen, weil Vibrationen sie langsam lösen.", zh:"儿童椅晃动时，拧紧螺丝常能解决，因为振动会慢慢松动。" },
+{ cat:"Technik", de:"Eine Unterlegscheibe verteilt die Kraft eines Schraubenkopfs auf eine größere Fläche und schützt weiches Material.", zh:"垫圈把螺丝头的力分散到更大面积，保护软材料。" },
+{ cat:"Technik", de:"Wenn man ein Bild aufhängt, ist nicht nur die Schraube wichtig, sondern auch der Winkel der Aufhängung.", zh:"挂画不仅螺丝重要，挂绳的角度也重要。" },
+{ cat:"Technik", de:"Je steiler die Aufhängung, desto größer die Zugkraft in der Schnur – das überrascht viele.", zh:"挂绳越陡，绳子里的拉力越大——很多人会惊讶。" },
+{ cat:"Technik", de:"Ein Regalbrett biegt sich weniger durch, wenn es höher ist oder wenn es eine Verstärkung an der Kante hat.", zh:"搁板更高或边缘加固时，弯曲会更小。" },
+{ cat:"Technik", de:"Wenn man ein Brett nur an den Enden stützt, ist die Durchbiegung in der Mitte am größten.", zh:"木板只在两端支撑时，中间挠度最大。" },
+{ cat:"Technik", de:"Eine zusätzliche Stütze in der Mitte halbiert nicht nur die Spannweite, sondern wirkt oft überproportional stabilisierend.", zh:"中间加支撑不只是把跨度减半，稳定提升往往更明显。" },
+{ cat:"Technik", de:"Mechanik kann man lernen, indem man Alltagsgegenstände beobachtet und fragt: Wo gehen die Kräfte hin?", zh:"学力学可以从观察日常物件开始：力都往哪里走？" },
+{ cat:"Technik", de:"Wenn ein Kleiderbügel bricht, passiert das meist an der dünnsten Stelle, wo Spannung konzentriert ist.", zh:"衣架断裂通常发生在最薄处，因为应力集中。" },
+{ cat:"Technik", de:"Bei Fahrrädern sieht man Mechanik schön: Kettenzug, Übersetzung, Bremskräfte und Rahmensteifigkeit.", zh:"自行车是力学的好例子：链条拉力、传动比、制动力和车架刚度。" },
+{ cat:"Technik", de:"Eine Felgenbremse wandelt Bewegungsenergie in Wärme um; nach langer Abfahrt kann man die Wärme sogar riechen.", zh:"圈刹把动能变成热；长下坡后甚至能闻到热味。" },
+{ cat:"Technik", de:"Scheibenbremsen funktionieren ähnlich, aber sie halten Leistung besser, weil Wärme anders abgeführt wird.", zh:"碟刹原理类似，但散热方式不同，性能更稳定。" },
+{ cat:"Technik", de:"Wenn Bremsen nass sind, sinkt die Reibung kurzzeitig, weshalb man nach Pfützen vorsichtig bremsen sollte.", zh:"刹车进水会短暂降低摩擦，所以过水后要小心制动。" },
+{ cat:"Technik", de:"Mechanische Systeme wirken zuverlässiger, wenn man Geräusche ernst nimmt: Quietschen ist oft ein Hinweis auf Reibung am falschen Ort.", zh:"机械系统的异响要重视：吱吱声常提示不该有的摩擦。" },
+{ cat:"Technik", de:"Wenn eine Tür schleift, ist das oft eine kleine Geometriefrage: ein Millimeter macht schon viel aus.", zh:"门蹭地多半是小几何问题：差一毫米影响就很大。" },
+{ cat:"Technik", de:"Beim Möbelaufbau hilft es, Schrauben erst leicht anzusetzen und erst am Ende festzuziehen, damit sich alles ausrichten kann.", zh:"装家具时先把螺丝轻轻拧上，最后再拧紧，便于对齐。" },
+{ cat:"Technik", de:"Wenn man alle Schrauben sofort festzieht, kann das Gestell schief werden, weil es keine Chance zum Ausgleichen hat.", zh:"一开始就拧死所有螺丝，框架可能会歪，因为无法调整。" },
+{ cat:"Technik", de:"Eine Wasserwaage ist ein einfaches Instrument, das zeigt, wie wichtig Geometrie für stabile Mechanik ist.", zh:"水平尺是简单工具，却说明几何对稳定机械有多重要。" },
+{ cat:"Technik", de:"Auch beim Bilderrahmen gilt: Gerade ausgerichtet sieht nicht nur besser aus, sondern verteilt Kräfte oft gleichmäßiger.", zh:"相框摆正不仅更好看，也常让受力更均匀。" },
+{ cat:"Technik", de:"Mechanik im Alltag ist letztlich die Frage, wie man mit wenig Aufwand zuverlässig Bewegung, Halt und Sicherheit bekommt.", zh:"日常力学归根结底就是：如何用较小付出获得可靠的运动、支撑与安全。" },
+{ cat:"Technik", de:"Wer diese Grundlagen versteht, erkennt in vielen Geräten keine Magie, sondern kluge Kombinationen aus Hebeln, Reibung und Material.", zh:"懂了这些基础，就会在许多设备里看到的不是魔法，而是杠杆、摩擦与材料的巧妙组合。" },
+
+// Technik – 200 Satzpaare (Alltagstechnik: Auto, Haushaltsgeräte; gebildeter Sprachgebrauch, nicht zu fachlich)
+// Kategorie: "Technik"
+
+// 1–25 Auto
+{ cat:"Technik", de:"Wenn das Auto morgens schwer anspringt, liegt es häufig an einer schwachen Batterie und nicht sofort am Anlasser.", zh:"车早上启动困难，往往是电瓶虚弱，而不一定是起动机坏了。" },
+{ cat:"Technik", de:"Eine Batterie altert schleichend; man merkt es oft erst, wenn es kalt wird und die Reserve plötzlich fehlt.", zh:"电瓶会渐进老化；常到天冷时才发现余量突然不够。" },
+{ cat:"Technik", de:"Wer Kurzstrecken fährt, lädt die Batterie oft nicht vollständig, weil der Motor zu kurz läuft.", zh:"经常短途行驶会让电瓶难以充满，因为发动机运行时间太短。" },
+{ cat:"Technik", de:"Wenn die Start-Stopp-Automatik ausbleibt, kann das ein Hinweis sein, dass die Batterie geschont wird.", zh:"启停功能不工作可能提示系统在保护电瓶。" },
+{ cat:"Technik", de:"Ein gleichmäßiger Reifendruck spart nicht nur Kraftstoff, sondern verbessert auch das Fahrverhalten bei Nässe.", zh:"胎压均衡不仅省油，也能改善湿地操控。" },
+{ cat:"Technik", de:"Wenn das Lenkrad vibriert, sind oft die Räder schlecht ausgewuchtet oder ein Reifen hat einen Schlag.", zh:"方向盘抖动，多半是轮胎动平衡不好或轮胎变形。" },
+{ cat:"Technik", de:"Unwucht fühlt sich bei bestimmten Geschwindigkeiten stärker an, weil sich Schwingungen dann besonders aufschaukeln.", zh:"不平衡在某些速度更明显，因为振动会在该区间被放大。" },
+{ cat:"Technik", de:"Ein leises Pfeifen beim Fahren kann von einem undichten Fenster oder einem schlecht sitzenden Spiegel kommen.", zh:"行驶时轻微啸声可能来自车窗漏风或后视镜松动。" },
+{ cat:"Technik", de:"Wenn die Klimaanlage muffig riecht, hilft oft ein frischer Innenraumfilter und ein Trocknungszyklus vor dem Abstellen.", zh:"空调有霉味时，换空调滤芯并在熄火前吹干通常有效。" },
+{ cat:"Technik", de:"Viele vergessen den Innenraumfilter, obwohl er entscheidend für Luftqualität und Beschlagfreiheit ist.", zh:"很多人忘了空调滤芯，但它对空气质量和防雾很关键。" },
+{ cat:"Technik", de:"Wenn Scheiben schnell beschlagen, ist die Luftfeuchtigkeit hoch; dann hilft Lüften oder die Klimaanlage als Entfeuchter.", zh:"车窗很快起雾说明湿度高；通风或开空调除湿会有用。" },
+{ cat:"Technik", de:"Die Defrost-Taste wirkt so gut, weil sie Luftstrom, Temperatur und Entfeuchtung gleichzeitig optimiert.", zh:"除雾键效果好，是因为它同时优化风量、温度和除湿。" },
+{ cat:"Technik", de:"Wenn die Scheibenwischer schmieren, ist oft die Scheibe fettig; Reinigen bringt manchmal mehr als neue Wischer.", zh:"雨刷刮花常是玻璃有油膜；清洁有时比换雨刷更有效。" },
+{ cat:"Technik", de:"Neue Wischerblätter sind sinnvoll, wenn das Gummi spröde ist oder die Kante ungleichmäßig abnutzt.", zh:"雨刷胶条变硬或边缘磨损不均时，换新才有意义。" },
+{ cat:"Technik", de:"Wenn das Auto beim Bremsen nach einer Seite zieht, kann ein Bremsbelag ungleich greifen oder ein Reifenproblem vorliegen.", zh:"刹车时车偏向一侧，可能是刹车片受力不均或轮胎问题。" },
+{ cat:"Technik", de:"Ein weicher Bremspedalweg kann auf Luft im System hinweisen; das sollte man nicht auf die leichte Schulter nehmen.", zh:"刹车踏板发软可能意味着系统有空气，这不能掉以轻心。" },
+{ cat:"Technik", de:"Bremsen wandeln Bewegungsenergie in Wärme um; deshalb riecht es nach langen Abfahrten manchmal „heiß“.", zh:"刹车把动能变成热；长下坡后有时会闻到“热味”。" },
+{ cat:"Technik", de:"Wenn die Motortemperatur schwankt, ist das oft ein Hinweis auf Thermostat oder Kühlmittelstand.", zh:"发动机温度波动常提示节温器或冷却液液位问题。" },
+{ cat:"Technik", de:"Kühlmittel ist nicht nur Wasser; es schützt auch vor Korrosion und Frost.", zh:"冷却液不只是水，它还防腐和防冻。" },
+{ cat:"Technik", de:"Wer im Winter nur Wasser nachfüllt, riskiert Frostschäden im Kühlsystem.", zh:"冬天只加水可能导致冷却系统冻裂。" },
+{ cat:"Technik", de:"Wenn eine Warnlampe angeht, lohnt es sich, die Bedeutung im Handbuch nachzuschlagen, statt zu raten.", zh:"警示灯亮起时，查手册比瞎猜更可靠。" },
+{ cat:"Technik", de:"Viele Warnlampen sind gelb als Hinweis und rot als Aufforderung zum sofortigen Handeln.", zh:"很多警示灯黄色是提示，红色则要求立刻处理。" },
+{ cat:"Technik", de:"Ein moderner Motor mag kurze Strecken, aber er erreicht dabei oft nicht die optimale Betriebstemperatur.", zh:"现代发动机能跑短途，但往往达不到最佳工作温度。" },
+{ cat:"Technik", de:"Wenn der Verbrauch steigt, kann das am Reifendruck, am Fahrstil oder an einem verschmutzten Luftfilter liegen.", zh:"油耗上升可能与胎压、驾驶习惯或空气滤清器脏有关。" },
+
+// 26–50 Auto
+{ cat:"Technik", de:"Ein Luftfilter ist unscheinbar, aber er bestimmt, wie frei der Motor atmen kann.", zh:"空气滤清器不起眼，但决定发动机呼吸是否顺畅。" },
+{ cat:"Technik", de:"Wenn der Motor „träge“ wirkt, kann ein verschmutzter Filter oder schlechter Kraftstoff eine Rolle spielen.", zh:"发动机感觉“没劲”，可能与滤芯脏或燃油质量有关。" },
+{ cat:"Technik", de:"Ein gleichmäßiges Brummen kann normal sein, aber plötzlich neue Geräusche sollte man ernst nehmen.", zh:"均匀的嗡声可能正常，但突然出现的新异响要重视。" },
+{ cat:"Technik", de:"Wenn es beim Lenken knackt, kann ein Gelenk verschlissen sein; das zeigt sich oft zuerst beim Rangieren.", zh:"转向时咔咔响可能是关节磨损，常在倒车挪车时先出现。" },
+{ cat:"Technik", de:"Eine Servolenkung erleichtert das Drehen, aber wenn sie ausfällt, merkt man, wie viel Kraft sonst nötig wäre.", zh:"助力转向让打方向更轻，一旦失效就能体会到原本需要多大力。" },
+{ cat:"Technik", de:"Wenn die Lenkung schwergängig wird, kann das an niedrigem Druck im System oder an einem defekten Sensor liegen.", zh:"转向变沉可能是系统压力不足或传感器故障。" },
+{ cat:"Technik", de:"Moderne Autos melden viele Dinge digital; trotzdem hilft es, regelmäßig Ölstand und Reifen visuell zu prüfen.", zh:"现代车很多信息数字提示，但定期目测机油和轮胎仍然有用。" },
+{ cat:"Technik", de:"Öl ist nicht nur Schmierung, sondern auch Kühlung und Reinigung im Motor.", zh:"机油不只润滑，还参与散热和清洁。" },
+{ cat:"Technik", de:"Wenn man Öl zu lange fährt, verliert es Eigenschaften und kann Ablagerungen begünstigen.", zh:"机油用太久会性能下降并促使积碳沉积。" },
+{ cat:"Technik", de:"Ein Ölwechsel ist oft günstiger als Reparaturen, die aus vernachlässigter Schmierung entstehen.", zh:"换机油通常比因润滑忽视造成的维修便宜得多。" },
+{ cat:"Technik", de:"Wenn der Motor im Leerlauf unruhig läuft, können Zündkerzen oder Luftzufuhr eine Rolle spielen.", zh:"怠速不稳可能与火花塞或进气有关。" },
+{ cat:"Technik", de:"Zündkerzen sind kleine Teile mit großer Wirkung; wenn sie verschleißen, leidet Start und Laufkultur.", zh:"火花塞小却关键，磨损后启动和运转平顺性都会变差。" },
+{ cat:"Technik", de:"Wenn das Auto im Winter innen feucht bleibt, helfen Gummimatten und das Trocknen von nassen Schuhen.", zh:"冬天车内潮湿，橡胶脚垫和晾干湿鞋会有帮助。" },
+{ cat:"Technik", de:"Feuchtigkeit im Auto beschlägt nicht nur Scheiben, sie kann auch Elektronik und Gerüche fördern.", zh:"车内湿气不仅起雾，还会影响电子设备并产生异味。" },
+{ cat:"Technik", de:"Eine Heckklappe schließt schlecht, wenn der Schlossmechanismus verschmutzt oder die Dichtung verformt ist.", zh:"后备箱盖难关，多半是锁机构脏或密封条变形。" },
+{ cat:"Technik", de:"Schmieren hilft manchmal, aber bei sicherheitsrelevanten Teilen sollte man lieber fachkundig prüfen lassen.", zh:"润滑有时能解决，但涉及安全的部件最好让专业人士检查。" },
+{ cat:"Technik", de:"Wenn ein Auto lange steht, kann die Batterie entladen und die Reifen können Standplatten bekommen.", zh:"车久停会导致电瓶亏电，轮胎也可能出现驻点变形。" },
+{ cat:"Technik", de:"Ein Standplattengefühl verschwindet oft nach einigen Kilometern, sollte aber beobachtet werden.", zh:"驻点导致的颠簸感常在开几公里后减轻，但仍应留意。" },
+{ cat:"Technik", de:"Wenn die Türdichtung im Winter festfriert, hilft es, sie vorher zu pflegen, statt sie mit Gewalt zu lösen.", zh:"冬天车门密封条冻住时，提前保养比硬拽更好。" },
+{ cat:"Technik", de:"Bei Frost sollte man den Wischer nicht trocken über Eis ziehen, weil das Gummi sonst schnell beschädigt wird.", zh:"结冰时不要干刮雨刷，否则胶条很快损坏。" },
+{ cat:"Technik", de:"Die Handbremse kann bei starkem Frost festfrieren; dann ist eine alternative Sicherung sinnvoll.", zh:"严寒时手刹可能冻住，此时用其他方式固定更稳妥。" },
+{ cat:"Technik", de:"Wenn der Tank fast leer ist, kann Kondenswasser eher ein Problem werden, besonders bei starken Temperaturwechseln.", zh:"油箱几乎见底时更易产生冷凝水，尤其温差大时。" },
+{ cat:"Technik", de:"Ein modernes Infotainment ist komfortabel, aber es lenkt ab, wenn man es während der Fahrt bedienen will.", zh:"车载娱乐系统很方便，但行驶中操作会分心。" },
+{ cat:"Technik", de:"Gute Sprachsteuerung ist praktisch, wenn sie zuverlässig ist und nicht jedes Mal neu nachfragen muss.", zh:"语音控制可靠时很实用，最怕它反复追问。" },
+
+// 51–75 Haushaltsgeräte
+{ cat:"Technik", de:"Wenn die Waschmaschine muffig riecht, liegt das oft daran, dass sie zu oft kalt läuft und innen feucht bleibt.", zh:"洗衣机有霉味，往往是低温洗太多、内部长期潮湿。" },
+{ cat:"Technik", de:"Ein heißer Waschgang zwischendurch hilft, Ablagerungen zu lösen und Gerüche zu reduzieren.", zh:"偶尔高温洗能溶解沉积并减轻异味。" },
+{ cat:"Technik", de:"Wer nach dem Waschen die Tür offen lässt, verlängert die Lebensdauer, weil weniger Schimmel entsteht.", zh:"洗完把门敞开能延长寿命，因为霉菌更难滋生。" },
+{ cat:"Technik", de:"Zu viel Waschmittel macht Wäsche nicht sauberer, sondern kann Rückstände hinterlassen.", zh:"洗涤剂放太多不会更干净，反而会残留。" },
+{ cat:"Technik", de:"Wenn Handtücher hart werden, kann das am Kalk im Wasser oder an zu viel Waschmittel liegen.", zh:"毛巾变硬可能是水垢或洗涤剂过量导致。" },
+{ cat:"Technik", de:"Ein Trockner spart Zeit, aber Flusenfilter und Wärmetauscher wollen regelmäßig gereinigt werden.", zh:"烘干机省时，但绒毛滤网和换热器要定期清洁。" },
+{ cat:"Technik", de:"Wenn der Trockner länger braucht, ist oft der Luftweg verstopft und nicht plötzlich die Heizung defekt.", zh:"烘干变慢多半是风道堵了，而不是加热器突然坏了。" },
+{ cat:"Technik", de:"Ein Staubsauger verliert Saugkraft, wenn Beutel oder Filter voll sind, selbst wenn der Motor noch stark ist.", zh:"吸尘器吸力下降，多因尘袋或滤网满了，即便电机仍有力。" },
+{ cat:"Technik", de:"Ein HEPA-Filter kann Luft reinigen, muss aber rechtzeitig gewechselt werden, sonst wird er zur Bremse.", zh:"HEPA滤网能净化空气，但要及时更换，否则会变成阻力。" },
+{ cat:"Technik", de:"Wenn der Staubsauger pfeift, ist oft irgendwo eine Verengung, die Luft beschleunigt und Geräusche erzeugt.", zh:"吸尘器尖叫通常是某处狭窄导致气流加速并发声。" },
+{ cat:"Technik", de:"In der Spülmaschine entscheidet die Beladung: Zu dicht gestapelt heißt schlechte Wasserverteilung.", zh:"洗碗机装载方式很关键：堆得太密会导致水流分配差。" },
+{ cat:"Technik", de:"Wenn Gläser milchig werden, kann das an zu viel Reiniger, zu hoher Temperatur oder am Wasser liegen.", zh:"玻璃发雾可能是洗涤剂过多、温度过高或水质原因。" },
+{ cat:"Technik", de:"Ein sauberer Siebfilter in der Spülmaschine verhindert, dass Essensreste den Ablauf verstopfen.", zh:"洗碗机滤网干净可防止残渣堵住排水。" },
+{ cat:"Technik", de:"Wenn die Spülmaschine riecht, hilft oft, die Dichtung zu reinigen, weil sich dort Fett sammelt.", zh:"洗碗机有味道时，清洁密封圈常有效，因为那里易积油。" },
+{ cat:"Technik", de:"Ein Kühlschrank kühlt besser, wenn er nicht überfüllt ist, weil Luft zirkulieren muss.", zh:"冰箱不塞满更制冷，因为需要空气循环。" },
+{ cat:"Technik", de:"Wenn der Kühlschrank ständig brummt, kann er zu nah an der Wand stehen und seine Wärme nicht abgeben.", zh:"冰箱一直嗡嗡响可能是贴墙太近散热不好。" },
+{ cat:"Technik", de:"Warmes Essen sollte man kurz abkühlen lassen, bevor es in den Kühlschrank kommt, sonst steigt der Energiebedarf.", zh:"热食应先稍微放凉再进冰箱，否则能耗会增加。" },
+{ cat:"Technik", de:"Eine Dichtung am Kühlschrank ist unscheinbar, aber wenn sie undicht ist, läuft der Kompressor länger.", zh:"冰箱密封条不起眼，但漏气会让压缩机更久运转。" },
+{ cat:"Technik", de:"Wenn der Ofen ungleichmäßig backt, kann das am Blech, an der Umluft oder an einem verschmutzten Sensor liegen.", zh:"烤箱受热不均可能与烤盘、热风或传感器脏有关。" },
+{ cat:"Technik", de:"Umluft verteilt Wärme gleichmäßiger, aber manche Speisen trocknen schneller aus, wenn man nicht aufpasst.", zh:"热风能更均匀分热，但有些食物不注意会更易变干。" },
+{ cat:"Technik", de:"Ein Wasserkocher verkalkt besonders schnell bei hartem Wasser; regelmäßiges Entkalken spart Energie.", zh:"硬水地区电水壶更易结垢；定期除垢更省电。" },
+{ cat:"Technik", de:"Kalk ist nicht nur ein Schönheitsproblem, sondern isoliert die Heizfläche und verlangsamt das Erhitzen.", zh:"水垢不只是影响观感，它会隔热，让加热变慢。" },
+{ cat:"Technik", de:"Wenn die Kaffeemaschine langsam wird, ist das oft Kalk und kein mysteriöser Defekt.", zh:"咖啡机变慢多半是水垢，不是什么神秘故障。" },
+{ cat:"Technik", de:"Viele Geräte danken es, wenn man sie nach Gebrauch trocken wischt, weil Feuchtigkeit Korrosion fördert.", zh:"很多设备用后擦干会更耐用，因为潮气会促使腐蚀。" },
+
+// 76–100 Haushaltsgeräte
+{ cat:"Technik", de:"Ein Induktionsherd wirkt „magisch“, aber er erhitzt den Topf durch ein Magnetfeld, nicht die Platte selbst.", zh:"电磁炉看似“魔法”，其实是通过磁场加热锅具，不是加热面板本身。" },
+{ cat:"Technik", de:"Wenn ein Topf auf Induktion nicht funktioniert, ist er meist nicht magnetisch genug.", zh:"锅在电磁炉上不工作，多半是磁性不够。" },
+{ cat:"Technik", de:"Eine Mikrowelle erwärmt Speisen ungleichmäßig, weshalb Umrühren oft wichtiger ist als mehr Zeit.", zh:"微波加热不均，所以搅拌往往比加时间更重要。" },
+{ cat:"Technik", de:"Wenn die Mikrowelle riecht, hilft häufig ein kurzer Dampf mit Zitronenwasser, um Gerüche zu lösen.", zh:"微波炉有味道，柠檬水蒸一蒸常能去味。" },
+{ cat:"Technik", de:"Ein Toaster sollte regelmäßig von Krümeln befreit werden, weil alte Krümel leicht anbrennen.", zh:"烤面包机要定期清理碎屑，否则易焦糊。" },
+{ cat:"Technik", de:"Ein Mixer wirkt stärker, wenn man zuerst Flüssigkeit einfüllt, weil die Messer dann nicht trocken blockieren.", zh:"搅拌机先加液体会更顺，因为刀片不至于干转卡住。" },
+{ cat:"Technik", de:"Bei Küchengeräten ist Überlastung ein häufiger Fehler: zu viel auf einmal heißt mehr Hitze und mehr Verschleiß.", zh:"厨房电器常见问题是超负荷：一次塞太多会更热更磨损。" },
+{ cat:"Technik", de:"Wenn ein Gerät heiß riecht, sollte man es nicht ignorieren, sondern prüfen, ob Lüftungsschlitze frei sind.", zh:"电器有热焦味不要忽视，应检查通风口是否被堵。" },
+{ cat:"Technik", de:"Ein Föhn funktioniert besser, wenn der Filter hinten sauber ist; sonst muss der Motor gegen Widerstand arbeiten.", zh:"吹风机后部滤网干净时效果更好，否则电机要顶着阻力转。" },
+{ cat:"Technik", de:"Wenn ein Wasserhahn tropft, ist oft eine Dichtung verschlissen; das ist kleine Technik mit großer Wirkung auf die Wasserrechnung.", zh:"水龙头滴水多半是密封圈磨损，这小问题对水费影响却不小。" },
+{ cat:"Technik", de:"Ein Perlator am Wasserhahn spart Wasser, weil er Luft untermischt und den Strahl voluminös wirken lässt.", zh:"水龙头起泡器省水，因为混入空气让水流看起来更大。" },
+{ cat:"Technik", de:"Wenn der Duschkopf verkalkt, helfen Entkalker oder Essig, weil Kalk die Düsen verstopft.", zh:"花洒结垢可用除垢剂或醋处理，因为水垢会堵喷孔。" },
+{ cat:"Technik", de:"Ein Boiler braucht Zeit, um nachzuheizen; wer kurz nacheinander duscht, merkt das am Ende.", zh:"热水器回温需要时间；连续洗澡就会在后面感觉到水变凉。" },
+{ cat:"Technik", de:"Bei Energiesparprogrammen dauert es länger, weil weniger Temperatur mit mehr Zeit kompensiert wird.", zh:"节能模式时间更长，因为用更低温度配更长时间来补偿。" },
+{ cat:"Technik", de:"Eine LED-Lampe spart Strom, aber billige Modelle flackern manchmal, was man besonders mit dem Augenwinkel wahrnimmt.", zh:"LED省电，但便宜款有时会闪，侧眼更容易察觉。" },
+{ cat:"Technik", de:"Wenn eine Lampe brummt, kann das am Netzteil oder Dimmer liegen, der nicht zur LED passt.", zh:"灯嗡嗡响可能是电源或调光器与LED不匹配。" },
+{ cat:"Technik", de:"Ein Dimmer muss zur Technik passen; sonst hat man statt Stimmung nur Störungen.", zh:"调光器要与灯具匹配，否则只会有故障没有氛围。" },
+{ cat:"Technik", de:"Bei smarten Steckdosen lohnt es sich, auf den Verbrauch im Standby zu achten, damit der Spartipp nicht ins Gegenteil kippt.", zh:"用智能插座要注意自身待机功耗，别让省电变成反效果。" },
+{ cat:"Technik", de:"Ein WLAN-Router steht besser frei als im Schrank, weil Wände und Metall das Signal dämpfen.", zh:"路由器最好摆开放处，而不是柜子里，因为墙和金属会衰减信号。" },
+{ cat:"Technik", de:"Wenn das WLAN abbricht, hilft manchmal ein Neustart, aber oft ist der Standort das eigentliche Problem.", zh:"Wi-Fi断线时重启有时有用，但位置往往才是根本问题。" },
+{ cat:"Technik", de:"Ein Staubsaugerroboter ist praktisch, aber er braucht eine aufgeräumte Fläche, sonst bleibt er an Kabeln hängen.", zh:"扫地机器人很方便，但地面要整理，否则会被电线绊住。" },
+{ cat:"Technik", de:"Wenn ein Roboter ständig hängen bleibt, hilft es, Kabel zu bündeln und Teppichkanten zu sichern.", zh:"机器人总卡住时，束线并固定地毯边缘会有帮助。" },
+{ cat:"Technik", de:"Technik im Haushalt spart Zeit, wenn sie zum Alltag passt; sonst schafft sie neue Aufgaben.", zh:"家用技术只有融入日常才省时间，否则只是制造新任务。" },
+{ cat:"Technik", de:"Eine gute Bedienungsanleitung ist nicht nur Papier, sondern ein Teil des Produkts, weil sie Fehler vermeidet.", zh:"好的说明书不只是纸张，而是产品的一部分，因为它能减少误用。" },
+
+// 101–125 Auto & Haushalt gemischt
+{ cat:"Technik", de:"Wenn die Autobeleuchtung schwach wirkt, ist nicht immer die Lampe schuld; matte Scheinwerfergläser streuen Licht.", zh:"车灯变暗不一定是灯泡问题；灯罩发黄会散射光。" },
+{ cat:"Technik", de:"Scheinwerfer werden klarer, wenn man sie aufbereitet, aber langfristig schützt eine Versiegelung vor erneutem Vergilben.", zh:"翻新车灯能变清晰，但长期要靠封釉/保护层防再次发黄。" },
+{ cat:"Technik", de:"Wenn das Auto ungewöhnlich viel Scheibenwaschwasser braucht, ist oft eine Düse verstellt oder eine Leitung undicht.", zh:"玻璃水耗得异常快，多半是喷嘴偏了或管路漏了。" },
+{ cat:"Technik", de:"Ein korrekt eingestellter Sprühstrahl trifft die Scheibe besser und spart Flüssigkeit.", zh:"喷嘴调准后更能喷到玻璃，也更省液体。" },
+{ cat:"Technik", de:"Bei Frost braucht man Winter-Scheibenreiniger; sonst friert die Anlage ein und die Sicht wird gefährlich.", zh:"结冰时要用冬季玻璃水，否则系统会冻住，视野很危险。" },
+{ cat:"Technik", de:"Wenn das Auto nach dem Start kurz quietscht, kann ein Riemen rutschen, der sich erst bei Wärme beruhigt.", zh:"启动后短暂尖叫可能是皮带打滑，热起来才稳定。" },
+{ cat:"Technik", de:"Ein Geräusch, das nur bei Nässe auftritt, deutet oft auf Riemen oder Bremsen hin.", zh:"只在潮湿时出现的异响常提示皮带或刹车问题。" },
+{ cat:"Technik", de:"Wenn die Türfernbedienung schwächer wird, ist meist die Knopfzelle leer, nicht das Auto „launisch“.", zh:"遥控钥匙不灵多半是纽扣电池没电，不是车“闹脾气”。" },
+{ cat:"Technik", de:"Wenn man den Schlüssel weiter weg halten muss, ist das ein typisches Zeichen für sinkende Batterieleistung.", zh:"必须把钥匙凑近才好用，是电量下降的典型信号。" },
+{ cat:"Technik", de:"Viele Haushaltsgeräte haben Energiesparmodi, aber sie funktionieren nur, wenn man sie konsequent nutzt.", zh:"很多家电有节能模式，但只有坚持使用才有效果。" },
+{ cat:"Technik", de:"Ein Kühlschrank auf zu niedriger Temperatur verbraucht mehr Strom, ohne Lebensmittel deutlich besser zu schützen.", zh:"冰箱设得过冷会更耗电，但对食物保护并不会明显更好。" },
+{ cat:"Technik", de:"Wenn man den Kühlschrank regelmäßig abtaut, arbeitet er effizienter, weil Eis wie eine Isolationsschicht wirkt.", zh:"定期除霜能让冰箱更省电，因为冰层像隔热层。" },
+{ cat:"Technik", de:"Ein Gefrierfach mit dicker Eisschicht kostet Geld, weil der Kompressor länger laufen muss.", zh:"冷冻室结厚冰费钱，因为压缩机要运转更久。" },
+{ cat:"Technik", de:"Wenn die Dichtung an der Gefriertruhe nicht sauber ist, zieht sie Luft, und es bildet sich schneller Eis.", zh:"冷柜密封条不干净会漏气，结冰就更快。" },
+{ cat:"Technik", de:"Eine Küchenwaage wirkt banal, aber sie verhindert viele Backfehler, weil Volumenangaben oft ungenau sind.", zh:"厨房秤看似普通，却能避免很多烘焙失误，因为体积量往往不准。" },
+{ cat:"Technik", de:"Wenn ein Ofen vorheizt, lohnt es sich, die Temperatur wirklich abzuwarten, weil viele Rezepte darauf aufbauen.", zh:"烤箱预热要等到温度到位，因为很多配方依赖这一点。" },
+{ cat:"Technik", de:"Ein Thermometer im Ofen zeigt manchmal, dass die Anzeige am Gerät optimistisch ist.", zh:"烤箱温度计有时会发现面板显示偏乐观。" },
+{ cat:"Technik", de:"Bei einem Wasserkocher ist die Abschaltautomatik wichtig, aber sie funktioniert nur zuverlässig, wenn der Dampfweg frei ist.", zh:"电水壶自动断电很重要，但要蒸汽通道畅通才可靠。" },
+{ cat:"Technik", de:"Wenn der Wasserkocher nicht mehr abschaltet, sollte man ihn nicht weiter benutzen, sondern prüfen lassen.", zh:"水壶不再自动断电时应停用并检查。" },
+{ cat:"Technik", de:"Ein Staubsaugerroboter ist am besten, wenn man ihm klare Zonen gibt; sonst saugt er überall ein bisschen und nirgends gründlich.", zh:"扫地机器人给它明确区域最好，否则到处扫一点、哪儿都不彻底。" },
+{ cat:"Technik", de:"Wenn der Roboter in dunklen Ecken meidet, erkennt er dort oft „Abgründe“ durch Sensoren, nicht Schmutz.", zh:"机器人避开暗处常是传感器把它当“悬崖”，不是因为脏。" },
+{ cat:"Technik", de:"Technik ist zuverlässig, wenn man sie versteht; wenn nicht, wirkt sie schnell wie ein launischer Mitbewohner.", zh:"懂技术它就可靠；不懂时它很快像个脾气古怪的室友。" },
+{ cat:"Technik", de:"Wenn ein Gerät piept, ist das meist keine Schikane, sondern ein Hinweis, der Schaden verhindern soll.", zh:"电器报警多半不是折腾人，而是为了提示并避免损坏。" },
+{ cat:"Technik", de:"Ein Auto kommuniziert heute über Symbole; wer sie kennt, spart Geld und Nerven.", zh:"现代汽车用图标交流；认识它们能省钱省心。" },
+
+// 126–150 Haushaltsgeräte
+{ cat:"Technik", de:"Wenn der Kühlschrank zu voll ist, werden Lebensmittel schneller schlecht, weil kalte Luft nicht überall hinkommt.", zh:"冰箱太满会让食物更快变坏，因为冷空气到不了每个角落。" },
+{ cat:"Technik", de:"Wer Lebensmittel abdeckt, reduziert Gerüche und verhindert, dass Feuchtigkeit an falschen Stellen kondensiert.", zh:"把食物盖好能减少串味，也防止湿气在不该的地方凝结。" },
+{ cat:"Technik", de:"Eine Dunstabzugshaube arbeitet besser, wenn die Fettfilter sauber sind; sonst wird sie laut und ineffizient.", zh:"油烟机油网干净时效果更好，否则又吵又费劲。" },
+{ cat:"Technik", de:"Wenn die Haube tropft, ist oft zu viel Fett im Filter, das sich verflüssigt.", zh:"油烟机滴油，常是滤网油脂太多融化所致。" },
+{ cat:"Technik", de:"Ein Geschirrspüler reinigt besser, wenn Sprüharme frei drehen können und nicht von großen Tellern blockiert werden.", zh:"洗碗机清洁更好，前提是喷淋臂能自由转动，不被大盘子挡住。" },
+{ cat:"Technik", de:"Wenn Besteck schmutzig bleibt, liegt es oft daran, dass es zu dicht im Korb steckt.", zh:"餐具洗不干净，常是因为筷勺在篮里挤得太密。" },
+{ cat:"Technik", de:"Spülmaschinensalz ist keine Laune der Industrie, sondern schützt vor Kalk und hilft dem Ionentauscher.", zh:"洗碗机盐不是厂家花样，而是防水垢、帮助软水系统工作。" },
+{ cat:"Technik", de:"Wenn man Salz nachfüllt, sollte man danach kurz ein Programm starten, damit nichts im Bodenraum verklumpt.", zh:"加盐后最好跑一下，让底部不会结块。" },
+{ cat:"Technik", de:"Ein Wasserfilter im Kaffeevollautomaten verbessert Geschmack, muss aber rechtzeitig gewechselt werden.", zh:"全自动咖啡机的滤芯能改善口感，但要及时更换。" },
+{ cat:"Technik", de:"Wenn Kaffee plötzlich bitter wird, kann das an altem Mahlgut oder an einem verschmutzten Brühkreis liegen.", zh:"咖啡突然变苦可能是粉渣陈旧或冲煮组件脏了。" },
+{ cat:"Technik", de:"Bei einem Mixer hilft es, harte Zutaten zuerst klein zu schneiden, damit der Motor nicht unnötig kämpft.", zh:"搅拌机处理硬食材时先切小块，能减少电机负担。" },
+{ cat:"Technik", de:"Ein Pürierstab ist praktisch, aber man sollte ihn nicht trocken laufen lassen, weil die Lager Schaden nehmen können.", zh:"手持搅拌棒很方便，但不要空转，否则轴承可能受损。" },
+{ cat:"Technik", de:"Ein Bügeleisen gleitet besser, wenn die Sohle sauber ist; angebrannte Rückstände hinterlassen sonst Flecken.", zh:"熨斗底板干净才好滑；烧焦残留会留下污渍。" },
+{ cat:"Technik", de:"Dampf hilft beim Bügeln, weil er Fasern entspannt; zu viel Dampf kann aber empfindliche Stoffe verziehen.", zh:"蒸汽熨烫是因为它让纤维松弛；但蒸汽过多会让敏感面料变形。" },
+{ cat:"Technik", de:"Wenn ein Wasserbehälter leckt, ist oft eine Dichtung verschoben, nicht der ganze Tank kaputt.", zh:"水箱漏水多半是密封圈错位，不一定是水箱坏了。" },
+{ cat:"Technik", de:"Ein Luftreiniger wirkt nur, wenn er zur Raumgröße passt und nicht in einer Ecke erstickt.", zh:"空气净化器要匹配房间大小，且不要塞在角落里，才能有效。" },
+{ cat:"Technik", de:"Wenn ein Ventilator staubig ist, wird er lauter und ineffizient, weil die Blätter aerodynamisch schlechter werden.", zh:"风扇积灰后更吵也更费劲，因为叶片气动性能变差。" },
+{ cat:"Technik", de:"Ein Saugroboter braucht freie Sensoren; ein Film aus Staub kann seine „Welt“ verfälschen.", zh:"扫地机器人传感器要干净；一层灰就会让它“误判世界”。" },
+{ cat:"Technik", de:"Wenn ein Gerät überhitzt, ist das oft ein Luftproblem: verstopfte Filter oder abgedeckte Lüftungsschlitze.", zh:"电器过热常是“空气问题”：滤网堵或通风口被遮挡。" },
+{ cat:"Technik", de:"Ein Ladegerät wird warm, weil es Energie umwandelt; heiß wird es, wenn es schlecht belüftet oder überfordert ist.", zh:"充电器会发温是能量转换；变烫往往是通风差或负载过大。" },
+{ cat:"Technik", de:"Mehrfachsteckdosen sind praktisch, aber man sollte sie nicht hintereinander stecken und große Verbraucher bündeln.", zh:"排插方便，但不应串联，也别把大功率设备都堆在一起。" },
+{ cat:"Technik", de:"Ein Wasserkocher auf einer wackligen Basis ist nicht nur nervig, sondern auch ein Sicherheitsrisiko.", zh:"水壶底座不稳不仅烦，还存在安全风险。" },
+{ cat:"Technik", de:"Wenn der Toaster nur noch ungleich bräunt, kann ein Heizdraht gealtert sein oder Krümel behindern die Wärme.", zh:"烤面包机烤得不均，可能是发热丝老化或碎屑影响加热。" },
+{ cat:"Technik", de:"Alltagstechnik wird besser, wenn man sie pflegt; die meisten Geräte sterben nicht am Alter, sondern an Vernachlässigung.", zh:"家用技术用得久靠保养；多数设备不是老死，而是被忽视“耗死”。" },
+
+// 151–175 Auto & Haushalt
+{ cat:"Technik", de:"Wenn das Auto innen nach Benzin riecht, sollte man nicht lange warten, weil es auf eine Undichtigkeit hinweisen kann.", zh:"车内有汽油味不应拖延，可能提示泄漏。" },
+{ cat:"Technik", de:"Ein süßlicher Geruch kann auf Kühlmittel hindeuten; das ist ein Hinweis, den man ernst nimmt.", zh:"甜腻味可能是冷却液气味，这是需要重视的信号。" },
+{ cat:"Technik", de:"Wenn der Motorraum nach heißem Öl riecht, kann ein kleiner Tropfen auf heißen Teilen schon reichen.", zh:"发动机舱有热油味，哪怕少量油滴到热部件上也会有明显气味。" },
+{ cat:"Technik", de:"Ein erhöhter Ölverbrauch ist nicht immer dramatisch, aber er sollte dokumentiert werden, um Trends zu erkennen.", zh:"机油消耗增加不一定立刻严重，但应记录以看出趋势。" },
+{ cat:"Technik", de:"Wenn die Fensterheber langsamer werden, kann das an schwacher Batterie oder an trockenen Führungen liegen.", zh:"车窗升降变慢可能是电瓶弱或导轨干涩。" },
+{ cat:"Technik", de:"Türscharniere danken ein wenig Pflege, weil trockene Gelenke nicht nur quietschen, sondern auch schneller verschleißen.", zh:"车门铰链稍加保养很受益；干涩关节不仅会响，也会更快磨损。" },
+{ cat:"Technik", de:"Ein Rückfahrlicht, das ausfällt, ist oft nur eine Lampe, aber es betrifft Sichtbarkeit und Sicherheit.", zh:"倒车灯不亮常只是灯泡坏，但涉及可见性和安全。" },
+{ cat:"Technik", de:"Wenn die Kamera verschmutzt ist, helfen ein Tuch und etwas Wasser mehr als hektisches Wischen im Trockenen.", zh:"倒车影像脏了，用布加点水比干擦更好。" },
+{ cat:"Technik", de:"Eine Anhängerkupplung ist praktisch, aber man sollte die elektrische Verbindung regelmäßig prüfen, bevor man losfährt.", zh:"拖车钩很实用，但出发前应检查电连接是否正常。" },
+{ cat:"Technik", de:"Bei langen Fahrten lohnt es sich, Pausen nicht nur für Menschen, sondern auch für das Auto einzuplanen.", zh:"长途行车的休息不仅为人，也能让车缓一缓。" },
+{ cat:"Technik", de:"Wenn die Kaffeemühle plötzlich lauter ist, kann das an einem Steinchen oder an verschlissenen Mahlscheiben liegen.", zh:"咖啡磨豆机突然变吵，可能是混入小石子或磨盘磨损。" },
+{ cat:"Technik", de:"Ein Wasserhahn, der pulsiert, kann auf Luft im System oder auf einen verschmutzten Perlator hinweisen.", zh:"水龙头出水忽大忽小可能是管路进气或起泡器堵了。" },
+{ cat:"Technik", de:"Wenn der Wasserstrahl seitlich spritzt, ist oft Kalk in den Düsen; Reinigen bringt sofort Verbesserung.", zh:"水流侧喷多半是喷嘴结垢；清理后立刻改善。" },
+{ cat:"Technik", de:"Ein Kühlschrank sollte nicht direkt neben dem Herd stehen, weil Wärme die Effizienz spürbar senkt.", zh:"冰箱不宜紧挨炉灶，因为热源会明显降低效率。" },
+{ cat:"Technik", de:"Wenn man die Dunstabzugshaube einschaltet, bevor man kocht, baut sie schneller einen Luftstrom auf.", zh:"做饭前先开油烟机，气流更快建立。" },
+{ cat:"Technik", de:"Viele Geräte arbeiten leiser, wenn sie waagerecht stehen; eine kleine Schieflage kann Vibrationen verstärken.", zh:"很多设备摆平会更安静；一点点倾斜就可能放大振动。" },
+{ cat:"Technik", de:"Eine Waschmaschine sollte auf festem Boden stehen; auf weichen Matten kann sie mehr schwingen.", zh:"洗衣机应放在坚实地面；软垫上反而更晃。" },
+{ cat:"Technik", de:"Wenn man beim Staubsaugen Kabel überfährt, schadet das nicht nur dem Kabel, sondern kann auch die Steckdose lockern.", zh:"吸尘时碾压电线不仅伤线，也可能把插座拉松。" },
+{ cat:"Technik", de:"Alltagstechnik ist oft eine Frage guter Gewohnheiten: reinigen, nachfüllen, prüfen – bevor etwas ausfällt.", zh:"日常技术维护多靠好习惯：清洁、补充、检查——别等到坏了。" },
+{ cat:"Technik", de:"Wer Bedienungsfehler reduziert, verlängert die Lebensdauer von Geräten, ohne einen Cent in Ersatzteile zu stecken.", zh:"减少误用就能延长设备寿命，甚至不用花钱买配件。" },
+{ cat:"Technik", de:"Das beste Werkzeug im Haushalt ist oft ein Timer, weil er verhindert, dass Technik durch Vergessen überlastet wird.", zh:"家里最好的工具往往是计时器，因为它防止因忘记而让设备过载。" },
+{ cat:"Technik", de:"Wenn man Geräte nach dem Gebrauch ausschaltet, spart man nicht nur Strom, sondern verhindert auch unnötigen Verschleiß.", zh:"用完关闭设备不仅省电，也减少不必要的磨损。" },
+
+// 176–200 Haushaltsgeräte & Auto Abschluss
+{ cat:"Technik", de:"Ein Kühlakku im Gefrierfach sollte flach liegen, weil er so schneller und gleichmäßiger durchfriert.", zh:"冷冻冰袋应平放，这样结冻更快更均匀。" },
+{ cat:"Technik", de:"Wenn ein Gefrierfach zu warm ist, hilft es, die Türdichtung zu prüfen, bevor man an einen Defekt denkt.", zh:"冷冻室不够冷，先查门封条再怀疑故障更合理。" },
+{ cat:"Technik", de:"Ein Gefrierschrank arbeitet effizienter, wenn er gut gefüllt ist, weil Masse Temperaturschwankungen abpuffert.", zh:"冰柜装得较满更省电，因为“热容量”能缓冲温度波动。" },
+{ cat:"Technik", de:"Zu voll darf er trotzdem nicht sein, sonst zirkuliert die kalte Luft schlecht.", zh:"但也不能塞太满，否则冷空气循环差。" },
+{ cat:"Technik", de:"Wenn der Herdknopf schwergängig ist, sollte man nicht mit Gewalt drehen, sondern prüfen, ob Verschmutzung blockiert.", zh:"炉灶旋钮发涩不要硬拧，应先检查是否被污垢卡住。" },
+{ cat:"Technik", de:"Eine Dichtung am Schnellkochtopf ist sicherheitsrelevant; wenn sie spröde wird, muss sie ersetzt werden.", zh:"高压锅密封圈关乎安全，变硬变脆就要更换。" },
+{ cat:"Technik", de:"Ein Schnellkochtopf spart Zeit, weil er bei höherem Druck höhere Temperaturen ermöglicht.", zh:"高压锅省时间，因为更高压力允许更高温度。" },
+{ cat:"Technik", de:"Wenn ein Wasserkocher nur noch halb so schnell ist, ist Kalk fast immer der stille Täter.", zh:"电水壶速度只剩一半时，水垢几乎总是幕后元凶。" },
+{ cat:"Technik", de:"Ein Geschirrspüler ist effizienter als Handspülen, wenn er voll beladen ist und man nicht vorspült.", zh:"洗碗机在满载且不预冲洗时，往往比手洗更省。" },
+{ cat:"Technik", de:"Vorspülen unter heißem Wasser kostet oft mehr Energie als der Spülgang selbst.", zh:"用热水预冲往往比洗碗机程序本身还耗能。" },
+{ cat:"Technik", de:"Wenn die Spülmaschine nicht trocknet, kann das an fehlendem Klarspüler oder an zu dicht gepacktem Geschirr liegen.", zh:"洗碗机不烘干可能是缺少漂洗剂或餐具摆放太密。" },
+{ cat:"Technik", de:"Ein Wasserfilter kann Kalk reduzieren, aber er ersetzt nicht die regelmäßige Gerätepflege.", zh:"净水滤芯能减少水垢，但不能替代定期维护。" },
+{ cat:"Technik", de:"Wenn die Kaffeemaschine „sauer“ schmeckt, liegt das oft an alten Rückständen im System.", zh:"咖啡喝起来“发酸”，常是系统里有陈旧残留。" },
+{ cat:"Technik", de:"Ein Reinigungsprogramm ist dann sinnvoll, wenn man es nicht erst startet, wenn alles schon sichtbar verklebt ist.", zh:"清洁程序要在还没明显粘糊前就做，才真正有意义。" },
+{ cat:"Technik", de:"Ein Staubsauger ist leiser, wenn man die Düse sauber hält; Haare und Fäden erzeugen Turbulenzen.", zh:"吸尘器想更安静，要保持吸头清洁；头发线绳会制造乱流噪声。" },
+{ cat:"Technik", de:"Wenn der Föhn nach Staub riecht, sollte man den Ansaugfilter reinigen, statt einfach weiter zu pusten.", zh:"吹风机有灰尘味时应清洁进风滤网，不要继续吹。" },
+{ cat:"Technik", de:"Ein Wasserleck unter der Spüle ist oft nur eine lockere Verschraubung, aber es sollte sofort behoben werden.", zh:"水槽下漏水常只是接头松了，但要立刻处理。" },
+{ cat:"Technik", de:"Wenn man einen Tropfen ignoriert, wird daraus manchmal ein Schimmelproblem, das viel teurer ist als die Reparatur.", zh:"忽视一滴漏水，可能变成霉菌问题，代价远高于维修。" },
+{ cat:"Technik", de:"Ein Auto ist ein komplexes System, aber im Alltag helfen einfache Routinen: Reifen, Flüssigkeiten, Licht, Geräusche.", zh:"汽车很复杂，但日常靠简单例行：轮胎、液体、灯光、异响。" },
+{ cat:"Technik", de:"Haushaltsgeräte wirken selbstverständlich, bis sie ausfallen; wer sie pflegt, kauft seltener neu.", zh:"家电平时理所当然，坏了才知道；保养好就更少换新。" },
+{ cat:"Technik", de:"Technik im Alltag ist am besten, wenn sie zuverlässig im Hintergrund arbeitet und nur selten Aufmerksamkeit verlangt.", zh:"日常技术最好是可靠地在后台工作，很少要求你操心。" },
+
+
+
 ];
 
 /* ==========================
    LOGIK
    ========================== */
+const ALL_CATEGORIES = ["Alltag","Technik","Politik","Gesellschaft","Geographie","Kultur","Bildung","Allgemein"];
 
-const els = {
-  categoryList: document.getElementById("categoryList"),
-  selectAllBtn: document.getElementById("selectAllBtn"),
-  poolInfo: document.getElementById("poolInfo"),
-  activeCats: document.getElementById("activeCats"),
-  poolCount: document.getElementById("poolCount"),
-  currentId: document.getElementById("currentId"),
-  statusPill: document.getElementById("statusPill"),
-  catTag: document.getElementById("catTag"),
-  lenTag: document.getElementById("lenTag"),
-  modeTag: document.getElementById("modeTag"),
-  deText: document.getElementById("deText"),
-  zhText: document.getElementById("zhText"),
-  nextBtn: document.getElementById("nextBtn"),
-  revealBtn: document.getElementById("revealBtn"),
-  resetBtn: document.getElementById("resetBtn"),
-  noteLine: document.getElementById("noteLine"),
-};
+    // State
+    let selectedCategories = new Set(); // empty => all
+    let current = null;
+    let reveal = false;
 
-let selectedCats = new Set(CATEGORY_ORDER); // standard: alle aktiv
-let current = null; // { idx, cat, de, zh }
-let revealed = false;
+    // Elements
+    const deText = document.getElementById("deText");
+    const zhText = document.getElementById("zhText");
+    const catChip = document.getElementById("catChip");
+    const revealBtn = document.getElementById("revealBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const selectAllBtn = document.getElementById("selectAllBtn");
+    const selectNoneBtn = document.getElementById("selectNoneBtn");
+    const categoryList = document.getElementById("categoryList");
+    const statusHint = document.getElementById("statusHint");
 
-function uniqIdForIndex(idx) {
-  // stabile ID, damit du Sätze später schnell findest
-  // (wenn du Einträge umsortierst, ändert sich die ID – wenn du das vermeiden willst, füge optional "id" hinzu)
-  return String(idx + 1).padStart(3, "0");
-}
+    function uniqCatsFromData(){
+      const cats = new Set(ALL_CATEGORIES);
+      for (const s of SENTENCES) if (s && s.cat) cats.add(s.cat);
+      return Array.from(cats);
+    }
 
-function buildCategoryUI() {
-  els.categoryList.innerHTML = "";
-  const counts = countByCategory();
+    function renderCategoryCheckboxes(){
+      const cats = uniqCatsFromData();
+      categoryList.innerHTML = "";
+      for (const cat of cats){
+        const id = "cat_" + cat.replace(/\s+/g,"_");
+        const label = document.createElement("label");
+        label.className = "cb";
+        label.htmlFor = id;
 
-  CATEGORY_ORDER.forEach(cat => {
-    const id = `cat_${cat}`;
-    const wrap = document.createElement("div");
-    wrap.className = "toggle";
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.id = id;
+        input.value = cat;
+        input.checked = selectedCategories.has(cat);
 
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.id = id;
-    cb.checked = selectedCats.has(cat);
+        input.addEventListener("change", () => {
+          if (input.checked) selectedCategories.add(cat);
+          else selectedCategories.delete(cat);
+          updateStatus();
+          // Optional: new random after changing filter
+          pickNewSentence();
+        });
 
-    cb.addEventListener("change", () => {
-      if (cb.checked) selectedCats.add(cat);
-      else selectedCats.delete(cat);
-      updatePoolStats();
-      // wenn Pool leer wird, sofort warnen
-      if (getPool().length === 0) setStatus("Pool ist leer – wähle mindestens eine Kategorie.", "warn");
-      else setStatus("Bereit", "ok");
+        const span = document.createElement("span");
+        span.textContent = cat;
+
+        label.appendChild(input);
+        label.appendChild(span);
+        categoryList.appendChild(label);
+      }
+      updateStatus();
+    }
+
+    function getPool(){
+      if (!Array.isArray(SENTENCES) || SENTENCES.length === 0) return [];
+      if (selectedCategories.size === 0) return SENTENCES.slice();
+      return SENTENCES.filter(s => selectedCategories.has(s.cat));
+    }
+
+    function updateStatus(){
+      const pool = getPool();
+      const sel = selectedCategories.size === 0 ? "alle" : Array.from(selectedCategories).join(", ");
+      statusHint.textContent = `Aktiv: ${sel} · Treffer: ${pool.length}`;
+      statusHint.classList.toggle("danger", pool.length === 0 && SENTENCES.length > 0);
+    }
+
+    function setReveal(v){
+      reveal = v;
+      zhText.style.display = reveal ? "block" : "none";
+      revealBtn.textContent = reveal ? "Verbergen" : "Auflösung";
+    }
+
+    function pickNewSentence(){
+      const pool = getPool();
+      if (SENTENCES.length === 0){
+        current = null;
+        deText.textContent = "Bitte Satzpaare in SENTENCES einfügen.";
+        zhText.textContent = "";
+        catChip.textContent = "Kategorie: —";
+        setReveal(false);
+        updateStatus();
+        return;
+      }
+      if (pool.length === 0){
+        current = null;
+        deText.textContent = "Keine Sätze in der Auswahl. Wähle andere Bereiche oder setze auf „Alle“. ";
+        zhText.textContent = "";
+        catChip.textContent = "Kategorie: —";
+        setReveal(false);
+        updateStatus();
+        return;
+      }
+      current = pool[Math.floor(Math.random() * pool.length)];
+      deText.textContent = current.de;
+      zhText.textContent = current.zh;
+      catChip.textContent = `Kategorie: ${current.cat}`;
+      setReveal(false);
+      updateStatus();
+    }
+
+    // Buttons
+    revealBtn.addEventListener("click", () => setReveal(!reveal));
+    nextBtn.addEventListener("click", pickNewSentence);
+
+    selectAllBtn.addEventListener("click", () => {
+      selectedCategories = new Set(); // empty => all
+      // uncheck all boxes
+      for (const cb of categoryList.querySelectorAll("input[type=checkbox]")) cb.checked = false;
+      updateStatus();
+      pickNewSentence();
     });
 
-    const label = document.createElement("label");
-    label.htmlFor = id;
+    selectNoneBtn.addEventListener("click", () => {
+      // "Keine" = explicit none selected => means empty set? (but empty means all)
+      // so we interpret "Keine" as: select none but keep it explicit by selecting a non-existing filter state.
+      // Implementation: clear all, then set a flag by selecting categories into an impossible set (handled via selectedCategoriesExplicitNone).
+      // Simpler: we treat "Keine" as clearing all checkboxes AND requiring user to pick at least one.
+      // So we implement: set to a special state by selecting a category that doesn't exist is ugly; better:
+      // We'll set selectedCategories to a Set with a marker and filter will yield empty.
+      selectedCategories = new Set(["__NONE__"]);
+      for (const cb of categoryList.querySelectorAll("input[type=checkbox]")) cb.checked = false;
+      updateStatus();
+      pickNewSentence();
+    });
 
-    const title = document.createElement("span");
-    title.textContent = cat;
-
-    const sub = document.createElement("small");
-    sub.textContent = `${counts[cat] ?? 0} Satzpaare`;
-
-    label.appendChild(title);
-    label.appendChild(sub);
-
-    wrap.appendChild(cb);
-    wrap.appendChild(label);
-
-    els.categoryList.appendChild(wrap);
-  });
-}
-
-function countByCategory() {
-  const m = {};
-  for (const s of SENTENCES) {
-    m[s.cat] = (m[s.cat] || 0) + 1;
-  }
-  return m;
-}
-
-function getPool() {
-  return SENTENCES
-    .map((s, idx) => ({ ...s, idx }))
-    .filter(s => selectedCats.has(s.cat));
-}
-
-function updatePoolStats() {
-  const pool = getPool();
-  const active = [...selectedCats].sort((a,b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b));
-
-  els.activeCats.textContent = active.length ? `${active.length}/${CATEGORY_ORDER.length}` : "0";
-  els.poolCount.textContent = String(pool.length);
-  els.poolInfo.textContent = `Pool: ${pool.length} Sätze · Kategorien: ${active.length || 0}`;
-
-  // Button „Auflösung“ nur aktiv, wenn ein Satz geladen ist
-  els.revealBtn.disabled = !current;
-
-  // Status, wenn Pool leer
-  if (pool.length === 0) setStatus("Pool ist leer – wähle Kategorien.", "warn");
-}
-
-function setStatus(text, kind) {
-  els.statusPill.textContent = text;
-  els.statusPill.style.borderColor =
-    kind === "ok" ? "rgba(52,211,153,0.55)" :
-    kind === "warn" ? "rgba(251,191,36,0.55)" :
-    "rgba(255,255,255,0.22)";
-  els.statusPill.style.background =
-    kind === "ok" ? "rgba(52,211,153,0.10)" :
-    kind === "warn" ? "rgba(251,191,36,0.10)" :
-    "rgba(255,255,255,0.06)";
-}
-
-function randomFrom(arr) {
-  const i = Math.floor(Math.random() * arr.length);
-  return arr[i];
-}
-
-function sentenceLengthHint(de) {
-  // simple Heuristik (Wörter)
-  const words = de.trim().split(/\s+/).filter(Boolean).length;
-  if (words <= 10) return "kurz";
-  if (words <= 18) return "mittel";
-  return "lang";
-}
-
-function loadNextSentence() {
-  const pool = getPool();
-  if (pool.length === 0) {
-    current = null;
-    revealed = false;
-    els.deText.textContent = "Pool ist leer. Bitte mindestens eine Kategorie auswählen.";
-    els.zhText.textContent = "（无法显示翻译，因为题库为空。）";
-    els.zhText.classList.add("hidden");
-    els.catTag.textContent = "Kategorie: –";
-    els.lenTag.textContent = "Länge: –";
-    els.currentId.textContent = "–";
-    els.revealBtn.disabled = true;
-    setStatus("Pool ist leer – wähle Kategorien.", "warn");
-    return;
-  }
-
-  // Zufall, aber möglichst nicht zweimal direkt derselbe Satz (wenn möglich)
-  let pick = randomFrom(pool);
-  if (current && pool.length > 1) {
-    let guard = 0;
-    while (pick.idx === current.idx && guard < 10) {
-      pick = randomFrom(pool);
-      guard++;
+    // Override getPool to respect "__NONE__"
+    const _getPool = getPool;
+    function getPool(){
+      if (!Array.isArray(SENTENCES) || SENTENCES.length === 0) return [];
+      if (selectedCategories.has("__NONE__")) return [];
+      if (selectedCategories.size === 0) return SENTENCES.slice();
+      return SENTENCES.filter(s => selectedCategories.has(s.cat));
     }
-  }
 
-  current = pick;
-  revealed = false;
-
-  els.deText.textContent = current.de;
-  els.zhText.textContent = current.zh;
-  els.zhText.classList.add("hidden");
-  els.revealBtn.disabled = false;
-
-  els.catTag.textContent = `Kategorie: ${current.cat}`;
-  els.lenTag.textContent = `Länge: ${sentenceLengthHint(current.de)}`;
-  els.currentId.textContent = `${uniqIdForIndex(current.idx)} (Index ${current.idx})`;
-
-  setStatus("Neuer Satz geladen", "ok");
-  els.noteLine.textContent = "Versuche zuerst frei zu übersetzen, dann klicke „Auflösung“.";
-}
-
-function reveal() {
-  if (!current) return;
-  revealed = true;
-  els.zhText.classList.remove("hidden");
-  setStatus("Auflösung angezeigt", "ok");
-}
-
-function reset() {
-  selectedCats = new Set(CATEGORY_ORDER);
-  current = null;
-  revealed = false;
-
-  // UI: Checkboxen aktualisieren
-  for (const cat of CATEGORY_ORDER) {
-    const cb = document.getElementById(`cat_${cat}`);
-    if (cb) cb.checked = true;
-  }
-
-  els.deText.textContent = "Wähle Kategorien links und klicke auf „Nächster Satz“.";
-  els.zhText.textContent = "（这里会显示中文翻译。）";
-  els.zhText.classList.add("hidden");
-  els.catTag.textContent = "Kategorie: –";
-  els.lenTag.textContent = "Länge: –";
-  els.currentId.textContent = "–";
-  els.revealBtn.disabled = true;
-
-  updatePoolStats();
-  setStatus("Reset – alle Kategorien aktiv", "ok");
-}
-
-/* ==========================
-   EVENTS
-   ========================== */
-
-els.selectAllBtn.addEventListener("click", () => {
-  const allSelected = selectedCats.size === CATEGORY_ORDER.length;
-  selectedCats = allSelected ? new Set() : new Set(CATEGORY_ORDER);
-
-  for (const cat of CATEGORY_ORDER) {
-    const cb = document.getElementById(`cat_${cat}`);
-    if (cb) cb.checked = selectedCats.has(cat);
-  }
-  updatePoolStats();
-  setStatus(allSelected ? "Alle abgewählt" : "Alle ausgewählt", "ok");
-});
-
-els.nextBtn.addEventListener("click", loadNextSentence);
-els.revealBtn.addEventListener("click", reveal);
-els.resetBtn.addEventListener("click", reset);
-
-// Tastatur-Shortcuts
-document.addEventListener("keydown", (e) => {
-  const key = e.key.toLowerCase();
-  if (key === "n") loadNextSentence();
-  if (key === "a") reveal();
-  if (key === "r") reset();
-});
-
-// Start
-buildCategoryUI();
-updatePoolStats();
-setStatus("Bereit", "ok");
-</script>
+    // Init
+    renderCategoryCheckboxes();
+    pickNewSentence();
+  </script>
 </body>
 </html>

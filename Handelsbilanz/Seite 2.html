@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Warum Welthandel? – Komparative Kostenvorteile</title>
+
+  <!-- Tailwind & Fonts & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1.25rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+    }
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.2rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+
+    .tiny { font-size:.85rem; color:#4B5563; }
+    .tiny strong { color:#111827; }
+
+    .schema {
+      display:flex;
+      flex-direction:column;
+      gap:.25rem;
+      margin-top:.5rem;
+      font-size:.8rem;
+    }
+    .schema-row {
+      display:flex;
+      align-items:center;
+      gap:.4rem;
+    }
+    .schema-step {
+      background:#2A3B32;
+      color:#fff;
+      border-radius:999px;
+      padding:.05rem .4rem;
+      font-size:.75rem;
+      font-weight:700;
+      min-width:1.4rem;
+      text-align:center;
+    }
+    .schema-text {
+      background:#E5E7EB;
+      border-radius:999px;
+      padding:.15rem .6rem;
+      flex:1;
+    }
+
+    .merksatz-box {
+      margin-top:.6rem;
+      background:#FEF3C7;
+      border:1px solid #FBBF24;
+      border-radius:10px;
+      padding:.4rem .6rem;
+      font-size:.8rem;
+    }
+
+    .chart-wrapper {
+      position:relative;
+      width:100%;
+      height:260px;
+    }
+
+    .full-span { grid-column:1 / -1; }
+
+    .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr; /* Left text, Center buttons, Right text */
+      align-items:center;
+      color:#666; font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      flex-shrink:0;
+      background: #F5F5F5; /* Matches body bg */
+      }
+    
+    .footer-left { justify-self: start; }
+    .footer-center { 
+        display: flex; 
+        gap: 1rem; 
+        justify-self: center; 
+    }
+    .footer-right { justify-self: end; }
+
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #2A3B32;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        min-width: 100px;
+    }
+    .nav-btn:hover {
+        background-color: #3D5245;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    .nav-btn:active {
+        transform: translateY(0);
+    }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.5rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:600;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.9rem; }
+
+    table.simple {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.8rem;
+      margin:.4rem 0 .2rem 0;
+    }
+    table.simple th, table.simple td {
+      border:1px solid #E5E7EB;
+      padding:.25rem .35rem;
+      text-align:center;
+    }
+    table.simple th {
+      background:#F9FAFB;
+      font-weight:600;
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+      .chart-wrapper{ height:240px; }
+      .full-span{ grid-column:auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Header -->
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Warum gibt es Welthandel?</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Geographie | Theo Schierbaum</p>
+    </div>
+
+    <!-- Inhalt -->
+    <div class="slide-content">
+
+      <div class="materials-grid">
+
+        <!-- (1) Warum Welthandel? -->
+        <div class="material">
+          <div class="mat-head">
+            <div class="badge">1</div>
+            <div class="mat-title">Theorie der komparativen Kostenvorteile (<i>Ricardo</i>)</div>
+          </div>
+          <div class="mat-body">
+            <ul class="tiny list-disc pl-5 space-y-1">
+              <li>Länder haben unterschiedliche <strong>Löhne</strong>, <strong>Rohstoffe</strong> und <strong>Technik</strong>.</li>
+              <li>Sie können manche Güter <strong>relativ günstiger</strong> herstellen als andere.</li>
+              <li>Wichtig sind nicht <em>absolute</em>, sondern <strong>komparative (relative)</strong> Kostenvorteile.</li>
+              <li>Nach Ricardo lohnt sich <strong>Spezialisierung</strong> und <strong>Handel</strong> für alle Beteiligten.</li>
+              <li>Auch ein ärmeres Land kann profitieren, wenn es sich auf arbeitsintensive Güter spezialisiert.</li>
+            </ul>
+
+            <div class="schema">
+              <div class="schema-row">
+                <div class="schema-step">1</div>
+                <div class="schema-text tiny">Unterschiedliche Produktionskosten in den Ländern</div>
+              </div>
+              <div class="schema-row">
+                <div class="schema-step">2</div>
+                <div class="schema-text tiny">Jedes Land spezialisiert sich auf sein „relativ bestes“ Gut</div>
+              </div>
+              <div class="schema-row">
+                <div class="schema-step">3</div>
+                <div class="schema-text tiny">Durch Handel: Mehr Güter insgesamt &amp; mehr Auswahl</div>
+              </div>
+            </div>
+
+            <div class="merksatz-box tiny">
+              <strong>Merksatz:</strong> Welthandel entsteht, weil sich Länder in dem spezialisieren,
+              was sie <em>relativ</em> am günstigsten herstellen können – und danach miteinander tauschen.
+            </div>
+          </div>
+        </div>
+
+        <!-- (2) Beispiel 3 Länder / 3 Produkte -->
+        <div class="material">
+          <div class="mat-head">
+            <div class="badge">2</div>
+            <div class="mat-title">Beispiel: 3 Länder – 3 Produkte</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-1">
+              Ein Arbeitstag wird für <strong>Maschinen</strong>, <strong>Elektronik</strong> oder <strong>Kleidung</strong> eingesetzt
+              (vereinfachte Stückzahlen pro Tag):
+            </p>
+
+            <table class="simple">
+              <thead>
+                <tr>
+                  <th>Land</th>
+                  <th>Maschinen</th>
+                  <th>Elektronik</th>
+                  <th>Kleidung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Deutschland (Hochlohn)</td>
+                  <td>10</td>
+                  <td>15</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>China (Mittellohn)</td>
+                  <td>6</td>
+                  <td>14</td>
+                  <td>18</td>
+                </tr>
+                <tr>
+                  <td>Bangladesch (Niedriglohn)</td>
+                  <td>2</td>
+                  <td>6</td>
+                  <td>16</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p class="tiny mb-1">
+              Grafik: Produktion pro Arbeitstag – wer ist bei welchem Gut relativ stark?
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="exampleChart"></canvas>
+            </div>
+
+           
+          </div>
+        </div>
+
+        <!-- (3) Löhne im Vergleich (sortiert) -->
+        <div class="material full-span">
+          <div class="mat-head">
+            <div class="badge">3</div>
+            <div class="mat-title">Nominale Durchschnittslöhne (Monatslöhne, vereinfacht)</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-1">
+              Gerundete, didaktisch vereinfachte Monatslöhne in US-Dollar –
+              <strong>aufsteigend sortiert</strong> (Niedriglohn &rarr; Hochlohn):
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="wageChart"></canvas>
+            </div>
+            <p class="tiny mt-1">
+              Zusammenhang zur Theorie: Niedriglohnländer haben oft Vorteile bei
+              <strong>arbeitsintensiven</strong> Gütern (z.&nbsp;B. Kleidung),
+              Hochlohnländer eher bei <strong>kapital- und wissensintensiven</strong> Gütern
+              (z.&nbsp;B. Maschinen).
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /materials-grid -->
+
+      <!-- Aufgaben -->
+      <a href="Seite 2a.html"><section class="task-section">
+        <div class="task-label">Aufgaben</div>
+        <ol>
+          <li>
+            1. <strong>Erkläre</strong>, warum es nach der Theorie
+            der <strong>komparativen Kostenvorteile</strong> überhaupt zu Welthandel kommt.
+          </li>
+          <li>
+            2. Sieh dir das Beispiel (Kasten 2) an:
+            <strong>Bei welchem Produkt ist Deutschland, China bzw. Bangladesch besonders stark?</strong>
+            <strong>Begründe</strong> deine Einschätzung knapp mit Bezug auf die Zahlen.
+          </li>
+          <li>
+            3. <strong>Erkläre</strong>, auf welches Produkt sich
+            <em>Deutschland</em>, auf welches <em>Bangladesch</em> eher spezialisieren sollte,
+            damit sich Handel lohnt? Was könnte eine sinnvolle Rolle für China sein?
+          </li>
+          <li>
+            4. Werte das Lohn-Diagramm (Kasten 3) aus:
+            <strong>Ordne</strong> jeweils zwei Beispiele für
+            <em>Niedriglohn-</em>, <em>Mittellohn-</em> und <em>Hochlohnländer</em> zu.
+            Welche Produktionen (z.&nbsp;B. Kleidung, Elektronik, Maschinen) erwartest du dort?
+          </li>
+          <li>
+            5. <strong>Globalisierung:</strong> Nenne zwei Gründe, warum Welthandel heute
+            stärker wächst als früher (z.&nbsp;B. Transport, Kommunikation, Zollabbau)
+            und verbinde sie mit der Idee der komparativen Kostenvorteile.
+          </li>
+          <li>
+            6. <strong>Kritische Reflexion:</strong> Welche mögliche
+            <em>Chance</em> und welches mögliche <em>Problem</em> entstehen für ein
+            Niedriglohnland, das sich stark auf Kleidungsexporte spezialisiert?
+          </li>
+        </ol>
+      </section></a>
+
+    </div><!-- /slide-content -->
+
+     <!-- Footer -->
+    <!-- Footer with Navigation -->
+<div class="footer">
+<div class="footer-left">
+<p>Erdkunde – Welthandel</p>
+</div>
+<div class="footer-center">
+<a class="nav-btn" href="Seite 1.html">← Zurück</a>
+<a class="nav-btn" href="Seite 2a.html">Nächste →</a>
+</div>
+<div class="footer-right">
+<p>Seite 3</p>
+</div>
+</div>
+
+  </div>
+
+  <!-- Chart.js: Beispiel & Löhne -->
+  <script>
+    // -------------------------
+    // Beispieldiagramm: 3 Länder / 3 Produkte
+    // -------------------------
+    const goods = ['Maschinen', 'Elektronik', 'Kleidung'];
+    const germany = [10, 15, 20];
+    const china = [6, 14, 18];
+    const bangladesh = [2, 6, 16];
+
+    const ctxExample = document.getElementById('exampleChart').getContext('2d');
+
+    new Chart(ctxExample, {
+      type: 'bar',
+      data: {
+        labels: goods,
+        datasets: [
+          {
+            label: 'Deutschland (Hochlohn)',
+            data: germany,
+            backgroundColor: 'rgba(37, 99, 235, 0.9)',
+            borderRadius: 4
+          },
+          {
+            label: 'China (Mittellohn)',
+            data: china,
+            backgroundColor: 'rgba(16, 185, 129, 0.9)',
+            borderRadius: 4
+          },
+          {
+            label: 'Bangladesch (Niedriglohn)',
+            data: bangladesh,
+            backgroundColor: 'rgba(234, 179, 8, 0.9)',
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              usePointStyle: true,
+              font: { family: 'Montserrat', size: 11 }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed.y;
+                return context.dataset.label + ': ' + value + ' Stück/Tag';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Produkte',
+              font: { family: 'Montserrat', weight: '600' }
+            },
+            grid: { display: false }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Produktion pro Arbeitstag (Stück)',
+              font: { family: 'Montserrat', weight: '600' }
+            },
+            beginAtZero: true,
+            grid: { color: 'rgba(209,213,219,0.5)' }
+          }
+        }
+      }
+    });
+
+    // -------------------------
+    // Lohn-Diagramm (sortiert von niedrig nach hoch)
+    // -------------------------
+    const wageCountries = [
+      'Bangladesch',
+      'Indien',
+      'Philippinen',
+      'Brasilien',
+      'Mexiko',
+      'China',
+      'Russland',
+      'Polen',
+      'Portugal',
+      'UK',
+      'Frankreich',
+      'Japan',
+      'Deutschland',
+      'USA',
+      'Belgien',
+      'Schweiz'
+    ];
+
+    // stark vereinfachte, aufsteigend sortierte Monatslöhne in US-$ (didaktisch)
+    const wages = [
+      150,   // Bangladesch
+      250,   // Indien
+      350,   // Philippinen
+      650,   // Brasilien
+      700,   // Mexiko
+      900,   // China
+      1000,  // Russland
+      1100,  // Polen
+      1300,  // Portugal
+      2800,  // UK
+      2900,  // Frankreich
+      3000,  // Japan
+      3200,  // Deutschland
+      3600,  // USA
+      3800,  // Belgien
+      5000   // Schweiz
+    ];
+
+    const ctxWage = document.getElementById('wageChart').getContext('2d');
+
+    new Chart(ctxWage, {
+      type: 'bar',
+      data: {
+        labels: wageCountries,
+        datasets: [{
+          label: 'Durchschnittlicher Monatslohn (US-$, vereinfacht)',
+          data: wages,
+          backgroundColor: 'rgba(37, 99, 235, 0.9)',
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              usePointStyle: true,
+              font: { family: 'Montserrat', size: 11 }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed.y;
+                return context.dataset.label + ': ' + value + ' US-$';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Länder (aufsteigend nach Lohn)',
+              font: { family: 'Montserrat', weight: '600' }
+            },
+            ticks: { autoSkip: false, maxRotation: 60, minRotation: 45 },
+            grid: { display: false }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Monatslohn (US-$)',
+              font: { family: 'Montserrat', weight: '600' }
+            },
+            beginAtZero: true,
+            grid: { color: 'rgba(209,213,219,0.5)' }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

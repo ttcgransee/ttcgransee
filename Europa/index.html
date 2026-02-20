@@ -121,6 +121,15 @@
         gap: 0.5rem;
     }
 
+    .mat-img{
+      width:100%;
+      height:auto;
+      display:block;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      background:#fff;
+    }
+
     /* Info Box inside Material */
     .info-box {
       background:#F3F4F6;
@@ -254,46 +263,6 @@
         }
         .footer-left, .footer-center, .footer-right { justify-self: center; }
     }
-
-
-    /* --- Drawing canvases (M1/M2) --- */
-    .canvas-panel{
-        position: relative;
-        width: 100%;
-        /* Height is driven by aspect-ratio (set via JS once images load) */
-        height: auto;
-        min-height: 260px;
-        aspect-ratio: 4 / 3; /* fallback */
-        background: #fff;
-        border: 1px solid #E5E7EB;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-    .canvas-hint{
-        position:absolute;
-        top:10px;
-        left:10px;
-        z-index:3;
-        background: rgba(0,0,0,0.55);
-        color:#fff;
-        font-size: 0.8rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 8px;
-        pointer-events:none;
-        user-select:none;
-    }
-    .canvas-bg-img{
-        display:none; /* we draw it onto the canvas */
-    }
-    .draw-canvas{
-        position:absolute;
-        inset:0;
-        width:100%;
-        height:100%;
-        touch-action:none; /* prevents scrolling while drawing */
-        cursor: crosshair;
-        background:#fff;
-    }
 </style>
 </head>
 <body>
@@ -315,14 +284,14 @@
 <div class="column flex flex-col gap-4">
 <section class="material h-full">
 <div class="mat-head"><span class="badge">M1</span><div class="mat-title">Disparitäten</div></div>
-<div class="mat-body"><div class="canvas-panel"><div class="canvas-hint">Zeichne mit der Maus.</div><img alt="M1 Hintergrund" class="canvas-bg-img" id="img-m1" src="Karte.png"/><canvas class="draw-canvas" id="canvas-m1"></canvas></div><p>Regionales Pro-Kopf-Einkommen in der EU in % des EU-Durchschnitts (2018)</p></div>
+<div class="mat-body"><img class="mat-img" src="Karte.png" alt="Karte (M1)"/><p>Regionales Pro-Kopf-Einkommen in der EU in % des EU-Durchschnitts (2018)</p></div>
 </section>
 </div>
 <!-- Right Column: Effects & Examples -->
 <div class="column flex flex-col gap-4">
 <section class="material h-full">
 <div class="mat-head"><span class="badge">M2</span><div class="mat-title">Ursachen</div></div>
-<div class="mat-body"><div class="canvas-panel"><div class="canvas-hint">Zeichne mit der Maus.</div><img alt="M2 Hintergrund" class="canvas-bg-img" id="img-m2" src="Kreise.png"/><canvas class="draw-canvas" id="canvas-m2"></canvas></div><p>Teufelskreis peripherer Regionen <i>(oben)</i> und positiver Zyklus in wirtschaftlich entwickelten Zentren <i>(unten)</i></p></div>
+<div class="mat-body"><img class="mat-img" src="Kreise.png" alt="Kreise (M2)"/><p>Teufelskreis peripherer Regionen <i>(oben)</i> und positiver Zyklus in wirtschaftlich entwickelten Zentren <i>(unten)</i></p></div>
 </section>
 </div>
 </div>
@@ -354,190 +323,5 @@
 </div>
 </div>
 </div>
-<script>
-(function(){
-  // Creates a drawable canvas with an <img> as background.
-  // Goal: image is ALWAYS fully visible, but as large as possible and filling the box width.
-  // We therefore set both M1/M2 panels to a common (shared) aspect ratio: the MIN width/height ratio
-  // of the loaded images. This makes both boxes equally large and prevents cropping when we scale-to-width.
-
-  const setups = [];
-
-  function gcd(a,b){ while(b){ const t=b; b=a%b; a=t; } return a || 1; }
-
-  function setupDrawableCanvas(imgId, canvasId){
-    const img = document.getElementById(imgId);
-    const canvas = document.getElementById(canvasId);
-    if(!img || !canvas) return;
-
-    const panel = canvas.closest('.canvas-panel') || canvas.parentElement;
-
-    const ctx = canvas.getContext('2d', { willReadFrequently: false });
-
-    // Offscreen buffer so resizing keeps existing drawing
-    const buffer = document.createElement('canvas');
-    const bctx = buffer.getContext('2d', { willReadFrequently: false });
-
-    const state = {
-      img, canvas, panel, ctx, buffer, bctx,
-      drawing: false,
-      lastX: 0,
-      lastY: 0,
-      cssW: 0,
-      cssH: 0,
-      dpr: 1,
-      ratio: null
-    };
-
-    // --- drawing helpers ---
-    function getPos(e){
-      const rect = canvas.getBoundingClientRect();
-      const xCss = (e.clientX - rect.left);
-      const yCss = (e.clientY - rect.top);
-      // map CSS pixels -> canvas pixels
-      return {
-        x: xCss * state.dpr,
-        y: yCss * state.dpr
-      };
-    }
-
-    function start(e){
-      state.drawing = true;
-      const p = getPos(e);
-      state.lastX = p.x;
-      state.lastY = p.y;
-      e.preventDefault();
-    }
-
-    function move(e){
-      if(!state.drawing) return;
-      const p = getPos(e);
-      ctx.save();
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.strokeStyle = '#90EE90'; // hellgrün
-      ctx.lineWidth = 3 * state.dpr; // 3px in CSS pixels
-      ctx.beginPath();
-      ctx.moveTo(state.lastX, state.lastY);
-      ctx.lineTo(p.x, p.y);
-      ctx.stroke();
-      ctx.restore();
-      state.lastX = p.x;
-      state.lastY = p.y;
-      e.preventDefault();
-    }
-
-    function end(){
-      state.drawing = false;
-    }
-
-    canvas.addEventListener('pointerdown', start);
-    canvas.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', end);
-    canvas.addEventListener('pointerleave', end);
-
-    // --- resizing / background drawing ---
-    function drawBackground(){
-      if(!img.complete || !img.naturalWidth) return;
-
-      const cw = canvas.width, ch = canvas.height;      // canvas pixels
-      const iw = img.naturalWidth, ih = img.naturalHeight;
-
-      // Scale to width (fills width), but never crop (if too tall, fall back to fit-height).
-      let scale = cw / iw;
-      if(ih * scale > ch){
-        scale = ch / ih; // safety
-      }
-
-      const dw = iw * scale, dh = ih * scale;
-      const dx = (cw - dw) / 2;
-      const dy = (ch - dh) / 2;
-
-      ctx.save();
-      ctx.setTransform(1,0,0,1,0,0);
-      ctx.clearRect(0,0,cw,ch);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0,0,cw,ch);
-      ctx.drawImage(img, dx, dy, dw, dh);
-      ctx.restore();
-    }
-
-    function resizeCanvas(){
-      const rect = panel.getBoundingClientRect();
-      const w = Math.max(1, rect.width);
-      const h = Math.max(1, rect.height);
-
-      const dpr = window.devicePixelRatio || 1;
-
-      // Save current drawing into buffer
-      if(canvas.width && canvas.height){
-        buffer.width = canvas.width;
-        buffer.height = canvas.height;
-        bctx.clearRect(0,0,buffer.width, buffer.height);
-        bctx.drawImage(canvas, 0, 0);
-      }
-
-      state.cssW = w;
-      state.cssH = h;
-      state.dpr = dpr;
-
-      canvas.width  = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-
-      // Redraw: background image + previous drawing scaled
-      drawBackground();
-      if(buffer.width && buffer.height){
-        ctx.drawImage(buffer, 0, 0, buffer.width, buffer.height, 0, 0, canvas.width, canvas.height);
-      }
-    }
-
-    // Observe size changes of the panel (responsive)
-    const ro = new ResizeObserver(() => resizeCanvas());
-    ro.observe(panel);
-
-    // When image is ready, store its aspect ratio and trigger common layout
-    function onImgReady(){
-      if(!img.naturalWidth) return;
-      state.ratio = img.naturalWidth / img.naturalHeight;
-      applyCommonAspectRatio();
-      resizeCanvas();
-    }
-
-    img.addEventListener('load', onImgReady);
-    if(img.complete) onImgReady();
-
-    setups.push(state);
-  }
-
-  function applyCommonAspectRatio(){
-    // Use the MIN ratio so that scaling-to-width never crops any image,
-    // and both panels become equally large (same aspect ratio).
-    const ratios = setups.map(s => s.ratio).filter(r => typeof r === 'number' && isFinite(r) && r > 0);
-    if(!ratios.length) return;
-    const common = Math.min(...ratios);
-
-    // Set aspect ratio as a number (supported by modern browsers).
-    // Also set a fraction fallback for better compatibility.
-    setups.forEach(s => {
-      if(!s.panel) return;
-
-      // numeric aspect-ratio
-      s.panel.style.aspectRatio = String(common);
-
-      // fraction fallback (approx) to avoid weird rounding in some engines
-      const denom = 1000;
-      const num = Math.round(common * denom);
-      const g = gcd(num, denom);
-      s.panel.style.setProperty('aspect-ratio', `${num/g} / ${denom/g}`);
-    });
-  }
-
-  // Init canvases for M1 & M2
-  setupDrawableCanvas('img-m1', 'canvas-m1');
-  setupDrawableCanvas('img-m2', 'canvas-m2');
-
-  // Re-apply on orientation change / viewport changes
-  window.addEventListener('resize', () => applyCommonAspectRatio());
-})();
-</script></body>
+</body>
 </html>

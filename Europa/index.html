@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wohlstandsunterschiede innerhalb der EU</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Raleway:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    /* Base Reset & Fonts */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body { 
+        margin:0; 
+        padding:0; 
+        width:100%; 
+        min-height:100%;
+        height:auto;
+        overflow:auto; /* page scrolls; footer is at end */
+        background:#F5F5F5; 
+        color:#333; 
+        font-family:'Montserrat',sans-serif; 
+    }
+
+    /* Responsive Slide Container */
+    /* Responsive Slide Container */
+    .slide-container { 
+        width: 100vw; 
+        max-width: none; 
+        min-height: 100vh; /* at least full viewport height */
+        height: auto;
+        margin: 0; 
+        display: flex; 
+        flex-direction: column; 
+        position: relative; 
+        background: #F5F5F5;
+        overflow: visible; /* footer is not fixed */
+    }
+    
+    /* Header Style */
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 3rem;
+      display:flex; justify-content:space-between; align-items:center;
+      flex-shrink:0; /* Prevents header from shrinking */
+    }
+    .header-title { margin:0; font-weight:700; font-size:clamp(1.5rem, 4vw, 2.1rem); letter-spacing: 0.02em; }
+    .divider { width:80px; height:5px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .header-sub { font-weight:300; font-size: 1rem; opacity: 0.9; }
+    
+    /* Main Content - Scrollable */
+    .slide-content {
+      flex: 1 0 auto; /* grows, but page scrolls normally */
+      padding:1.5rem 3rem 1rem 3rem;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      font-family:'Raleway',sans-serif;
+      overflow: visible; /* no internal scrolling */
+    }
+
+    /* Materials Grid - Responsive */
+    .materials-grid { 
+        display:grid; 
+        grid-template-columns:repeat(2, 1fr); 
+        gap:1.5rem; 
+        flex-shrink: 0; /* Ensures it takes necessary space */
+    }
+    
+    @media (max-width: 768px) {
+        .slide-header, .slide-content, .footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .materials-grid { grid-template-columns: 1fr; }
+    }
+
+    .material { 
+        background:#fff; 
+        border:1px solid #E5E7EB; 
+        border-radius:12px; 
+        box-shadow:0 4px 6px rgba(0,0,0,.05); 
+        overflow:hidden; 
+        display:flex; 
+        flex-direction:column; 
+    }
+    
+    .mat-head { 
+        display:flex; 
+        align-items:center; 
+        gap:.8rem; 
+        padding:.6rem 1rem; 
+        background:#F9FAFB; 
+        border-bottom:1px solid #E5E7EB; 
+    }
+    
+    .badge { 
+        background:#2A3B32; 
+        color:#fff; 
+        font-weight:700; 
+        font-size:.9rem; 
+        padding:.2rem .6rem; 
+        border-radius:6px; 
+        min-width:2.5rem; 
+        text-align:center; 
+    }
+    
+    .mat-title { 
+        font-weight:700; 
+        color:#2A3B32; 
+        font-size:1.1rem; 
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .mat-body { 
+        padding:1rem; 
+        font-family:'Raleway',sans-serif; 
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+
+    /* Info Box inside Material */
+    .info-box {
+      background:#F3F4F6;
+      border-radius:8px;
+      padding:0.8rem;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid #2A3B32;
+    }
+    .info-label {
+      font-size:0.75rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:#4B5563;
+      margin-bottom:0.3rem;
+    }
+    .main-text {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #1F2937;
+    }
+
+    .example-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .example-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+    .example-icon {
+        width: 32px;
+        height: 32px;
+        background: #FEF3C7; /* yellow-100 */
+        color: #D97706; /* yellow-600 */
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    /* Task Section */
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem 1.5rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:0.5rem;
+      margin-bottom: 0.5rem;
+      flex-shrink: 0;
+    }
+    .task-label {
+      position:absolute;
+      top:-14px;
+      left:1.5rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.2rem .8rem;
+      border-radius:6px;
+      font-weight:600;
+      font-size:.85rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .task-text {
+        font-size: 1rem;
+        color: #2A3B32;
+        font-weight: 500;
+    }
+
+    /* Footer & Navigation */
+    .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr; /* Left text, Center buttons, Right text */
+      align-items:center;
+      color:#666; font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      flex-shrink:0;
+      background: #F5F5F5; /* Matches body bg */
+      margin-top: auto; /* pushes footer to bottom if content is short */
+      border-top: none; /* no footer separator line */
+      }
+    
+    .footer-left { justify-self: start; }
+    .footer-center { 
+        display: flex; 
+        gap: 1rem; 
+        justify-self: center; 
+    }
+    .footer-right { justify-self: end; }
+
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #2A3B32;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        min-width: 100px;
+    }
+    .nav-btn:hover {
+        background-color: #3D5245;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    .nav-btn:active {
+        transform: translateY(0);
+    }
+    
+    /* Responsive Footer */
+    @media (max-width: 640px) {
+        .footer {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 0.5rem;
+            text-align: center;
+            padding: 1rem;
+        }
+        .footer-left, .footer-center, .footer-right { justify-self: center; }
+    }
+
+
+    /* --- Drawing canvases (M1/M2) --- */
+    .canvas-panel{
+        position: relative;
+        width: 100%;
+        /* Height is driven by aspect-ratio (set via JS once images load) */
+        height: auto;
+        min-height: 260px;
+        aspect-ratio: 4 / 3; /* fallback */
+        background: #fff;
+        border: 1px solid #E5E7EB;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .canvas-hint{
+        position:absolute;
+        top:10px;
+        left:10px;
+        z-index:3;
+        background: rgba(0,0,0,0.55);
+        color:#fff;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 8px;
+        pointer-events:none;
+        user-select:none;
+    }
+    .canvas-bg-img{
+        display:none; /* we draw it onto the canvas */
+    }
+    .draw-canvas{
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+        touch-action:none; /* prevents scrolling while drawing */
+        cursor: crosshair;
+        background:#fff;
+    }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="slide-header">
+<div>
+<h1 class="header-title">Wohlstandsunterschiede innerhalb der EU</h1>
+<div class="divider"></div>
+</div>
+<div class="text-right">
+<p class="header-sub">Geographie | Klasse 10</p>
+</div>
+</div>
+<!-- Scrollable Content -->
+<div class="slide-content">
+<div class="materials-grid">
+<!-- Left Column: Definition & Basics -->
+<div class="column flex flex-col gap-4">
+<section class="material h-full">
+<div class="mat-head"><span class="badge">M1</span><div class="mat-title">Disparitäten</div></div>
+<div class="mat-body"><div class="canvas-panel"><div class="canvas-hint">Zeichne mit der Maus.</div><img alt="M1 Hintergrund" class="canvas-bg-img" id="img-m1" src="Karte.png"/><canvas class="draw-canvas" id="canvas-m1"></canvas></div><p>Regionales Pro-Kopf-Einkommen in der EU in % des EU-Durchschnitts (2018)</p></div>
+</section>
+</div>
+<!-- Right Column: Effects & Examples -->
+<div class="column flex flex-col gap-4">
+<section class="material h-full">
+<div class="mat-head"><span class="badge">M2</span><div class="mat-title">Ursachen</div></div>
+<div class="mat-body"><div class="canvas-panel"><div class="canvas-hint">Zeichne mit der Maus.</div><img alt="M2 Hintergrund" class="canvas-bg-img" id="img-m2" src="Kreise.png"/><canvas class="draw-canvas" id="canvas-m2"></canvas></div><p>Teufelskreis peripherer Regionen <i>(oben)</i> und positiver Zyklus in wirtschaftlich entwickelten Zentren <i>(unten)</i></p></div>
+</section>
+</div>
+</div>
+<!-- Task / Merke Section -->
+<section class="task-section">
+<div class="task-label">Aufgaben</div>
+<p class="task-text"><ul>
+<ol>1. <strong>Beschreibe</strong> das Wohlstandsgefälle innerhalb der EU. <i>(Abb. 1)</i></ol>
+<ol>2. <strong>Analysiere</strong> den Zusammenhang zw. Wirtschaftskraft und Bevölkerungsdichte. <i>(Abb. 1; Diercke-Atlas, S.102-1)</i></ol>
+<ol>3. <strong>Beurteile</strong>, in welchen Ländern die Disparitäten besonders klein, in welchen sehr groß sind. <i>(Abb. 1)</i></ol>
+<ol>4. <strong>Diskutiere</strong>, inwieweit die EU geeignet ist und welche Möglichkeiten sie hat, Disparitäten auszugleichen. <i>(Haack-Atlas, S.109-1)</i></ol>
+<ol>5. Der sog. Matthäus-Effekt besagt, „die Reichen können nur reicher, die Armen nur ärmer werden“. <strong>Beurteile</strong>, inwieweit dies für (geograph.) Regionen gilt und wie EU-<ol>Maßnahmen dem entgegenwirken können. <i>(Abb. 2 + 3)</i></ol>
+<ol>6. <strong>Beurteile</strong>, ob in der EU eine Verringerung der Disparitäten stattgefunden hat. <i>(Diercke-Atlas, S.100-2)</i></ol>
+<ol>7. <strong>Diskutiere</strong>, inwieweit die Disparitäten zu einer ungerechten Politik in der EU beitragen und die Demokratie gefährden können.</ol>
+</ul></p>
+</section>
+</div>
+<!-- Footer with Navigation -->
+<div class="footer">
+<div class="footer-left">
+<p>Theo Schierbaum – Disparitäten in Europa</p>
+</div>
+<div class="footer-center">
+<a class="nav-btn" href="2.html">← Zurück</a>
+<a class="nav-btn" href="4.html">Nächste →</a>
+</div>
+<div class="footer-right">
+<p>Seite 3</p>
+</div>
+</div>
+</div>
+<script>
+(function(){
+  // Creates a drawable canvas with an <img> as background.
+  // Goal: image is ALWAYS fully visible, but as large as possible and filling the box width.
+  // We therefore set both M1/M2 panels to a common (shared) aspect ratio: the MIN width/height ratio
+  // of the loaded images. This makes both boxes equally large and prevents cropping when we scale-to-width.
+
+  const setups = [];
+
+  function gcd(a,b){ while(b){ const t=b; b=a%b; a=t; } return a || 1; }
+
+  function setupDrawableCanvas(imgId, canvasId){
+    const img = document.getElementById(imgId);
+    const canvas = document.getElementById(canvasId);
+    if(!img || !canvas) return;
+
+    const panel = canvas.closest('.canvas-panel') || canvas.parentElement;
+
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
+
+    // Offscreen buffer so resizing keeps existing drawing
+    const buffer = document.createElement('canvas');
+    const bctx = buffer.getContext('2d', { willReadFrequently: false });
+
+    const state = {
+      img, canvas, panel, ctx, buffer, bctx,
+      drawing: false,
+      lastX: 0,
+      lastY: 0,
+      cssW: 0,
+      cssH: 0,
+      dpr: 1,
+      ratio: null
+    };
+
+    // --- drawing helpers ---
+    function getPos(e){
+      const rect = canvas.getBoundingClientRect();
+      const xCss = (e.clientX - rect.left);
+      const yCss = (e.clientY - rect.top);
+      // map CSS pixels -> canvas pixels
+      return {
+        x: xCss * state.dpr,
+        y: yCss * state.dpr
+      };
+    }
+
+    function start(e){
+      state.drawing = true;
+      const p = getPos(e);
+      state.lastX = p.x;
+      state.lastY = p.y;
+      e.preventDefault();
+    }
+
+    function move(e){
+      if(!state.drawing) return;
+      const p = getPos(e);
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#90EE90'; // hellgrün
+      ctx.lineWidth = 3 * state.dpr; // 3px in CSS pixels
+      ctx.beginPath();
+      ctx.moveTo(state.lastX, state.lastY);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      ctx.restore();
+      state.lastX = p.x;
+      state.lastY = p.y;
+      e.preventDefault();
+    }
+
+    function end(){
+      state.drawing = false;
+    }
+
+    canvas.addEventListener('pointerdown', start);
+    canvas.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', end);
+    canvas.addEventListener('pointerleave', end);
+
+    // --- resizing / background drawing ---
+    function drawBackground(){
+      if(!img.complete || !img.naturalWidth) return;
+
+      const cw = canvas.width, ch = canvas.height;      // canvas pixels
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+
+      // Scale to width (fills width), but never crop (if too tall, fall back to fit-height).
+      let scale = cw / iw;
+      if(ih * scale > ch){
+        scale = ch / ih; // safety
+      }
+
+      const dw = iw * scale, dh = ih * scale;
+      const dx = (cw - dw) / 2;
+      const dy = (ch - dh) / 2;
+
+      ctx.save();
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.clearRect(0,0,cw,ch);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0,0,cw,ch);
+      ctx.drawImage(img, dx, dy, dw, dh);
+      ctx.restore();
+    }
+
+    function resizeCanvas(){
+      const rect = panel.getBoundingClientRect();
+      const w = Math.max(1, rect.width);
+      const h = Math.max(1, rect.height);
+
+      const dpr = window.devicePixelRatio || 1;
+
+      // Save current drawing into buffer
+      if(canvas.width && canvas.height){
+        buffer.width = canvas.width;
+        buffer.height = canvas.height;
+        bctx.clearRect(0,0,buffer.width, buffer.height);
+        bctx.drawImage(canvas, 0, 0);
+      }
+
+      state.cssW = w;
+      state.cssH = h;
+      state.dpr = dpr;
+
+      canvas.width  = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+
+      // Redraw: background image + previous drawing scaled
+      drawBackground();
+      if(buffer.width && buffer.height){
+        ctx.drawImage(buffer, 0, 0, buffer.width, buffer.height, 0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    // Observe size changes of the panel (responsive)
+    const ro = new ResizeObserver(() => resizeCanvas());
+    ro.observe(panel);
+
+    // When image is ready, store its aspect ratio and trigger common layout
+    function onImgReady(){
+      if(!img.naturalWidth) return;
+      state.ratio = img.naturalWidth / img.naturalHeight;
+      applyCommonAspectRatio();
+      resizeCanvas();
+    }
+
+    img.addEventListener('load', onImgReady);
+    if(img.complete) onImgReady();
+
+    setups.push(state);
+  }
+
+  function applyCommonAspectRatio(){
+    // Use the MIN ratio so that scaling-to-width never crops any image,
+    // and both panels become equally large (same aspect ratio).
+    const ratios = setups.map(s => s.ratio).filter(r => typeof r === 'number' && isFinite(r) && r > 0);
+    if(!ratios.length) return;
+    const common = Math.min(...ratios);
+
+    // Set aspect ratio as a number (supported by modern browsers).
+    // Also set a fraction fallback for better compatibility.
+    setups.forEach(s => {
+      if(!s.panel) return;
+
+      // numeric aspect-ratio
+      s.panel.style.aspectRatio = String(common);
+
+      // fraction fallback (approx) to avoid weird rounding in some engines
+      const denom = 1000;
+      const num = Math.round(common * denom);
+      const g = gcd(num, denom);
+      s.panel.style.setProperty('aspect-ratio', `${num/g} / ${denom/g}`);
+    });
+  }
+
+  // Init canvases for M1 & M2
+  setupDrawableCanvas('img-m1', 'canvas-m1');
+  setupDrawableCanvas('img-m2', 'canvas-m2');
+
+  // Re-apply on orientation change / viewport changes
+  window.addEventListener('resize', () => applyCommonAspectRatio());
+})();
+</script></body>
+</html>

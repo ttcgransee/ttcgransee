@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fallbeispiel Vietnam - Saigon Hi-Tech Park</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; background:#f3f4f6; color:#1f2937; font-family:'Montserrat',sans-serif; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+    .header { background:#2A3B32; color:white; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
+    .title { margin:0; font-size:2rem; font-weight:700; }
+    .divider { width:88px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .content { padding:1.2rem 2rem 1.4rem; display:flex; flex-direction:column; gap:1rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .card.full { grid-column:1/-1; }
+    .head { display:flex; align-items:center; gap:.7rem; padding:.75rem .95rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; }
+    .badge { min-width:3.2rem; text-align:center; padding:.15rem .6rem; border-radius:7px; background:#2A3B32; color:white; font-weight:700; font-size:.9rem; }
+    .h { font-size:1.05rem; font-weight:600; color:#2A3B32; }
+    .body { padding:1rem; font-family:'Raleway',sans-serif; }
+    .small { font-size:.86rem; color:#4b5563; line-height:1.45; }
+    .note { background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.7rem .8rem; margin-bottom:.8rem; }
+    .warn { background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:.7rem .8rem; margin-bottom:.8rem; }
+    .kpis { display:grid; grid-template-columns:repeat(4, 1fr); gap:.6rem; }
+    .kpi { border:1px solid #e5e7eb; border-radius:10px; padding:.65rem; background:#fafafa; }
+    .kpi .l { font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:#6b7280; }
+    .kpi .v { margin-top:.25rem; font-weight:700; font-size:1.05rem; color:#111827; }
+    .chart { position:relative; height:290px; }
+    .mini-chart { position:relative; height:240px; }
+    table { width:100%; border-collapse:collapse; font-size:.84rem; }
+    th, td { border:1px solid #e5e7eb; padding:.45rem .55rem; vertical-align:top; }
+    th { background:#f9fafb; text-align:left; }
+    .img-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .img-box { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .img-box img { width:100%; height:220px; object-fit:cover; display:block; }
+    .cap { padding:.55rem .7rem; font-size:.8rem; color:#4b5563; }
+    .map-wrap { border:1px solid #d1d5db; border-radius:12px; overflow:hidden; }
+    .map-wrap iframe { width:100%; height:320px; border:0; display:block; }
+    .split { display:grid; grid-template-columns:1.2fr .8fr; gap:.9rem; }
+    .route { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; padding:.8rem; }
+    .step { display:flex; gap:.75rem; padding:.55rem 0; border-bottom:1px dashed #d1d5db; }
+    .step:last-child { border-bottom:none; }
+    .num { width:1.7rem; height:1.7rem; flex-shrink:0; border-radius:999px; background:#2A3B32; color:white; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; }
+    .pill { display:inline-flex; align-items:center; gap:.4rem; padding:.38rem .8rem; border-radius:999px; background:#166534; color:white; font-size:.82rem; font-weight:700; text-decoration:none; }
+    .pill:hover { background:#15803d; }
+    .rubric { display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; }
+    .rub { border:1px solid #e5e7eb; border-radius:10px; padding:.75rem; background:#fafafa; }
+    .rub h4 { margin:0 0 .35rem 0; font-size:.93rem; font-weight:700; color:#111827; }
+    .task { position:relative; background:#e9f0ec; border:2px solid #2A3B32; border-radius:14px; padding:1rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:white; padding:.25rem .75rem; border-radius:6px; font-size:.9rem; font-weight:600; }
+    .task ol { margin-left:1rem; }
+    .task li { margin:.48rem 0; line-height:1.52; font-size:.92rem; font-family:'Raleway',sans-serif; }
+    .footer { padding:1rem 2rem 1.25rem; color:#6b7280; font-size:.85rem; display:flex; justify-content:space-between; gap:1rem; font-family:'Raleway',sans-serif; }
+    @media (max-width:1080px) {
+      .grid, .split, .kpis, .img-grid, .rubric { grid-template-columns:1fr; }
+      .chart { height:240px; }
+      .mini-chart { height:220px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="title">Fallbeispiel Vietnam - <i>Saigon Hi-Tech Park</i></h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light text-right">Geographie | Klasse 12</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M1</span><div class="h">Vietnam: Von der Werkbank zum Elektronik-Knoten?</div></div>
+        <div class="body">
+          <div class="kpis mb-3">
+            <div class="kpi"><div class="l">Exporte 2025</div><div class="v">US$ 475,1 Mrd.</div></div>
+            <div class="kpi"><div class="l">Elektronik 2025</div><div class="v">US$ 107,7 Mrd.</div></div>
+            <div class="kpi"><div class="l">Maschinen 2025</div><div class="v">US$ 59,0 Mrd.</div></div>
+            <div class="kpi"><div class="l">Top-3-Anteil</div><div class="v">47,0 %</div></div>
+          </div>
+          <p class="small mb-3">Vietnam passt im Fluggänsemodell besonders gut zu einer <strong>Aufsteiger- bzw. Anschlussphase</strong>: arbeitsintensive Fertigung bleibt wichtig, zugleich steigen <strong>Elektronik, Montage, Zulieferung, Prüfprozesse und techniknahe Dienstleistungen</strong> deutlich auf. Entscheidend ist: Vietnam exportiert nicht nur mehr, sondern rückt in <strong>höhere Wertschöpfungsstufen</strong> globaler Produktionsketten vor.</p>
+          <div class="chart"><canvas id="structureShift"></canvas></div>
+          <p class="small mt-2">Die Grafik ist eine <strong>didaktische Verdichtung</strong>: Sie zeigt nicht eine amtliche Einzelzeitreihe, sondern den strukturellen Wandel von Textil- und Leichtindustrie hin zu Elektronik, Montage, Test, Automatisierung und ersten F&amp;E-Kernen.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M2</span><div class="h">Exportprofil Vietnams 2025</div></div>
+        <div class="body">
+          <table>
+            <thead>
+              <tr><th>Warengruppe</th><th>Wert 2025</th><th>Anteil an Exporten</th><th>Veränderung</th><th>Was sagt das über die Wirtschaftsstruktur?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Elektronik, Computer, Komponenten</td><td>US$ 107,7 Mrd.</td><td>22,7 %</td><td>+48,4 %</td><td>&nbsp;</td></tr>
+              <tr><td>Maschinen, Geräte, Werkzeuge, Ersatzteile</td><td>US$ 59,0 Mrd.</td><td>12,4 %</td><td>+13,2 %</td><td>&nbsp;</td></tr>
+              <tr><td>Telefone und Komponenten</td><td>US$ 56,7 Mrd.</td><td>11,9 %</td><td>+5,2 %</td><td>&nbsp;</td></tr>
+              <tr><td>Textilien und Bekleidung</td><td>US$ 39,6 Mrd.</td><td>8,3 %</td><td>+7,0 %</td><td>&nbsp;</td></tr>
+              <tr><td>Schuhe</td><td>US$ 24,2 Mrd.</td><td>5,1 %</td><td>+5,8 %</td><td>&nbsp;</td></tr>
+            </tbody>
+          </table>
+          <div class="mini-chart mt-3"><canvas id="exportMix"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M3</span><div class="h">Standortprofil: <i>Saigon Hi-Tech Park</i> (Thu Duc, Ho-Chi-Minh-Stadt)</div></div>
+        <div class="body">
+          <div class="note small"><strong>Definition:</strong> Ein High-Tech-Park ist mehr als ein Industriegebiet. Er bündelt <strong>Produktion, Montage, Test, Verwaltung, Ausbildung, Forschung, Infrastruktur und Ansiedlungspolitik</strong> an einem Ort. Genau diese räumliche Kopplung soll in der Exkursion sichtbar werden.</div>
+          <div class="kpis mb-3">
+            <div class="kpi"><div class="l">Eröffnung</div><div class="v">2002</div></div>
+            <div class="kpi"><div class="l">Fläche</div><div class="v">326 ha</div></div>
+            <div class="kpi"><div class="l">Projekte</div><div class="v">ca. 160</div></div>
+            <div class="kpi"><div class="l">Investitionen</div><div class="v">US$ 12,3 Mrd.</div></div>
+          </div>
+          <p class="small mb-2">Der Saigon Hi-Tech Park (SHTP) ist Vietnams wichtigstes Beispiel für einen <strong>strategisch aufgebauten Technologie- und Produktionsstandort</strong> im Süden des Landes. Dort sitzen globale Konzerne wie <strong>Intel, Samsung, Jabil, Nidec, Nipro oder Datalogic</strong>. Typisch ist die Verbindung von exportorientierter Fertigung, internationaler Zulieferlogik, Ausbildungsfunktionen und staatlich geförderter Clusterpolitik.</p>
+          <table>
+            <thead><tr><th>Strukturelement</th><th>Beobachtbarer Ausdruck im Raum</th><th>Mögliche Bedeutung für die Analyse</th></tr></thead>
+            <tbody>
+              <tr><td>Großflächige Werks- und Campusanlagen</td><td>lange Grundstücksgrenzen, große Hallen, Bürotrakte, gesicherte Zufahrten</td><td>spricht für kapitalintensive Fertigung, Montage, Test und Firmensteuerung</td></tr>
+              <tr><td>Verkehrsorientierung</td><td>breite Achsen, Busse, große Einfahrten, Lastwagenverkehr, Parkflächen</td><td>Hinweis auf Pendler- und Logistikfunktion statt innerstädtischer Mischnutzung</td></tr>
+              <tr><td>Mehrsprachige Beschilderung</td><td>vietnamesische und englische Firmen- und Wegweiser</td><td>zeigt internationale Einbindung und Außenorientierung</td></tr>
+              <tr><td>Ausbildungs- und Forschungsorte</td><td>Training Center, Labore, Inkubation, Verwaltung</td><td>macht den Übergang von reiner Montage zu höherer Funktionstiefe sichtbar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M4</span><div class="h">Clusterlogik: Welche Funktionen dominieren - und was fehlt?</div></div>
+        <div class="body">
+          <div class="warn small"><strong>Wichtig:</strong> Diese Grafik ist als <em>Arbeitsmaterial</em> gedacht. Sie verdichtet die im SHTP typischen Schwerpunktfelder. Die Aufgabe besteht darin, das Profil mit der digitalen Exkursion zu <strong>überprüfen</strong>: Bestätigen die Beobachtungen die Clusterlogik - oder zeigen sie eher einen klassischen Industriepark?</div>
+          <div class="chart"><canvas id="clusterRadar"></canvas></div>
+          <table class="mt-3">
+            <thead><tr><th>Funktion</th><th>Typische Akteure / Hinweise</th><th>Frage für die Auswertung</th></tr></thead>
+            <tbody>
+              <tr><td>Elektronikmontage / EMS</td><td>große Hallen, standardisierte Gebäude, Lieferzonen</td><td>Welche Merkmale sprechen für montageintensive Fertigung?</td></tr>
+              <tr><td>Assembly, Test, Packaging</td><td>Intel, spezialisierte Sicherheits- und Technikflächen</td><td>Woran erkennst du High-Tech-Produktion, obwohl das Innere unsichtbar bleibt?</td></tr>
+              <tr><td>Automatisierung / Mechatronik</td><td>Nidec, Robotik, Antriebstechnik, industrielle Präzision</td><td>Warum ist diese Branche typisch für den Aufstieg in höhere Wertschöpfung?</td></tr>
+              <tr><td>Alltagswirtschaft</td><td>Wohnen, kleinteiliger Einzelhandel, urbane Freizeitnutzung</td><td>Welche Nutzungen sind schwach vertreten - und warum?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M5</span><div class="h">Raumbilder des Parks</div></div>
+        <div class="body">
+          <div class="note small"><strong>Hinweise zur digitalen Exkursion:</strong> Nutze Bilder nicht nur als Illustration. Lies sie wie Quellen: Achte auf <strong>Maßstab, Erschließung, Begrünung, Sicherheitsregime, Beschilderung, Fahrzeugtypen und Nutzungsdichte</strong>.</div>
+          <div class="img-grid">
+            <div class="img-box">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Saigon_Hi-Tech_Park.JPG/330px-Saigon_Hi-Tech_Park.JPG" alt="Saigon Hi-Tech Park" onerror="this.style.display='none'; this.parentNode.insertAdjacentHTML('beforeend','<div style=&quot;padding:2rem;text-align:center;color:#6b7280&quot;>Bild konnte nicht geladen werden.</div>');"/>
+              <div class="cap"><strong>Quelle A:</strong> Eingangssituation bzw. repräsentative Grün- und Freiraumgestaltung. Auswertbar sind hier Maßstab, Corporate Identity, Planungscharakter und die Frage, wie stark der Park als <em>geplanter Investitionsraum</em> inszeniert wird.</div>
+            </div>
+            <div class="img-box">
+              <img src="https://image.vietnamnews.vn/uploadvnnews/Article/2025/1/7/398458_hcmc.jpg" alt="Trainingseinrichtung im Saigon Hi-Tech Park" onerror="this.style.display='none'; this.parentNode.insertAdjacentHTML('beforeend','<div style=&quot;padding:2rem;text-align:center;color:#6b7280&quot;>Bild konnte nicht geladen werden.</div>');"/>
+              <div class="cap"><strong>Quelle B:</strong> Ausbildungs- bzw. Trainingsumgebung im Park. Das Bild verweist darauf, dass der Standort nicht nur produziert, sondern auch <strong>Qualifizierung, Automatisierung und Kompetenzaufbau</strong> organisiert.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M6</span><div class="h">Karte: räumliche Orientierung im Saigon-Hi-Tech-Park-Raum</div></div>
+        <div class="body">
+          <div class="split">
+            <div>
+              <div class="map-wrap">
+                <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=106.796%2C10.835%2C106.821%2C10.853&layer=mapnik&marker=10.8445%2C106.8088" loading="lazy"></iframe>
+              </div>
+              <div class="small mt-2">Die eingebettete Karte dient nur der <strong>Orientierung</strong>. Für die eigentliche Exkursion solltest du zusätzlich Google Maps im Vollbild öffnen und in <strong>Street View</strong> arbeiten, um Firmenlabels, Zufahrten, Bushaltestellen und Gebäudestrukturen genauer prüfen zu können.</div>
+            </div>
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Kartengestützte Voranalyse</div>
+              <ul class="small" style="padding-left:1rem; margin:0;">
+                <li>1. Markiere die Hauptachsen und die auffällig breiten Sammelstraßen.</li>
+                <li>2. Suche nach Ballungen großer Hallen- und Campusstrukturen.</li>
+                <li>3. Prüfe, wo Einfahrten, Sicherheitsbereiche und Parkflächen konzentriert sind.</li>
+                <li>4. Achte auf die Lage des Training Centers, der Verwaltung und großer Leitunternehmen.</li>
+                <li>5. Frage: Wirkt der Raum eher wie ein Stadtviertel - oder wie ein streng funktionsorientierter Produktionsraum?</li>
+              </ul>
+              <a class="pill mt-3" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat=10.8445&mlon=106.8088#map=16/10.8445/106.8088"><i class="fas fa-map"></i> Karte in OSM öffnen</a>
+              <a class="pill mt-2" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Saigon+Hi-Tech+Park+Training+Center"><i class="fas fa-location-arrow"></i> Startpunkt in Google Maps</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M7</span><div class="h">Kriteriengeleitete digitale Exkursion: Route, Beobachtungsraster, Auswertung</div></div>
+        <div class="body">
+          <div class="warn small"><strong>Methodischer Kern:</strong> Die Exkursion soll nicht aus bloßem "Herumklicken" bestehen. Ziel ist eine <strong>räumlich begründete Analyse</strong> des Industrie- und Technologieclusters mit festen Beobachtungskriterien.</div>
+          <div class="split">
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Vorgeschlagene Exkursionsroute (25-35 Minuten)</div>
+              <div class="step"><div class="num">1</div><div><div class="font-semibold text-sm">Ankerpunkt setzen</div><div class="small">Starte am <strong>Saigon Hi-Tech Park Training Center</strong>. Der Ort ist didaktisch günstig, weil er neben Produktion auch Ausbildung und Kompetenzaufbau sichtbar macht.</div></div></div>
+              <div class="step"><div class="num">2</div><div><div class="font-semibold text-sm">Makro-Blick</div><div class="small">Wechsle kurz in die Satellitenansicht. Beschreibe Blockgrößen, Hallendichte, Grünflächen, Straßennetz, Parken und den Grad der funktionalen Trennung.</div></div></div>
+              <div class="step"><div class="num">3</div><div><div class="font-semibold text-sm">Verkehr und Erschließung</div><div class="small">Untersuche Einfahrten, breite Straßen, Lieferzonen, Busstopps und die Beziehung zur Hauptverkehrsachse. Frage: Ist der Park stärker auf Logistik, Pendeln oder Besucher orientiert?</div></div></div>
+              <div class="step"><div class="num">4</div><div><div class="font-semibold text-sm">Leitunternehmen erfassen</div><div class="small">Dokumentiere mindestens <strong>6 Standorte</strong>. Darunter sollen mindestens zwei Produktionsstandorte, ein Ausbildungs- oder Verwaltungsstandort und ein Infrastrukturelement liegen.</div></div></div>
+              <div class="step"><div class="num">5</div><div><div class="font-semibold text-sm">Typische Ziele</div><div class="small">Arbeite möglichst mit diesen Suchpunkten: <strong>Intel Products Vietnam</strong>, <strong>Nidec Vietnam</strong>, <strong>SHTP Labs / Incubation</strong>, <strong>High Tech Park Station</strong> (bzw. angrenzender Bereich).</div></div></div>
+              <div class="step"><div class="num">6</div><div><div class="font-semibold text-sm">Räumliches Urteil</div><div class="small">Formuliere am Ende ein Urteil: Ist der SHTP eher <strong>verlängerte Werkbank, aufsteigender Technologiestandort oder Mischform</strong>?</div></div></div>
+            </div>
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Beobachtungsraster (verbindlich)</div>
+              <div class="rubric">
+                <div class="rub"><h4>1. Raumstruktur</h4><div class="small">Gebäudetypen, Parzellengröße, Zaunanlagen, Repräsentationsarchitektur, Freiflächen.</div></div>
+                <div class="rub"><h4>2. Verkehrsanbindung</h4><div class="small">breite Achsen, Busse, LKW, Parken, Zulieferlogik, Hauptstraßenbezug.</div></div>
+                <div class="rub"><h4>3. Unternehmen</h4><div class="small">Name, Funktion, global/ lokal, Produktion vs. Training vs. Verwaltung.</div></div>
+                <div class="rub"><h4>4. Branchen</h4><div class="small">Elektronik, Assembly/Test, Automatisierung, Biotech, Dienstleistungen.</div></div>
+                <div class="rub"><h4>5. Sprache / Zeichen</h4><div class="small">Vietnamesisch/Englisch, Corporate Logos, Sicherheits- und Wegweiser.</div></div>
+                <div class="rub"><h4>6. Clusterhinweise</h4><div class="small">Wiederholung ähnlicher Branchen, Nähe komplementärer Funktionen, geringe Alltagsnutzung.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <table class="mt-4">
+            <thead>
+              <tr><th>Standort / Unternehmen</th><th>Beobachtete Merkmale</th><th>Zuordnung (Produktion / F&amp;E / Verwaltung / Infrastruktur)</th><th>Branche</th><th>Cluster-Aussage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M8</span><div class="h">Leitunternehmen als Anker des Clusters</div></div>
+        <div class="body">
+          <div class="note small"><strong>Vertiefung:</strong> Leitunternehmen strukturieren den Raum nicht nur durch Umsatz, sondern auch durch <strong>Zulieferbeziehungen, Fachkräftebedarf, Standards, Schulungsbedarf und Infrastrukturansprüche</strong>.</div>
+          <table>
+            <thead><tr><th>Unternehmen / Typ</th><th>Rolle im Cluster</th><th>Auswertungsfrage</th></tr></thead>
+            <tbody>
+              <tr><td>Intel Products Vietnam</td><td>Assembly, Test, Packaging; globaler Exportanker</td><td>Warum wertet ein ATP-Standort Vietnams Position in der Wertschöpfungskette auf?</td></tr>
+              <tr><td>Nidec / Automatisierung</td><td>Antriebstechnik, Präzision, industrielle Zulieferung</td><td>Warum ist diese Branche für den Übergang von einfacher Fertigung zu höherem technischen Niveau wichtig?</td></tr>
+              <tr><td>Training Center / Labs / Incubation</td><td>Qualifizierung, Forschung, Unternehmensunterstützung</td><td>Weshalb gehört Ausbildung zur Funktionsweise eines High-Tech-Clusters?</td></tr>
+            </tbody>
+          </table>
+          <div class="mini-chart mt-3"><canvas id="valueChain"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M9</span><div class="h">Mehrdimensionale Deutung: Chancen und Grenzen des Fluggänsemodells</div></div>
+        <div class="body">
+          <div class="chart"><canvas id="limitsChart"></canvas></div>
+          <p class="small mt-2">Das Fluggänsemodell erklärt Vietnams Aufstieg über <strong>Verlagerung, Spezialisierung und Exportindustrialisierung</strong> sehr gut. Weniger gut erklärt es jedoch Abhängigkeiten von Konzernentscheidungen, geopolitische Risiken, die Rolle staatlicher Industriepolitik und den ungleichen Übergang von Montage zu Forschung.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label">Arbeitsaufträge - Analyse, Exkursion, Urteil</div>
+      <ol>
+        <li>1. <strong>Strukturwandel einordnen:</strong> Erläutere anhand von M1 und M2, wie sich Vietnams Rolle in der internationalen Arbeitsteilung verändert hat. Gehe ausdrücklich auf <em>Wertschöpfungsstufen</em> ein.</li>
+        <li>2. <strong>Datenauswertung:</strong> Werte M2 aus. Formuliere mindestens <strong>drei</strong> begründete Aussagen, die jeweils <em>eine Zahl</em> mit einer <em>wirtschaftsgeographischen Deutung</em> verknüpfen.</li>
+        <li>3. <strong>Standortcharakter:</strong> Arbeite mit M3 und M4 heraus, warum der SHTP eher als <em>Cluster</em> denn als gewöhnliches Industriegebiet zu deuten ist.</li>
+        <li>4. <strong>Bildanalyse:</strong> Untersuche M5 systematisch. Leite mindestens <strong>fünf</strong> Beobachtungen ab und ordne sie den Kriterien Raumstruktur, Planung, Ausbildung, Sicherheit oder Internationalität zu.</li>
+        <li>5. <strong>Kartengestützte Voranalyse:</strong> Nutze M6. Beschreibe, welche räumlichen Strukturen schon <em>vor</em> der Exkursion erkennbar sind und welche Fragen sich daraus ergeben.</li>
+        <li>6. <strong>Digitale Exkursion durchführen:</strong> Bearbeite M7. Dokumentiere mindestens <strong>6 Standorte</strong> und fülle das Raster mit belastbaren Beobachtungen.</li>
+        <li>7. <strong>Gesamturteil:</strong> Formuliere auf Basis deiner Beobachtungen ein kriteriengeleitetes Urteil zum Saigon Hi-Tech Park. Gehe auf <strong>Merkmale, Verkehr, Unternehmen, Branchen und Sprachen</strong> ein.</li>
+        <li>8. <strong>Transfer:</strong> Zeige mit Hilfe von M8 und M9, inwiefern Vietnam bzw. der SHTP das Fluggänsemodell bestätigt - und an welchen Punkten das Modell zu kurz greift.</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>Theo Schierbaum - Fallbeispiel zum Fluggänsemodell</div>
+    <div class="text-right">Datenbasis (Auswahl): Vietnam Customs 2025; Vietnam News / VietnamPlus 2025-2026. Diagramme teils didaktisch verdichtet.</div>
+  </div>
+</div>
+
+<script>
+const commonLegend = { plugins:{ legend:{ position:'bottom' } }, responsive:true, maintainAspectRatio:false };
+
+new Chart(document.getElementById('structureShift'), {
+  type:'line',
+  data:{
+    labels:['1990er','2000er','2010er','2020','2023','2025'],
+    datasets:[
+      { label:'arbeitsintensive Leichtindustrie', data:[82,70,54,42,36,30], borderColor:'#B45309', backgroundColor:'rgba(180,83,9,0.08)', tension:.28, fill:false },
+      { label:'Montage, Zulieferung, Exportfertigung', data:[22,40,62,74,78,81], borderColor:'#166534', backgroundColor:'rgba(22,101,52,0.08)', tension:.28, fill:false },
+      { label:'High-Tech-Funktionen, Test, Training, F&E', data:[5,12,24,34,43,52], borderColor:'#2A3B32', backgroundColor:'rgba(42,59,50,0.08)', tension:.28, fill:false }
+    ]
+  },
+  options:{ ...commonLegend, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'didaktischer Strukturindex' } } } }
+});
+
+new Chart(document.getElementById('exportMix'), {
+  type:'bar',
+  data:{
+    labels:['Elektronik','Maschinen','Telefone','Textilien','Schuhe'],
+    datasets:[
+      { label:'Anteil an Exporten 2025 (%)', data:[22.7,12.4,11.9,8.3,5.1], backgroundColor:['rgba(42,59,50,0.85)','rgba(22,101,52,0.78)','rgba(180,83,9,0.75)','rgba(107,114,128,0.68)','rgba(209,213,219,0.9)'] },
+      { label:'Wachstum 2025 (%)', data:[48.4,13.2,5.2,7.0,5.8], backgroundColor:'rgba(230,180,0,0.55)' }
+    ]
+  },
+  options:{ ...commonLegend, scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Prozent' } } } }
+});
+
+new Chart(document.getElementById('clusterRadar'), {
+  type:'radar',
+  data:{
+    labels:['Elektronikmontage','Assembly/Test','Automatisierung','Ausbildung','Biotech','Verwaltung/Clustersteuerung','Alltagsnutzung'],
+    datasets:[{ label:'strukturelle Bedeutung im SHTP', data:[90,82,74,68,44,63,20], borderColor:'#2A3B32', backgroundColor:'rgba(42,59,50,0.18)', pointBackgroundColor:'#2A3B32' }]
+  },
+  options:{ ...commonLegend, scales:{ r:{ beginAtZero:true, max:100, ticks:{ stepSize:20 }, pointLabels:{ font:{ size:11 } } } } }
+});
+
+new Chart(document.getElementById('valueChain'), {
+  type:'bar',
+  data:{
+    labels:['Montage / EMS','Assembly-Test-Packaging','Automatisierung / Zulieferung','Training / Labs','Alltagsfunktionen'],
+    datasets:[{ label:'Bedeutung für Clusterfunktion (Index)', data:[88,86,72,64,24], backgroundColor:['rgba(42,59,50,0.85)','rgba(22,101,52,0.76)','rgba(180,83,9,0.72)','rgba(107,114,128,0.68)','rgba(209,213,219,0.92)'] }]
+  },
+  options:{ ...commonLegend, indexAxis:'y', plugins:{ legend:{ display:false } }, scales:{ x:{ beginAtZero:true, max:100, title:{ display:true, text:'didaktischer Funktionsindex' } } } }
+});
+
+new Chart(document.getElementById('limitsChart'), {
+  type:'bar',
+  data:{
+    labels:['Erklärung durch Verlagerung','Erklärung des Upgradings','Erklärung staatlicher Industriepolitik','Erklärung Konzernabhängigkeit','Erklärung sozialräumlicher Folgen'],
+    datasets:[{ label:'wie gut das Modell den Aspekt erklärt (0-100)', data:[90,74,38,31,27], backgroundColor:['rgba(22,101,52,0.78)','rgba(42,59,50,0.78)','rgba(180,83,9,0.72)','rgba(107,114,128,0.68)','rgba(209,213,219,0.95)'] }]
+  },
+  options:{ ...commonLegend, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'Erklärungsgrad (didaktischer Index)' } } } }
+});
+</script>
+</body>
+</html>

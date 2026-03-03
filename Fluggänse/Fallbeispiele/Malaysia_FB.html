@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fallbeispiel Malaysia - Bayan Lepas Free Industrial Zone</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; background:#f3f4f6; color:#1f2937; font-family:'Montserrat',sans-serif; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+    .header { background:#2A3B32; color:white; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
+    .title { margin:0; font-size:2rem; font-weight:700; }
+    .divider { width:88px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .content { padding:1.2rem 2rem 1.4rem; display:flex; flex-direction:column; gap:1rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .card.full { grid-column:1/-1; }
+    .head { display:flex; align-items:center; gap:.7rem; padding:.75rem .95rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; }
+    .badge { min-width:3.2rem; text-align:center; padding:.15rem .6rem; border-radius:7px; background:#2A3B32; color:white; font-weight:700; font-size:.9rem; }
+    .h { font-size:1.05rem; font-weight:600; color:#2A3B32; }
+    .body { padding:1rem; font-family:'Raleway',sans-serif; }
+    .small { font-size:.86rem; color:#4b5563; line-height:1.45; }
+    .note { background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.7rem .8rem; margin-bottom:.8rem; }
+    .warn { background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:.7rem .8rem; margin-bottom:.8rem; }
+    .kpis { display:grid; grid-template-columns:repeat(4, 1fr); gap:.6rem; }
+    .kpi { border:1px solid #e5e7eb; border-radius:10px; padding:.65rem; background:#fafafa; }
+    .kpi .l { font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:#6b7280; }
+    .kpi .v { margin-top:.25rem; font-weight:700; font-size:1.05rem; color:#111827; }
+    .chart { position:relative; height:290px; }
+    .mini-chart { position:relative; height:240px; }
+    table { width:100%; border-collapse:collapse; font-size:.84rem; }
+    th, td { border:1px solid #e5e7eb; padding:.45rem .55rem; vertical-align:top; }
+    th { background:#f9fafb; text-align:left; }
+    .img-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .img-box { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .img-box img { width:100%; height:220px; object-fit:cover; display:block; }
+    .cap { padding:.55rem .7rem; font-size:.8rem; color:#4b5563; }
+    .map-wrap { border:1px solid #d1d5db; border-radius:12px; overflow:hidden; }
+    .map-wrap iframe { width:100%; height:320px; border:0; display:block; }
+    .split { display:grid; grid-template-columns:1.2fr .8fr; gap:.9rem; }
+    .route { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; padding:.8rem; }
+    .step { display:flex; gap:.75rem; padding:.55rem 0; border-bottom:1px dashed #d1d5db; }
+    .step:last-child { border-bottom:none; }
+    .num { width:1.7rem; height:1.7rem; flex-shrink:0; border-radius:999px; background:#2A3B32; color:white; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; }
+    .pill { display:inline-flex; align-items:center; gap:.4rem; padding:.38rem .8rem; border-radius:999px; background:#166534; color:white; font-size:.82rem; font-weight:700; text-decoration:none; }
+    .pill:hover { background:#15803d; }
+    .rubric { display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; }
+    .rub { border:1px solid #e5e7eb; border-radius:10px; padding:.75rem; background:#fafafa; }
+    .rub h4 { margin:0 0 .35rem 0; font-size:.93rem; font-weight:700; color:#111827; }
+    .task { position:relative; background:#e9f0ec; border:2px solid #2A3B32; border-radius:14px; padding:1rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:white; padding:.25rem .75rem; border-radius:6px; font-size:.9rem; font-weight:600; }
+    .task ol { margin-left:1rem; }
+    .task li { margin:.48rem 0; line-height:1.52; font-size:.92rem; font-family:'Raleway',sans-serif; }
+    .footer { padding:1rem 2rem 1.25rem; color:#6b7280; font-size:.85rem; display:flex; justify-content:space-between; gap:1rem; font-family:'Raleway',sans-serif; }
+    @media (max-width:1080px) {
+      .grid, .split, .kpis, .img-grid, .rubric { grid-template-columns:1fr; }
+      .chart { height:240px; }
+      .mini-chart { height:220px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="title">Fallbeispiel Malaysia - <i>Bayan Lepas Free Industrial Zone</i></h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light text-right">Geographie | Klasse 12</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M1</span><div class="h">Malaysia: Aufsteiger im mittleren Stadium des Flugganseschemas</div></div>
+        <div class="body">
+          <div class="kpis mb-3">
+            <div class="kpi"><div class="l">Exportprofil</div><div class="v">E&E dominiert</div></div>
+            <div class="kpi"><div class="l">Dez. 2025</div><div class="v">48,1 % E&E</div></div>
+            <div class="kpi"><div class="l">Schwerpunkt</div><div class="v">Assembly/Test</div></div>
+            <div class="kpi"><div class="l">Ziel</div><div class="v">Upgrading</div></div>
+          </div>
+          <p class="small mb-3">Malaysia steht im Fluggänsemodell nicht mehr am Anfang der Industrialisierung: Das Land ist fest in globale Wertschöpfungsketten eingebunden, vor allem in der Elektronik. Charakteristisch ist jedoch, dass weite Teile der Industrie noch in <strong>montage-, test- und zulieferungsnahen Segmenten</strong> liegen. Gleichzeitig versucht Malaysia, in <strong>IC-Design, Advanced Packaging, Engineering Services</strong> und wissensintensivere Funktionen aufzusteigen.</p>
+          <div class="chart"><canvas id="structureShift"></canvas></div>
+          <p class="small mt-2">Die Kurve ist als didaktische Rekonstruktion zu lesen: Sie zeigt den Wandel von arbeitsintensiver Fertigung zu exportorientierter Elektronik und den aktuellen Versuch, in höhere Wertschöpfungsstufen vorzurücken.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M2</span><div class="h">Warum ist Elektronik für Malaysia so wichtig?</div></div>
+        <div class="body">
+          <table>
+            <thead>
+              <tr><th>Aspekt</th><th>Beobachtung</th><th>Was bedeutet das?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>E&E-Anteil an den Exporten (Dez. 2025)</td><td>48,1 %</td><td>Elektronik ist der zentrale Exportmotor; andere Branchen treten im Vergleich deutlich zurück.</td></tr>
+              <tr><td>Wachstum E&E (Dez. 2025 ggü. Dez. 2024)</td><td>+25,3 %</td><td>Die globale Halbleiterkonjunktur schlägt direkt auf Malaysias Außenhandel durch.</td></tr>
+              <tr><td>Malaysia im Halbleiternetz</td><td>stark in Test, Packaging, Assembly</td><td>Das Land ist tief in globale Lieferketten integriert, aber oft in nachgelagerten Produktionsstufen.</td></tr>
+              <tr><td>Politisches Entwicklungsziel</td><td>mehr Design, mehr Advanced Packaging</td><td>Das Land will vom verlängerten Werkbank-Standort zum wissensintensiveren Knoten aufsteigen.</td></tr>
+              <tr><td>Räumlicher Schwerpunkt</td><td>Penang als Leitstandort</td><td>Clusterbildung konzentriert Fachkräfte, Zulieferer, Logistik und internationale Investitionen.</td></tr>
+            </tbody>
+          </table>
+          <div class="mini-chart mt-3"><canvas id="exportMix"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M3</span><div class="h">Der Standort: Bayan Lepas Free Industrial Zone</div></div>
+        <div class="body">
+          <div class="note small"><strong>Definition:</strong> Die Bayan Lepas Free Industrial Zone (FIZ) ist kein gewöhnliches Industriegebiet. Sie verbindet Exportproduktion, internationale Konzernstandorte, spezialisierte Zulieferer, Logistik, Flughafennähe und inzwischen auch wissensintensivere Funktionen. Genau diese <strong>räumliche Kopplung</strong> ist für das Fluggänsemodell besonders aufschlussreich.</div>
+          <div class="kpis mb-3">
+            <div class="kpi"><div class="l">Gründung</div><div class="v">1972</div></div>
+            <div class="kpi"><div class="l">Standort</div><div class="v">Penang</div></div>
+            <div class="kpi"><div class="l">Raumtyp</div><div class="v">Exportcluster</div></div>
+            <div class="kpi"><div class="l">Nähe</div><div class="v">Flughafen</div></div>
+          </div>
+          <p class="small mb-2">Bayan Lepas gilt als einer der klassischen Industrialisierungsräume Malaysias. Der Standort wurde früh für exportorientierte Elektronik aufgebaut und steht bis heute für den Übergang von arbeitsintensiver Fertigung zu einem international vernetzten Elektronikcluster. Die Nähe zum <strong>Penang International Airport</strong>, zu Schnellstraßen und zu weiteren Industrieflächen macht den Raum besonders gut lesbar.</p>
+          <table>
+            <thead><tr><th>Strukturelement</th><th>Beobachtbarer Ausdruck im Raum</th><th>Mögliche Bedeutung</th></tr></thead>
+            <tbody>
+              <tr><td>Großflächige Werksareale</td><td>breite Parzellen, gesicherte Einfahrten, niedrige bis mittelhohe Hallen- und Blockbauten</td><td>spricht für exportorientierte Fertigung, Lagerung und technische Infrastruktur</td></tr>
+              <tr><td>Internationale Firmenschilder</td><td>englische Marken, globale Logos, standardisierte Corporate Architecture</td><td>Hinweis auf starke Außenorientierung und internationale Konzernintegration</td></tr>
+              <tr><td>Logistische Prägung</td><td>LKW-Zufahrten, breite Straßen, Flughafennähe, Frachtbezug</td><td>typisch für just-in-time-orientierte Fertigungscluster</td></tr>
+              <tr><td>Begrenzte Alltagsnutzung</td><td>wenig Wohnen, wenig klassische Innenstadtfunktionen</td><td>monofunktional geprägter Produktionsraum statt Mischquartier</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M4</span><div class="h">Clusterlogik in Penang: Welche Funktionen dominieren?</div></div>
+        <div class="body">
+          <div class="warn small"><strong>Wichtig:</strong> Die Grafik ist bewusst didaktisch verdichtet. Deine Aufgabe ist es, sie in der Exkursion zu prüfen: Bestätigt der sichtbare Raum tatsächlich ein Elektronikcluster - oder eher ein einfaches Industriegebiet?</div>
+          <div class="chart"><canvas id="clusterRadar"></canvas></div>
+          <table class="mt-3">
+            <thead><tr><th>Funktion</th><th>Typische Sichtbarkeit vor Ort</th><th>Leitfrage</th></tr></thead>
+            <tbody>
+              <tr><td>Assembly / Packaging</td><td>große Fabrikfronten, Werkszufahrten, Lieferverkehr</td><td>Woran erkennst du Produktionsnähe, obwohl du nicht in das Gelände hineinsehen kannst?</td></tr>
+              <tr><td>Test / Engineering</td><td>modernere Büro- und Technikbauten, streng markierte Firmenareale</td><td>Wie unterscheiden sich diese Gebäude äußerlich von Hallenstandorten?</td></tr>
+              <tr><td>Zulieferung / Präzision</td><td>kleinere Spezialfirmen, technische Dienstleister, Materialversorgung</td><td>Warum sind diese Standorte für den Cluster wichtig, obwohl sie unscheinbarer wirken?</td></tr>
+              <tr><td>Alltagswirtschaft</td><td>Imbisse, Tankstellen, Hotels an den Rändern</td><td>Welche Funktionen fehlen im Kern - und was sagt das über den Raumtyp?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M5</span><div class="h">Raumbilder: Was soll in Streetview gezielt gelesen werden?</div></div>
+        <div class="body">
+          <div class="note small"><strong>Hinweis zur digitalen Exkursion:</strong> Nutze Streetview nicht nur illustrativ. Lies den Raum wie eine Quelle: Achte auf Maßstab, Straßenbreite, Zaunanlagen, Tore, Firmenlogos, Beschilderung, Parkplätze, LKW-Verkehr, Sicherheitsregime und auf die Frage, welche Nutzungen fehlen.</div>
+          <div class="img-grid">
+            <div class="img-box">
+              <img src="https://www.buletinmutiara.com/wp-content/uploads/2024/06/7.-Bayan-Lepas-FTZ-2024.png" alt="Bayan-Lepas" onerror="this.style.display='none'; this.parentNode.insertAdjacentHTML('beforeend','<div style=&quot;padding:2rem;text-align:center;color:#6b7280&quot;>Bild konnte nicht geladen werden.</div>');"/>
+
+              <div class="cap"><strong>Quelle A:</strong> Im Vordergrund steht nicht das einzelne Gebäude, sondern die <strong>Funktionslogik des Straßenraums</strong>: Wie werden Beschäftigte, Material und Waren bewegt?</div>
+            </div>
+            <div class="img-box">
+              <img src="https://media.licdn.com/dms/image/v2/C5622AQH3gzRL5_XZgg/feedshare-shrink_800/feedshare-shrink_800/0/1675076221610?e=2147483647&v=beta&t=BmL3ZMSHqQAtlHU0wVu3dp5yikML97DiMOc3FfMnf5A" alt="Industrial Zone, Penang" onerror="this.style.display='none'; this.parentNode.insertAdjacentHTML('beforeend','<div style=&quot;padding:2rem;text-align:center;color:#6b7280&quot;>Bild konnte nicht geladen werden.</div>');"/>
+
+              <div class="cap"><strong>Quelle B:</strong> Achte auf die <strong>räumliche Sprache globaler Konzerne</strong>: Logos, englische Beschriftung, klar abgegrenzte Grundstücke, technische Gebäudehüllen.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M6</span><div class="h">Karte: räumliche Orientierung im Raum Bayan Lepas</div></div>
+        <div class="body">
+          <div class="split">
+            <div>
+              <div class="map-wrap">
+                <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=100.2600%2C5.2950%2C100.3150%2C5.3450&layer=mapnik&marker=5.3150%2C100.2800" loading="lazy"></iframe>
+              </div>
+              <div class="small mt-2">Die Karte dient nur als <strong>Orientierung</strong>. Für die eigentliche Exkursion solltest du zusätzlich Google Maps öffnen, um Firmenlabels, Fotos und Streetview gezielt zu nutzen.</div>
+            </div>
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Kartengestützte Voranalyse</div>
+              <ul class="small" style="padding-left:1rem; margin:0;">
+                <li>1. Suche nach den großen Achsen rund um <em>Jalan Sultan Azlan Shah</em> und den internen Erschließungsstraßen der FIZ.</li>
+                <li>2. Achte auf die Nähe zwischen Industrieflächen und Flughafen.</li>
+                <li>3. Prüfe, wo Hotels, Tankstellen, Logistik und Dienstleistung an den Randzonen liegen.</li>
+                <li>4. Unterscheide zwischen geschlossenen Werksblöcken und kleinteiligeren Mischzonen.</li>
+                <li>5. Überlege schon vorab: Handelt es sich eher um Produktionsraum, Logistikraum oder gemischtes Hightech-Cluster?</li>
+              </ul>
+              <a class="pill mt-3" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat=5.3150&mlon=100.2800#map=14/5.3150/100.2800"><i class="fas fa-map"></i> Karte in OSM öffnen</a>
+              <a class="pill mt-2" target="_blank" rel="noopener" href="https://www.google.com/maps/search/Bayan+Lepas+Free+Industrial+Zone+Penang"><i class="fas fa-location-arrow"></i> Startpunkt in Google Maps</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M7</span><div class="h">Angeleitete digitale Exkursion: Route, Beobachtungsraster, Auswertung</div></div>
+        <div class="body">
+          <div class="warn small"><strong>Methodischer Kern:</strong> Du sollst den Raum nicht nur beschreiben, sondern mit festen Kriterien auswerten. Ziel ist eine <strong>räumlich begründete Einordnung Malaysias im Fluggänsemodell</strong>.</div>
+          <div class="split">
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Vorgeschlagene Exkursionsroute (25-35 Minuten)</div>
+              <div class="step"><div class="num">1</div><div><div class="font-semibold text-sm">Ankerpunkt setzen</div><div class="small">Starte an der Hauptachse <strong>Jalan Sultan Azlan Shah</strong> im Bereich der Bayan Lepas FIZ. Dort ist der Übergang zwischen Flughafenraum, Zubringer und Industrie besonders gut erkennbar.</div></div></div>
+              <div class="step"><div class="num">2</div><div><div class="font-semibold text-sm">Makro-Blick</div><div class="small">Wechsle zuerst in die Satellitenansicht. Beschreibe Blockgrößen, Hallenstrukturen, Dachflächen, Straßennetz, Parken und die Nähe zu Fracht- und Verkehrsachsen.</div></div></div>
+              <div class="step"><div class="num">3</div><div><div class="font-semibold text-sm">Straßenraum lesen</div><div class="small">Wechsle in Streetview. Achte auf Fahrbahnbreite, Gehwege, Zaunanlagen, LKW-Spuren, Bushaltestellen, Werkszufahrten und Kontrollpunkte.</div></div></div>
+              <div class="step"><div class="num">4</div><div><div class="font-semibold text-sm">Unternehmen erfassen</div><div class="small">Dokumentiere mindestens <strong>6 sichtbare Standorte</strong>. Mindestens zwei sollen produzierende Firmen, eine ein logistischer oder infrastruktureller Standort und eine ein dienstleistungsnaher Randstandort sein.</div></div></div>
+              <div class="step"><div class="num">5</div><div><div class="font-semibold text-sm">Wertschöpfung deuten</div><div class="small">Ordne jeden Standort ein: eher Montage/Test, eher Engineering/Verwaltung, eher Zulieferung oder eher Logistik? Begründe jeweils anhand sichtbarer Merkmale.</div></div></div>
+              <div class="step"><div class="num">6</div><div><div class="font-semibold text-sm">Gesamturteil</div><div class="small">Formuliere am Ende ein Urteil: Ist Bayan Lepas vor allem ein exportorientierter Fertigungscluster, ein moderner Hightech-Campus - oder ein Übergangsraum zwischen beidem?</div></div></div>
+            </div>
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Beobachtungsraster (verbindlich)</div>
+              <div class="rubric">
+                <div class="rub"><h4>1. Raumstruktur</h4><div class="small">Gebäudetypen, Parzellengröße, Zäune, Einsehbarkeit, Dichte, Freiflächen.</div></div>
+                <div class="rub"><h4>2. Verkehr</h4><div class="small">Straßenbreite, Lieferverkehr, Pendlerorientierung, Parkplatzflächen, Busse.</div></div>
+                <div class="rub"><h4>3. Unternehmen</h4><div class="small">Name, global/lokal, Produktions- oder Dienstleistungsfunktion.</div></div>
+                <div class="rub"><h4>4. Branchen</h4><div class="small">Elektronik, Packaging, Test, Präzision, Logistik, Services.</div></div>
+                <div class="rub"><h4>5. Sprache / Zeichen</h4><div class="small">Englisch, Firmenlogos, Sicherheitshinweise, standardisierte Beschilderung.</div></div>
+                <div class="rub"><h4>6. Clusterhinweise</h4><div class="small">Nähe ähnlicher Nutzungen, logistische Verdichtung, geringe Alltagsmischung.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <table class="mt-4">
+            <thead>
+              <tr><th>Standort / Unternehmen</th><th>Beobachtete Merkmale</th><th>Zuordnung (Produktion / Test / Verwaltung / Logistik / Service)</th><th>Branche</th><th>Aussage zum Cluster</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M8</span><div class="h">Leitunternehmen und Upgrading: Was zeigt Penang?</div></div>
+        <div class="body">
+          <div class="note small"><strong>Vertiefung:</strong> Leitunternehmen prägen den Raum nicht nur durch Arbeitsplätze, sondern durch Zulieferketten, Standards, Logistikanforderungen und Fachkräftebindung.</div>
+          <table>
+            <thead><tr><th>Akteur</th><th>Rolle im Raum</th><th>Deutungsfrage</th></tr></thead>
+            <tbody>
+              <tr><td>Internationale Elektronik- und Halbleiterfirmen</td><td>tragen den Exportcluster und stabilisieren globale Lieferketten</td><td>Warum entsteht gerade um große Ankerfirmen eine dichte Zuliefer- und Serviceumgebung?</td></tr>
+              <tr><td>ASE-Erweiterung 2025</td><td>sichtbares Beispiel für Ausbau von Packaging- und Testkapazitäten</td><td>Ist das nur Mengenausweitung - oder bereits ein Schritt zu höherwertiger Spezialisierung?</td></tr>
+              <tr><td>Staatliche Standortpolitik / InvestPenang</td><td>werben gezielt um wissensintensivere Industrie und FDI</td><td>Wie stark ist der Standort politisch gelenkt, statt nur marktgetrieben zu wachsen?</td></tr>
+            </tbody>
+          </table>
+          <div class="mini-chart mt-3"><canvas id="valueChain"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M9</span><div class="h">Malaysia im Fluggänsemodell: Passend - aber nicht vollständig</div></div>
+        <div class="body">
+          <div class="chart"><canvas id="limitsChart"></canvas></div>
+          <p class="small mt-2">Das Fluggänsemodell erklärt hier gut den <strong>Aufstieg über Verlagerung, Spezialisierung und Exportorientierung</strong>. Weniger gut erklärt es die starke Abhängigkeit von multinationalen Konzernen, geopolitische Halbleiterrisiken, Fachkräftemangel und die Frage, ob das Land den Sprung in wirklich forschungsnahe Stufen dauerhaft schafft.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label">Arbeitsaufträge - Analyse, Exkursion, Urteil</div>
+      <ol>
+        <li>1. <strong>Strukturwandel einordnen:</strong> Erläutere mit Hilfe von M1 und M2, wie sich Malaysia von einem arbeitsintensiven Produktionsstandort zu einem wichtigen Elektronikknoten entwickelt hat.</li>
+        <li>2. <strong>Exportstruktur deuten:</strong> Formuliere mindestens <strong>drei</strong> begründete Aussagen, die den hohen E&E-Anteil mit Malaysias Stellung in globalen Wertschöpfungsketten verknüpfen.</li>
+        <li>3. <strong>Raumtyp bestimmen:</strong> Begründe mit M3 und M4, warum Bayan Lepas eher als <em>Cluster</em> denn als beliebiges Industriegebiet verstanden werden kann.</li>
+        <li>4. <strong>Streetview vorbereiten:</strong> Nutze M5 und M6, um Kriterien zu sammeln, nach denen du den Raum systematisch untersuchen willst.</li>
+        <li>5. <strong>Digitale Exkursion durchführen:</strong> Bearbeite M7. Dokumentiere mindestens <strong>6 Standorte</strong> und fülle das Raster mit präzisen Beobachtungen.</li>
+        <li>6. <strong>Wertschöpfung analysieren:</strong> Ordne deine beobachteten Standorte den Kategorien Montage, Test, Zulieferung, Verwaltung oder Logistik zu und begründe jede Einordnung.</li>
+        <li>7. <strong>Gesamturteil formulieren:</strong> Beurteile, in welchem Stadium des Fluggänsemodells Malaysia hier sichtbar wird. Gehe auf Raumstruktur, Verkehr, Unternehmen, Sprache und Wertschöpfung ein.</li>
+        <li>8. <strong>Transfer und Kritik:</strong> Zeige mit M8 und M9, an welchen Punkten Bayan Lepas das Fluggänsemodell bestätigt - und an welchen Stellen das Modell zu einfach bleibt.</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>Theo Schierbaum - Fallbeispiel zum Fluggänsemodell</div>
+    <div class="text-right">Quellenbasis: DOSM (Außenhandel 2025/2026), MATRADE (Handelsberichte 2025), InvestPenang (FDI/Standortprofile), MIDA (Standortgeschichte), ASE (Erweiterung 2025). Diagramme sind didaktisch verdichtet.</div>
+  </div>
+</div>
+
+<script>
+const commonLegend = { plugins:{ legend:{ position:'bottom' } }, responsive:true, maintainAspectRatio:false };
+
+new Chart(document.getElementById('structureShift'), {
+  type:'line',
+  data:{
+    labels:['1970er','1980er','1990er','2000er','2010er','2020er'],
+    datasets:[
+      { label:'arbeitsintensive Fertigung', data:[82,64,44,28,19,12], borderColor:'#B45309', backgroundColor:'rgba(180,83,9,0.08)', tension:.28, fill:false },
+      { label:'exportorientierte Elektronikfertigung', data:[20,42,61,74,78,73], borderColor:'#0F766E', backgroundColor:'rgba(15,118,110,0.08)', tension:.28, fill:false },
+      { label:'wissensintensivere Funktionen', data:[4,9,18,29,41,56], borderColor:'#25404B', backgroundColor:'rgba(37,64,75,0.08)', tension:.28, fill:false }
+    ]
+  },
+  options:{ ...commonLegend, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'didaktischer Strukturindex' } } } }
+});
+
+new Chart(document.getElementById('exportMix'), {
+  type:'bar',
+  data:{
+    labels:['E&E-Anteil','E&E-Wachstum','Logistikbedeutung','Upgrading-Druck','Alltagsnutzung im Kern'],
+    datasets:[
+      { label:'didaktischer Index', data:[48,25,76,72,18], backgroundColor:['rgba(37,64,75,0.85)','rgba(15,118,110,0.78)','rgba(59,130,160,0.72)','rgba(180,83,9,0.70)','rgba(209,213,219,0.95)'] }
+    ]
+  },
+  options:{ ...commonLegend, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'Index / Prozentnähe' } } } }
+});
+
+new Chart(document.getElementById('clusterRadar'), {
+  type:'radar',
+  data:{
+    labels:['Assembly','Packaging','Testing','Engineering','Logistik','Dienstleistung','Wohnen'],
+    datasets:[{ label:'strukturelle Sichtbarkeit im Raum Bayan Lepas', data:[90,86,79,52,83,44,10], borderColor:'#25404B', backgroundColor:'rgba(37,64,75,0.18)', pointBackgroundColor:'#25404B' }]
+  },
+  options:{ ...commonLegend, scales:{ r:{ beginAtZero:true, max:100, ticks:{ stepSize:20 }, pointLabels:{ font:{ size:11 } } } } }
+});
+
+new Chart(document.getElementById('valueChain'), {
+  type:'bar',
+  data:{
+    labels:['Montage / Assembly','Packaging / Test','Engineering / Support','Design / R&D','Alltagsfunktionen'],
+    datasets:[{ label:'Bedeutung im beobachtbaren Raum', data:[82,88,58,34,20], backgroundColor:['rgba(59,130,160,0.78)','rgba(37,64,75,0.85)','rgba(15,118,110,0.76)','rgba(180,83,9,0.72)','rgba(209,213,219,0.92)'] }]
+  },
+  options:{ ...commonLegend, indexAxis:'y', plugins:{ legend:{ display:false } }, scales:{ x:{ beginAtZero:true, max:100, title:{ display:true, text:'didaktischer Funktionsindex' } } } }
+});
+
+new Chart(document.getElementById('limitsChart'), {
+  type:'bar',
+  data:{
+    labels:['Erklärung durch Verlagerung','Erklärung von Clusterbildung','Erklärung politischer Standortsteuerung','Erklärung geopolitischer Risiken','Erklärung von Abhängigkeit von MNCs'],
+    datasets:[{ label:'wie gut das Modell den Aspekt erklärt (0-100)', data:[87,71,52,29,36], backgroundColor:['rgba(15,118,110,0.80)','rgba(37,64,75,0.78)','rgba(59,130,160,0.72)','rgba(180,83,9,0.72)','rgba(209,213,219,0.95)'] }]
+  },
+  options:{ ...commonLegend, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'Erklärungsgrad (didaktischer Index)' } } } }
+});
+</script>
+</body>
+</html>

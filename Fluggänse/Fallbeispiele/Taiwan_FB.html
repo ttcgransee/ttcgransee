@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fallbeispiel Taiwan – Hsinchu Science Park (vertiefte Fassung)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; background:#f3f4f6; color:#1f2937; font-family:'Montserrat',sans-serif; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+    .header { background:#2A3B32; color:white; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
+    .title { margin:0; font-size:2rem; font-weight:700; }
+    .divider { width:88px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .content { padding:1.2rem 2rem 1.4rem; display:flex; flex-direction:column; gap:1rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .card.full { grid-column:1/-1; }
+    .head { display:flex; align-items:center; gap:.7rem; padding:.75rem .95rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; }
+    .badge { min-width:3.2rem; text-align:center; padding:.15rem .6rem; border-radius:7px; background:#2A3B32; color:white; font-weight:700; font-size:.9rem; }
+    .h { font-size:1.05rem; font-weight:600; color:#2A3B32; }
+    .body { padding:1rem; font-family:'Raleway',sans-serif; }
+    .small { font-size:.86rem; color:#4b5563; line-height:1.45; }
+    .note { background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.7rem .8rem; margin-bottom:.8rem; }
+    .warn { background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:.7rem .8rem; margin-bottom:.8rem; }
+    .kpis { display:grid; grid-template-columns:repeat(4, 1fr); gap:.6rem; }
+    .kpi { border:1px solid #e5e7eb; border-radius:10px; padding:.65rem; background:#fafafa; }
+    .kpi .l { font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:#6b7280; }
+    .kpi .v { margin-top:.25rem; font-weight:700; font-size:1.05rem; color:#111827; }
+    .chart { position:relative; height:290px; }
+    .mini-chart { position:relative; height:240px; }
+    table { width:100%; border-collapse:collapse; font-size:.84rem; }
+    th, td { border:1px solid #e5e7eb; padding:.45rem .55rem; vertical-align:top; }
+    th { background:#f9fafb; text-align:left; }
+    .img-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .img-box { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .img-box img { width:100%; height:220px; object-fit:cover; display:block; }
+    .cap { padding:.55rem .7rem; font-size:.8rem; color:#4b5563; }
+    .map-wrap { border:1px solid #d1d5db; border-radius:12px; overflow:hidden; }
+    .map-wrap iframe { width:100%; height:320px; border:0; display:block; }
+    .split { display:grid; grid-template-columns:1.2fr .8fr; gap:.9rem; }
+    .route { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; padding:.8rem; }
+    .step { display:flex; gap:.75rem; padding:.55rem 0; border-bottom:1px dashed #d1d5db; }
+    .step:last-child { border-bottom:none; }
+    .num { width:1.7rem; height:1.7rem; flex-shrink:0; border-radius:999px; background:#2A3B32; color:white; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; }
+    .pill { display:inline-flex; align-items:center; gap:.4rem; padding:.38rem .8rem; border-radius:999px; background:#166534; color:white; font-size:.82rem; font-weight:700; text-decoration:none; }
+    .pill:hover { background:#15803d; }
+    .rubric { display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; }
+    .rub { border:1px solid #e5e7eb; border-radius:10px; padding:.75rem; background:#fafafa; }
+    .rub h4 { margin:0 0 .35rem 0; font-size:.93rem; font-weight:700; color:#111827; }
+    .task { position:relative; background:#e9f0ec; border:2px solid #2A3B32; border-radius:14px; padding:1rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:white; padding:.25rem .75rem; border-radius:6px; font-size:.9rem; font-weight:600; }
+    .task ol { margin-left:1rem; }
+    .task li { margin:.48rem 0; line-height:1.52; font-size:.92rem; font-family:'Raleway',sans-serif; }
+    .footer { padding:1rem 2rem 1.25rem; color:#6b7280; font-size:.85rem; display:flex; justify-content:space-between; gap:1rem; font-family:'Raleway',sans-serif; }
+    @media (max-width:1080px) {
+      .grid, .split, .kpis, .img-grid, .rubric { grid-template-columns:1fr; }
+      .chart { height:240px; }
+      .mini-chart { height:220px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="title">Fallbeispiel Taiwan – <i>Hsinchu Science Park</i></h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light text-right">Geographie | Klasse 12</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M1</span><div class="h">Taiwan: Vom Aufholer zum Taktgeber?</div></div>
+        <div class="body">
+         
+          <div class="kpis mb-3">
+            <div class="kpi"><div class="l">Export 2025</div><div class="v">US$ 640,7 Mrd.</div></div>
+            <div class="kpi"><div class="l">IKT/AV 2025</div><div class="v">US$ 251,2 Mrd.</div></div>
+            <div class="kpi"><div class="l">Elektronikteile 2025</div><div class="v">US$ 222,9 Mrd.</div></div>
+            <div class="kpi"><div class="l">Gemeinsamer Anteil</div><div class="v">74 %</div></div>
+          </div>
+          <p class="small mb-3">Die taiwanische Exportstruktur zeigt 2025 eine außergewöhnlich starke Konzentration auf informations-, kommunikations- und audio-/videobezogene Produkte sowie Teile elektronischer Produkte. Für die Analyse reicht es daher nicht, nur von „Elektronik“ zu sprechen: zu unterscheiden sind <strong>Endgeräte, Komponenten, integrierte Schaltkreise, Ausrüstung</strong> und wissensintensive Vorstufen.</p>
+          <div class="chart"><canvas id="structureShift"></canvas></div>
+          <p class="small mt-2">Das Diagramm bildet <strong>keine amtliche Zeitreihe</strong> ab, sondern eine didaktische Rekonstruktion der Verschiebung zwischen arbeitsintensiver Fertigung, OEM (Auftragsfertigung)/ODM (Design und Fertigung)-Elektronik und wissensintensiver Chip-/F&amp;E-Ökonomie. </p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M2</span><div class="h">Exportprofil Taiwans 2025</div></div>
+        <div class="body">
+          
+          <table>
+            <thead>
+              <tr><th>Warengruppe</th><th>Wert 2025</th><th>Anteil an Exporten</th><th>Veränderung ggü. 2024</th><th>Was sagt das über die Wirtschaftsstruktur?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Informations-, Kommunikations- und AV-Produkte</td><td>US$ 251,2 Mrd.</td><td>39,2 %</td><td>+89,5 %</td><td>&nbsp;</td></tr>
+              <tr><td>Teile elektronischer Produkte</td><td>US$ 222,9 Mrd.</td><td>34,8 %</td><td>+25,8 %</td><td>&nbsp;</td></tr>
+              <tr><td>Maschinen</td><td>US$ 25,8 Mrd.</td><td>4,0 %</td><td>+7,0 %</td><td>&nbsp;</td></tr>
+              <tr><td>Basismetalle und Metallwaren</td><td>US$ 27,9 Mrd.</td><td>4,4 %</td><td>-2,0 %</td><td>&nbsp;</td></tr>
+              <tr><td>Chemikalien</td><td>US$ 18,3 Mrd.</td><td>2,9 %</td><td>-0,2 %</td><td>&nbsp;</td></tr>
+              <tr><td>Mineralprodukte</td><td>US$ 13,9 Mrd.</td><td>2,2 %</td><td>-0,2 %</td><td>&nbsp;</td></tr>
+            </tbody>
+          </table>
+          <div class="mini-chart mt-3"><canvas id="exportMix"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M3</span><div class="h">Science Park <i>Hsinchu</i></div></div>
+        <div class="body">
+          <div class="note small"><strong>Definition <i>Science Park</i>:</strong> Ein Science Park ist mehr als ein Industriegebiet. Er bündelt Produktion, Zulieferung, Verwaltung, Forschung, Ausbildung, Infrastruktur und oft auch alltagsnahe Dienstleistungen. Genau diese <strong>räumliche Kopplung</strong> soll in der Exkursion sichtbar werden.</div>
+          <div class="kpis mb-3">
+            <div class="kpi"><div class="l">Gründung</div><div class="v">1980</div></div>
+            <div class="kpi"><div class="l">Fläche</div><div class="v">686 ha</div></div>
+            <div class="kpi"><div class="l">Unternehmen</div><div class="v">&gt; 600</div></div>
+            <div class="kpi"><div class="l">Beschäftigte</div><div class="v">&gt; 160.000</div></div>
+          </div>
+          <p class="small mb-2">Der Hsinchu Science Park wurde als Taiwans erster Science Park aufgebaut. Laut offizieller Parkbeschreibung konzentriert er <strong>Halbleiter, Computer und Peripherie, Kommunikation, Optoelektronik, Präzisionsmaschinen und Biotechnologie</strong>. Entscheidend ist die Lage zwischen staatlicher Innovationspolitik, Forschungsinstitutionen (u. a. ITRI) und Hochschulen.</p>
+          <table>
+            <thead><tr><th>Strukturelement</th><th>Beobachtbarer Ausdruck im Raum</th><th>Mögliche Bedeutung für die Analyse</th></tr></thead>
+            <tbody>
+              <tr><td>Großparzellige Werks- und Bürokomplexe</td><td>weitläufige Gebäudeblöcke, gesicherte Zufahrten, Firmenschilder</td><td>spricht für kapital- und flächenintensive Hightech-Produktion bzw. F&amp;E</td></tr>
+              <tr><td>Institutionen + Firmen im selben Gebiet</td><td>Verwaltung, Museum, Firmenzentralen, ggf. Labore</td><td>Hinweis auf Cluster statt monofunktionalem Industriegebiet</td></tr>
+              <tr><td>Mehrsprachige Beschilderung</td><td>Chinesisch + Englisch auf Schildern / Labels</td><td>internationalisierte Wissensökonomie, globale Vernetzung</td></tr>
+              <tr><td>Spezialisierte Mobilität</td><td>Shuttlebusse, breite Achsen, Parkplätze, Nähe zu Fernstraßen</td><td>enge Verzahnung mit Pendler- und Güterverkehr</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="card">
+        <div class="head"><span class="badge">M4</span><div class="h">Clusterlogik: Welche Branchen dominieren – und was fehlt?</div></div>
+        <div class="body">
+          <div class="warn small"><strong>Wichtig:</strong> Diese Grafik ist als <em>Arbeitsmaterial</em> gedacht. Sie verdichtet offizielle Schwerpunktbranchen des Parks. Die Aufgabe besteht darin, sie mit der Exkursion abzugleichen: Bestätigen die Beobachtungen dieses Profil – oder zeigen sie Abweichungen?</div>
+          <div class="chart"><canvas id="clusterRadar"></canvas></div>
+          <table class="mt-3">
+            <thead><tr><th>Branche</th><th>Typische Unternehmen/Funktionen</th><th>Frage für die Auswertung</th></tr></thead>
+            <tbody>
+              <tr><td>Foundry / Fertigung</td><td>Waferproduktion, Reinraumstandorte, kapitalintensive Anlagen</td><td>Woran erkennst du Produktion trotz geringer Einsehbarkeit?</td></tr>
+              <tr><td>IC-Design / F&amp;E</td><td>Designhäuser, Entwicklungszentren, Bürocampi</td><td>Wie unterscheiden sich diese Standorte äußerlich von Fabriken?</td></tr>
+              <tr><td>Ausrüstung / Präzisionsmaschinen</td><td>Spezialmaschinen, Test- und Labortechnik</td><td>Warum sind diese Firmen für den Cluster zentral, obwohl sie oft weniger sichtbar sind?</td></tr>
+              <tr><td>Alltagswirtschaft</td><td>Einzelhandel, Wohnen, klassische Innenstadtfunktionen</td><td>Welche dieser Nutzungen sind im Park schwach vertreten – und warum?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M5</span><div class="h">Raumbilder des Parks</div></div>
+        <div class="body">
+          <div class="note small"><strong>Hinweise zur digitalen Exkursion:</strong> Nutze die Bilder (v.a. in Streetview) nicht nur illustrativ. Lies sie wie Quellen oder visuelle Hinweise, die ausgewertet werden können: Achte auf Maßstab, Erschließung, Beschilderung, Sicherheitsregime, Gestalt der Gebäude, Verkehrsmittel und Sprachen.</div>
+          <div class="img-grid">
+            <div class="img-box">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Buses%20hsinchu%20science%20park.jpg" alt="Busse im Hsinchu Science Park" onerror="this.style.display='none'; this.parentNode.insertAdjacentHTML('beforeend','<div style=&quot;padding:2rem;text-align:center;color:#6b7280&quot;>Bild konnte nicht geladen werden.</div>');"/>
+              <div class="cap"><strong>Quelle A:</strong> Shuttle-/Bus-Infrastruktur im Park. Auswertbar sind hier Verkehrsanbindung, Pendlerorientierung und die Frage, ob der Raum auto- oder transitdominiert erschlossen ist.</div>
+            </div>
+            <div class="img-box">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tsmc%20factory%20hsinchu.JPG" alt="TSMC-Werksgebäude in Hsinchu" onerror="this.style.display='none'; this.parentNode.insertAdjacentHTML('beforeend','<div style=&quot;padding:2rem;text-align:center;color:#6b7280&quot;>Bild konnte nicht geladen werden.</div>');"/>
+              <div class="cap"><strong>Quelle B:</strong> TSMC-Gebäude in Hsinchu. Achte auf Größe, Einsehbarkeit, Fassadensprache, Firmenmarkierung und den Kontrast zu einem klassischen innerstädtischen Gewerbegebiet.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M6</span><div class="h">Karte: räumliche Orientierung im Hsinchu-Science-Park-Raum</div></div>
+        <div class="body">
+          <div class="split">
+            <div>
+              <div class="map-wrap">
+                <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=121.002%2C24.765%2C121.055%2C24.803&layer=mapnik&marker=24.7778%2C121.0285" loading="lazy"></iframe>
+              </div>
+              <div class="small mt-2">Die eingebettete Karte ist bewusst als <strong>Orientierungskarte</strong> gewählt. Für die eigentliche Exkursion solltest du zusätzlich Google Maps oder OpenStreetMap im Vollbild öffnen, um Firmenlabels, Fotos und Wege besser prüfen zu können.</div>
+            </div>
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Kartengestützte Voranalyse</div>
+              <ul class="small" style="padding-left:1rem; margin:0;">
+                <li>1. Markiere mental die Hauptachsen und breite Sammelstraßen.</li>
+                <li>2. Suche nach Ballungen großer, rechtwinkliger Gebäudeblöcke.</li>
+                <li>3. Prüfe, ob Wohn- und Einzelhandelsnutzungen dominieren oder untergeordnet bleiben.</li>
+                <li>4. Achte auf Bezeichnungen wie <em>Innovation Rd.</em>, <em>Li-Hsin Rd.</em>, <em>Hsin-Ann Rd.</em> als Hinweise auf interne Parkstruktur.</li>
+                <li>5. Notiere, wo Verkehrsknoten, Parkhäuser, Bushaltestellen oder Verwaltungsstandorte liegen.</li>
+              </ul>
+              <a class="pill mt-3" target="_blank" rel="noopener" href="https://www.openstreetmap.org/?mlat=24.7778&mlon=121.0285#map=15/24.7778/121.0285"><i class="fas fa-map"></i> Karte in OSM öffnen</a>
+              <a class="pill mt-2" target="_blank" rel="noopener" href="https://www.google.com/maps/search/TSMC+Museum+of+Innovation+Hsinchu"><i class="fas fa-location-arrow"></i> Startpunkt in Google Maps</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full">
+        <div class="head"><span class="badge">M7</span><div class="h">Kriteriengeleitete digitale Exkursion: Route, Beobachtungsraster, Auswertung</div></div>
+        <div class="body">
+          <div class="warn small"><strong>Methodischer Kern:</strong> Du sollst nicht „einfach herumlaufen“, sondern den Park mit festen Beobachtungskriterien lesen. Das Ziel ist eine <strong>räumlich begründete Clusteranalyse</strong> – nicht das Sammeln beliebiger Firmennamen.</div>
+          <div class="split">
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Vorgeschlagene Exkursionsroute (25–35 Minuten)</div>
+              <div class="step"><div class="num">1</div><div><div class="font-semibold text-sm">Ankerpunkt setzen</div><div class="small">Starte beim <strong>TSMC Museum of Innovation</strong>. Dieser Ort ist didaktisch sinnvoll, weil er im Cluster liegt und TSMC als globalen Leitakteur sichtbar macht.</div></div></div>
+              <div class="step"><div class="num">2</div><div><div class="font-semibold text-sm">Makro-Blick</div><div class="small">Wechsle in die Satellitenansicht. Beschreibe zunächst den Raumtyp: Blockgrößen, Straßennetz, Freiflächen, Parken, eventuelle Begrünung, Dichte der Beschilderung.</div></div></div>
+              <div class="step"><div class="num">3</div><div><div class="font-semibold text-sm">Verkehr untersuchen</div><div class="small">Suche nach Buslinien, Haltestellen, breiten Ein- und Ausfallstraßen, Parkhäusern, Lieferzonen. Frage: Ist der Park stärker auf Pendlerverkehr, Logistik oder Besucher ausgerichtet?</div></div></div>
+              <div class="step"><div class="num">4</div><div><div class="font-semibold text-sm">Unternehmen erfassen</div><div class="small">Dokumentiere mindestens <strong>6 Standorte</strong>. Davon sollen mindestens zwei direkt mit Halbleitern/Elektronik, einer mit Verwaltung/Forschung und einer mit Infrastruktur/Dienstleistung zusammenhängen.</div></div></div>
+              <div class="step"><div class="num">5</div><div><div class="font-semibold text-sm">Sprachen und Internationalität</div><div class="small">Achte gezielt auf Chinesisch/Englisch auf Firmenlogos, Wegweisern, Bushaltestellen, Gebäudeschildern. Deute, was dies über Zielgruppen und globale Verflechtung aussagt.</div></div></div>
+              <div class="step"><div class="num">6</div><div><div class="font-semibold text-sm">Räumliches Urteil</div><div class="small">Formuliere am Ende ein Gesamturteil: Handelt es sich primär um Fertigungsraum, Forschungsraum, Mischcluster oder repräsentative Konzernlandschaft?</div></div></div>
+            </div>
+            <div class="route">
+              <div class="font-semibold text-sm mb-2 text-gray-800">Beobachtungsraster (verbindlich)</div>
+              <div class="rubric">
+                <div class="rub"><h4>1. Raumstruktur</h4><div class="small">Gebäudetypen, Parzellengröße, Einsehbarkeit, Zaunanlagen, Repräsentationsarchitektur, Freiflächen.</div></div>
+                <div class="rub"><h4>2. Verkehrsanbindung</h4><div class="small">breite Achsen, Busse, Parken, Lieferzonen, Nähe zu übergeordneten Straßen, Pendlerlogik.</div></div>
+                <div class="rub"><h4>3. Unternehmen</h4><div class="small">Name, Funktion, global/ lokal, produzierend vs. forschend vs. verwaltend.</div></div>
+                <div class="rub"><h4>4. Branchen</h4><div class="small">Foundry, IC-Design, Peripherie, Optoelektronik, Maschinen, Dienstleistung, Bildung.</div></div>
+                <div class="rub"><h4>5. Sprache / Zeichen</h4><div class="small">Chinesisch/Englisch, Markenlogos, Nummernsysteme, internationale Corporate Identity.</div></div>
+                <div class="rub"><h4>6. Clusterhinweise</h4><div class="small">Wiederholung ähnlicher Branchen, Nähe komplementärer Funktionen, geringe Alltagsnutzung.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <table class="mt-4">
+            <thead>
+              <tr><th>Standort / Unternehmen</th><th>Beobachtete Merkmale</th><th>Zuordnung (Produktion / F&amp;E / Verwaltung / Infrastruktur)</th><th>Branche</th><th>Cluster-Aussage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="card">
+        <div class="head"><span class="badge">M8</span><div class="h">Leitunternehmen als Anker des Clusters</div></div>
+        <div class="body">
+          <div class="note small"><strong>Vertiefung:</strong> Leitunternehmen strukturieren den Raum nicht nur durch Umsatz, sondern durch Zulieferbeziehungen, Fachkräftebindung, Infrastrukturbedarf und Standards für den gesamten Standort.</div>
+          <table>
+            <thead><tr><th>Unternehmen</th><th>Rolle im Cluster</th><th>Auswertungsfrage</th></tr></thead>
+            <tbody>
+              <tr><td>TSMC</td><td>globaler Foundry-Leitakteur; Hauptsitz im Hsinchu Science Park</td><td>Warum erzeugt ein solches Unternehmen ein dichtes Zuliefer- und Wissensumfeld?</td></tr>
+              <tr><td>IC-Designer / Zulieferer</td><td>Entwicklung, Test, spezialisierte Vorprodukte</td><td>Warum ist räumliche Nähe trotz globaler Lieferketten wichtig?</td></tr>
+              <tr><td>Parkverwaltung / Museum / Dienstleistungen</td><td>Steuerung, Repräsentation, Besucher- und Wissensinfrastruktur</td><td>Weshalb gehört auch dies zur Funktionsweise eines Hightech-Clusters?</td></tr>
+            </tbody>
+          </table>
+          <div class="mini-chart mt-3"><canvas id="valueChain"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M9</span><div class="h">Mehrdimensionale Deutung: Chancen und Grenzen des Fluggänsemodells</div></div>
+        <div class="body">
+          <div class="chart"><canvas id="limitsChart"></canvas></div>
+          <p class="small mt-2">Die Grafik soll helfen, ein differenziertes Fazit zu formulieren: Das Fluggänsemodell erklärt den <strong>Aufstieg über Verlagerung und Spezialisierung</strong> gut. Es erklärt aber weniger gut geopolitische Risiken, extreme Kapitalintensität, Abhängigkeit von Schlüsselunternehmen und die Binnenfolgen eines solchen Clusters.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label">Arbeitsaufträge – Analyse, Exkursion, Urteil</div>
+      <ol>
+        <li>1. <strong>Strukturwandel einordnen:</strong> Erläutere anhand von M1 und M2, wie sich Taiwans wirtschaftliche Rolle seit dem späten 20. Jahrhundert verändert hat. Gehe ausdrücklich auf <em>Wertschöpfungsstufen</em> und nicht nur auf Produkte ein.</li>
+        <li>2. <strong>Datenauswertung:</strong> Werte die Tabelle in M2 aus. Formuliere mindestens <strong>drei</strong> begründete Aussagen, die jeweils <em>eine Zahl</em> mit einer <em>räumlich-wirtschaftlichen Deutung</em> verknüpfen.</li>
+        <li>3. <strong>Raumanalyse vorbereiten:</strong> Arbeite M3 und M4 heraus. Begründe, warum Hsinchu eher als <em>Cluster</em> denn als gewöhnliches Industriegebiet zu deuten ist.</li>
+        <li>4. <strong>Bildanalyse:</strong> Untersuche die beiden Bilder in M5 systematisch. Leite mindestens <strong>fünf</strong> konkrete Beobachtungen ab und ordne sie den Kriterien Raumstruktur, Verkehr, Sicherheit, Internationalität oder Funktionsmischung zu.</li>
+        <li>5. <strong>Kartengestützte Voranalyse:</strong> Nutze M6. Skizziere, welche räumlichen Strukturen du schon <em>vor</em> der eigentlichen Exkursion erkennen kannst und welche Fragen dadurch für die Vor-Ort-Analyse entstehen.</li>
+        <li>6. <strong>Digitale Exkursion durchführen:</strong> Bearbeite M7. Dokumentiere mindestens <strong>6 Standorte</strong> und fülle das Beobachtungsraster mit belastbaren Einträgen aus.</li>
+        <li>7. <strong>Exkursionsauswertung:</strong> Formuliere auf Basis deines Rasters ein kriteriengeleitetes Gesamturteil zum Hsinchu Science Park. Gehe auf <strong>Merkmale, Verkehrsanbindung, Unternehmen, Branchen und Sprachen</strong> ein.</li>
+        <li>8. <strong>Transfer:</strong> Zeige mit Hilfe von M8 und M9, inwiefern Hsinchu das Fluggänsemodell bestätigt – und an welchen Punkten das Modell zu kurz greift.</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>Theo Schierbaum - Fallbeispiel zum Fluggänsemodell</div>
+    <div class="text-right">Hinweis: Einige Diagramme verdichten mehrere Quellen didaktisch; sie sind zur Interpretation gedacht, nicht als reine Merksätze.</div>
+  </div>
+</div>
+
+<script>
+const commonLegend = { plugins:{ legend:{ position:'bottom' } }, responsive:true, maintainAspectRatio:false };
+
+new Chart(document.getElementById('structureShift'), {
+  type:'line',
+  data:{
+    labels:['1960er','1970er','1980er','1990er','2000er','2010er','2020er'],
+    datasets:[
+      { label:'arbeitsintensive Fertigung', data:[84,78,58,36,22,15,10], borderColor:'#B45309', backgroundColor:'rgba(180,83,9,0.08)', tension:.28, fill:false },
+      { label:'OEM/ODM-Elektronik & Komponenten', data:[18,30,52,70,67,56,45], borderColor:'#166534', backgroundColor:'rgba(22,101,52,0.08)', tension:.28, fill:false },
+      { label:'Chipfertigung, Design, F&E', data:[3,8,20,42,68,82,92], borderColor:'#2A3B32', backgroundColor:'rgba(42,59,50,0.08)', tension:.28, fill:false }
+    ]
+  },
+  options:{ ...commonLegend, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'didaktischer Strukturindex' } } } }
+});
+
+new Chart(document.getElementById('exportMix'), {
+  type:'bar',
+  data:{
+    labels:['IKT/AV','Elektronikteile','Maschinen','Metalle','Chemikalien','Mineralprodukte'],
+    datasets:[
+      { label:'Anteil an Exporten 2025 (%)', data:[39.2,34.8,4.0,4.4,2.9,2.2], backgroundColor:['rgba(42,59,50,0.85)','rgba(22,101,52,0.78)','rgba(180,83,9,0.75)','rgba(107,114,128,0.68)','rgba(156,163,175,0.68)','rgba(209,213,219,0.9)'] },
+      { label:'Wachstum ggü. 2024 (%)', data:[89.5,25.8,7.0,-2.0,-0.2,-0.2], backgroundColor:'rgba(230,180,0,0.55)' }
+    ]
+  },
+  options:{ ...commonLegend, scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Prozent' } } } }
+});
+
+new Chart(document.getElementById('clusterRadar'), {
+  type:'radar',
+  data:{
+    labels:['Halbleiter','IC-Design','Computer/Peripherie','Kommunikation','Optoelektronik','Präzisionsmaschinen','Biotech'],
+    datasets:[{ label:'strukturelle Bedeutung im Hsinchu Science Park', data:[96,88,72,66,63,58,38], borderColor:'#2A3B32', backgroundColor:'rgba(42,59,50,0.18)', pointBackgroundColor:'#2A3B32' }]
+  },
+  options:{ ...commonLegend, scales:{ r:{ beginAtZero:true, max:100, ticks:{ stepSize:20 }, pointLabels:{ font:{ size:11 } } } } }
+});
+
+new Chart(document.getElementById('valueChain'), {
+  type:'bar',
+  data:{
+    labels:['Waferfertigung / Foundry','IC-Design / Entwicklung','Ausrüstung / Test','Parksteuerung / Services','Alltagsnutzungen'],
+    datasets:[{ label:'Bedeutung für Clusterfunktion (Index)', data:[95,84,74,58,22], backgroundColor:['rgba(42,59,50,0.85)','rgba(22,101,52,0.76)','rgba(180,83,9,0.72)','rgba(107,114,128,0.68)','rgba(209,213,219,0.92)'] }]
+  },
+  options:{ ...commonLegend, indexAxis:'y', plugins:{ legend:{ display:false } }, scales:{ x:{ beginAtZero:true, max:100, title:{ display:true, text:'didaktischer Funktionsindex' } } } }
+});
+
+new Chart(document.getElementById('limitsChart'), {
+  type:'bar',
+  data:{
+    labels:['Erklärungsstärke des Fluggänsemodells','Erklärung geopolitischer Risiken','Erklärung extremer Kapitalintensität','Erklärung Cluster-Binnenstrukturen','Erklärung sozialräumlicher Nebenfolgen'],
+    datasets:[{ label:'wie gut das Modell den Aspekt erklärt (0-100)', data:[86,34,42,48,27], backgroundColor:['rgba(22,101,52,0.78)','rgba(180,83,9,0.72)','rgba(107,114,128,0.68)','rgba(156,163,175,0.68)','rgba(209,213,219,0.95)'] }]
+  },
+  options:{ ...commonLegend, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, max:100, title:{ display:true, text:'Erklärungsgrad (didaktischer Index)' } } } }
+});
+</script>
+</body>
+</html>

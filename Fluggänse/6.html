@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fluggänsemodell</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333;
+      font-family:'Montserrat',sans-serif;
+    }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1.1rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:1rem;
+    }
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.2rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny { font-size:.86rem; color:#4B5563; }
+
+    .key-box {
+      background:#FEF3C7;
+      border:1px solid #FBBF24;
+      border-radius:10px;
+      padding:.7rem .8rem;
+      margin-bottom:.75rem;
+    }
+
+    .geese-flow {
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:.55rem;
+      align-items:stretch;
+      margin-top:.5rem;
+    }
+    .goose-step {
+      position:relative;
+      background:#F9FAFB;
+      border:1px solid #D1D5DB;
+      border-radius:12px;
+      padding:.7rem;
+      min-height:145px;
+    }
+    .goose-step:not(:last-child)::after {
+      content:'→';
+      position:absolute;
+      right:-.55rem;
+      top:50%;
+      transform:translateY(-50%);
+      width:1.1rem; height:1.1rem;
+      display:flex; align-items:center; justify-content:center;
+      background:#2A3B32; color:#fff;
+      border-radius:999px;
+      font-weight:700;
+      z-index:2;
+    }
+    .step-kicker {
+      font-size:.75rem;
+      font-weight:700;
+      letter-spacing:.03em;
+      color:#166534;
+      text-transform:uppercase;
+      margin-bottom:.3rem;
+    }
+    .step-title { font-weight:700; color:#1F2937; margin-bottom:.35rem; font-size:.95rem; }
+    .step-list { margin:0; padding-left:1rem; font-size:.83rem; color:#4B5563; }
+
+
+
+        .fact-box {
+      background:#EEF6F1;
+      border:1px solid #B7D3C2;
+      border-radius:10px;
+      padding:.7rem .8rem;
+      margin-bottom:.75rem;
+    }
+    .milestone-grid {
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:.6rem;
+    }
+    .milestone {
+      background:#FAFAFA;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.65rem;
+    }
+    .milestone .year {
+      font-size:.78rem;
+      font-weight:700;
+      color:#166534;
+      text-transform:uppercase;
+      letter-spacing:.03em;
+      margin-bottom:.25rem;
+    }
+    .milestone .m-title {
+      font-size:.9rem;
+      font-weight:700;
+      color:#1F2937;
+      margin-bottom:.25rem;
+    }
+
+    .chart-wrap { position:relative; width:100%; height:260px; }
+
+    .compare-list {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:.7rem;
+      margin-top:.8rem;
+    }
+    .compare-card {
+      background:#FAFAFA;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.75rem;
+    }
+    .compare-card h3 {
+      margin:0 0 .4rem 0;
+      font-size:.95rem;
+      font-weight:700;
+      color:#1F2937;
+    }
+
+
+    .app-grid {
+      display:grid;
+      grid-template-columns:.95fr 1.05fr;
+      gap:.85rem;
+      margin-top:.15rem;
+    }
+    .mini-card {
+      background:#FAFAFA;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.75rem;
+    }
+    .mini-card h3 { margin:0 0 .45rem 0; font-size:.95rem; font-weight:700; color:#1F2937; }
+    .chart-wrap { position:relative; width:100%; height:250px; }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.1rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:600;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.91rem; }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      background:#166534;
+      color:#fff;
+      padding:.35rem .8rem;
+      border-radius:999px;
+      font-size:.85rem;
+      font-weight:600;
+      cursor:pointer;
+      border:none;
+    }
+    .btn:hover { background:#15803D; }
+    .solution {
+      margin-top:.5rem;
+      background:#FEF3C7;
+      border:1px solid #FBBF24;
+      border-radius:10px;
+      padding:.6rem .7rem;
+    }
+
+    .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      color:#666; font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      flex-shrink:0;
+      background:#F5F5F5;
+    }
+    .footer-left { justify-self:start; }
+    .footer-center { display:flex; gap:1rem; justify-self:center; }
+    .footer-right { justify-self:end; }
+
+    .nav-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background-color:#2A3B32;
+      color:white;
+      padding:0.5rem 1.25rem;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      font-size:0.9rem;
+      transition:all 0.2s ease;
+      box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      min-width:100px;
+    }
+    .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); box-shadow:0 4px 6px rgba(0,0,0,0.15); }
+    .nav-btn.disabled { background:#9CA3AF; pointer-events:none; box-shadow:none; }
+
+    @media (max-width:980px){
+      .materials-grid, .app-grid, .geese-flow { grid-template-columns:1fr; }
+      .goose-step:not(:last-child)::after { display:none; }
+      .chart-wrap { height:220px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Das Fluggänsemodell</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Geographie | Klasse 12</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="materials-grid">
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M1</span>
+            <div class="mat-title">Grundidee des Modells</div>
+          </div>
+          <div class="mat-body">
+            <div class="key-box tiny">
+              <strong>Merksatz:</strong> Eine wirtschaftlich führende Volkswirtschaft entwickelt zuerst neue Industrien. Wenn Löhne steigen und sich die Produktion verteuert, werden einfachere Produktionsschritte in nachfolgende Länder verlagert.
+            </div>
+            <p class="tiny mb-2">
+              Das Bild der <strong>Fluggänse</strong> beschreibt also eine <strong>gestaffelte Industrialisierung</strong>: Ein „Vorreiter“ fliegt voraus, andere Staaten folgen mit zeitlicher Verzögerung.
+            </p>
+
+            <div class="geese-flow">
+              <div class="goose-step">
+                <div class="step-kicker">1. Vorreiter</div>
+                <div class="step-title">Innovation entsteht</div>
+                <ul class="step-list">
+                  <li>neue Produkte</li>
+                  <li>hohes Know-how</li>
+                  <li>starke Investitionen</li>
+                </ul>
+              </div>
+              <div class="goose-step">
+                <div class="step-kicker">2. Reifung</div>
+                <div class="step-title">Massenproduktion</div>
+                <ul class="step-list">
+                  <li>Produktion wächst</li>
+                  <li>Exporte steigen</li>
+                  <li>Branche standardisiert sich</li>
+                </ul>
+              </div>
+              <div class="goose-step">
+                <div class="step-kicker">3. Verlagerung</div>
+                <div class="step-title">Kosten werden wichtiger</div>
+                <ul class="step-list">
+                  <li>Löhne steigen</li>
+                  <li>einfachere Stufen wandern ab</li>
+                  <li>FDI nimmt zu</li>
+                </ul>
+              </div>
+              <div class="goose-step">
+                <div class="step-kicker">4. Aufstieg</div>
+                <div class="step-title">Nachzügler holen auf</div>
+                <ul class="step-list">
+                  <li>Industrialisierung startet</li>
+                  <li>Exporte wachsen</li>
+                  <li>neue Arbeitsteilung entsteht</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M2</span>
+            <div class="mat-title">Anwendung auf Ostasien</div>
+          </div>
+          <div class="mat-body">
+            <div class="app-grid">
+              <div class="mini-card">
+                <h3><i class="fas fa-plane-departure mr-1"></i> Vereinfachtes Beispiel</h3>
+                <p class="tiny mb-2">
+                  In didaktisch vereinfachter Form lässt sich der Wandel so lesen:
+                </p>
+                <ul class="step-list" style="padding-left:1rem;">
+                  <li><strong>Japan</strong>: früher Vorreiter in Industrie und Technologie</li>
+                  <li><strong>Südkorea / Taiwan</strong>: Aufstieg in Elektronik, Autos, Hightech</li>
+                  <li><strong>ASEAN-Staaten</strong>: stärkere Rolle bei Montage und arbeitsintensiver Fertigung</li>
+                  <li><strong>China</strong>: zugleich Werkbank, Binnenmarkt und Hightech-Konkurrent</li>
+                </ul>
+                <div class="solution tiny mt-3">
+                  <strong>Wichtig:</strong> Das Modell ist ein <em>Erklärmodell</em>, keine perfekte Abbildung der Realität. Besonders Chinas Entwicklung verläuft komplexer als eine einfache Reihenfolge.
+                </div>
+              </div>
+
+              <div class="mini-card">
+                <h3><i class="fas fa-chart-line mr-1"></i> Schematische Industriewanderung</h3>
+                <div class="chart-wrap">
+                  <canvas id="geeseChart"></canvas>
+                </div>
+                <p class="tiny mt-2">Je höher der Wert, desto stärker ist ein Land in einer bestimmten Phase mit standardisierter Fertigung verbunden (didaktischer Index, keine Echtstatistik).</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+
+<div class="materials-grid">
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M3</span>
+            <div class="mat-title">Fallbeispiel <i>Südkorea</i></div>
+          </div>
+          <div class="mat-body">
+            <div class="fact-box tiny">
+              <strong>Didaktischer Fokus:</strong> Südkorea zeigt besonders deutlich, wie ein Staat durch <strong>Exportorientierung</strong>, <strong>Bildung</strong>, <strong>Industriepolitik</strong> und <strong>technologischen Aufstieg</strong> vom einfachen Produktionsstandort zu einem Hightech-Standort werden kann.
+            </div>
+            <p class="tiny mb-3">
+              Im Sinne des Fluggänsemodells ist Südkorea zunächst ein <strong>nachfolgender Aufholer</strong>, später aber selbst ein <strong>regionaler Vorreiter</strong>. Das Land verlagert einfache Produktionsschritte weiter und spezialisiert sich stärker auf kapital- und wissensintensive Branchen.
+            </p>
+            <div class="milestone-grid">
+              <div class="milestone">
+                <div class="year">1960er-1970er</div>
+                <div class="m-title">Aufbauphase</div>
+                <div class="tiny">Textilien, einfache Industrie, exportorientierte Produktion, starker staatlicher Entwicklungsfokus.</div>
+              </div>
+              <div class="milestone">
+                <div class="year">1980er-1990er</div>
+                <div class="m-title">Industrieaufstieg</div>
+                <div class="tiny">Stahl, Schiffbau, Automobilindustrie und Elektronik gewinnen deutlich an Bedeutung.</div>
+              </div>
+              <div class="milestone">
+                <div class="year">2000er-heute</div>
+                <div class="m-title">Hightech-Standort</div>
+                <div class="tiny">Halbleiter, digitale Geräte, Forschung und globale Marken prägen die Exportstruktur.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M4</span>
+            <div class="mat-title">Strukturwandel in Südkorea</div>
+          </div>
+          <div class="mat-body">
+            <p class="tiny mb-2">
+              Das Diagramm verdeutlicht (didaktisch stark vereinfacht), wie sich der Schwerpunkt der Ausfuhren von arbeitsintensiven zu technologieintensiven Branchen verschiebt.
+            </p>
+            <div class="chart-wrap">
+              <canvas id="koreaChart"></canvas>
+            </div>
+            <div class="compare-list">
+              <div class="compare-card">
+                <h3>Früher wichtiger</h3>
+                <div class="tiny">arbeitsintensive Güter, einfache Montage, preisorientierter Wettbewerb</div>
+              </div>
+              <div class="compare-card">
+                <h3>Heute wichtiger</h3>
+                <div class="tiny">Halbleiter, Fahrzeuge, Elektronik, Forschung, globale Marken und Design</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+
+
+
+      <section class="task-section">
+        <div class="task-label">Arbeitsaufträge (Modellverständnis, 12–15 Min.)</div>
+        <ol>
+          <li>
+            1. <strong>Beschreiben:</strong> Erkläre in 2–3 Sätzen, was mit „gestaffelter Industrialisierung“ gemeint ist.
+            <button class="btn ml-2" onclick="toggleSolution('sol1')"><i class="fas fa-lightbulb"></i> Lösung</button>
+            <div id="sol1" class="solution tiny hidden">
+              „Gestaffelt“ bedeutet, dass Industrien nicht überall gleichzeitig entstehen. Ein Vorreiterland entwickelt und produziert zuerst, spätere Länder übernehmen dann mit zeitlicher Verzögerung vor allem standardisierte oder kostensensible Produktionsschritte.
+            </div>
+          </li>
+
+          <li>
+            2. <strong>Alltagsbezug:</strong> Denke an ein Smartphone. Welche Teile der Wertschöpfung passen eher zu einem Vorreiterland, welche eher zu einem später aufsteigenden Produktionsstandort?
+            <button class="btn ml-2" onclick="toggleSolution('sol2')"><i class="fas fa-mobile-alt"></i> Lösung</button>
+            <div id="sol2" class="solution tiny hidden">
+              Eher Vorreiterland: Forschung, Chipentwicklung, komplexe Präzisionsbauteile. Eher später aufsteigender Standort: Endmontage, standardisierte Fertigungsschritte, einfache Zulieferteile.
+            </div>
+          </li>
+
+          <li>
+            3. <strong>Mini-Rechnen:</strong> Ein Unternehmen spart durch Verlagerung 4 € pro T-Shirt. Bei 80.000 T-Shirts pro Monat: Wie groß ist die monatliche Ersparnis?
+            <button class="btn ml-2" onclick="toggleSolution('sol3')"><i class="fas fa-calculator"></i> Lösung</button>
+            <div id="sol3" class="solution tiny hidden">
+              80.000 × 4 € = <strong>320.000 €</strong> monatliche Ersparnis.
+            </div>
+          </li>
+
+          <li>
+            4. <strong>Bewerten:</strong> Nenne einen Vorteil und einen Nachteil des Fluggänsemodells als Erklärung für Ostasien.
+            <button class="btn ml-2" onclick="toggleSolution('sol4')"><i class="fas fa-balance-scale"></i> Lösung</button>
+            <div id="sol4" class="solution tiny hidden">
+              <strong>Vorteil:</strong> Das Modell erklärt gut, warum sich Produktion regional verlagert und wie Länder schrittweise industrialisieren. <strong>Nachteil:</strong> Es vereinfacht stark und bildet komplexe Entwicklungen (z. B. China, Dienstleistungen, geopolitische Einflüsse) nur unvollständig ab.
+            </div>
+          </li>
+        </ol>
+      </section>
+
+
+<section class="task-section">
+        <div class="task-label">Arbeitsaufträge (Fallbeispiel, 12-15 Min.)</div>
+        <ol>
+          <li>
+            1. <strong>Beschreiben:</strong> Formuliere in 2-3 Sätzen den Strukturwandel Südkoreas mit Hilfe der Zeitabschnitte.
+            <button class="btn ml-2" onclick="toggleSolution('sol5')"><i class="fas fa-lightbulb"></i> Lösung</button>
+            <div id="sol5" class="solution tiny hidden">
+              <strong>Musterlösung:</strong> Südkorea entwickelte sich von einem exportorientierten Standort mit eher einfachen Industriegütern zu einer stark industrialisierten Volkswirtschaft. Später verlagerte sich der Schwerpunkt auf anspruchsvollere Branchen wie Automobilbau, Elektronik und schließlich Hightech, Forschung und Halbleiter.
+            </div>
+          </li>
+          <li>
+            2. <strong>Rechnen:</strong> Angenommen, der Anteil von Hightech-Ausfuhren steigt von <strong>20</strong> auf <strong>55</strong> Indexpunkte. Um wie viele Punkte steigt er? Um wie viel Prozent wächst er im Vergleich zum Ausgangswert?
+            <button class="btn ml-2" onclick="toggleSolution('sol6')"><i class="fas fa-calculator"></i> Lösung</button>
+            <div id="sol6" class="solution tiny hidden">
+              <strong>Punktzuwachs:</strong> 55 - 20 = <strong>35</strong> Punkte.<br/>
+              <strong>Prozentuales Wachstum:</strong> 35 / 20 = 1,75 = <strong>175 %</strong>.
+            </div>
+          </li>
+          <li>
+            3. <strong>Transfer:</strong> Erkläre, warum Südkorea im Fluggänsemodell erst ein Nachfolger und später selbst ein Vorreiter sein kann.
+            <button class="btn ml-2" onclick="toggleSolution('sol7')"><i class="fas fa-plane"></i> Lösung</button>
+            <div id="sol7" class="solution tiny hidden">
+              <strong>Musterlösung:</strong> Zunächst übernahm Südkorea Industrien, die in führenden Staaten bereits entwickelt waren. Mit wachsendem Know-how und steigenden Löhnen spezialisierte sich das Land auf anspruchsvollere Branchen und konnte einfachere Produktionsstufen wiederum in günstigere Standorte verlagern.
+            </div>
+          </li>
+          <li>
+            4. <strong>Recherche / Projekt:</strong> Untersuche ein südkoreanisches Unternehmen (z. B. Samsung, Hyundai, LG). Finde heraus, welches Produkt global verkauft wird und welche Produktionsschritte in anderen Ländern stattfinden könnten.
+            <button class="btn ml-2" onclick="toggleSolution('sol8')"><i class="fas fa-search"></i> Lösung</button>
+            <div id="sol8" class="solution tiny hidden">
+              <strong>Musterlösung (Vorgehen):</strong> Unternehmen wählen - Hauptprodukt bestimmen - wichtige Standorte notieren - begründen: Kosten, Zulieferer, Marktnaehe, Logistik, Fachkraefte. Ergebnis als einfache Wertschöpfungskette darstellen.
+            </div>
+          </li>
+        </ol>
+      </section>
+
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-left"><p>Erdkunde – Theo Schierbaum</p></div>
+      <div class="footer-center">
+        <a class="nav-btn" href="index.html">← Zurück</a>
+        <a class="nav-btn" href="Fallbeispiele/Taiwan_FB.html"">FB Taiwan</a>
+        <a class="nav-btn" href="Fallbeispiele/Malaysia_FB.html"">FB Malaysia</a>
+        <a class="nav-btn" href="Fallbeispiele/Vietnam_FB.html"">FB Vietnam</a>
+      </div>
+      <div class="footer-right"><p>Seite 6</p></div>
+    </div>
+  </div>
+
+<script>
+    function toggleSolution(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+
+    const koreaCtx = document.getElementById('koreaChart').getContext('2d');
+    new Chart(koreaCtx, {
+      type: 'bar',
+      data: {
+        labels: ['einfache Industriegüter', 'Schwerindustrie', 'Elektronik', 'Hightech'],
+        datasets: [
+          {
+            label: 'frühere Phase',
+            data: [70, 45, 25, 20],
+            backgroundColor: 'rgba(42, 59, 50, 0.75)',
+            borderColor: 'rgba(42, 59, 50, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'spätere Phase',
+            data: [20, 55, 70, 85],
+            backgroundColor: 'rgba(230, 180, 0, 0.65)',
+            borderColor: 'rgba(180, 137, 0, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' + context.raw + ' (Indexwert)';
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            title: { display: true, text: 'didaktischer Index' }
+          }
+        }
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSolution(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+
+    const geeseCtx = document.getElementById('geeseChart').getContext('2d');
+    new Chart(geeseCtx, {
+      type: 'line',
+      data: {
+        labels: ['frühe Phase', 'Aufstieg', 'Massenproduktion', 'Verlagerung'],
+        datasets: [
+          {
+            label: 'Japan',
+            data: [9, 8, 5, 2],
+            borderColor: '#2A3B32',
+            backgroundColor: 'rgba(42,59,50,0.1)',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'Südkorea / Taiwan',
+            data: [3, 6, 8, 5],
+            borderColor: '#B45309',
+            backgroundColor: 'rgba(180,83,9,0.1)',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'ASEAN-Produktionsstandorte',
+            data: [1, 3, 5, 8],
+            borderColor: '#166534',
+            backgroundColor: 'rgba(22,101,52,0.1)',
+            tension: 0.3,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 10,
+            ticks: { stepSize: 2 },
+            title: { display: true, text: 'didaktischer Index (0–10)' }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              afterBody: () => 'Schematische Darstellung – nicht als exakte Statistik zu lesen.'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

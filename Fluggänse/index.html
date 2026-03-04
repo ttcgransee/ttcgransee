@@ -8,9 +8,8 @@
   <!-- Tailwind & Fonts & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* Grundlayout: beibehalten */
     html, body { margin:0; padding:0; width:100%; min-height:100%;
@@ -64,50 +63,7 @@
       flex-shrink:0;
       background: #F5F5F5; /* Matches body bg */
       }
-        .nav-row{
-      display:flex; gap:.6rem; justify-content:flex-end;
-      margin-top:.75rem; flex-wrap:wrap;
-    }
-    .btn, .btn1 {
-      border-radius:12px;
-      padding:.6rem .9rem;
-      font-weight:700;
-      border:1px solid #E5E7EB;
-      background:#fff;
-      font-family:'Montserrat',sans-serif;
-    }
-    .btn-primary{
-      background:#2A3B32; color:#fff; border-color:#2A3B32;
-    }
-    .btn-accent{
-      background:#166534; color:#fff; border-color:#166534;
-    }
-    .btn:disabled, .btn1:disabled{ opacity:.6; cursor:not-allowed; }
-     .nav { display:flex; gap:.5rem; justify-content:flex-end; }
-     .nav-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #2A3B32;
-        color: white;
-        padding: 0.5rem 1.25rem;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        min-width: 100px;
-    }
-    .nav-btn:hover {
-        background-color: #3D5245;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-    }
-    .nav-btn:active {
-        transform: translateY(0);
-    }
-
+    
     .footer-left { justify-self: start; }
     .footer-center { 
         display: flex; 
@@ -148,7 +104,7 @@
     <!-- Header -->
     <div class="slide-header">
       <div>
-        <h1 class="title">Das Fluggänsemodell</h1>
+        <h1 class="title">Asiatische Tiger</h1>
         <div class="divider"></div>
       </div>
       <p class="text-sm font-light">Geographie | Klasse 12</p>
@@ -159,31 +115,26 @@
 
 
         <section class="material">
-          <div class="mat-head"><span class="badge">M1</span><div class="mat-title">Fluggänsemodell</div></div>
-          <img class="mat-img" src="FG1.png" alt="Fluggänsemodell">
-          <div class="mat-body tiny">Japan als Leitgans, gefolgt von den Tigerstaaten, Myanmar steht am Ende</div>
+          <div class="mat-head">
+    <div class="badge">M1</div>
+    <div class="mat-title">Wirtschaftswachstum der Tigerstaaten</div>
+  </div>
+  <div class="mat-body">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+      <button id="toggleDEJP" class="chip">Deutschland & Japan einblenden</button>
+    </div>
+
+    <div class="chart-wrapper" style="height: 520px;">
+      <canvas id="gdpAsianTigersChart"></canvas>
+    </div>
+  </div>
         </section>
 
         
  <section class="material">
-  <div class="mat-head">
-    <div class="badge">M2</div>
-    <div class="mat-title">Fluggänsemodell im Zeitverlauf</div>
-  </div>
-  <div class="mat-body">
-    <p class="tiny mb-2">
-      Schematische Darstellung des „Flying Geese“-Modells: oben für ein Land im Zeitverlauf,
-      unten für eine Branche im Ländervergleich.
-    </p>
-
-    <div class="chart-wrapper" style="height: 280px; margin-bottom: 1rem;">
-      <canvas id="flyingGeeseCountryChart"></canvas>
-    </div>
-
-    <div class="chart-wrapper" style="height: 280px;">
-      <canvas id="flyingGeeseIndustryChart"></canvas>
-    </div>
-  </div>
+          <div class="mat-head"><span class="badge">M2</span><div class="mat-title">Physische Karte Ostasien</div></div>
+          <img class="mat-img" src="Karte2.png" alt="Ostasien">
+          
         </section>
 
 
@@ -194,33 +145,6 @@
 
 
       </div><!-- /materials-grid -->
-<div class="materials-grid">
-
-
-<section class="material">
-          <div class="mat-head"><span class="badge">M3</span><div class="mat-title">Fluggänsemodell in Ostasien</div></div>
-          <img class="mat-img" src="FG3.png" alt="Fluggänsemodell">
-          <div class="mat-body tiny">Verlagerung von Branchen in andere Länder in Asien</div>
-        </section>
-
-        <section class="material">
-          <div class="mat-head"><span class="badge">M4</span><div class="mat-title">Entwicklung eines Landes</div></div>
-          <img class="mat-img" src="FG4.png" alt="FG4">
-          <div class="mat-body tiny">Veränderung der Wirtschaftsstruktur innerhalb einer Phase des Fluggänsemodells</div>
-        </section></a>
-       
-
-
-
-
-
-   
-
-
-
-      </div><!-- /materials-grid -->
-
-
 
     </div><!-- /slide-content -->
 
@@ -230,171 +154,227 @@
 <p>Erdkunde – Theo Schierbaum</p>
 </div>
 <div class="footer-center">
-<a class="nav-btn" href="4.html">← Zurück</a>
-<a class="nav-btn" href="6.html">Nächste →</a>
+<a class="nav-btn" href="3.html">← Zurück</a>
+<a class="nav-btn" href="AB Fluggänse.html">AB Fluggänsemodell</a>
+<a class="nav-btn" href="5.html">Nächste →</a>
 </div>
 <div class="footer-right">
-<p>Seite 5</p>
+<p>Seite 4</p>
 </div>
 </div>
 
   </div>
 
-<script>
-  // Hilfsfunktion: erzeugt eine bogenförmige Kurve (Parabel)
-  function createArc(center, width, height, steps = 60) {
-    const points = [];
-    const start = center - width / 2;
-    const end = center + width / 2;
 
-    for (let i = 0; i <= steps; i++) {
-      const x = start + (end - start) * (i / steps);
-      const normalized = (x - center) / (width / 2); // -1 bis +1
-      const y = height * (1 - normalized * normalized); // Parabel
-      points.push({ x, y });
-    }
-    return points;
+<script>
+  const years = [
+    1960, 1962, 1964, 1966, 1968, 1970, 1972, 1974, 1976, 1978,
+    1980, 1982, 1984, 1986, 1988, 1990, 1992, 1994, 1996, 1998,
+    2000, 2002, 2004, 2006, 2008, 2009, 2010, 2012, 2014, 2016, 2018, 2019
+  ];
+
+  // Weiterhin feste Werte (stabile Offline-Lösung)
+  // Diese Reihen sind als NIVEAUS brauchbar; für den Lerneffekt schalten wir standardmäßig auf Index um.
+  const levelSeries = {
+    singapore: [
+      4300, 5000, 5800, 7100, 9000, 11200, 13500, 15000, 16500, 18500,
+      21000, 23000, 25500, 27500, 31000, 34000, 36500, 42000, 45500, 43000,
+      47000, 49000, 53000, 59000, 64000, 61000, 68000, 72000, 76000, 79000, 84000, 85500
+    ],
+    hongKong: [
+      4000, 4700, 5800, 6500, 7100, 8200, 9500, 10200, 11800, 13500,
+      15500, 16500, 18000, 20500, 23000, 24500, 26500, 29000, 30500, 28200,
+      30000, 30500, 32000, 36500, 41000, 40000, 42000, 44500, 46000, 48000, 50000, 50500
+    ],
+    taiwan: [
+      1600, 1900, 2300, 2800, 3400, 4000, 4800, 5300, 6500, 7600,
+      8600, 9200, 10400, 12400, 14500, 16000, 18200, 20500, 22800, 24200,
+      26000, 27000, 29000, 32000, 35000, 34800, 37800, 39800, 41500, 43500, 46000, 47500
+    ],
+    southKorea: [
+      1300, 1500, 1750, 2100, 2500, 3000, 3600, 4200, 5000, 6000,
+      5600, 6200, 7400, 9000, 11000, 13000, 14500, 16000, 18500, 20000,
+      22500, 24500, 26500, 28500, 31500, 31800, 34000, 35500, 37200, 39000, 41200, 42000
+    ],
+    germany: [
+      12500, 14000, 15600, 17200, 18800, 20500, 22200, 23500, 24800, 26100,
+      27400, 27900, 28800, 30000, 31500, 32800, 34000, 35200, 36500, 37200,
+      38500, 39000, 39800, 41000, 42000, 40200, 41800, 43200, 44800, 46600, 48500, 49000
+    ],
+    japan: [
+      5000, 6500, 8500, 10800, 14000, 17500, 21500, 24000, 26500, 29000,
+      31000, 32000, 33200, 35000, 37200, 39200, 40200, 41000, 42000, 40500,
+      41500, 42000, 42500, 43000, 42000, 39800, 41000, 41800, 42500, 43500, 44500, 44800
+    ]
+  };
+
+  function toIndex(arr) {
+    const base = arr[0];
+    return arr.map(v => (v / base) * 100);
   }
 
-  // Gemeinsame Chart-Optionen
-  function createFlyingGeeseChart(canvasId, chartTitle, labelsConfig) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
+  let indexedMode = true;
 
-    const datasets = labelsConfig.map(item => ({
-      label: item.label,
-      data: createArc(item.center, item.width, item.height),
-      parsing: false,
-      borderColor: '#6B4F5F',
-      borderWidth: 2,
-      pointRadius: 0,
-      fill: false,
-      tension: 0.15
-    }));
+  function currentSeries(key) {
+    return indexedMode ? toIndex(levelSeries[key]) : levelSeries[key];
+  }
 
-    // Plugin für Textbeschriftungen über den Bögen
-    const arcLabelsPlugin = {
-      id: canvasId + '_labels',
-      afterDatasetsDraw(chart) {
-        const { ctx, scales: { x, y } } = chart;
-        ctx.save();
-        ctx.font = '600 13px Montserrat';
-        ctx.fillStyle = '#3A2A33';
-        ctx.textAlign = 'center';
+  const ctx = document.getElementById('gdpAsianTigersChart');
 
-        labelsConfig.forEach(item => {
-          ctx.fillText(
-            item.label,
-            x.getPixelForValue(item.center),
-            y.getPixelForValue(item.height) - 10
-          );
-        });
-
-        ctx.restore();
-      }
-    };
-
-    new Chart(ctx, {
-      type: 'line',
-      data: { datasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: false,
-        plugins: {
-          legend: { display: false },
-          title: {
-            display: true,
-            text: chartTitle,
-            color: '#111827',
-            font: {
-              family: 'Montserrat',
-              size: 16,
-              weight: '700'
-            },
-            padding: { bottom: 12 }
-          },
-          tooltip: { enabled: false }
+  const gdpChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: 'Singapore',
+          data: currentSeries('singapore'),
+          borderColor: '#8a2be2',
+          borderWidth: 3,
+          pointRadius: 0,
+          tension: 0.18
         },
-        scales: {
-          x: {
-            type: 'linear',
-            min: 0,
-            max: 10,
-            grid: { display: false },
-            border: {
-              display: true,
-              color: '#111827',
-              width: 2
-            },
-            ticks: {
-              display: false
-            },
-            title: {
-              display: true,
-              text: 'Zeit',
-              align: 'end',
-              color: '#111827',
-              font: {
-                family: 'Montserrat',
-                size: 12,
-                weight: '600'
+        {
+          label: 'Hong Kong',
+          data: currentSeries('hongKong'),
+          borderColor: '#14a37f',
+          borderWidth: 3,
+          pointRadius: 0,
+          tension: 0.18
+        },
+        {
+          label: 'Taiwan',
+          data: currentSeries('taiwan'),
+          borderColor: '#56aeea',
+          borderWidth: 3,
+          pointRadius: 0,
+          tension: 0.18
+        },
+        {
+          label: 'South Korea',
+          data: currentSeries('southKorea'),
+          borderColor: '#e19b00',
+          borderWidth: 3,
+          pointRadius: 0,
+          tension: 0.18
+        },
+        {
+          label: 'Germany',
+          data: currentSeries('germany'),
+          borderColor: 'rgba(68,68,68,0.85)',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          tension: 0.18,
+          hidden: true
+        },
+        {
+          label: 'Japan',
+          data: currentSeries('japan'),
+          borderColor: 'rgba(176,90,43,0.9)',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          tension: 0.18,
+          hidden: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'start',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'line',
+            boxWidth: 42,
+            padding: 16
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              if (indexedMode) {
+                return `${context.dataset.label}: ${context.raw.toFixed(1)} (1960 = 100)`;
               }
-            }
-          },
-          y: {
-            min: 0,
-            max: 10,
-            grid: { display: false },
-            border: {
-              display: true,
-              color: '#111827',
-              width: 2
-            },
-            ticks: {
-              display: false
-            },
-            title: {
-              display: true,
-              text: 'Indikator des komparativen Vorteils',
-              color: '#111827',
-              font: {
-                family: 'Montserrat',
-                size: 12,
-                weight: '600'
-              }
+              return `${context.dataset.label}: ${Math.round(context.raw).toLocaleString('de-DE')} US$`;
             }
           }
         }
       },
-      plugins: [arcLabelsPlugin]
-    });
-  }
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: true, color: '#111', width: 2 }
+        },
+        y: {
+          min: 0,
+          ticks: {
+            callback: value => indexedMode
+              ? Number(value).toLocaleString('de-DE')
+              : Number(value).toLocaleString('de-DE')
+          },
+          title: {
+            display: true,
+            text: indexedMode
+              ? 'Index (1960 = 100)'
+              : 'GDP per capita (constant US$)'
+          },
+          grid: { display: false },
+          border: { display: true, color: '#111', width: 2 }
+        }
+      }
+    }
+  });
 
-  // (a) Für ein bestimmtes Land
-  createFlyingGeeseChart(
-    'flyingGeeseCountryChart',
-    '(a) Für ein bestimmtes Land',
-    [
-      { label: 'Textik',     center: 1.7, width: 2.2, height: 6.8 },
-      { label: 'Chemie',     center: 3.3, width: 2.2, height: 6.8 },
-      { label: 'Stahl', center: 4.9, width: 2.2, height: 6.8 },
-      { label: 'Automobile',   center: 6.5, width: 2.2, height: 6.8 },
-      { label: 'Elektronik',  center: 8.1, width: 2.2, height: 6.8 }
-    ]
-  );
+  const toggleBtn = document.getElementById('toggleDEJP');
+  const switchBtn = document.createElement('button');
+  switchBtn.className = 'chip';
+  switchBtn.style.marginRight = '8px';
+  switchBtn.textContent = 'Absolute Werte anzeigen';
 
-  // (b) Für eine bestimmte Branche
-  createFlyingGeeseChart(
-    'flyingGeeseIndustryChart',
-    '(b) Für eine bestimmte Branche (z.B. Textil)',
-    [
-      { label: 'Japan',         center: 1.7, width: 2.2, height: 6.8 },
-      { label: 'Tiger',         center: 3.3, width: 2.2, height: 6.8 },
-      { label: 'ASEAN',         center: 4.9, width: 2.2, height: 6.8 },
-      { label: 'China',         center: 6.5, width: 2.2, height: 6.8 },
-      { label: 'Vietnam/Indien', center: 8.1, width: 2.4, height: 6.8 }
-    ]
-  );
+  toggleBtn.parentElement.prepend(switchBtn);
+
+  let extraVisible = false;
+
+  toggleBtn.addEventListener('click', () => {
+    extraVisible = !extraVisible;
+    gdpChart.data.datasets[4].hidden = !extraVisible;
+    gdpChart.data.datasets[5].hidden = !extraVisible;
+    gdpChart.update();
+
+    toggleBtn.textContent = extraVisible
+      ? 'Deutschland & Japan ausblenden'
+      : 'Deutschland & Japan einblenden';
+  });
+
+  switchBtn.addEventListener('click', () => {
+    indexedMode = !indexedMode;
+
+    gdpChart.data.datasets[0].data = currentSeries('singapore');
+    gdpChart.data.datasets[1].data = currentSeries('hongKong');
+    gdpChart.data.datasets[2].data = currentSeries('taiwan');
+    gdpChart.data.datasets[3].data = currentSeries('southKorea');
+    gdpChart.data.datasets[4].data = currentSeries('germany');
+    gdpChart.data.datasets[5].data = currentSeries('japan');
+
+    gdpChart.options.scales.y.title.text = indexedMode
+      ? 'Index (1960 = 100)'
+      : 'GDP per capita (constant US$)';
+
+    gdpChart.options.scales.y.max = indexedMode ? undefined : 90000;
+
+    switchBtn.textContent = indexedMode
+      ? 'Absolute Werte anzeigen'
+      : 'Index (1960 = 100) anzeigen';
+
+    gdpChart.update();
+  });
 </script>
+
+
 </body>
 </html>

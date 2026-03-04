@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Das Fluggänsemodell</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #F5F5F5;
+      color: #333;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .slide-container {
+      width: 100%;
+      min-height: 720px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide-header {
+      background: #2A3B32;
+      color: #fff;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      margin: 0;
+      font-weight: 700;
+      font-size: 2.1rem;
+      line-height: 1.15;
+    }
+
+    .divider {
+      width: 90px;
+      height: 4px;
+      background: #E6B400;
+      border-radius: 3px;
+      margin-top: .6rem;
+    }
+
+    .slide-content {
+      flex: 1 1 auto;
+      padding: 1.25rem 2rem 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .material {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .full-span {
+      grid-column: 1 / -1;
+    }
+
+    .mat-head {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .7rem .9rem;
+      background: #F9FAFB;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .badge {
+      background: #2A3B32;
+      color: #fff;
+      font-weight: 700;
+      font-size: .9rem;
+      padding: .15rem .55rem;
+      border-radius: 6px;
+      min-width: 3.2rem;
+      text-align: center;
+    }
+
+    .mat-title {
+      font-weight: 600;
+      color: #2A3B32;
+      font-size: 1.05rem;
+    }
+
+    .mat-body {
+      padding: .95rem;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    .tiny {
+      font-size: .9rem;
+      color: #4B5563;
+      line-height: 1.6;
+    }
+
+    .tiny strong,
+    .tiny h3 {
+      color: #111827;
+    }
+
+    .intro-box {
+      background: #E9F0EC;
+      border: 1px solid #C7D6CE;
+      border-radius: 10px;
+      padding: .85rem 1rem;
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+
+    .placeholder {
+      margin-top: .8rem;
+      border: 2px dashed #9CA3AF;
+      border-radius: 12px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #F9FAFB,
+        #F9FAFB 12px,
+        #F3F4F6 12px,
+        #F3F4F6 24px
+      );
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      color: #4B5563;
+      font-size: .92rem;
+      font-weight: 600;
+    }
+
+    .placeholder.tall {
+      min-height: 260px;
+    }
+
+    .caption {
+      margin-top: .5rem;
+      font-size: .78rem;
+      color: #6B7280;
+      font-style: italic;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .phase-box {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: .8rem;
+      margin-bottom: .75rem;
+    }
+
+    .phase-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .phase-box h4 {
+      margin: 0 0 .35rem 0;
+      color: #2A3B32;
+      font-size: .95rem;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .country-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+    }
+
+    .country-card {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: .8rem;
+    }
+
+    .country-card h4 {
+      margin: 0 0 .35rem 0;
+      color: #2A3B32;
+      font-size: .95rem;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .task-section {
+      position: relative;
+      background: #E9F0EC;
+      border: 2px solid #2A3B32;
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: 'Raleway', sans-serif;
+      margin-top: .25rem;
+    }
+
+    .task-label {
+      position: absolute;
+      top: -12px;
+      left: 1rem;
+      background: #2A3B32;
+      color: #fff;
+      padding: .25rem .75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    .task-section ol {
+      margin: .25rem 0 0 1rem;
+      padding: 0;
+    }
+
+    .task-section li {
+      margin: .45rem 0;
+      line-height: 1.55;
+      font-size: .95rem;
+    }
+
+    .footer {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      color: #666;
+      font-size: 0.9rem;
+      font-family: 'Raleway', sans-serif;
+      background: #F5F5F5;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px) {
+      .materials-grid,
+      .country-list,
+      .phase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Das Fluggänsemodell</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Geographie | Klasse 12</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="intro-box">
+        Das Fluggänsemodell (im Englischen <em>Flying Geese Model</em>) ist ein Erklärungsansatz, der die industrielle Entwicklung ostasiatischer Länder anhand einer zeitlich gestaffelten Abfolge von Produktions- und Exportmustern beschreibt. Entwickelt wurde es maßgeblich von dem japanischen Ökonomen Kaname Akamatsu in den 1930er-Jahren. Die zentrale Metapher verweist auf eine Gänseformation: Eine „Leitgans“ – ursprünglich Japan – fliegt an der Spitze, während weitere Länder in ihrem Windschatten folgen und nach einer gewissen Verzögerung ähnliche Entwicklungsschritte durchlaufen.
+      </div>
+
+      <div class="materials-grid">
+        <section class="material">
+          <div class="mat-head">
+            <div class="badge">1</div>
+            <div class="mat-title">Grundidee</div>
+          </div>
+          <div class="mat-body tiny">
+            <p>
+              Nach dem Ende des Zweiten Weltkriegs setzte sich Japan an die Spitze der wirtschaftlichen Entwicklung in Ostasien. In zeitlichem Abstand folgten die sogenannten „Tigerstaaten“ (Südkorea, Taiwan, Singapur, Hongkong), gefolgt von anderen aufstrebenden Ökonomien wie den ASEAN-Ländern (z.&nbsp;B. Thailand, Malaysia, Indonesien, Vietnam) und inzwischen auch China (Abb. 1 links).
+            </p>
+            <p>
+              Die Grundannahme des Modells lautet, dass jedes Land eine Reihe von Phasen durchläuft, in denen es zunächst Technologien und Waren importiert, sie anschließend selbst produziert und schließlich in den Export übergeht. Dieses stufenweise Aufschließen hat zur Folge, dass immer neue Länder in die „Formation“ aufgenommen werden.
+            </p>
+            <p>
+              Dabei verändern sich auch die jeweiligen Schwerpunkte der Produktion: Die Länder an der Spitze (z.&nbsp;B. Japan) verlagern ihre Industrien zunehmend in Sektoren mit höherer Wertschöpfung (z.&nbsp;B. Hightech oder Dienstleistungen), während die nachfolgenden Staaten (z.&nbsp;B. Vietnam) Arbeitsschritte mit geringerer technischer Komplexität übernehmen (Abb. 1 rechts).
+            </p>
+
+            
+                <img src="FG5.png">
+             
+            <div class="caption">Abb. 1: Das Fluggänsemodell: Abfolge der Staaten hinsichtlich ihrer Entwicklung (links) und Veränderung der Industriebranchenstruktur in den einzelnen Ländern (rechts)</div>
+          </div>
+        </section>
+
+        <section class="material">
+          <div class="mat-head">
+            <div class="badge">2</div>
+            <div class="mat-title">Die Phasen der wirtschaftlichen Entwicklung</div>
+          </div>
+          <div class="mat-body tiny">
+            <div class="phase-grid">
+              <div>
+                <div class="phase-box">
+                  <h4>Phase 1: Importphase</h4>
+                  <div>In der ersten Phase steht ein Land noch am Anfang seiner Industrialisierung. Es bezieht Güter und Technologien vorwiegend aus dem Ausland (Abb. 2 (M)). Häufig handelt es sich um Konsumgüter wie Textilien, einfache Elektronikartikel oder Maschinen, die noch nicht selbst hergestellt werden können. In dieser Phase ist das Land stark von externem Know-how abhängig.</div>
+                </div>
+
+                <div class="phase-box">
+                  <h4>Phase 2: Importsubstitution</h4>
+                  <div>In der Importsubstitutionsphase entwickeln sich erste lokale Produktionskapazitäten. Der Staat und/oder private Unternehmen versuchen, heimische Industrien aufzubauen, die bisher importierte Waren allmählich ersetzen können (Abb. 2 (P)). Dabei kommen oft staatliche Schutzmaßnahmen (z.&nbsp;B. Zölle, Handelshemmnisse) zum Einsatz, um die einheimische Produktion vor konkurrierenden Importen zu schützen. Ziel ist, technisches Know-how aufzubauen und eine gewisse Unabhängigkeit von Auslandslieferungen zu erreichen.</div>
+                </div>
+
+                <div class="phase-box">
+                  <h4>Phase 3: Exportorientierung</h4>
+                  <div>Hat ein Land ausreichende Produktionskapazitäten, strebt es den Export bestimmter Güter an (Abb. 2 (X)). Meist beginnt es mit arbeitsintensiven Produkten (z.&nbsp;B. Bekleidung, einfache Elektronik). Parallel gewinnen Unternehmen zunehmend technologisches Wissen und Investoren beginnen, Kapital in neue Industriezweige zu lenken. Damit rückt das Land auf der Wertschöpfungsskala nach oben.</div>
+                </div>
+
+                <div class="phase-box">
+                  <h4>Phase 4: Übergang zu komplexeren Industrien</h4>
+                  <div>Sobald sich eine Volkswirtschaft erfolgreich am Weltmarkt etabliert hat, steigen die Löhne und das Wohlstandsniveau. Dadurch verlagert sich die Produktion einfacherer Güter in neue, kostengünstigere Länder (die wiederum in früheren Phasen stehen). Das „führende“ Land konzentriert sich nun auf höherwertige Industrien oder Dienstleistungen, etwa Hightech, IT, Automobilindustrie oder Finanzdienstleistungen. Es entsteht ein Kreislauf: Immer, wenn ein Land eine Entwicklungsstufe erreicht, beginnt das nächste, auf niedrigeren Stufen Anschluss zu finden.</div>
+                </div>
+              </div>
+
+              <div>
+                
+                    <img src="FG4.png">
+                 
+                <div class="caption">Abb. 2: Phasen der wirtschaftlichen Entwicklung im Fluggänsemodell</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="material full-span">
+          <div class="mat-head">
+            <div class="badge">3</div>
+            <div class="mat-title">Entwicklungsschritte am Beispiel Ostasiens</div>
+          </div>
+          <div class="mat-body tiny">
+            <div class="country-list">
+              <div class="country-card">
+                <h4>Japan</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Ab 1945 konsequente Industrialisierung; Fokussierung auf Exportgüter (Autos, Elektronik, Maschinen).</li>
+                  <li>Durch hohe Investitionen in Bildung und Technologie konnte Japan schnell in die Spitzengruppe der Industrienationen aufsteigen.</li>
+                </ul>
+              </div>
+
+              <div class="country-card">
+                <h4>Tigerstaaten (Südkorea, Taiwan, Singapur, Hongkong)</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Sie folgten Japan um etwa ein bis zwei Jahrzehnte verzögert.</li>
+                  <li>Staatliche Strategien (z.&nbsp;B. Unterstützung großer Konzerne in Südkorea oder Freihandelszonen in Hongkong) beschleunigten die Exporterfolge.</li>
+                </ul>
+              </div>
+
+              <div class="country-card">
+                <h4>China</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Ab 1976 Öffnungspolitik und Einrichtung von Sonderwirtschaftszonen (z.&nbsp;B. Shenzhen).</li>
+                  <li>Aufstieg zum „Exportweltmeister“ vor allem im Bereich arbeitsintensiver Güter, später Übergang zu anspruchsvolleren Produkten (Smartphones, IT, E-Mobilität).</li>
+                </ul>
+              </div>
+
+              <div class="country-card">
+                <h4>ASEAN-Länder (z.&nbsp;B. Vietnam, Indonesien)</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Zunehmende Attraktivität für Investoren, da Lohnkosten in China und anderen Tigerstaaten anstiegen.</li>
+                  <li>Vietnam ist aktuell ein Beispiel für ein Land, das vom niedrigen Lohnniveau profitiert und rasch in den Export einfacherer Industrieprodukte einsteigt.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="task-section">
+        <div class="task-label">Aufgaben</div>
+        <ol>
+          <li>1. <strong>Beschreibe</strong>, welche Branchen sich in den Ländern der ASEAN-Staaten und in Vietnam zukünftig entwickeln werden.</li>
+          <li>2. <strong>Erläutere</strong> anhand von Abb. 2 die Entwicklungsstrategien und -phasen ostasiatischer Länder nach dem Fluggänsemodell.</li>
+          <li>3. <strong>Beurteile</strong>, inwiefern China tatsächlich in das Modell der Fluggänse passt.</li>
+        </ol>
+      </section>
+    </div>
+
+    <div class="footer">
+      <div>Erdkunde – Theo Schierbaum</div>
+      <div>AB Fluggänsemodell</div>
+    </div>
+  </div>
+</body>
+</html>

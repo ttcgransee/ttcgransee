@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Übungsseite – Wärmemenge berechnen (Q = m · c · ΔT)</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    html, body{ margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container{ width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header{ background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title{ margin:0; font-weight:700; font-size:2.05rem; }
+    .divider{ width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content{ flex:1 1 auto; padding:1.1rem 2rem 1.3rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+
+    .tiny{ font-size:.86rem; color:#6B7280; font-family:'Raleway',sans-serif; }
+    .formula{ font-family:"Courier New", monospace; font-size:.95rem; background:#E5E7EB; padding:0 .25rem; border-radius:4px; white-space:nowrap; }
+
+    .top-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:1rem; align-items:start; }
+    .card{ background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05); overflow:hidden; }
+    .card-head{ padding:.75rem .95rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; font-weight:700; color:#2A3B32; }
+    .card-body{ padding:.9rem .95rem; font-family:'Raleway',sans-serif; }
+
+    .eq-box{
+      background:#FFF7E6; border:1px solid #F59E0B; border-radius:12px;
+      padding:.75rem .9rem; display:flex; gap:.6rem; flex-wrap:wrap; align-items:center;
+      font-family:"Courier New", monospace; font-size:1.05rem;
+    }
+
+    table.ref{ width:100%; border-collapse:collapse; font-size:.86rem; margin-top:.35rem; }
+    table.ref th, table.ref td{ border:1px solid #D1D5DB; padding:.35rem; text-align:left; }
+    table.ref th{ background:#F3F4F6; font-weight:700; }
+
+    .task-section{
+      position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px;
+      padding:1rem; font-family:'Raleway',sans-serif;
+    }
+    .task-label{
+      position:absolute; top:-12px; left:1rem;
+      background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px;
+      font-weight:600; font-size:.9rem;
+    }
+
+    .tasks{ margin:0; padding-left:1.15rem; }
+    .task-item{ margin:.7rem 0; line-height:1.55; font-size:.98rem; }
+    .task-controls{ margin-top:.45rem; display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+
+    .btn{
+      background:#2A3B32; color:#fff; border-radius:10px; padding:.42rem .75rem; font-weight:700; font-size:.85rem;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .btn.secondary{ background:#F9FAFB; color:#2A3B32; border:1px solid #D1D5DB; }
+    .btn:active{ transform: translateY(1px); }
+
+    .solution{
+      display:none;
+      margin-top:.55rem;
+      background:#ffffff;
+      border:1px solid #D1D5DB;
+      border-left:6px solid #10B981;
+      border-radius:10px;
+      padding:.7rem .85rem;
+      font-size:.93rem;
+      color:#111827;
+    }
+    .solution .sol-title{
+      font-weight:800;
+      color:#065F46;
+      margin-bottom:.25rem;
+      font-size:.82rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .solution .work{
+      font-family:"Courier New", monospace;
+      font-size:.92rem;
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.55rem .65rem;
+      margin-top:.45rem;
+      white-space:pre-wrap;
+    }
+
+   .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      color:#666; 
+      font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      background: #fff;
+      border-top: none;
+      flex-shrink: 0;
+    
+      margin-top: auto;
+    }
+
+    
+    .footer-left { text-align: left; }
+    .footer-right { text-align: right; }
+
+    .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .nav-btn {
+        background-color: #2A3B32;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .nav-btn:hover {
+        background-color: #3d5448;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+
+    @media (max-width:1100px){
+      .top-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Übungen: Q = m · c · ΔT</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Physik | Klasse 10</p>
+    </div>
+
+    <div class="slide-content">
+
+      <div class="eq-box">
+        <span><strong>Formel:</strong></span>
+        <span>Q = m · c · ΔT</span>
+        <span style="font-family:'Raleway',sans-serif; font-size:.9rem; color:#6B7280;">
+          (Q in kJ, wenn c in kJ/(kg·K) eingesetzt wird)
+        </span>
+      </div>
+
+      <div class="top-grid">
+        <div class="card">
+          <div class="card-head">Hinweise zu Einheiten</div>
+          <div class="card-body">
+            <ul class="list-disc ml-5">
+              <li><span class="formula">ΔT</span> in Kelvin ist zahlenmäßig gleich wie in °C: z.&nbsp;B. 20&nbsp;K ↔ 20&nbsp;°C Temperaturänderung.</li>
+              <li>Wasser: <span class="formula">1 L ≈ 1 kg</span></li>
+              <li>Ergebnis sinnvoll runden (meist 2–3 signifikante Stellen).</li>
+              <li>Die Formel gilt nur ohne Aggregatzustandswechsel (kein Schmelzen/Verdampfen).</li>
+            </ul>
+            <div class="task-controls" style="margin-top:.8rem;">
+              <button class="btn secondary" id="toggleAllBtn" type="button">
+                <i class="fa-solid fa-eye"></i>&nbsp;Alle Lösungen anzeigen
+              </button>
+              <button class="btn secondary" id="hideAllBtn" type="button">
+                <i class="fa-solid fa-eye-slash"></i>&nbsp;Alle Lösungen ausblenden
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">c-Werte (Auswahl)</div>
+          <div class="card-body">
+            <table class="ref" aria-label="Spezifische Wärmekapazitäten">
+              <thead><tr><th>Stoff</th><th>c in kJ/(kg·K)</th></tr></thead>
+              <tbody>
+                <tr><td>Wasser</td><td>4,19</td></tr>
+                <tr><td>Aluminium</td><td>0,90</td></tr>
+                <tr><td>Stahl</td><td>0,47</td></tr>
+                <tr><td>Kupfer</td><td>0,39</td></tr>
+                <tr><td>Fensterglas</td><td>0,17</td></tr>
+                <tr><td>Holz (Eiche)</td><td>2,39</td></tr>
+                <tr><td>Mauerwerk/Beton</td><td>0,86</td></tr>
+                <tr><td>Olivenöl</td><td>1,97</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- A -->
+      <section class="task-section">
+        <div class="task-label">A – Küche & Haushalt</div>
+        <ol class="tasks">
+          <li class="task-item">
+            Ein Wasserkocher erhitzt <strong>1,5 L Wasser</strong> von <strong>18 °C</strong> auf <strong>100 °C</strong>. Berechne <span class="formula">Q</span> in kJ.
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>m ≈ 1,5 kg, c = 4,19 kJ/(kg·K), ΔT = 82 K</div>
+              <div class="work">Q = m · c · ΔT
+Q = 1,5 · 4,19 · 82
+Q ≈ 515 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Eine Tasse Tee enthält <strong>250 g</strong> Wasser und kühlt von <strong>90 °C</strong> auf <strong>25 °C</strong> ab. Wie viel Wärme wird abgegeben? (kJ)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>m = 0,25 kg, c = 4,19 kJ/(kg·K), ΔT = 65 K</div>
+              <div class="work">Q = 0,25 · 4,19 · 65
+Q ≈ 68,1 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Eine Wärmflasche enthält <strong>1,8 kg Wasser</strong> und wird von <strong>20 °C</strong> auf <strong>75 °C</strong> erwärmt. Berechne <span class="formula">Q</span> in kJ.
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>m = 1,8 kg, c = 4,19, ΔT = 55 K</div>
+              <div class="work">Q = 1,8 · 4,19 · 55
+Q ≈ 415 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Eine Pfanne enthält <strong>0,60 kg Olivenöl</strong> und wird um <strong>160 K</strong> erwärmt. Berechne <span class="formula">Q</span> in kJ. (c(Olivenöl)=1,97)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>m = 0,60 kg, c = 1,97, ΔT = 160 K</div>
+              <div class="work">Q = 0,60 · 1,97 · 160
+Q ≈ 189 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Du hast <strong>500 kJ</strong> Wärme zur Verfügung und willst Wasser um <strong>40 K</strong> erwärmen. Welche Wassermasse <span class="formula">m</span> (kg) ist möglich?
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>m = Q / (c · ΔT)</div>
+              <div class="work">m = 500 / (4,19 · 40)
+m ≈ 2,98 kg  (≈ 3,0 kg)</div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- B -->
+      <section class="task-section">
+        <div class="task-label">B – Technik & Werkstoffe</div>
+        <ol class="tasks">
+          <li class="task-item">
+            Eine Aluminium-Pfanne (m = <strong>2,0 kg</strong>) wird von <strong>20 °C</strong> auf <strong>200 °C</strong> erhitzt. Berechne <span class="formula">Q</span> in kJ. (c(Al)=0,90)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>ΔT = 180 K</div>
+              <div class="work">Q = 2,0 · 0,90 · 180
+Q = 324 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Eine Stahlstange (m = <strong>12 kg</strong>) erwärmt sich durch Reibung um <strong>15 K</strong>. Wie groß ist <span class="formula">Q</span> in kJ? (c(Stahl)=0,47)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div class="work">Q = 12 · 0,47 · 15
+Q = 84,6 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Kupfer-Kühlkörper (m = <strong>0,8 kg</strong>) wird um <strong>25 K</strong> wärmer. Berechne <span class="formula">Q</span> in kJ. (c(Kupfer)=0,39)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div class="work">Q = 0,8 · 0,39 · 25
+Q = 7,8 kJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Stück Metall (m = <strong>0,50 kg</strong>) braucht <strong>22 kJ</strong>, um um <strong>100 K</strong> wärmer zu werden. Berechne <span class="formula">c</span> in kJ/(kg·K).
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>c = Q / (m · ΔT)</div>
+              <div class="work">c = 22 / (0,50 · 100)
+c = 0,44 kJ/(kg·K)</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Mit <strong>90 kJ</strong> soll Aluminium um <strong>50 K</strong> erwärmt werden. Welche Masse <span class="formula">m</span> (kg) ist möglich? (c(Al)=0,90)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div class="work">m = 90 / (0,90 · 50)
+m = 2,0 kg</div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- C -->
+      <section class="task-section">
+        <div class="task-label">C – Natur & Umwelt</div>
+        <ol class="tasks">
+          <li class="task-item">
+            Ein kleiner Pool enthält <strong>5 m³ Wasser</strong> (≈ <strong>5000 kg</strong>). Er wird tagsüber um <strong>2 K</strong> erwärmt. Berechne <span class="formula">Q</span> in MJ.
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Q in kJ: Q = 5000 · 4,19 · 2 = 41&nbsp;900 kJ → in MJ: /1000</div>
+              <div class="work">Q ≈ 41,9 MJ</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Eine Betonplatte (m = <strong>300 kg</strong>) erwärmt sich an einem sonnigen Tag um <strong>5 K</strong>. Berechne <span class="formula">Q</span> in kJ. (c(Beton)=0,86)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div class="work">Q = 300 · 0,86 · 5
+Q = 1290 kJ  (≈ 1,29 MJ)</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Motor-Kühlkreislauf enthält <strong>6 L</strong> Kühlflüssigkeit (≈ wie Wasser, m ≈ 6 kg). Beim Aufwärmen steigt die Temperatur um <strong>40 K</strong>.
+            Berechne <span class="formula">Q</span> in kJ.
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div class="work">Q = 6 · 4,19 · 40
+Q = 1005,6 kJ  (≈ 1,01 MJ)</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein großer Topf Wasser (m = <strong>3,0 kg</strong>) nimmt beim Erhitzen <strong>600 kJ</strong> auf. Um wie viele Kelvin steigt die Temperatur? (ohne Verdampfen)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>ΔT = Q / (m · c)</div>
+              <div class="work">ΔT = 600 / (3,0 · 4,19)
+ΔT ≈ 47,7 K</div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Betonblock (m = <strong>200 kg</strong>) nimmt <strong>430 kJ</strong> Wärme auf. Um wie viele Kelvin steigt seine Temperatur? (c(Beton)=0,86)
+            <div class="task-controls">
+              <button class="btn toggleBtn" type="button">Lösung anzeigen</button>
+            </div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div class="work">ΔT = 430 / (200 · 0,86)
+ΔT = 2,5 K</div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <p class="tiny" style="margin:0;">
+        Extra: Forme die Gleichung bei Bedarf um: <span class="formula">m = Q/(c·ΔT)</span>, <span class="formula">c = Q/(m·ΔT)</span>, <span class="formula">ΔT = Q/(m·c)</span>.
+      </p>
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+<p>Thermische Energie und Wärme</p>
+</div>
+<div class="nav-buttons">
+<a class="nav-btn" href="7.html">← Zurück</a>
+<a class="nav-btn" href="9.html">Nächste →</a>
+</div>
+<div class="footer-right">
+<p>Seite 8</p>
+    </div>
+  </div>
+
+  <script>
+    function setSol(el, show){
+      el.style.display = show ? 'block' : 'none';
+      const btn = el.closest('.task-item').querySelector('.toggleBtn');
+      btn.textContent = show ? 'Lösung ausblenden' : 'Lösung anzeigen';
+      btn.classList.toggle('secondary', show);
+    }
+
+    document.querySelectorAll('.task-item').forEach(item=>{
+      const btn = item.querySelector('.toggleBtn');
+      const sol = item.querySelector('.solution');
+
+      btn.addEventListener('click', ()=>{
+        const isVisible = sol.style.display === 'block';
+        setSol(sol, !isVisible);
+      });
+    });
+
+    document.getElementById('toggleAllBtn').addEventListener('click', ()=>{
+      document.querySelectorAll('.solution').forEach(sol => setSol(sol, true));
+    });
+    document.getElementById('hideAllBtn').addEventListener('click', ()=>{
+      document.querySelectorAll('.solution').forEach(sol => setSol(sol, false));
+    });
+  </script>
+</body>
+</html>

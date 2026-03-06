@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Übungsseite – Komplexere Aufgaben zur Wärmemenge</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <!-- MathJax for proper formula notation (indices, fractions, units, ...) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    html, body{ margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container{ width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header{ background:#2A3B32; color:#fff; padding:1.1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title{ margin:0; font-weight:700; font-size:1.95rem; }
+    .divider{ width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.5rem; }
+
+    .slide-content{ flex:1 1 auto; padding:.95rem 2rem 1.1rem 2rem; display:flex; flex-direction:column; gap:.75rem; }
+
+    .tiny{ font-size:.8rem; color:#6B7280; font-family:'Raleway',sans-serif; }
+    .formula{ font-family:"Courier New", monospace; font-size:.9rem; background:#E5E7EB; padding:0 .25rem; border-radius:4px; white-space:nowrap; }
+
+    .top-grid{ display:grid; grid-template-columns: 1.18fr .82fr; gap:.85rem; align-items:start; }
+    .card{ background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05); overflow:hidden; }
+    .card-head{ padding:.65rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; font-weight:700; color:#2A3B32; }
+    .card-body{ padding:.8rem .9rem; font-family:'Raleway',sans-serif; font-size:.9rem; }
+
+    .eq-box{
+      background:#FFF7E6; border:1px solid #F59E0B; border-radius:12px;
+      padding:.65rem .8rem; display:flex; gap:.55rem; flex-wrap:wrap; align-items:center;
+      font-family:"Courier New", monospace; font-size:.98rem;
+    }
+
+    table.ref{ width:100%; border-collapse:collapse; font-size:.8rem; margin-top:.3rem; }
+    table.ref th, table.ref td{ border:1px solid #D1D5DB; padding:.28rem; text-align:left; }
+    table.ref th{ background:#F3F4F6; font-weight:700; }
+
+    .task-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:.75rem; align-items:start; }
+
+    .task-section{
+      position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px;
+      padding:.85rem .85rem .7rem .85rem; font-family:'Raleway',sans-serif; min-height:100%;
+    }
+    .task-label{
+      position:absolute; top:-12px; left:.9rem;
+      background:#2A3B32; color:#fff; padding:.22rem .65rem; border-radius:6px;
+      font-weight:600; font-size:.84rem;
+    }
+
+    .tasks{ margin:0; padding-left:1rem; }
+    .task-item{ margin:.55rem 0; line-height:1.42; font-size:.84rem; }
+    .task-item ul{ margin:.3rem 0 .2rem .4rem; padding-left:.9rem; list-style:disc; }
+    .task-controls{ margin-top:.35rem; display:flex; gap:.45rem; align-items:center; flex-wrap:wrap; }
+
+    .btn{
+      background:#2A3B32; color:#fff; border-radius:10px; padding:.35rem .62rem; font-weight:700; font-size:.77rem;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .btn.secondary{ background:#F9FAFB; color:#2A3B32; border:1px solid #D1D5DB; }
+    .btn:active{ transform: translateY(1px); }
+
+    .solution{
+      display:none;
+      margin-top:.45rem;
+      background:#ffffff;
+      border:1px solid #D1D5DB;
+      border-left:6px solid #10B981;
+      border-radius:10px;
+      padding:.55rem .7rem;
+      font-size:.8rem;
+      color:#111827;
+    }
+    .solution .sol-title{
+      font-weight:800;
+      color:#065F46;
+      margin-bottom:.2rem;
+      font-size:.74rem;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .solution .work{
+      font-family:"Courier New", monospace;
+      font-size:.76rem;
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.45rem .55rem;
+      margin-top:.35rem;
+      white-space:normal;
+      line-height:1.32;
+    }
+    .solution .work .line{ margin:.18rem 0; }
+
+   .footer {
+      padding:.9rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      color:#666;
+      font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      background: #fff;
+      border-top: none;
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .footer-left { text-align: left; }
+    .footer-right { text-align: right; }
+
+    .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .nav-btn {
+        background-color: #2A3B32;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .nav-btn:hover {
+        background-color: #3d5448;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width:1200px){
+      .task-grid{ grid-template-columns:1fr; }
+      .top-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Vertiefung: Komplexere Wärme-Aufgaben</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Physik | Klasse 10</p>
+    </div>
+
+    <div class="slide-content">
+
+      <div class="eq-box">
+        <span><strong>Formel:</strong></span>
+        <span>\(Q = m\,c\,\Delta T\)</span>
+        <span style="font-family:'Raleway',sans-serif; font-size:.84rem; color:#6B7280;">
+          kombiniert mit Umformen, Summieren und Wirkungsgrad
+        </span>
+      </div>
+
+      <div class="top-grid">
+        <div class="card">
+          <div class="card-head">Jetzt schwieriger</div>
+          <div class="card-body">
+            <ul class="list-disc ml-5">
+              <li>Mehrschrittig rechnen: Teilmengen getrennt berechnen und dann addieren.</li>
+              <li>Bei Mischungen gilt: abgegebene Wärme = aufgenommene Wärme (Verluste hier ignoriert, falls nicht anders angegeben).</li>
+              <li>Wirkungsgrad: \(Q_{\mathrm{nutz}} = \eta\,E\) bzw. \(E = Q_{\mathrm{nutz}}/\eta\).</li>
+              <li>Ohne Schmelzen/Verdampfen: nur Temperaturänderungen innerhalb eines Aggregatzustands.</li>
+            </ul>
+            <div class="task-controls" style="margin-top:.65rem;">
+              <button class="btn secondary" id="toggleAllBtn" type="button">
+                <i class="fa-solid fa-eye"></i>&nbsp;Alle Lösungen anzeigen
+              </button>
+              <button class="btn secondary" id="hideAllBtn" type="button">
+                <i class="fa-solid fa-eye-slash"></i>&nbsp;Alle Lösungen ausblenden
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">c-Werte (Auswahl)</div>
+          <div class="card-body">
+            <table class="ref" aria-label="Spezifische Wärmekapazitäten">
+              <thead><tr><th>Stoff</th><th>c in kJ/(kg·K)</th></tr></thead>
+              <tbody>
+                <tr><td>Wasser</td><td>4,19</td></tr>
+                <tr><td>Aluminium</td><td>0,90</td></tr>
+                <tr><td>Stahl</td><td>0,47</td></tr>
+                <tr><td>Kupfer</td><td>0,39</td></tr>
+                <tr><td>Mauerwerk/Beton</td><td>0,86</td></tr>
+                <tr><td>Olivenöl</td><td>1,97</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-grid">
+      <!-- A -->
+      <section class="task-section">
+        <div class="task-label">A – Küche & Haushalt</div>
+        <ol class="tasks">
+          <li class="task-item">
+            Für Pasta werden <strong>2,0 L Wasser</strong> und ein <strong>0,80 kg</strong> schwerer Stahl-Topf gemeinsam von <strong>20 °C</strong> auf <strong>95 °C</strong> erhitzt. Bestimme die insgesamt benötigte Wärme.
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Wasser und Topf getrennt berechnen und addieren (\(\Delta T\) ist für beide gleich).</div>
+              <div class="work">
+                <div class="line">\(\Delta T = T_{\mathrm{end}}-T_{\mathrm{start}} = 95\,^{\circ}\mathrm{C}-20\,^{\circ}\mathrm{C} = 75\,\mathrm{K}\)</div>
+                <div class="line">\(Q_{\mathrm{W}} = m_{\mathrm{W}}\,c_{\mathrm{W}}\,\Delta T\)</div>
+                <div class="line">\(Q_{\mathrm{W}} = (2{,}0\,\mathrm{kg})\cdot\left(4{,}19\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(75\,\mathrm{K}) = 628{,}5\,\mathrm{kJ}\)</div>
+                <div class="line">\(Q_{\mathrm{Topf}} = m_{\mathrm{Topf}}\,c_{\mathrm{Stahl}}\,\Delta T\)</div>
+                <div class="line">\(Q_{\mathrm{Topf}} = (0{,}80\,\mathrm{kg})\cdot\left(0{,}47\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(75\,\mathrm{K}) = 28{,}2\,\mathrm{kJ}\)</div>
+                <div class="line">\(Q_{\mathrm{ges}} = Q_{\mathrm{W}} + Q_{\mathrm{Topf}} = 628{,}5\,\mathrm{kJ} + 28{,}2\,\mathrm{kJ} = 656{,}7\,\mathrm{kJ}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(Q_{\mathrm{ges}}\approx 6{,}57\cdot10^{2}\,\mathrm{kJ}\)</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            In <strong>1,2 kg</strong> Wasser bei <strong>15 °C</strong> werden <strong>0,30 kg</strong> heißes Wasser mit <strong>80 °C</strong> gegossen. Welche Mischtemperatur entsteht? (Nur Wasser, keine Verluste.)
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Wärmeabgabe des heißen Wassers = Wärmeaufnahme des kalten Wassers (\(c\) ist gleich und kürzt sich).</div>
+              <div class="work">
+                <div class="line">\(Q_{\mathrm{ab}} = Q_{\mathrm{auf}}\)</div>
+                <div class="line">\(m_{\mathrm{h}}\,c_{\mathrm{W}}\,(T_{\mathrm{h}}-T_{\mathrm{m}}) = m_{\mathrm{k}}\,c_{\mathrm{W}}\,(T_{\mathrm{m}}-T_{\mathrm{k}})\)</div>
+                <div class="line">\(\Rightarrow\; m_{\mathrm{h}}\,(T_{\mathrm{h}}-T_{\mathrm{m}}) = m_{\mathrm{k}}\,(T_{\mathrm{m}}-T_{\mathrm{k}})\)</div>
+                <div class="line">Einsetzen (Temperaturdifferenzen in \(\mathrm{K}\); numerisch identisch zu \(^{\circ}\mathrm{C}\)-Differenzen):</div>
+                <div class="line">\((0{,}30\,\mathrm{kg})\cdot(80\,^{\circ}\mathrm{C}-T_{\mathrm{m}}) = (1{,}2\,\mathrm{kg})\cdot(T_{\mathrm{m}}-15\,^{\circ}\mathrm{C})\)</div>
+                <div class="line">\(0{,}30\cdot(80-T_{\mathrm{m}})=1{,}2\cdot(T_{\mathrm{m}}-15)\)</div>
+                <div class="line">\(24-0{,}30T_{\mathrm{m}}=1{,}2T_{\mathrm{m}}-18\Rightarrow 42=1{,}5T_{\mathrm{m}}\Rightarrow T_{\mathrm{m}}=28{,}0\,^{\circ}\mathrm{C}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(T_{\mathrm{m}}=28{,}0\,^{\circ}\mathrm{C}\)</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Wasserkocher nimmt <strong>900 kJ</strong> elektrische Energie auf und arbeitet mit <strong>85 %</strong> Wirkungsgrad. Welche Wassermasse kann er von <strong>18 °C</strong> auf <strong>100 °C</strong> erhitzen?
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Erst nutzbare Wärme berechnen, dann nach \(m\) umstellen und mit Einheiten einsetzen.</div>
+              <div class="work">
+                <div class="line">Gesucht: \(m_{\mathrm{W}}\)</div>
+                <div class="line">\(Q_{\mathrm{nutz}}=\eta\,E_{\mathrm{el}} = 0{,}85\cdot 900\,\mathrm{kJ} = 765\,\mathrm{kJ}\)</div>
+                <div class="line">\(\Delta T = 100\,^{\circ}\mathrm{C}-18\,^{\circ}\mathrm{C}=82\,\mathrm{K}\)</div>
+                <div class="line">Formel: \(Q_{\mathrm{nutz}} = m_{\mathrm{W}}\,c_{\mathrm{W}}\,\Delta T\)</div>
+                <div class="line">Umstellen: \(m_{\mathrm{W}} = \dfrac{Q_{\mathrm{nutz}}}{c_{\mathrm{W}}\,\Delta T}\)</div>
+                <div class="line">Einsetzen: \(m_{\mathrm{W}} = \dfrac{765\,\mathrm{kJ}}{\left(4{,}19\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(82\,\mathrm{K})} = \dfrac{765\,\mathrm{kJ}}{343{,}58\,\mathrm{kJ}/\mathrm{kg}}\approx 2{,}23\,\mathrm{kg}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(m_{\mathrm{W}}\approx 2{,}23\,\mathrm{kg}\) (≈ 2,23 L)</div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- B -->
+      <section class="task-section">
+        <div class="task-label">B – Technik & Werkstoffe</div>
+        <ol class="tasks">
+          <li class="task-item">
+            Ein Bauteil besteht aus <strong>3,0 kg Aluminium</strong> und <strong>2,0 kg Stahl</strong>. Es wird gleichmäßig von <strong>25 °C</strong> auf <strong>175 °C</strong> erhitzt. Wie groß ist die gesamte Wärmemenge?
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Beide Teilwärmen berechnen und addieren (\(\Delta T\) ist gleich).</div>
+              <div class="work">
+                <div class="line">\(\Delta T = 175\,^{\circ}\mathrm{C}-25\,^{\circ}\mathrm{C}=150\,\mathrm{K}\)</div>
+                <div class="line">\(Q_{\mathrm{Al}} = m_{\mathrm{Al}}\,c_{\mathrm{Al}}\,\Delta T\)</div>
+                <div class="line">\(Q_{\mathrm{Al}}=(3{,}0\,\mathrm{kg})\cdot\left(0{,}90\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(150\,\mathrm{K})=405\,\mathrm{kJ}\)</div>
+                <div class="line">\(Q_{\mathrm{St}} = m_{\mathrm{St}}\,c_{\mathrm{St}}\,\Delta T\)</div>
+                <div class="line">\(Q_{\mathrm{St}}=(2{,}0\,\mathrm{kg})\cdot\left(0{,}47\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(150\,\mathrm{K})=141\,\mathrm{kJ}\)</div>
+                <div class="line">\(Q_{\mathrm{ges}}=Q_{\mathrm{Al}}+Q_{\mathrm{St}}=405\,\mathrm{kJ}+141\,\mathrm{kJ}=546\,\mathrm{kJ}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(Q_{\mathrm{ges}}=546\,\mathrm{kJ}\)</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein <strong>1,5 kg</strong> schwerer Kupferblock mit <strong>180 °C</strong> wird in <strong>4,0 kg</strong> Wasser mit <strong>20 °C</strong> gelegt. Welche Endtemperatur stellt sich ein? (Verluste vernachlässigt.)
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Wärmeabgabe Kupfer = Wärmeaufnahme Wasser, nach \(T\) auflösen.</div>
+              <div class="work">
+                <div class="line">Gesucht: \(T_{\mathrm{end}}\)</div>
+                <div class="line">\(m_{\mathrm{Cu}}\,c_{\mathrm{Cu}}\,(T_{\mathrm{Cu,i}}-T_{\mathrm{end}})=m_{\mathrm{W}}\,c_{\mathrm{W}}\,(T_{\mathrm{end}}-T_{\mathrm{W,i}})\)</div>
+                <div class="line">Einsetzen:</div>
+                <div class="line">\((1{,}5\,\mathrm{kg})\cdot\left(0{,}39\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(180\,^{\circ}\mathrm{C}-T_{\mathrm{end}})=(4{,}0\,\mathrm{kg})\cdot\left(4{,}19\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)\cdot(T_{\mathrm{end}}-20\,^{\circ}\mathrm{C})\)</div>
+                <div class="line">\(0{,}585\,\frac{\mathrm{kJ}}{\mathrm{K}}\,(180-T_{\mathrm{end}})=16{,}76\,\frac{\mathrm{kJ}}{\mathrm{K}}\,(T_{\mathrm{end}}-20)\)</div>
+                <div class="line">\(105{,}3\,\mathrm{kJ}-0{,}585\,\frac{\mathrm{kJ}}{\mathrm{K}}\,T_{\mathrm{end}}=16{,}76\,\frac{\mathrm{kJ}}{\mathrm{K}}\,T_{\mathrm{end}}-335{,}2\,\mathrm{kJ}\)</div>
+                <div class="line">\(440{,}5\,\mathrm{kJ}=17{,}345\,\frac{\mathrm{kJ}}{\mathrm{K}}\,T_{\mathrm{end}}\Rightarrow T_{\mathrm{end}}\approx 25{,}4\,^{\circ}\mathrm{C}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(T_{\mathrm{end}}\approx 25{,}4\,^{\circ}\mathrm{C}\)</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Ofen gibt pro Zyklus <strong>720 kJ</strong> Nutzwärme ab. Damit soll ein <strong>6,0 kg</strong> schweres Aluminiumteil und ein <strong>2,0 kg</strong> schweres Stahlteil ausgehend von <strong>20 °C</strong> gemeinsam erhitzt werden. Um wie viele Kelvin steigt ihre Temperatur maximal?
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Gemeinsame Wärmekapazität \(m\,c\) addieren, dann nach \(\Delta T\) umstellen.</div>
+              <div class="work">
+                <div class="line">Gesucht: \(\Delta T\)</div>
+                <div class="line">\(Q_{\mathrm{nutz}}=(m_{\mathrm{Al}}\,c_{\mathrm{Al}}+m_{\mathrm{St}}\,c_{\mathrm{St}})\,\Delta T\)</div>
+                <div class="line">Umstellen: \(\Delta T = \dfrac{Q_{\mathrm{nutz}}}{m_{\mathrm{Al}}\,c_{\mathrm{Al}}+m_{\mathrm{St}}\,c_{\mathrm{St}}}\)</div>
+                <div class="line">Einsetzen: \(\Delta T = \dfrac{720\,\mathrm{kJ}}{(6{,}0\,\mathrm{kg})\left(0{,}90\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)+(2{,}0\,\mathrm{kg})\left(0{,}47\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)}\)</div>
+                <div class="line">\(\Delta T = \dfrac{720\,\mathrm{kJ}}{5{,}40\,\mathrm{kJ}/\mathrm{K}+0{,}94\,\mathrm{kJ}/\mathrm{K}=6{,}34\,\mathrm{kJ}/\mathrm{K}}\approx 113{,}6\,\mathrm{K}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(\Delta T\approx 114\,\mathrm{K}\)</div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- C -->
+      <section class="task-section">
+        <div class="task-label">C – Natur & Umwelt</div>
+        <ol class="tasks">
+          <li class="task-item">
+            Ein Solarspeicher enthält <strong>150 L Wasser</strong> bei <strong>22 °C</strong>. Bis zum Abend sollen <strong>60 °C</strong> erreicht werden. Die Solaranlage liefert <strong>7,5 MJ</strong> pro Stunde als Nutzwärme. Wie lange dauert das mindestens?
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Zuerst benötigte Wärme \(Q\) berechnen, dann durch die stündliche Nutzwärme teilen.</div>
+              <div class="work">
+                <div class="line">Gegeben: \(m_{\mathrm{W}}\approx 150\,\mathrm{kg}\) (\(150\,\mathrm{L}\approx150\,\mathrm{kg}\))</div>
+                <div class="line">\(\Delta T = 60\,^{\circ}\mathrm{C}-22\,^{\circ}\mathrm{C}=38\,\mathrm{K}\)</div>
+                <div class="line">\(Q = m_{\mathrm{W}}\,c_{\mathrm{W}}\,\Delta T = (150\,\mathrm{kg})\left(4{,}19\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)(38\,\mathrm{K}) = 23883\,\mathrm{kJ}\)</div>
+                <div class="line">Umrechnen: \(23883\,\mathrm{kJ}=23{,}883\,\mathrm{MJ}\)</div>
+                <div class="line">Zeit: \(t = \dfrac{Q}{P} = \dfrac{23{,}883\,\mathrm{MJ}}{7{,}5\,\mathrm{MJ}/\mathrm{h}}\approx 3{,}18\,\mathrm{h}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> mindestens \(t\approx 3{,}2\,\mathrm{h}\)</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            Ein Betonboden mit <strong>450 kg</strong> kühlt nachts von <strong>28 °C</strong> auf <strong>19 °C</strong> ab. Wie viel Wärme gibt er ab? Gib das Ergebnis in <strong>MJ</strong> an.
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>Abgegebene Wärmemenge ist der Betrag von \(m\,c\,\Delta T\).</div>
+              <div class="work">
+                <div class="line">\(\Delta T = 28\,^{\circ}\mathrm{C}-19\,^{\circ}\mathrm{C}=9\,\mathrm{K}\)</div>
+                <div class="line">\(Q = m\,c\,\Delta T = (450\,\mathrm{kg})\left(0{,}86\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)(9\,\mathrm{K}) = 3483\,\mathrm{kJ}\)</div>
+                <div class="line">Umrechnen: \(3483\,\mathrm{kJ}=3{,}483\,\mathrm{MJ}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(Q\approx 3{,}48\,\mathrm{MJ}\)</div>
+              </div>
+            </div>
+          </li>
+
+          <li class="task-item">
+            In einem Pufferspeicher befinden sich <strong>200 kg Wasser</strong> bei <strong>70 °C</strong>. Durch Wärmeverlust sinkt die Temperatur auf <strong>55 °C</strong>. Mit dieser abgegebenen Wärme wird eine <strong>120 kg</strong> schwere Betonwand erwärmt. Um wie viele Kelvin steigt deren Temperatur?
+            <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+            <div class="solution">
+              <div class="sol-title">Musterlösung</div>
+              <div>1) Wärmeverlust des Wassers berechnen. 2) Diese Wärme geht in die Betonwand: \(Q_{\mathrm{W}}=Q_{\mathrm{Beton}}\).</div>
+              <div class="work">
+                <div class="line">Schritt 1 (Wasser): \(\Delta T_{\mathrm{W}} = 70\,^{\circ}\mathrm{C}-55\,^{\circ}\mathrm{C}=15\,\mathrm{K}\)</div>
+                <div class="line">\(Q_{\mathrm{W}} = m_{\mathrm{W}}\,c_{\mathrm{W}}\,\Delta T_{\mathrm{W}} = (200\,\mathrm{kg})\left(4{,}19\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)(15\,\mathrm{K})=12570\,\mathrm{kJ}\)</div>
+                <div class="line">Schritt 2 (Beton): \(Q_{\mathrm{Beton}} = m_{\mathrm{B}}\,c_{\mathrm{B}}\,\Delta T_{\mathrm{B}}\)</div>
+                <div class="line">Wegen Energieerhaltung (ohne Verluste): \(Q_{\mathrm{Beton}}=Q_{\mathrm{W}}\Rightarrow \Delta T_{\mathrm{B}}=\dfrac{Q_{\mathrm{W}}}{m_{\mathrm{B}}\,c_{\mathrm{B}}}\)</div>
+                <div class="line">Einsetzen: \(\Delta T_{\mathrm{B}} = \dfrac{12570\,\mathrm{kJ}}{(120\,\mathrm{kg})\left(0{,}86\,\frac{\mathrm{kJ}}{\mathrm{kg}\,\mathrm{K}}\right)} = \dfrac{12570\,\mathrm{kJ}}{103{,}2\,\mathrm{kJ}/\mathrm{K}}\approx 121{,}8\,\mathrm{K}\)</div>
+                <div class="line"><strong>Ergebnis:</strong> \(\Delta T_{\mathrm{B}}\approx 122\,\mathrm{K}\)</div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </section>
+      </div>
+
+      <p class="tiny" style="margin:0;">
+        Extra: Hier wird nicht nur <span class="formula">Q</span> berechnet – oft müssen zuerst Teilwärmen addiert oder Gleichungen nach <span class="formula">m</span>, <span class="formula">\(\Delta T\)</span> oder der Mischtemperatur umgestellt werden.
+      </p>
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-left"><p>Thermische Energie und Wärme</p></div>
+      <div class="nav-buttons">
+        <a class="nav-btn" href="8.html">← Zurück</a>
+        <a class="nav-btn" href="10.html">Nächste →</a>
+      </div>
+      <div class="footer-right"><p>Seite 8</p></div>
+    </div>
+  </div>
+
+  <script>
+    function setSol(el, show){
+      el.style.display = show ? 'block' : 'none';
+      const btn = el.closest('.task-item').querySelector('.toggleBtn');
+      btn.textContent = show ? 'Lösung ausblenden' : 'Lösung anzeigen';
+      btn.classList.toggle('secondary', show);
+
+      // Let MathJax re-typeset newly shown content (if available)
+      if (show && window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([el]).catch(()=>{});
+      }
+    }
+
+    document.querySelectorAll('.task-item').forEach(item=>{
+      const btn = item.querySelector('.toggleBtn');
+      const sol = item.querySelector('.solution');
+
+      btn.addEventListener('click', ()=>{
+        const isVisible = sol.style.display === 'block';
+        setSol(sol, !isVisible);
+      });
+    });
+
+    document.getElementById('toggleAllBtn').addEventListener('click', ()=>{
+      document.querySelectorAll('.solution').forEach(sol => setSol(sol, true));
+    });
+    document.getElementById('hideAllBtn').addEventListener('click', ()=>{
+      document.querySelectorAll('.solution').forEach(sol => setSol(sol, false));
+    });
+  </script>
+</body>
+</html>

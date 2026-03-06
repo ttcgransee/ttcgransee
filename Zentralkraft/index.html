@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Radialkraft – 3D-Karussell (Spielplatz)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Import-Map, damit OrbitControls "three" korrekt auflösen kann -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body{ margin:0; background:#f5f5f5; color:#333; font-family:"Montserrat",sans-serif; }
+    .page{ min-height:100vh; display:flex; flex-direction:column; }
+
+    .header{
+      background:#2A3B32; color:#fff;
+      padding:18px 28px;
+      display:flex; justify-content:space-between; align-items:center;
+      gap:16px; flex-wrap:wrap;
+    }
+    .title{ margin:0; font-size:1.7rem; font-weight:800; letter-spacing:.01em; }
+    .divider{ width:78px; height:5px; background:#E6B400; border-radius:999px; margin-top:8px; }
+    .subtitle{ font-weight:300; opacity:.92; font-size:.95rem; }
+
+    .content{
+      padding:16px 28px 22px;
+      display:grid;
+      grid-template-columns: minmax(440px, 1.35fr) minmax(320px, .65fr);
+      gap:14px;
+      flex:1;
+      font-family:"Raleway",sans-serif;
+    }
+
+    .card{
+      background:#fff; border:1px solid #e5e7eb; border-radius:14px;
+      box-shadow:0 2px 10px rgba(0,0,0,.05);
+      overflow:hidden;
+    }
+    .card-head{
+      padding:12px 14px; background:#f9fafb; border-bottom:1px solid #e5e7eb;
+      display:flex; align-items:center; gap:10px;
+    }
+    .badge{
+      background:#2A3B32; color:#fff; font-weight:800; border-radius:8px;
+      padding:4px 9px; font-size:.9rem; min-width:42px; text-align:center;
+    }
+    .card-title{ font-weight:700; color:#2A3B32; }
+
+    .viewer-wrap{ padding:10px; background:linear-gradient(to bottom,#ffffff,#f7fafc); }
+    #scene{
+      width:100%; height:72vh; min-height:470px; display:block;
+      border-radius:12px; border:1px solid #dbe3ea;
+      background:linear-gradient(to bottom,#f8fbff,#eef3f8);
+    }
+
+    .panel{ padding:14px; display:flex; flex-direction:column; gap:12px; }
+    .box{ background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+    .box-title{
+      font-size:.78rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+      color:#4b5563; margin-bottom:10px; font-family:"Montserrat",sans-serif;
+    }
+    .control{ margin-bottom:12px; }
+    .control:last-child{ margin-bottom:0; }
+    .control label{
+      display:flex; justify-content:space-between; gap:10px; margin-bottom:4px;
+      font-weight:700; color:#2A3B32; font-family:"Montserrat",sans-serif; font-size:.95rem;
+    }
+    .control input[type="range"]{ width:100%; accent-color:#2A3B32; }
+
+    .btn-row{ display:flex; gap:8px; flex-wrap:wrap; }
+    button{
+      border:1px solid #cad4cf; background:#fff; color:#2A3B32;
+      border-radius:10px; padding:9px 12px; cursor:pointer;
+      font-weight:800; font-family:"Montserrat",sans-serif;
+      transition:.12s ease;
+    }
+    button:hover{ transform:translateY(-1px); }
+    button.active{ background:#2A3B32; color:#fff; border-color:#2A3B32; }
+
+    .values{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .value{ background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:10px; }
+    .value .name{
+      font-size:.74rem; text-transform:uppercase; font-weight:800; letter-spacing:.05em;
+      color:#6b7280; margin-bottom:4px; font-family:"Montserrat",sans-serif;
+    }
+    .value .num{ font-size:1.12rem; font-weight:900; color:#2A3B32; font-family:"Montserrat",sans-serif; }
+
+    .formula{
+      background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:12px;
+      color:#2A3B32; font-weight:800; line-height:1.45; font-family:"Montserrat",sans-serif;
+    }
+    .note{ font-size:.92rem; color:#4b5563; line-height:1.45; }
+
+    .footer{ padding:0 28px 22px; color:#666; font-family:"Raleway",sans-serif; font-size:.95rem; }
+
+    @media (max-width: 980px){
+      .content{ grid-template-columns:1fr; }
+      #scene{ height:56vh; }
+    }
+    @media (max-width: 700px){
+      .header,.content,.footer{ padding-left:14px; padding-right:14px; }
+      .title{ font-size:1.35rem; }
+      .values{ grid-template-columns:1fr; }
+    }
+.slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .divider { width:110px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.5rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+    .formula {
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+    .materials-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:1rem;
+      align-items:stretch;
+    }
+
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .material:hover{
+      transform: translateY(-3px);
+      box-shadow:0 14px 28px rgba(0,0,0,.10);
+    }
+
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3.0rem; text-align:center;
+    }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; }
+    .tiny { font-size:.9rem; color:#4B5563; }
+
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.6rem;
+      margin-top:.4rem;
+    }
+    .info-box {
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:8px;
+      padding:.6rem .75rem;
+    }
+    .info-box.full { grid-column:1 / -1; }
+    .info-label {
+      font-size:.72rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#374151;
+      margin-bottom:.25rem;
+    }
+    .info-box p,
+    .info-box ul,
+    .info-box ol {
+      font-size:.9rem;
+      line-height:1.5;
+      margin:0;
+    }
+    .info-box ul { margin-left:1rem; list-style:disc; }
+    .info-box ol { margin-left:1.1rem; list-style:decimal; }
+
+    .task-section {
+      position:relative;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:12px;
+      padding:1rem;
+      font-family:'Raleway',sans-serif;
+      margin-top:.25rem;
+    }
+    .task-label {
+      position:absolute;
+      top:-12px;
+      left:1rem;
+      background:#2A3B32;
+      color:#fff;
+      padding:.25rem .75rem;
+      border-radius:6px;
+      font-weight:700;
+      font-size:.9rem;
+    }
+    .task-section ol { margin-left:1.2rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
+
+    /* GIF block (200×280) */
+    .gif-row{
+      display:flex;
+      gap:.8rem;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-top:.6rem;
+    }
+    .gif-box{
+      width:200px; height:280px;
+      border-radius:10px;
+      border:1px solid #E5E7EB;
+      background:#fff;
+      overflow:hidden;
+      flex: 0 0 auto;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .gif-box img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .gif-placeholder{
+      text-align:center;
+      color:#6B7280;
+      font-size:.85rem;
+      padding:.6rem;
+      font-family:'Raleway',sans-serif;
+    }
+    .formula {
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
+     .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr; /* Left text, Center buttons, Right text */
+      align-items:center;
+      color:#666; font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      flex-shrink:0;
+      background: #F5F5F5; /* Matches body bg */
+      margin-top: auto; /* pushes footer to bottom if content is short */
+      border-top: none; /* no footer separator line */
+      }
+    
+    .footer-left { justify-self: start; }
+    .footer-center { 
+        display: flex; 
+        gap: 1rem; 
+        justify-self: center; 
+    }
+    .footer-right { justify-self: end; }
+
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #2A3B32;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        min-width: 100px;
+    }
+    .nav-btn:hover {
+        background-color: #3D5245;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    .nav-btn:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width:980px){
+      .materials-grid{ grid-template-columns:1fr; }
+      .gif-row{ flex-direction:column; }
+      .gif-box{ width:100%; max-width:260px; height:280px; }
+    }
+
+    @media print {
+      html, body { background:#fff; }
+      .slide-header, .footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .material, .task-section { box-shadow:none; }
+    }
+  
+    .action-btn{ transition: transform .18s ease, box-shadow .18s ease; }
+    .action-btn:hover{
+      transform: translateY(-2px);
+      box-shadow:0 10px 18px rgba(0,0,0,.10);
+    }
+    /* Tabelle (wie in 2.html) */
+    table.measure-table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.85rem;
+      margin-top:.4rem;
+      table-layout:fixed;
+    }
+    table.measure-table th, table.measure-table td {
+      border:1px solid #d1d5db;
+      padding:.45rem .35rem;
+      text-align:center;
+      vertical-align:middle;
+      word-wrap:break-word;
+    }
+    table.measure-table th {
+      background:#f3f4f6;
+      font-weight:700;
+    }
+    table.measure-table .rowhead {
+      text-align:left;
+      font-weight:700;
+      padding-left:.6rem;
+      background:#fafafa;
+    }
+    table.measure-table td {
+      height:2.0rem;
+      background:#fff;
+    }
+</style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="header">
+      <div>
+        <h1 class="title"><i>Simulation</i> Radialkraft</h1>
+        <div class="divider"></div>
+      </div>
+      <div class="subtitle">Physik | Klasse 9/10</div>
+    </div>
+
+    <div class="content">
+      <div class="card">
+        <div class="card-head">
+          <span class="badge">1</span>
+          <div class="card-title">Animation eines Karussells</div>
+        </div>
+        <div class="viewer-wrap">
+          <canvas id="scene"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="badge">2</span>
+          <div class="card-title">Steuerung & Messwerte</div>
+        </div>
+
+        <div class="panel">
+          <div class="box">
+            <div class="box-title">Steuergröße</div>
+            <div class="btn-row">
+              <button id="modeV" class="active" type="button">v fest</button>
+              <button id="modeW" type="button">ω fest</button>
+              <button id="toggleRun" class="active" type="button">Animation an</button>
+              <button id="resetBtn" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="box-title">Regler</div>
+
+            <div class="control">
+              <label>Masse m (kg) <strong id="massOut">60</strong></label>
+              <input id="mass" type="range" min="20" max="120" step="1" value="60">
+            </div>
+
+            <div class="control">
+              <label>Bahnradius r (m) <strong id="radiusOut">2.0</strong></label>
+              <input id="radius" type="range" min="0.5" max="4.0" step="0.1" value="2.0">
+            </div>
+
+            <div class="control">
+              <label>Karussellradius (m) <strong id="platformOut">3.2</strong></label>
+              <input id="platform" type="range" min="1.5" max="5.0" step="0.1" value="3.2">
+            </div>
+
+            <div class="control">
+              <label>Bahngeschwindigkeit v (m/s) <strong id="speedOut">2.0</strong></label>
+              <input id="speed" type="range" min="0.2" max="8.0" step="0.1" value="2.0">
+            </div>
+
+            <div class="control">
+              <label>Winkelgeschwindigkeit ω (rad/s) <strong id="omegaOut">1.00</strong></label>
+              <input id="omega" type="range" min="0.1" max="4.0" step="0.01" value="1.00">
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="box-title">Messwerte</div>
+            <div class="values">
+              <div class="value">
+                <div class="name">Radialkraft (innen) Fᵣ</div>
+                <div class="num" id="forceInOut">120.00 N</div>
+              </div>
+              <div class="value">
+                <div class="name">Zentrifugalkraft (außen) F<sub>zf</sub></div>
+                <div class="num" id="forceOutOut">120.00 N</div>
+              </div>
+              <div class="value">
+                <div class="name">Beschleunigung aᵣ</div>
+                <div class="num" id="accOut">2.00 m/s²</div>
+              </div>
+              <div class="value">
+                <div class="name">v / ω</div>
+                <div class="num" id="vwOut">2.00 m/s · 1.00 rad/s</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box">
+            <div class="box-title">Legende</div>
+            <div class="note">
+              <strong style="color:#c0392b;">Rot:</strong> Radialkraft ·
+              <strong style="color:#f59e0b;">Orange:</strong> Zentrifugalkraft ·
+              <strong style="color:#2563eb;">Blau:</strong> Bahngeschwindigkeit
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+<!-- ======= NEU: Aufgabenstellung + Messwertetabelle (im Vorlagen-Stil) ======= -->
+<div class="content" >
+
+  <!-- LINKS: Aufgabenstellung -->
+  
+
+  <!-- RECHTS: Messwertetabelle -->
+  <section class="material">
+    <div class="mat-head">
+      <span class="badge">3</span>
+      <div class="mat-title">Messwertetabelle</div>
+    </div>
+
+    <div class="mat-body">
+      <div class="info-box full">
+        <div class="info-label">Eintragen: Zentripetalkraft F<sub>z</sub></div>
+
+        <div style="overflow-x:auto; padding-bottom:.25rem;">
+          <table class="measure-table" aria-label="Messwertetabelle Zentripetalkraft">
+            <colgroup>
+              <col style="width: 5.5rem;">
+              <col style="width: 4.5rem;"><col style="width: 4.5rem;"><col style="width: 4.5rem;">
+              <col style="width: 4.5rem;"><col style="width: 4.5rem;"><col style="width: 4.5rem;">
+              <col style="width: 4.5rem;"><col style="width: 4.5rem;"><col style="width: 4.5rem;">
+            </colgroup>
+
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="3"><em>m</em><sub>1</sub></th>
+                <th colspan="3"><em>m</em><sub>2</sub></th>
+                <th colspan="3"><em>m</em><sub>3</sub></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th><em>r</em><sub>1</sub></th>
+                <th><em>r</em><sub>2</sub></th>
+                <th><em>r</em><sub>3</sub></th>
+
+                <th><em>r</em><sub>1</sub></th>
+                <th><em>r</em><sub>2</sub></th>
+                <th><em>r</em><sub>3</sub></th>
+
+                <th><em>r</em><sub>1</sub></th>
+                <th><em>r</em><sub>2</sub></th>
+                <th><em>r</em><sub>3</sub></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <th class="rowhead"><em>v</em><sub>1</sub></th>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th class="rowhead"><em>v</em><sub>2</sub></th>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <th class="rowhead"><em>v</em><sub>3</sub></th>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      
+    </div>
+  </section>
+
+<section class="material">
+    <div class="mat-head">
+      <span class="badge">4</span>
+      <div class="mat-title">Aufgabenstellung</div>
+    </div>
+
+    <div class="mat-body">
+      <div class="task-section" style="margin-top:.6rem; font-size:.95rem;">
+        <div class="task-label"><i class="fas fa-clipboard-check mr-2"></i>Auftrag</div>
+                    Messe für <strong>drei unterschiedliche Geschwindigkeiten</strong>, für <strong>drei unterschiedliche Radien</strong> und für <strong>drei unterschiedliche Massen</strong> je die (notwendige)
+            <strong>Zentripetalkraft</strong>.
+
+        <div style="margin-top:.6rem; font-size:.95rem;">
+          Trage alle Werte in die Tabelle ein (3 × 3 × 3) und leite daraus
+          <strong>Proportionalitäten</strong> ab. Formuliere anschließend eine
+          <strong>Berechnungsformel</strong> für die Zentripetalkraft.
+        </div>
+      </div>
+
+      <div class="info-box full" style="margin-top:.6rem;">
+        <div class="info-label">Hinweis</div>
+        <p>
+          Nutze die Simulation so, dass jeweils <strong>nur eine Größe</strong> verändert wird
+          (z.B. <em>v</em> variieren, <em>m</em> und <em>r</em> konstant halten).
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+<!-- ======= /NEU ======= -->
+
+
+    </div>
+
+    <!-- Footer with Navigation -->
+<div class="footer">
+<div class="footer-left">
+<p>Theo Schierbaum – Zentralkräfte</p>
+</div>
+<div class="footer-center">
+<a class="nav-btn" href="index.html">← Zurück</a>
+<a class="nav-btn" href="3.html">Nächste →</a>
+</div>
+<div class="footer-right">
+<p>Seite 2</p>
+</div>
+</div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+
+    // ---------- UI ----------
+    const el = {
+      canvas: document.getElementById("scene"),
+      mass: document.getElementById("mass"),
+      radius: document.getElementById("radius"),
+      platform: document.getElementById("platform"),
+      speed: document.getElementById("speed"),
+      omega: document.getElementById("omega"),
+
+      massOut: document.getElementById("massOut"),
+      radiusOut: document.getElementById("radiusOut"),
+      platformOut: document.getElementById("platformOut"),
+      speedOut: document.getElementById("speedOut"),
+      omegaOut: document.getElementById("omegaOut"),
+
+      forceInOut: document.getElementById("forceInOut"),
+      forceOutOut: document.getElementById("forceOutOut"),
+      accOut: document.getElementById("accOut"),
+      vwOut: document.getElementById("vwOut"),
+
+      modeV: document.getElementById("modeV"),
+      modeW: document.getElementById("modeW"),
+      toggleRun: document.getElementById("toggleRun"),
+      resetBtn: document.getElementById("resetBtn"),
+    };
+
+    const state = {
+      m: 60,
+      r: 2.0,
+      R: 3.2,
+      v: 2.0,
+      w: 1.0,
+      mode: "v",
+      running: true,
+      angle: 0
+    };
+
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+    // ---------- THREE ----------
+    const renderer = new THREE.WebGLRenderer({ canvas: el.canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+
+    // Himmel
+    const sky = new THREE.Mesh(
+      new THREE.SphereGeometry(120, 32, 16),
+      new THREE.MeshBasicMaterial({ color: 0x9fd3ff, side: THREE.BackSide })
+    );
+    scene.add(sky);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 300);
+    camera.position.set(10, 6.5, 11);
+
+    const controls = new OrbitControls(camera, el.canvas);
+    controls.enableDamping = true;
+    controls.target.set(0, 1.15, 0);
+    controls.minDistance = 6;
+    controls.maxDistance = 40;
+    controls.maxPolarAngle = Math.PI / 2.03;
+
+    // Licht
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    scene.add(new THREE.HemisphereLight(0xdbeafe, 0xb7c4a1, 0.6));
+
+    const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+    sun.position.set(10, 14, 8);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.left = -40;
+    sun.shadow.camera.right = 40;
+    sun.shadow.camera.top = 40;
+    sun.shadow.camera.bottom = -40;
+    scene.add(sun);
+
+    // Boden (Gras)
+    const ground = new THREE.Mesh(
+      new THREE.CircleGeometry(55, 160),
+      new THREE.MeshStandardMaterial({ color: 0x8ec07c, roughness: 1 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Platz (heller Kreis)
+    const plaza = new THREE.Mesh(
+      new THREE.CircleGeometry(11, 120),
+      new THREE.MeshStandardMaterial({ color: 0xe8e7e1, roughness: 1 })
+    );
+    plaza.rotation.x = -Math.PI / 2;
+    plaza.position.y = 0.002;
+    plaza.receiveShadow = true;
+    scene.add(plaza);
+
+    // ---------- Häuser im Hintergrund (statt Hochhäuser) ----------
+    function addHouse(x, z, s=1, rot=0) {
+      const g = new THREE.Group();
+      const wall = new THREE.Mesh(
+        new THREE.BoxGeometry(3.2*s, 2.0*s, 2.3*s),
+        new THREE.MeshStandardMaterial({ color: 0xf2efe6, roughness: 1 })
+      );
+      wall.position.y = 1.0*s;
+      wall.castShadow = true;
+      g.add(wall);
+
+      const roof = new THREE.Mesh(
+        new THREE.ConeGeometry(2.5*s, 1.4*s, 4),
+        new THREE.MeshStandardMaterial({ color: 0xb5533b, roughness: 1 })
+      );
+      roof.position.y = 2.3*s;
+      roof.rotation.y = Math.PI/4;
+      roof.castShadow = true;
+      g.add(roof);
+
+      g.position.set(x, 0, z);
+      g.rotation.y = rot;
+      scene.add(g);
+    }
+
+    addHouse(18, -10, 1.2, 0.3);
+    addHouse(-18, -12, 1.0, -0.2);
+    addHouse(0, -22, 1.4, 0);
+
+    // ---------- Umgebung: größere Bäume, Bänke ----------
+    function addTree(x, z, s=1) {
+      const g = new THREE.Group();
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.20*s, 0.26*s, 2.4*s, 12),
+        new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 1 })
+      );
+      trunk.position.y = 1.2*s;
+      trunk.castShadow = true;
+      g.add(trunk);
+
+      const crown = new THREE.Mesh(
+        new THREE.SphereGeometry(1.15*s, 18, 14),
+        new THREE.MeshStandardMaterial({ color: 0x2f7d32, roughness: 1 })
+      );
+      crown.position.y = 2.8*s;
+      crown.castShadow = true;
+      g.add(crown);
+
+      const crown2 = new THREE.Mesh(
+        new THREE.SphereGeometry(0.95*s, 18, 14),
+        new THREE.MeshStandardMaterial({ color: 0x2f7d32, roughness: 1 })
+      );
+      crown2.position.set(0.70*s, 2.65*s, 0.2*s);
+      crown2.castShadow = true;
+      g.add(crown2);
+
+      g.position.set(x, 0, z);
+      scene.add(g);
+    }
+
+    function addBenchWithPeople(x, z, rot=0) {
+      const g = new THREE.Group();
+      const wood = new THREE.MeshStandardMaterial({ color: 0x8b6b3e, roughness: 1 });
+      const metal = new THREE.MeshStandardMaterial({ color: 0x48525a, roughness: 0.7, metalness: 0.15 });
+
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.12, 0.45), wood);
+      seat.position.y = 0.45;
+      seat.castShadow = true;
+      g.add(seat);
+
+      const back = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.55, 0.10), wood);
+      back.position.set(0, 0.78, -0.18);
+      back.castShadow = true;
+      g.add(back);
+
+      const legGeo = new THREE.BoxGeometry(0.08, 0.45, 0.08);
+      const legs = [
+        [-0.9,0.225, 0.15],[ 0.9,0.225, 0.15],
+        [-0.9,0.225,-0.15],[ 0.9,0.225,-0.15],
+      ].map(p=>{
+        const m=new THREE.Mesh(legGeo, metal);
+        m.position.set(p[0],p[1],p[2]); m.castShadow=true; return m;
+      });
+      legs.forEach(m=>g.add(m));
+
+      // 2 sitzende Figuren
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0xf0c7a5, roughness: 1 });
+
+      function addSitter(px, c=0x1f2937) {
+        const p = new THREE.Group();
+        const mat = new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 });
+
+        const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.35, 5, 10), mat);
+        torso.position.set(0, 0.82, 0.05);
+        torso.castShadow = true;
+        p.add(torso);
+
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 12), skinMat);
+        head.position.set(0, 1.12, 0.05);
+        head.castShadow = true;
+        p.add(head);
+
+        const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.06, 0.28, 4, 10), mat);
+        leg.rotation.x = Math.PI/2.2;
+        leg.position.set(0, 0.58, 0.25);
+        leg.castShadow = true;
+        p.add(leg);
+
+        p.position.x = px;
+        g.add(p);
+      }
+
+      addSitter(-0.45, 0x1f2937);
+      addSitter(0.45, 0x334155);
+
+      g.position.set(x, 0, z);
+      g.rotation.y = rot;
+      scene.add(g);
+    }
+
+    const ringR = 19;
+    for (let i=0;i<10;i++){
+      const a = i/10 * Math.PI*2;
+      addTree(Math.cos(a)*ringR + (i%2?1.0:-0.6), Math.sin(a)*ringR + (i%3?0.6:-1.0), 1.45 + (i%3)*0.22);
+    }
+    addBenchWithPeople(7.5, 9.5, -0.75);
+    addBenchWithPeople(-8.0, 8.5, 0.65);
+
+    // ---------- Textur für sichtbare Drehung (Streifen) ----------
+    function makeStripeTexture() {
+      const c = document.createElement("canvas");
+      c.width = 512; c.height = 512;
+      const g = c.getContext("2d");
+
+      g.fillStyle = "#c79b80";
+      g.fillRect(0,0,c.width,c.height);
+
+      g.translate(c.width/2, c.height/2);
+
+      const stripes = 28;
+      for (let i=0;i<stripes;i++){
+        g.save();
+        g.rotate((i/stripes) * Math.PI*2);
+        g.fillStyle = i%2===0 ? "rgba(20,60,40,0.12)" : "rgba(255,255,255,0.06)";
+        g.fillRect(0, -14, c.width/2, 28);
+        g.restore();
+      }
+
+      g.beginPath();
+      g.arc(0,0, 236, 0, Math.PI*2);
+      g.strokeStyle = "rgba(0,0,0,0.14)";
+      g.lineWidth = 10;
+      g.stroke();
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.anisotropy = 8;
+      return tex;
+    }
+    const topTex = makeStripeTexture();
+
+    // ---------- Karussell ----------
+    const carousel = new THREE.Group();
+    scene.add(carousel);
+
+    const matSide = new THREE.MeshStandardMaterial({ color: 0xb36a3f, roughness: 0.95 });
+    const matTop  = new THREE.MeshStandardMaterial({ map: topTex, color: 0xffffff, roughness: 0.98 });
+
+    const platform = new THREE.Mesh(
+      new THREE.CylinderGeometry(3, 3, 0.42, 96, 1, false),
+      [matSide, matTop, matTop]
+    );
+    platform.position.y = 0.21;
+    platform.castShadow = true;
+    platform.receiveShadow = true;
+    carousel.add(platform);
+
+    // Zentraler Mast (Nabe)
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0x2b5137, roughness: 0.55, metalness: 0.12 });
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.20, 1.6, 32), hubMat);
+    hub.position.y = 1.0;
+    hub.castShadow = true;
+    carousel.add(hub);
+
+    const hubCap = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 24), hubMat);
+    hubCap.position.y = 1.92;
+    hubCap.castShadow = true;
+    carousel.add(hubCap);
+
+    // ---------- Playground-Geländer: Speichen + Außenstangen ----------
+    const railGroup = new THREE.Group();
+    carousel.add(railGroup);
+    let lastBuiltR = null;
+
+    function cylinderBetween(a, b, radius, material) {
+      const dir = new THREE.Vector3().subVectors(b, a);
+      const len = dir.length();
+      const geom = new THREE.CylinderGeometry(radius, radius, Math.max(0.001, len), 10);
+      const mesh = new THREE.Mesh(geom, material);
+      mesh.position.copy(a).add(b).multiplyScalar(0.5);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+      mesh.castShadow = true;
+      return mesh;
+    }
+
+    function rebuildPlaygroundRails() {
+      while (railGroup.children.length) railGroup.remove(railGroup.children[0]);
+
+      const R = state.R;
+      lastBuiltR = R;
+
+      const railMat = new THREE.MeshStandardMaterial({ color: 0x1f7a2d, roughness: 0.55, metalness: 0.12 });
+
+      const deckY = 0.42;
+      const chestY = 1.20;
+      const hubAttach = new THREE.Vector3(0, chestY, 0);
+
+      const spokeCount = 10;
+      const outerRadius = Math.max(0.9, R - 0.18);
+
+      for (let i=0;i<spokeCount;i++){
+        const a = (i/spokeCount) * Math.PI*2;
+
+        const outerTop = new THREE.Vector3(Math.cos(a)*outerRadius, chestY, Math.sin(a)*outerRadius);
+        const outerBottom = new THREE.Vector3(Math.cos(a)*outerRadius, deckY, Math.sin(a)*outerRadius);
+
+        railGroup.add(cylinderBetween(hubAttach, outerTop, 0.03, railMat));
+        railGroup.add(cylinderBetween(outerTop, outerBottom, 0.035, railMat));
+
+        const knob = new THREE.Mesh(new THREE.SphereGeometry(0.06, 14, 12), railMat);
+        knob.position.copy(outerTop);
+        knob.castShadow = true;
+        railGroup.add(knob);
+      }
+    }
+
+    // ---------- Person ----------
+    const person = new THREE.Group();
+    carousel.add(person);
+
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.75 });
+    const skinMat = new THREE.MeshStandardMaterial({ color: 0xf0c7a5, roughness: 0.95 });
+    const hairMat = new THREE.MeshStandardMaterial({ color: 0x3b1d12, roughness: 0.85 });
+
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 0.62, 6, 12), bodyMat);
+    torso.position.y = 1.05; torso.castShadow = true; person.add(torso);
+
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), skinMat);
+    head.position.y = 1.66; head.castShadow = true; person.add(head);
+
+    const hair = new THREE.Mesh(
+      new THREE.SphereGeometry(0.165, 24, 24, 0, Math.PI*2, 0, Math.PI*0.60),
+      hairMat
+    );
+    hair.position.y = 1.73; hair.castShadow = true; person.add(hair);
+
+    const leftArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.52, 4, 10), bodyMat);
+    leftArm.position.set(-0.28, 1.14, 0); leftArm.rotation.z = Math.PI / 2.8; leftArm.castShadow = true; person.add(leftArm);
+
+    const rightArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.52, 4, 10), bodyMat);
+    rightArm.position.set(0.28, 1.14, 0); rightArm.rotation.z = -Math.PI / 2.8; rightArm.castShadow = true; person.add(rightArm);
+
+    const leftLeg = new THREE.Mesh(new THREE.CapsuleGeometry(0.07, 0.62, 4, 10), bodyMat);
+    leftLeg.position.set(-0.11, 0.45, 0); leftLeg.rotation.z = 0.12; leftLeg.castShadow = true; person.add(leftLeg);
+
+    const rightLeg = new THREE.Mesh(new THREE.CapsuleGeometry(0.07, 0.62, 4, 10), bodyMat);
+    rightLeg.position.set(0.11, 0.45, 0); rightLeg.rotation.z = -0.12; rightLeg.castShadow = true; person.add(rightLeg);
+
+    // Pfeile
+    const radialArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(-1, 0, 0), new THREE.Vector3(0, 1.15, 0),
+      1.0, 0xc0392b, 0.28, 0.14
+    );
+    person.add(radialArrow);
+
+    const centrifArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1.15, 0),
+      1.0, 0xf59e0b, 0.28, 0.14
+    );
+    person.add(centrifArrow);
+
+    const velArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(0, 0, -1), new THREE.Vector3(0, 0.95, 0),
+      0.9, 0x2563eb, 0.24, 0.12
+    );
+    person.add(velArrow);
+
+    function updatePersonScale() {
+      const t = (state.m - 20) / 100;
+      const width = 0.65 + t * 1.10;
+      const height = 0.94 + t * 0.14;
+      person.scale.set(width, height, width);
+    }
+
+    // ---------- Physik/UI Sync ----------
+    function sync(changed = null) {
+      state.m = +el.mass.value;
+      state.R = +el.platform.value;
+
+      state.r = Math.min(+el.radius.value, state.R - 0.35);
+      if (+el.radius.value !== state.r) el.radius.value = state.r.toFixed(1);
+
+      if (state.mode === "v") {
+        if (changed !== "omega") state.v = +el.speed.value;
+        state.w = clamp(state.v / state.r, 0.1, 4.0);
+        el.omega.value = state.w.toFixed(2);
+      } else {
+        if (changed !== "speed") state.w = +el.omega.value;
+        state.v = clamp(state.w * state.r, 0.2, 8.0);
+        el.speed.value = state.v.toFixed(1);
+      }
+
+      el.massOut.textContent = state.m.toFixed(0);
+      el.radiusOut.textContent = state.r.toFixed(1);
+      el.platformOut.textContent = state.R.toFixed(1);
+      el.speedOut.textContent = state.v.toFixed(1);
+      el.omegaOut.textContent = state.w.toFixed(2);
+
+      const ar = (state.v * state.v) / state.r;
+      const F = state.m * ar;
+
+      el.forceInOut.textContent = F.toFixed(2) + " N";
+      el.forceOutOut.textContent = F.toFixed(2) + " N";
+      el.accOut.textContent = ar.toFixed(2) + " m/s²";
+      el.vwOut.textContent = state.v.toFixed(2) + " m/s · " + state.w.toFixed(2) + " rad/s";
+
+      applyGeometry(F);
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      el.modeV.classList.toggle("active", mode === "v");
+      el.modeW.classList.toggle("active", mode === "w");
+
+      el.speed.disabled = mode !== "v";
+      el.omega.disabled = mode !== "w";
+      el.speed.style.opacity = mode === "v" ? "1" : ".55";
+      el.omega.style.opacity = mode === "w" ? "1" : ".55";
+      sync();
+    }
+
+    // ---------- Szene-Updates ----------
+    function applyGeometry(forceN) {
+      const s = state.R / 3;
+      platform.scale.set(s, 1, s);
+
+      if (lastBuiltR === null || Math.abs(lastBuiltR - state.R) > 1e-6) {
+        rebuildPlaygroundRails();
+      }
+
+      const deckY = 0.42;
+
+      // Person leicht tangential verschieben, damit sie nicht in einer Stange steht:
+      // Sie steht bei +X; Tangentialrichtung (CCW) ist -Z. Wir verschieben leicht in -Z.
+      const tangentialOffset = 0.22;
+      person.position.set(state.r, deckY, -tangentialOffset);
+
+      updatePersonScale();
+
+      const len = clamp(0.20 + forceN / 350, 0.25, 2.8);
+      radialArrow.setLength(len, 0.28, 0.14);
+      centrifArrow.setLength(len, 0.28, 0.14);
+
+      const velLen = clamp(0.35 + state.v * 0.18, 0.35, 1.9);
+      velArrow.setLength(velLen, 0.24, 0.12);
+    }
+
+    // ---------- Resize ----------
+    function resize() {
+      const r = el.canvas.getBoundingClientRect();
+      const w = Math.max(10, r.width);
+      const h = Math.max(10, r.height);
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+
+    // ---------- Events ----------
+    el.mass.addEventListener("input", () => sync("mass"));
+    el.radius.addEventListener("input", () => sync("radius"));
+    el.platform.addEventListener("input", () => sync("platform"));
+    el.speed.addEventListener("input", () => sync("speed"));
+    el.omega.addEventListener("input", () => sync("omega"));
+
+    el.modeV.addEventListener("click", () => setMode("v"));
+    el.modeW.addEventListener("click", () => setMode("w"));
+
+    el.toggleRun.addEventListener("click", () => {
+      state.running = !state.running;
+      el.toggleRun.classList.toggle("active", state.running);
+      el.toggleRun.textContent = state.running ? "Animation an" : "Animation aus";
+    });
+
+    el.resetBtn.addEventListener("click", () => {
+      el.mass.value = 60;
+      el.radius.value = 2.0;
+      el.platform.value = 3.2;
+      el.speed.value = 2.0;
+      el.omega.value = 1.0;
+      state.angle = 0;
+      state.running = true;
+      el.toggleRun.classList.add("active");
+      el.toggleRun.textContent = "Animation an";
+      setMode("v");
+    });
+
+    // ---------- Animation Loop ----------
+    let last = performance.now();
+
+    function animate(now) {
+      const dt = Math.min(0.04, (now - last) / 1000);
+      last = now;
+
+      if (state.running) {
+        state.angle += state.w * dt;
+        carousel.rotation.y = state.angle;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    // Init
+    resize();
+    setMode("v");
+    sync();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

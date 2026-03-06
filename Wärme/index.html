@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Thermische Energie – Grundgleichung zur Berechnung der Wärmemenge</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    html, body{ margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container{ width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header{
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title{ margin:0; font-weight:700; font-size:2.05rem; }
+    .divider{ width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content{
+      flex:1 1 auto;
+      padding:1.25rem 2rem 1.35rem 2rem;
+      display:flex; flex-direction:column; gap:.9rem;
+    }
+
+    .tiny{ font-size:.86rem; color:#6B7280; font-family:'Raleway',sans-serif; }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:1rem;
+      align-items:stretch;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 150px;
+    }
+    .card-head{
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+      font-weight:700;
+      color:#2A3B32;
+      font-size:1.02rem;
+    }
+    .card-body{
+      padding:.85rem .9rem;
+      font-family:'Raleway',sans-serif;
+      font-size:.88rem;
+      line-height:1.45;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+    }
+
+    .chip{
+      display:inline-block;
+      background:#E5E7EB;
+      border-radius:6px;
+      padding:.15rem .45rem;
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      white-space:nowrap;
+    }
+
+    .muted{
+      background:#F3F4F6;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.8rem .9rem;
+      font-family:'Raleway',sans-serif;
+      font-size:.9rem;
+      line-height:1.5;
+    }
+    .equation{
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      flex-wrap:wrap;
+      font-family:"Courier New", monospace;
+      font-size:1.15rem;
+      background:#FFF7E6;
+      border:1px solid #F59E0B;
+      border-radius:12px;
+      padding:.8rem .9rem;
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:1rem;
+      align-items:start;
+    }
+
+    .aside{
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+    }
+    .aside-head{
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+      padding:.7rem .9rem;
+      font-weight:700;
+      color:#2A3B32;
+    }
+    .aside-body{
+      padding:.85rem .9rem;
+      font-family:'Raleway',sans-serif;
+      font-size:.9rem;
+      line-height:1.5;
+      color:#374151;
+    }
+
+    .work{
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+    }
+    .work-head{
+      background:#E9F0EC;
+      border-bottom:1px solid #D1D5DB;
+      padding:.7rem .9rem;
+      font-weight:700;
+      color:#2A3B32;
+    }
+    .work-body{
+      padding:.9rem;
+      font-family:'Raleway',sans-serif;
+    }
+    .work-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:.8rem;
+      margin-top:.6rem;
+    }
+    .label{
+      font-size:.72rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#374151;
+      margin-bottom:.2rem;
+    }
+    .inp{
+      width:100%;
+      border:1px solid #D1D5DB;
+      border-radius:10px;
+      padding:.45rem .55rem;
+      font-size:.95rem;
+      background:#fff;
+      text-align:center;
+      font-variant-numeric: tabular-nums;
+      outline:none;
+    }
+    .inp:focus{
+      border-color:#2A3B32;
+      box-shadow:0 0 0 2px rgba(42,59,50,.12);
+    }
+    .result{
+      background:#F9FAFB;
+      border:1px dashed #D1D5DB;
+      border-radius:12px;
+      padding:.7rem .8rem;
+      font-family:"Courier New", monospace;
+      font-size:1.05rem;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.5rem;
+      flex-wrap:wrap;
+    }
+
+    .note{
+      font-size:.86rem;
+      color:#6B7280;
+      margin-top:.5rem;
+    }
+
+     .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      color:#666; 
+      font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      background: #fff;
+      border-top: none;
+      flex-shrink: 0;
+    
+      margin-top: auto;
+    }
+
+    
+    .footer-left { text-align: left; }
+    .footer-right { text-align: right; }
+
+    .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .nav-btn {
+        background-color: #2A3B32;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .nav-btn:hover {
+        background-color: #3d5448;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width:1100px){
+      .grid-3{ grid-template-columns:1fr; }
+      .two-col{ grid-template-columns:1fr; }
+      .work-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Grundgleichung zur Berechnung der Wärmemenge</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Physik | Klasse 10</p>
+    </div>
+
+    <div class="slide-content">
+
+      <p class="tiny">
+        Aus den Experimenten folgt: Die Wärmemenge <span class="chip">Q</span> hängt vom Stoff (über <span class="chip">c</span>),
+        von der Masse <span class="chip">m</span> und von der Temperaturerhöhung <span class="chip">ΔT</span> ab.
+      </p>
+
+      <!-- Drei Proportionalitäts-Kästchen -->
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-head">Q ist vom Stoff abhängig</div>
+          <div class="card-body">
+            <div><span class="chip">Q</span> hängt von der <strong>spezifischen Wärmekapazität</strong> <span class="chip">c</span> ab.</div>
+            <div class="muted"><strong>Konstant:</strong> <span class="chip">ΔT</span> und <span class="chip">m</span></div>
+            <div><strong>Merksatz:</strong> <span class="chip">Q ~ c</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">Q ist proportional zur Masse</div>
+          <div class="card-body">
+            <div>Bei gleicher Temperaturerhöhung braucht mehr Masse mehr Wärme.</div>
+            <div class="muted"><strong>Konstant:</strong> <span class="chip">ΔT</span> und <span class="chip">c</span></div>
+            <div><strong>Merksatz:</strong> <span class="chip">Q ~ m</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">Q ist proportional zu ΔT</div>
+          <div class="card-body">
+            <div>Je größer die Temperaturerhöhung, desto größer die Wärmemenge.</div>
+            <div class="muted"><strong>Konstant:</strong> <span class="chip">m</span> und <span class="chip">c</span></div>
+            <div><strong>Merksatz:</strong> <span class="chip">Q ~ ΔT</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gleichung + Erklärung + Übrigens -->
+      <div class="two-col">
+        <div>
+          <div class="equation" aria-label="Grundgleichung">
+            <span><strong>Grundgleichung:</strong></span>
+            <span class="chip">Q = c · m · ΔT</span>
+            <span style="font-family:'Raleway',sans-serif; font-size:.92rem; color:#6B7280;">
+              (gilt nur ohne Aggregatzustandsänderung)
+            </span>
+          </div>
+
+          <div class="work mt-3">
+            <div class="work-head">Musteraufgabe (mit Rechner)</div>
+            <div class="work-body">
+              <div>
+                Für eine Tasse Tee werden <strong>200&nbsp;g</strong> Wasser von <strong>18&nbsp;°C</strong> auf <strong>97&nbsp;°C</strong> erwärmt.
+                Wie viel Wärme muss zugeführt werden?
+              </div>
+
+              <div class="work-grid">
+                <div>
+                  <div class="label">Gegeben</div>
+                  <div class="muted">
+                    <div>m = <span class="chip">0,2 kg</span></div>
+                    <div>ΔT = <span class="chip">79 K</span></div>
+                    <div>c (Wasser) = <span class="chip">4,19 kJ/(kg·K)</span></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="label">Interaktiv berechnen</div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div>
+                      <div class="label">m (kg)</div>
+                      <input class="inp" id="mInput" type="number" step="0.01" value="0.2"/>
+                    </div>
+                    <div>
+                      <div class="label">ΔT (K)</div>
+                      <input class="inp" id="dTInput" type="number" step="1" value="79"/>
+                    </div>
+                    <div>
+                      <div class="label">c (kJ/kg·K)</div>
+                      <input class="inp" id="cInput" type="number" step="0.01" value="4.19"/>
+                    </div>
+                  </div>
+
+                  <div class="result mt-3" id="qOut">
+                    <span>Q =</span>
+                    <span><strong>66,2 kJ</strong></span>
+                  </div>
+
+                  <div class="note">
+                    Hinweis: Im Unterricht wird meist auf sinnvolle Stellen gerundet (hier etwa <strong>66 kJ</strong>).
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3 muted">
+                <strong>Lösungsweg:</strong>
+                <div class="mt-2" style="font-family:'Courier New', monospace;">
+                  Q = c · m · ΔT<br/>
+                  Q = 4,19 · 0,2 · 79 ≈ 66,2 kJ
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="aside-head">Übrigens</div>
+          <div class="aside-body">
+            <p>
+              In der Gleichung sind auch folgende Beziehungen enthalten:
+            </p>
+            <ul class="list-disc ml-5 mt-2" style="font-family:'Raleway',sans-serif;">
+              <li>Je größer die Masse eines Körpers ist, desto größer ist die Wärmemenge, die er beim Abkühlen abgeben kann.</li>
+              <li>Je höher die Temperatur eines Körpers ist, desto mehr Wärme kann er abgeben.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+
+   <div class="footer">
+      <div class="footer-left">
+<p>Thermische Energie und Wärme</p>
+</div>
+<div class="nav-buttons">
+<a class="nav-btn" href="6.html">← Zurück</a>
+<a class="nav-btn" href="8.html">Nächste →</a>
+</div>
+<div class="footer-right">
+<p>Seite 7</p>
+    </div>
+  </div>
+
+  <script>
+    function roundTo(n, digits=1){
+      const p = Math.pow(10, digits);
+      return Math.round(n*p)/p;
+    }
+    function formatDE(n, digits=1){
+      // simple German decimal comma formatting
+      const s = n.toFixed(digits);
+      return s.replace('.', ',');
+    }
+
+    function recalc(){
+      const m = parseFloat(document.getElementById('mInput').value);
+      const dT = parseFloat(document.getElementById('dTInput').value);
+      const c  = parseFloat(document.getElementById('cInput').value); // kJ/(kg·K)
+
+      const q = (isFinite(m) && isFinite(dT) && isFinite(c)) ? (c * m * dT) : NaN; // in kJ
+      const out = document.getElementById('qOut');
+
+      if (!isFinite(q)){
+        out.innerHTML = '<span>Q =</span><span><strong>–</strong></span>';
+        return;
+      }
+      const q1 = roundTo(q, 1);
+      out.innerHTML = `<span>Q =</span><span><strong>${formatDE(q1, 1)} kJ</strong></span>`;
+    }
+
+    ['mInput','dTInput','cInput'].forEach(id=>{
+      document.getElementById(id).addEventListener('input', recalc);
+    });
+
+    recalc();
+  </script>
+</body>
+</html>

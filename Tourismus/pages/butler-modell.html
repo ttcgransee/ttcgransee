@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butler-Modell - Tourismus in Europa - Theo Schierbaum</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Tourismus in Europa</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">Start</a>
+                <a href="ueberblick.html" class="nav-link">Überblick</a>
+                <a href="gunstfaktoren.html" class="nav-link">Gunstfaktoren</a>
+                <a href="butler-modell.html" class="nav-link active">Butler-Modell</a>
+                <a href="alpen-fallbeispiel.html" class="nav-link">Alpen</a>
+                <a href="berechnungen.html" class="nav-link">Berechnungen</a>
+                <a href="umweltfolgen.html" class="nav-link">Umwelt</a>
+                <a href="soziale-folgen.html" class="nav-link">Soziales</a>
+                <a href="projekt.html" class="nav-link">Projekt</a>
+                <a href="nachhaltigkeit.html" class="nav-link">Nachhaltigkeit</a>
+                <a href="zusammenfassung.html" class="nav-link">Fazit</a>
+                <a href="quellen.html" class="nav-link">Quellen</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content-page">
+        <div class="page-header">
+            <h1 class="page-title">Das Butler-Modell</h1>
+            <p class="page-subtitle">Der Destinationslebenszyklus touristischer Entwicklung</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Einführung in das Butler-Modell</h2>
+            <p>
+                Das <strong>Butler-Modell</strong> (1980) beschreibt die typische Entwicklung einer Tourismusdestination 
+                in sechs charakteristischen Phasen. Es zeigt, wie sich Tourismusgebiete von der ersten Entdeckung 
+                bis zur möglichen Erneuerung oder zum Niedergang entwickeln.
+            </p>
+            
+            <div class="info-box">
+                <h3>Richard Butler (1980)</h3>
+                <p>
+                    Der kanadische Geograph Richard Butler entwickelte dieses Modell basierend auf dem 
+                    <strong>Produktlebenszyklus</strong> aus der Wirtschaftswissenschaft. Es ist eines der 
+                    wichtigsten Modelle in der Tourismusgeographie.
+                </p>
+            </div>
+
+            <img src="../images/LLPHJeU0drzu.gif" alt="Butler Modell Diagramm" class="content-image">
+            <p class="image-caption">Das Butler-Modell: Entwicklungsphasen einer Tourismusdestination</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Die 6 Phasen des Butler-Modells</h2>
+
+            <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin: 30px 0;">
+                <canvas id="butler-chart" width="800" height="400" style="max-width: 100%; height: auto;"></canvas>
+            </div>
+
+            <h3>Phase 1: Erkundung (Exploration)</h3>
+            <div style="background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #4caf50;">
+                <h4>Merkmale:</h4>
+                <ul>
+                    <li>Wenige <strong>Pionier-Touristen</strong> und Abenteurer</li>
+                    <li>Keine spezielle touristische Infrastruktur</li>
+                    <li>Authentische, unverfälschte Erlebnisse</li>
+                    <li>Minimale Umweltauswirkungen</li>
+                    <li>Touristen nutzen lokale Einrichtungen</li>
+                </ul>
+                <p><strong>Beispiel:</strong> Entdeckung abgelegener Bergdörfer durch Wanderer</p>
+            </div>
+
+            <h3>Phase 2: Erschließung (Involvement)</h3>
+            <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #2196f3;">
+                <h4>Merkmale:</h4>
+                <ul>
+                    <li>Erste <strong>touristische Einrichtungen</strong> entstehen</li>
+                    <li>Lokale Bevölkerung wird aktiv (Pensionen, Restaurants)</li>
+                    <li>Steigende Besucherzahlen</li>
+                    <li>Erste Werbemaßnahmen</li>
+                    <li>Entstehung einer "Tourismuszone"</li>
+                </ul>
+                <p><strong>Beispiel:</strong> Erste Hotels und Gasthäuser in Skigebieten</p>
+            </div>
+
+            <h3>Phase 3: Entwicklung (Development)</h3>
+            <div style="background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #ff9800;">
+                <h4>Merkmale:</h4>
+                <ul>
+                    <li><strong>Rasches Wachstum</strong> der Besucherzahlen</li>
+                    <li>Massiver Ausbau der Infrastruktur</li>
+                    <li>Externe Investoren und Hotelketten kommen</li>
+                    <li>Tourismus wird wichtiger Wirtschaftsfaktor</li>
+                    <li>Erste Umwelt- und soziale Probleme</li>
+                </ul>
+                <p><strong>Beispiel:</strong> Bau von Liftanlagen und großen Hotels in den Alpen</p>
+            </div>
+
+            <h3>Phase 4: Konsolidierung (Consolidation)</h3>
+            <div style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #e91e63;">
+                <h4>Merkmale:</h4>
+                <ul>
+                    <li><strong>Verlangsamung des Wachstums</strong></li>
+                    <li>Tourismus dominiert die lokale Wirtschaft</li>
+                    <li>Erste Umweltprobleme werden sichtbar</li>
+                    <li>Marketing wird intensiviert</li>
+                    <li>Konkurrenz durch andere Destinationen</li>
+                </ul>
+                <p><strong>Beispiel:</strong> Etablierte Badeorte am Mittelmeer in den 1990ern</p>
+            </div>
+
+            <h3>Phase 5: Stagnation (Stagnation)</h3>
+            <div style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #9c27b0;">
+                <h4>Merkmale:</h4>
+                <ul>
+                    <li><strong>Besucherzahlen stagnieren</strong> oder gehen zurück</li>
+                    <li>Umwelt- und soziale Probleme verstärken sich</li>
+                    <li>Destination verliert an Attraktivität</li>
+                    <li>Konkurrenz durch neue, günstigere Ziele</li>
+                    <li>Überalterung der Infrastruktur</li>
+                </ul>
+                <p><strong>Beispiel:</strong> Viele Alpenregionen heute, überlastete Mittelmeerorte</p>
+            </div>
+
+            <h3>Phase 6: Erneuerung oder Niedergang</h3>
+            <div style="background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #f44336;">
+                <h4>Zwei mögliche Entwicklungen:</h4>
+                
+                <h5>A) Erneuerung (Rejuvenation):</h5>
+                <ul>
+                    <li>Neue <strong>Attraktionen und Angebote</strong></li>
+                    <li>Nachhaltiger Tourismus</li>
+                    <li>Modernisierung der Infrastruktur</li>
+                    <li>Neue Zielgruppen erschließen</li>
+                </ul>
+                
+                <h5>B) Niedergang (Decline):</h5>
+                <ul>
+                    <li><strong>Rückgang der Besucherzahlen</strong></li>
+                    <li>Wirtschaftliche Probleme</li>
+                    <li>Verfall der Infrastruktur</li>
+                    <li>Abwanderung der Bevölkerung</li>
+                </ul>
+                
+                <p><strong>Beispiele:</strong> 
+                    <br>Erneuerung: Barcelona (Olympia 1992), Bilbao (Guggenheim Museum)
+                    <br>Niedergang: Verlassene Badeorte an der Ostsee
+                </p>
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Interaktive Aufgabe: Phasen zuordnen</h3>
+            <p>Ordnet die folgenden Beschreibungen den richtigen Phasen des Butler-Modells zu:</p>
+            
+            <div class="quiz-container">
+                <div class="quiz-question">
+                    <p><strong>Szenario 1:</strong> Ein kleines Fischerdorf wird von wenigen Rucksacktouristen entdeckt, die in einfachen Pensionen übernachten.</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-correct="true">Erkundung</button>
+                        <button class="quiz-option">Erschließung</button>
+                        <button class="quiz-option">Entwicklung</button>
+                        <button class="quiz-option">Stagnation</button>
+                    </div>
+                    <div class="quiz-explanation" style="display: none;">
+                        <p><strong>Richtig!</strong> Wenige Pionier-Touristen und keine spezielle Infrastruktur sind typisch für die Erkundungsphase.</p>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>Szenario 2:</strong> Ein Skigebiet baut massiv neue Liftanlagen und Hotels, internationale Ketten investieren stark.</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option">Erkundung</button>
+                        <button class="quiz-option">Erschließung</button>
+                        <button class="quiz-option" data-correct="true">Entwicklung</button>
+                        <button class="quiz-option">Konsolidierung</button>
+                    </div>
+                    <div class="quiz-explanation" style="display: none;">
+                        <p><strong>Richtig!</strong> Massiver Infrastrukturausbau und externe Investoren kennzeichnen die Entwicklungsphase.</p>
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <p><strong>Szenario 3:</strong> Ein Badeort kämpft mit rückläufigen Gästezahlen und starker Konkurrenz durch günstigere Destinationen.</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option">Entwicklung</button>
+                        <button class="quiz-option">Konsolidierung</button>
+                        <button class="quiz-option" data-correct="true">Stagnation</button>
+                        <button class="quiz-option">Erneuerung</button>
+                    </div>
+                    <div class="quiz-explanation" style="display: none;">
+                        <p><strong>Richtig!</strong> Rückläufige Gästezahlen und Konkurrenzprobleme sind typisch für die Stagnationsphase.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Kritik und Grenzen des Butler-Modells</h2>
+            
+            <h3>Stärken des Modells:</h3>
+            <ul>
+                <li><strong>Einfach verständlich</strong> und gut visualisierbar</li>
+                <li>Hilft bei der <strong>strategischen Planung</strong> von Destinationen</li>
+                <li>Zeigt <strong>typische Entwicklungsmuster</strong> auf</li>
+                <li>Warnt vor möglichen <strong>Problemen</strong> in späteren Phasen</li>
+            </ul>
+
+            <h3>Schwächen und Kritikpunkte:</h3>
+            <ul>
+                <li><strong>Nicht alle Destinationen</strong> folgen diesem Muster</li>
+                <li><strong>Zeitrahmen</strong> ist sehr unterschiedlich</li>
+                <li><strong>Externe Faktoren</strong> (Krisen, Naturkatastrophen) werden nicht berücksichtigt</li>
+                <li>Modell ist zu <strong>deterministisch</strong> (vorhersagbar)</li>
+                <li><strong>Kulturelle Unterschiede</strong> werden nicht beachtet</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>Moderne Entwicklungen</h3>
+                <p>
+                    Heute entwickeln sich Tourismusdestinationen oft anders als im Butler-Modell vorhergesagt:
+                </p>
+                <ul>
+                    <li><strong>Digitalisierung</strong> beschleunigt Entwicklungen</li>
+                    <li><strong>Nachhaltigkeit</strong> wird von Anfang an mitgedacht</li>
+                    <li><strong>Nischentourismus</strong> ermöglicht andere Entwicklungspfade</li>
+                    <li><strong>Globalisierung</strong> verändert Tourismusströme schnell</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Anwendungsaufgabe</h3>
+            <p><strong>Aufgabe:</strong> Analysiert eine bekannte Tourismusdestination eurer Wahl mit dem Butler-Modell.</p>
+            
+            <h4>Arbeitsschritte:</h4>
+            <ol>
+                <li>Wählt eine Destination (z.B. Mallorca, Garmisch-Partenkirchen, Venedig)</li>
+                <li>Recherchiert die <strong>historische Entwicklung</strong> des Tourismus dort</li>
+                <li>Ordnet die Destination einer <strong>aktuellen Phase</strong> zu</li>
+                <li>Begründet eure Einschätzung mit <strong>konkreten Beispielen</strong></li>
+                <li>Entwickelt <strong>Lösungsvorschläge</strong> für erkannte Probleme</li>
+            </ol>
+
+            <h4>Leitfragen:</h4>
+            <ul>
+                <li>Wann begann der Tourismus in dieser Region?</li>
+                <li>Wie haben sich die Besucherzahlen entwickelt?</li>
+                <li>Welche Infrastruktur wurde gebaut?</li>
+                <li>Gibt es Umwelt- oder soziale Probleme?</li>
+                <li>Wie könnte sich die Region erneuern?</li>
+            </ul>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="gunstfaktoren.html" class="nav-button secondary">
+                ← Zurück: Gunstfaktoren
+            </a>
+            <a href="alpen-fallbeispiel.html" class="nav-button primary">
+                Nächste Seite: Fallbeispiel Alpen
+                <span class="arrow">→</span>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Tourismus in Europa - Geographie Unterricht Klasse 11</p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
+

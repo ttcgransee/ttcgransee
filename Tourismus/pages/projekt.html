@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projektaufgabe - Tourismus in Europa - Theo Schierbaum</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Tourismus in Europa</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">Start</a>
+                <a href="ueberblick.html" class="nav-link">Überblick</a>
+                <a href="gunstfaktoren.html" class="nav-link">Gunstfaktoren</a>
+                <a href="butler-modell.html" class="nav-link">Butler-Modell</a>
+                <a href="alpen-fallbeispiel.html" class="nav-link">Alpen</a>
+                <a href="berechnungen.html" class="nav-link">Berechnungen</a>
+                <a href="umweltfolgen.html" class="nav-link">Umwelt</a>
+                <a href="soziale-folgen.html" class="nav-link">Soziales</a>
+                <a href="projekt.html" class="nav-link active">Projekt</a>
+                <a href="nachhaltigkeit.html" class="nav-link">Nachhaltigkeit</a>
+                <a href="zusammenfassung.html" class="nav-link">Fazit</a>
+                <a href="quellen.html" class="nav-link">Quellen</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content-page">
+        <div class="page-header">
+            <h1 class="page-title">Projektaufgabe</h1>
+            <p class="page-subtitle">Anwendung des Butler-Modells auf eine eigene Tourismusregion</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Projektübersicht</h2>
+            <p>
+                In dieser Projektaufgabe wendet ihr das Butler-Modell auf eine selbst gewählte europäische 
+                Tourismusregion an. Ihr werdet die Entwicklung der Region analysieren, sie in das Modell 
+                einordnen und Lösungsansätze für die Zukunft entwickeln.
+            </p>
+            
+            <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 30px; border-radius: 16px; margin: 30px 0;">
+                <h3 style="color: #1565c0; margin-bottom: 20px;">🎯 Projektziele</h3>
+                <ul style="color: #0d47a1;">
+                    <li>Vertiefung des Verständnisses für das Butler-Modell</li>
+                    <li>Anwendung theoretischen Wissens auf reale Beispiele</li>
+                    <li>Entwicklung von Problemlösungskompetenzen</li>
+                    <li>Förderung der Recherche- und Präsentationsfähigkeiten</li>
+                    <li>Kritische Bewertung touristischer Entwicklungen</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3>Hauptaufgabe: Butler-Modell Analyse</h3>
+            <p><strong>Aufgabenstellung:</strong> Wählt eine europäische Tourismusregion und analysiert sie vollständig nach dem Butler-Modell.</p>
+            
+            <h4>Phase 1: Region auswählen (1 Woche)</h4>
+            <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                <h5>Mögliche Regionen:</h5>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <h6>🏖️ Badeorte</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Mallorca (Spanien)</li>
+                            <li>Rimini (Italien)</li>
+                            <li>Goldstrand (Bulgarien)</li>
+                            <li>Algarve (Portugal)</li>
+                        </ul>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <h6>🏔️ Bergregionen</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Garmisch-Partenkirchen</li>
+                            <li>Zermatt (Schweiz)</li>
+                            <li>Innsbruck (Österreich)</li>
+                            <li>Chamonix (Frankreich)</li>
+                        </ul>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <h6>🏛️ Kulturstädte</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Prag (Tschechien)</li>
+                            <li>Dubrovnik (Kroatien)</li>
+                            <li>Rothenburg o.d.T.</li>
+                            <li>Brügge (Belgien)</li>
+                        </ul>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+                        <h6>🌊 Küstenregionen</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Sylt (Deutschland)</li>
+                            <li>Côte d'Azur (Frankreich)</li>
+                            <li>Amalfiküste (Italien)</li>
+                            <li>Santorini (Griechenland)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h5 style="margin-top: 20px;">Auswahlkriterien:</h5>
+                <ul>
+                    <li>Ausreichend verfügbare Informationen und Daten</li>
+                    <li>Interessante touristische Entwicklung</li>
+                    <li>Erkennbare Phasen des Butler-Modells</li>
+                    <li>Aktuelle Herausforderungen oder Probleme</li>
+                </ul>
+            </div>
+
+            <h4>Phase 2: Recherche durchführen (2 Wochen)</h4>
+            <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                <h5>Zu recherchierende Daten:</h5>
+                <table class="data-table" style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Kategorie</th>
+                            <th>Konkrete Daten</th>
+                            <th>Quellen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Historische Entwicklung</td>
+                            <td>Beginn des Tourismus, wichtige Meilensteine, Wachstumsphasen</td>
+                            <td>Geschichtsbücher, lokale Archive, Tourismusverbände</td>
+                        </tr>
+                        <tr>
+                            <td>Besucherzahlen</td>
+                            <td>Übernachtungen, Tagesgäste, Entwicklung über Zeit</td>
+                            <td>Statistikämter, Eurostat, UNWTO</td>
+                        </tr>
+                        <tr>
+                            <td>Infrastruktur</td>
+                            <td>Hotels, Restaurants, Verkehrsanbindung, Freizeiteinrichtungen</td>
+                            <td>Tourismusverbände, Gemeinden, Google Maps</td>
+                        </tr>
+                        <tr>
+                            <td>Wirtschaftliche Bedeutung</td>
+                            <td>Tourismuseinnahmen, Arbeitsplätze, Anteil am BIP</td>
+                            <td>Wirtschaftsstatistiken, Handelskammern</td>
+                        </tr>
+                        <tr>
+                            <td>Probleme/Herausforderungen</td>
+                            <td>Umweltprobleme, Overtourism, soziale Konflikte</td>
+                            <td>Zeitungsartikel, Studien, NGO-Berichte</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5 style="margin-top: 20px;">Empfohlene Quellen:</h5>
+                <ul>
+                    <li><strong>Eurostat:</strong> ec.europa.eu/eurostat (offizielle EU-Statistiken)</li>
+                    <li><strong>UNWTO:</strong> unwto.org (World Tourism Organization)</li>
+                    <li><strong>Nationale Statistikämter:</strong> destatis.de, statistik.at, etc.</li>
+                    <li><strong>Regionale Tourismusverbände:</strong> Offizielle Websites</li>
+                    <li><strong>Wissenschaftliche Artikel:</strong> Google Scholar, ResearchGate</li>
+                    <li><strong>Zeitungsarchive:</strong> Lokale und überregionale Medien</li>
+                </ul>
+            </div>
+
+            <h4>Phase 3: Analyse und Einordnung (1 Woche)</h4>
+            <div style="background: #fefce8; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                <h5>Analyseschritte:</h5>
+                <ol>
+                    <li><strong>Chronologie erstellen:</strong> Zeitstrahl der touristischen Entwicklung</li>
+                    <li><strong>Phasen identifizieren:</strong> Welche Butler-Phasen sind erkennbar?</li>
+                    <li><strong>Aktuelle Phase bestimmen:</strong> Wo steht die Region heute?</li>
+                    <li><strong>Indikatoren bewerten:</strong> Welche Merkmale sprechen für welche Phase?</li>
+                    <li><strong>Zukunftsprognose:</strong> Wie könnte sich die Region entwickeln?</li>
+                </ol>
+
+                <h5>Bewertungsraster:</h5>
+                <table class="data-table" style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Butler-Phase</th>
+                            <th>Indikatoren</th>
+                            <th>Trifft zu? (Ja/Nein)</th>
+                            <th>Begründung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Erkundung</td>
+                            <td>Wenige Touristen, keine spezielle Infrastruktur</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Erschließung</td>
+                            <td>Erste Hotels, lokale Initiative</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Entwicklung</td>
+                            <td>Rasches Wachstum, externe Investoren</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Konsolidierung</td>
+                            <td>Verlangsamtes Wachstum, Marketing</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Stagnation</td>
+                            <td>Stagnierende Zahlen, Probleme</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Erneuerung/Niedergang</td>
+                            <td>Neue Konzepte oder Rückgang</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Phase 4: Lösungsansätze entwickeln (1 Woche)</h4>
+            <div style="background: #f3e8ff; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                <h5>Leitfragen für Lösungsansätze:</h5>
+                <ul>
+                    <li>Welche Probleme hat die Region aktuell?</li>
+                    <li>Wie könnte nachhaltiger Tourismus gefördert werden?</li>
+                    <li>Welche neuen Zielgruppen könnten erschlossen werden?</li>
+                    <li>Wie kann die Saisonalität reduziert werden?</li>
+                    <li>Welche Rolle spielt die Digitalisierung?</li>
+                    <li>Wie können Umwelt- und soziale Probleme gelöst werden?</li>
+                </ul>
+
+                <h5>Kategorien für Lösungsansätze:</h5>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 8px;">
+                        <h6>🌱 Nachhaltigkeit</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Ökotourismus</li>
+                            <li>Umweltschutz</li>
+                            <li>Lokale Produkte</li>
+                        </ul>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">
+                        <h6>💡 Innovation</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Digitale Services</li>
+                            <li>Neue Attraktionen</li>
+                            <li>Smart Tourism</li>
+                        </ul>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">
+                        <h6>👥 Soziales</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Bürgerbeteiligung</li>
+                            <li>Faire Löhne</li>
+                            <li>Kulturerhalt</li>
+                        </ul>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px;">
+                        <h6>📊 Management</h6>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Besucherlenkung</li>
+                            <li>Kapazitätsgrenzen</li>
+                            <li>Monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Präsentation und Bewertung</h2>
+            
+            <h3>Präsentationsformat</h3>
+            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                <h4>📊 Anforderungen an die Präsentation:</h4>
+                <ul>
+                    <li><strong>Dauer:</strong> 10-12 Minuten + 3 Minuten Diskussion</li>
+                    <li><strong>Format:</strong> PowerPoint, Prezi oder ähnlich</li>
+                    <li><strong>Gruppengröße:</strong> 2-3 Personen</li>
+                    <li><strong>Hilfsmittel:</strong> Karten, Diagramme, Fotos, Videos</li>
+                </ul>
+
+                <h4>📋 Gliederung der Präsentation:</h4>
+                <ol>
+                    <li><strong>Einleitung (2 Min.):</strong> Vorstellung der Region, Motivation für die Auswahl</li>
+                    <li><strong>Historische Entwicklung (3 Min.):</strong> Chronologie des Tourismus</li>
+                    <li><strong>Butler-Modell Analyse (4 Min.):</strong> Einordnung in die Phasen</li>
+                    <li><strong>Aktuelle Situation (2 Min.):</strong> Probleme und Herausforderungen</li>
+                    <li><strong>Lösungsansätze (2 Min.):</strong> Empfehlungen für die Zukunft</li>
+                    <li><strong>Fazit (1 Min.):</strong> Zusammenfassung und Ausblick</li>
+                </ol>
+            </div>
+
+            <h3>Bewertungskriterien</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Kriterium</th>
+                        <th>Punkte</th>
+                        <th>Beschreibung</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Inhaltliche Qualität</td>
+                        <td>40%</td>
+                        <td>Vollständigkeit, Richtigkeit, Tiefe der Analyse</td>
+                    </tr>
+                    <tr>
+                        <td>Anwendung Butler-Modell</td>
+                        <td>25%</td>
+                        <td>Korrekte Einordnung, Begründung, kritische Reflexion</td>
+                    </tr>
+                    <tr>
+                        <td>Quellenarbeit</td>
+                        <td>15%</td>
+                        <td>Vielfalt und Qualität der Quellen, korrekte Zitation</td>
+                    </tr>
+                    <tr>
+                        <td>Präsentation</td>
+                        <td>15%</td>
+                        <td>Struktur, Visualisierung, Vortragsstil</td>
+                    </tr>
+                    <tr>
+                        <td>Lösungsansätze</td>
+                        <td>5%</td>
+                        <td>Kreativität, Realitätsbezug, Nachhaltigkeit</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <h3>Tipps für eine erfolgreiche Projektarbeit</h3>
+            <ul>
+                <li><strong>Früh anfangen:</strong> Beginnt rechtzeitig mit der Recherche</li>
+                <li><strong>Quellen dokumentieren:</strong> Notiert euch alle verwendeten Quellen sofort</li>
+                <li><strong>Kritisch hinterfragen:</strong> Nicht alle Informationen sind zuverlässig</li>
+                <li><strong>Visualisieren:</strong> Nutzt Karten, Diagramme und Fotos</li>
+                <li><strong>Üben:</strong> Probt eure Präsentation mehrmals</li>
+                <li><strong>Diskussion vorbereiten:</strong> Denkt über mögliche Fragen nach</li>
+                <li><strong>Teamwork:</strong> Teilt die Arbeit fair auf und kommuniziert regelmäßig</li>
+            </ul>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="soziale-folgen.html" class="nav-button secondary">
+                ← Zurück: Soziale Folgen
+            </a>
+            <a href="nachhaltigkeit.html" class="nav-button primary">
+                Nächste Seite: Nachhaltigkeit
+                <span class="arrow">→</span>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Tourismus in Europa - Geographie Unterricht Klasse 11</p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
+

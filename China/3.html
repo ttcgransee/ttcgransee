@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Merkmale des chinesischen Entwicklungsmodells</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .subtitle { font-size:1rem; font-weight:400; opacity:.8; margin-top:.2rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content { flex:1 1 auto; padding:1.25rem 2rem 1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+    .materials-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .material { background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05); overflow:hidden; display:flex; flex-direction:column; }
+    .mat-head { display:flex; align-items:center; gap:.6rem; padding:.7rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+    .badge { background:#2A3B32; color:#fff; font-weight:700; font-size:.9rem; padding:.15rem .55rem; border-radius:6px; min-width:2rem; text-align:center; }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; flex:1; }
+    .tiny { font-size:.85rem; color:#4B5563; }
+    .tiny strong { color:#111827; }
+    .chart-wrapper { position:relative; width:100%; height:240px; }
+    .full-span { grid-column:1 / -1; }
+    .task-section { position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:1rem; font-family:'Raleway',sans-serif; margin-top:.5rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px; font-weight:600; font-size:.9rem; }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.9rem; }
+    .footer { padding:1rem 3rem; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; color:#666; font-size:.9rem; font-family:'Raleway',sans-serif; flex-shrink:0; background:#F5F5F5; }
+    .footer-left { justify-self:start; }
+    .footer-center { display:flex; gap:1rem; justify-self:center; }
+    .footer-right { justify-self:end; }
+    .nav-btn { display:inline-flex; align-items:center; justify-content:center; background-color:#2A3B32; color:white; padding:.5rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:.9rem; transition:all .2s ease; box-shadow:0 2px 4px rgba(0,0,0,.1); min-width:100px; }
+    .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); }
+
+    /* Mischsystem-Modell */
+    .model-wrap { display:flex; align-items:stretch; gap:.5rem; margin:.5rem 0; }
+    .model-side1 { flex:1; border-radius:10px; padding:.6rem .75rem; }
+    .model-center1 { flex:0 0 auto; display:flex; align-items:center; }
+    .model-arrow1 { font-size:1.4rem; color:#9CA3AF; }
+    .model-label { font-weight:700; font-size:.8rem; margin-bottom:.3rem; }
+    .model-list { list-style:disc; padding-left:1rem; font-size:.78rem; font-family:'Raleway',sans-serif; color:#374151; line-height:1.5; }
+        .model-box { display:flex; flex-direction:column; gap:.5rem; }
+    .model-row { display:flex; gap:.5rem; align-items:stretch; }
+    .model-center { background:#2A3B32; color:#fff; border-radius:10px; padding:.6rem .8rem; text-align:center; font-weight:700; font-size:.9rem; display:flex; align-items:center; justify-content:center; min-width:120px; }
+    .model-side { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:.5rem .7rem; font-size:.82rem; font-family:'Raleway',sans-serif; flex:1; }
+    .model-arrow { display:flex; align-items:center; justify-content:center; color:#9CA3AF; font-size:1.2rem; padding:0 .3rem; }
+    .model-title { font-weight:700; color:#2A3B32; font-size:.85rem; margin-bottom:.2rem; }
+
+
+    table.simple { width:100%; border-collapse:collapse; font-size:.8rem; }
+    table.simple th { background:#2A3B32; color:#fff; padding:.35rem .5rem; text-align:left; }
+    table.simple td { border-bottom:1px solid #E5E7EB; padding:.35rem .5rem; }
+    table.simple tr:nth-child(even) td { background:#F9FAFB; }
+    table.compare { width:100%; border-collapse:separate; border-spacing:0; font-size:.82rem; }
+    .compare th, .compare td { padding:.45rem .6rem; border-bottom:1px solid #E5E7EB; text-align:left; }
+    .compare th { background:#F9FAFB; font-weight:600; color:#374151; }
+    .compare tr:hover td { background:#FAFAFA; }
+    .compare td:first-child { font-weight:600; color:#2A3B32; }
+    .tag { display:inline-block; background:#E9F0EC; color:#2A3B32; font-size:.75rem; font-weight:600; padding:.1rem .4rem; border-radius:4px; margin:.1rem; }
+
+    @media (max-width:980px) { .materials-grid{ grid-template-columns:1fr; } .full-span{ grid-column:auto; } }
+  </style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="slide-header">
+    <div>
+      <h1 class="title">Das chinesische Entwicklungsmodell</h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light">Geographie | Klasse 12</p>
+  </div>
+
+  <div class="slide-content">
+    <div class="materials-grid">
+
+
+
+<div class="material">
+          <div class="mat-head">
+            <span class="badge">A</span>
+            <div class="mat-title">Modell: Sozialistische Marktwirtschaft</div>
+          </div>
+          <div class="mat-body">
+            <div class="model-box">
+              <!-- Obere Ebene: Staat -->
+              <div style="background:#2A3B32; color:#fff; border-radius:10px; padding:.6rem 1rem; text-align:center; font-weight:700; font-size:.95rem;">
+                <i class="fas fa-landmark mr-1"></i> Kommunistische Partei Chinas (KPCh)
+              </div>
+              <div style="text-align:center; color:#9CA3AF; font-size:1.2rem;">↓ Steuerung &amp; Kontrolle</div>
+              <!-- Mittlere Ebene -->
+              <div class="model-row">
+                <div class="model-side">
+                  <div class="model-title"><i class="fas fa-building mr-1"></i>Staatsbetriebe (SOEs)</div>
+                  Strategische Sektoren: Energie, Telekommunikation, Banken, Rüstung. Staatliche Kontrolle bleibt erhalten.
+                </div>
+                <div class="model-arrow">⇄</div>
+                <div class="model-side">
+                  <div class="model-title"><i class="fas fa-store mr-1"></i>Privatwirtschaft</div>
+                  Dynamischer Sektor: Tech-Konzerne (Alibaba, Huawei, BYD), Exportindustrie, KMU. Wettbewerb nach Marktprinzip.
+                </div>
+              </div>
+              <div style="text-align:center; color:#9CA3AF; font-size:1.2rem;">↓ Exportorientierung</div>
+              <!-- Untere Ebene: Weltmarkt -->
+              <div style="background:#E6B400; color:#1a1a1a; border-radius:10px; padding:.5rem 1rem; text-align:center; font-weight:700; font-size:.9rem;">
+                <i class="fas fa-globe mr-1"></i> Weltmarkt – globale Lieferketten &amp; Exportmärkte
+              </div>
+            </div>
+            <p class="tiny mt-2">Kennzeichen: Staatslenkung + Marktmechanismus + Exportorientierung + Industriepolitik</p>
+          </div>
+        </div>
+
+
+
+
+      <!-- (A) Das Mischsystem-Modell -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">B</div>
+          <div class="mat-title">Sozialismus chinesischer Prägung</div>
+        </div>
+        <div class="mat-body">
+          <p class="tiny mb-2">Das chinesische System verbindet staatliche Lenkung mit marktwirtschaftlichen Elementen – ein weltweit einzigartiges Mischsystem.</p>
+          <div class="model-wrap">
+            <div class="model-side1" style="background:#DBEAFE;">
+              <div class="model-label" style="color:#1D4ED8;"><i class="fas fa-chess-king mr-1"></i>Staatliche Elemente</div>
+              <ul class="model-list">
+                <li>Kommunistische Partei bestimmt Wirtschaftsstrategie (Fünfjahresplan)</li>
+                <li>Staatsunternehmen (SOEs) in Schlüsselbranchen (Energie, Banken, Telekom)</li>
+                <li>Kapitalverkehrskontrollen; Wechselkurspolitik</li>
+                <li>Industriepolitik: Förderung strategischer Sektoren</li>
+                <li>Zensur, politische Stabilität als Grundbedingung</li>
+              </ul>
+            </div>
+            <div class="model-center1"><div class="model-arrow1">⇄</div></div>
+            <div class="model-side1" style="background:#DCFCE7;">
+              <div class="model-label" style="color:#16A34A;"><i class="fas fa-store mr-1"></i>Marktliche Elemente</div>
+              <ul class="model-list">
+                <li>Private Unternehmen zugelassen; Unternehmertum gefördert</li>
+                <li>Wettbewerb zwischen Provinzen um Investitionen</li>
+                <li>Exportorientierung: Weltmarktpreise als Signal</li>
+                <li>Ausländische Direktinvestitionen (FDI) willkommen</li>
+                <li>Binnenmarktentwicklung als neue Wachstumsquelle</li>
+              </ul>
+            </div>
+          </div>
+          <div style="background:#FEF3C7;border:1px solid #FBBF24;border-radius:8px;padding:.4rem .6rem;margin-top:.4rem;">
+            <p class="tiny"><strong>Merksatz:</strong> China ist kein klassischer Kapitalismus (kein freier Markt) und kein klassischer Sozialismus (keine reine Planwirtschaft) – sondern ein pragmatisches <em>Mischsystem unter Parteiführung</em>.</p>
+          </div>
+        </div>
+      </div>
+
+      
+
+    </div>
+
+
+<div class="material">
+        <div class="mat-head">
+          <span class="badge">C</span>
+          <div class="mat-title">Vergleich: Wirtschaftssysteme im Überblick</div>
+        </div>
+        <div class="mat-body">
+          <table class="compare">
+            <thead>
+              <tr>
+                <th>Merkmal</th>
+                <th>Freie Marktwirtschaft (z.B. USA)</th>
+                <th>Planwirtschaft (z.B. UdSSR)</th>
+                <th>Sozialistische Marktwirtschaft (China)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Eigentum</td>
+                <td>Überwiegend privat</td>
+                <td>Staatlich</td>
+                <td>Gemischt: privat + staatlich</td>
+              </tr>
+              <tr>
+                <td>Preisbildung</td>
+                <td>Markt (Angebot/Nachfrage)</td>
+                <td>Staatlich festgesetzt</td>
+                <td>Markt + staatliche Eingriffe</td>
+              </tr>
+              <tr>
+                <td>Wirtschaftsplanung</td>
+                <td>Dezentral</td>
+                <td>Zentral (5-Jahres-Pläne)</td>
+                <td>5-Jahres-Pläne + Marktmechanismus</td>
+              </tr>
+              <tr>
+                <td>Außenhandel</td>
+                <td>Weitgehend frei</td>
+                <td>Staatlich kontrolliert</td>
+                <td>Exportorientiert, selektiv geöffnet</td>
+              </tr>
+              <tr>
+                <td>Politisches System</td>
+                <td>Demokratie</td>
+                <td>Einparteienstaat</td>
+                <td>Einparteienstaat (KPCh)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:.6rem;">
+            <span class="tag">Schlüsselbegriff: Mischsystem</span>
+            <span class="tag">Staatslenkung</span>
+            <span class="tag">Exportorientierung</span>
+            <span class="tag">Industriepolitik</span>
+            <span class="tag">Binnenmarktentwicklung</span>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    <!-- Aufgaben -->
+    <section class="task-section">
+      <div class="task-label">Aufgaben</div>
+      <ol>
+        <li>1. <strong>Erkläre</strong> das Modell der „sozialistischen Marktwirtschaft" in eigenen Worten (A+B). Welche Elemente stammen aus der Planwirtschaft, welche aus dem Kapitalismus?</li>
+           <li>2. <strong>Analysiere</strong> mithilfe von C: Welche Elemente des chinesischen Wirtschaftssystems sind typisch planwirtschaftlich, welche marktwirtschaftlich? Diskutiere, ob das Modell als Erfolgsmodell bezeichnet werden kann.</li>
+          <li>3. <strong>Diskutiere</strong>: Kann ein autoritär geführtes Land dauerhaft wirtschaftlich erfolgreich sein? Nenne Argumente für und gegen diese These.</li>
+
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left"><p>Geographie – Aufstieg Chinas</p></div>
+    <div class="footer-center">
+      <a class="nav-btn" href="2.html">← Zurück</a>
+      <a class="nav-btn" href="4.html">Nächste →</a>
+    </div>
+    <div class="footer-right"><p>3</p></div>
+  </div>
+</div>
+<script>
+  // (B) Exportwachstum
+  new Chart(document.getElementById('exportChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['1990','1995','2000','2005','2010','2015','2020','2022'],
+      datasets:[
+        { label:'Exportvolumen (Mrd. US-$)', data:[62,149,249,762,1578,2276,2591,3594], backgroundColor:'rgba(42,59,50,0.8)', borderRadius:4, yAxisID:'y' },
+        { label:'Anteil Weltexport (%)', data:[1.8,2.9,3.9,7.3,10.4,13.8,14.7,14.4], type:'line', borderColor:'#E6B400', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, pointBackgroundColor:'#E6B400', yAxisID:'y1', tension:.25 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ font:{family:'Montserrat', size:11} } } },
+      scales:{
+        x:{ title:{ display:true, text:'Jahr', font:{family:'Montserrat',weight:'600'} }, grid:{display:false} },
+        y:{ title:{ display:true, text:'Export (Mrd. US-$)', font:{family:'Montserrat',weight:'600'} }, beginAtZero:true, grid:{color:'rgba(209,213,219,.5)'} },
+        y1:{ position:'right', title:{ display:true, text:'Welthandelsanteil (%)', font:{family:'Montserrat',weight:'600'} }, beginAtZero:true, grid:{display:false} }
+      }
+    }
+  });
+
+  // (C) Exportstruktur
+  new Chart(document.getElementById('exportStructChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Textilien/Bekleidung','Elektro/Elektronik','Maschinen','Chemie','Metalle','Sonstiges'],
+      datasets:[
+        { label:'1995', data:[25,15,10,5,8,37], backgroundColor:'rgba(220,38,38,0.7)', borderRadius:3 },
+        { label:'2022', data:[10,42,18,8,7,15], backgroundColor:'rgba(42,59,50,0.8)', borderRadius:3 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ font:{family:'Montserrat', size:11} } } },
+      scales:{
+        x:{ ticks:{ font:{size:10} }, grid:{display:false} },
+        y:{ title:{ display:true, text:'Anteil am Export (%)', font:{family:'Montserrat',weight:'600'} }, beginAtZero:true, max:50, grid:{color:'rgba(209,213,219,.5)'} }
+      }
+    }
+  });
+</script>
+</body>
+</html>

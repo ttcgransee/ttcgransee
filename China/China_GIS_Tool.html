@@ -279,6 +279,67 @@
    .task-section li { margin:.45rem 0; line-height:1.55; }
 
 
+
+    .inline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .classification-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: #f8fafc;
+      margin-top: 8px;
+    }
+
+    .classification-box.hidden {
+      display: none;
+    }
+
+    .category-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .category-table th,
+    .category-table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px;
+      text-align: left;
+      vertical-align: middle;
+      background: #fff;
+    }
+
+    .category-table input[type="number"] {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    .category-table input[type="color"] {
+      width: 44px;
+      height: 32px;
+      border: none;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .tiny-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tiny-actions button {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
     @media (max-width: 1100px) {
       .app {
         grid-template-columns: 1fr;
@@ -312,6 +373,39 @@
       <div class="row">
         <label for="paletteSelect">Farbpalette</label>
         <select id="paletteSelect"></select>
+      </div>
+
+      <div class="row">
+        <label for="categoryCountSelect">Kategorien</label>
+        <select id="categoryCountSelect">
+          <option value="">Kontinuierliches Farbschema</option>
+          <option value="3">3 Kategorien</option>
+          <option value="4">4 Kategorien</option>
+          <option value="5">5 Kategorien</option>
+          <option value="6">6 Kategorien</option>
+          <option value="7">7 Kategorien</option>
+          <option value="8">8 Kategorien</option>
+          <option value="9">9 Kategorien</option>
+        </select>
+        <div class="small">Ohne Auswahl bleibt die Einfärbung kontinuierlich. Mit Auswahl werden automatisch Klassen gebildet, die unten angepasst werden können.</div>
+      </div>
+
+      <div class="classification-box hidden" id="classificationBox">
+        <div class="small">Für jede Kategorie kann die obere Grenze und die Farbe angepasst werden. Die untere Grenze ergibt sich jeweils aus der vorherigen Klasse.</div>
+        <table class="category-table">
+          <thead>
+            <tr>
+              <th>Kategorie</th>
+              <th>Obere Grenze</th>
+              <th>Farbe</th>
+            </tr>
+          </thead>
+          <tbody id="categoryTableBody"></tbody>
+        </table>
+        <div class="tiny-actions">
+          <button type="button" id="autoClassesBtn">Grenzen automatisch setzen</button>
+          <button type="button" id="resetClassColorsBtn">Farben aus Palette</button>
+        </div>
       </div>
 
       <div class="row">
@@ -454,6 +548,11 @@
     const ctx = mapCanvas.getContext('2d', { willReadFrequently: true });
     const titleInput = document.getElementById('titleInput');
     const paletteSelect = document.getElementById('paletteSelect');
+    const categoryCountSelect = document.getElementById('categoryCountSelect');
+    const classificationBox = document.getElementById('classificationBox');
+    const categoryTableBody = document.getElementById('categoryTableBody');
+    const autoClassesBtn = document.getElementById('autoClassesBtn');
+    const resetClassColorsBtn = document.getElementById('resetClassColorsBtn');
     const provinceFilter = document.getElementById('provinceFilter');
     const valueTableBody = document.getElementById('valueTableBody');
     const exportPngBtn = document.getElementById('exportPngBtn');
@@ -475,6 +574,7 @@
     let inputMap = new Map();
     let provinceRows = new Map();
     let mapReady = false;
+    let customClassificationDirty = false;
 
     function initPaletteSelect() {
       Object.keys(palettes).forEach((name) => {
@@ -567,6 +667,134 @@
       const idx = Math.min(stops.length - 2, Math.floor(scaled));
       const localT = scaled - idx;
       return interpolateColor(stops[idx], stops[idx + 1], localT);
+    }
+
+    function getCategoryCount() {
+      const count = Number(categoryCountSelect.value);
+      return Number.isInteger(count) && count >= 2 ? count : null;
+    }
+
+    function samplePaletteColors(paletteName, count) {
+      const colors = [];
+      if (!count) return colors;
+      const max = Math.max(1, count - 1);
+      for (let i = 0; i < count; i++) {
+        const value = max === 0 ? 0 : i / max;
+        colors.push(getColorForValue(value, 0, 1, paletteName));
+      }
+      return colors.map(rgbStringToHex);
+    }
+
+    function rgbStringToHex(color) {
+      if (!color) return '#cccccc';
+      if (color.startsWith('#')) return color;
+      const parts = color.match(/\d+/g) || [204, 204, 204];
+      return '#' + parts.slice(0, 3).map(v => Number(v).toString(16).padStart(2, '0')).join('');
+    }
+
+    function getNumericValues() {
+      return getValues().filter(v => v.value != null).map(v => v.value);
+    }
+
+    function createAutomaticBreaks(min, max, count) {
+      if (!Number.isFinite(min) || !Number.isFinite(max) || !count) return [];
+      if (count === 1 || min === max) return Array.from({ length: count }, () => max);
+      const step = (max - min) / count;
+      return Array.from({ length: count }, (_, i) => i === count - 1 ? max : roundNumber(min + step * (i + 1)));
+    }
+
+    function roundNumber(num) {
+      return Math.round(num * 1000) / 1000;
+    }
+
+    function buildCategoryEditor(forceAuto = false, resetColors = false) {
+      const count = getCategoryCount();
+      classificationBox.classList.toggle('hidden', !count);
+      if (!count) {
+        categoryTableBody.innerHTML = '';
+        customClassificationDirty = false;
+        return;
+      }
+
+      const currentRows = Array.from(categoryTableBody.querySelectorAll('tr')).map((tr) => ({
+        max: tr.querySelector('input[data-role="max"]')?.value || '',
+        color: tr.querySelector('input[data-role="color"]')?.value || '#cccccc'
+      }));
+
+      const numeric = getNumericValues();
+      const min = numeric.length ? Math.min(...numeric) : 0;
+      const max = numeric.length ? Math.max(...numeric) : count;
+      const autoBreaks = createAutomaticBreaks(min, max, count);
+      const paletteColors = samplePaletteColors(paletteSelect.value || 'Default', count);
+
+      categoryTableBody.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const tr = document.createElement('tr');
+        const tdLabel = document.createElement('td');
+        tdLabel.textContent = `Klasse ${i + 1}`;
+
+        const tdMax = document.createElement('td');
+        const maxInput = document.createElement('input');
+        maxInput.type = 'number';
+        maxInput.step = 'any';
+        maxInput.dataset.role = 'max';
+        const preservedMax = currentRows[i]?.max;
+        maxInput.value = (!forceAuto && preservedMax !== '' && preservedMax != null) ? preservedMax : autoBreaks[i];
+        maxInput.addEventListener('input', () => {
+          customClassificationDirty = true;
+          renderMap();
+        });
+        tdMax.appendChild(maxInput);
+
+        const tdColor = document.createElement('td');
+        const colorInput = document.createElement('input');
+        colorInput.type = 'color';
+        colorInput.dataset.role = 'color';
+        const preservedColor = currentRows[i]?.color;
+        colorInput.value = (!resetColors && !forceAuto && preservedColor) ? preservedColor : paletteColors[i];
+        colorInput.addEventListener('input', () => {
+          customClassificationDirty = true;
+          renderMap();
+        });
+        tdColor.appendChild(colorInput);
+
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdMax);
+        tr.appendChild(tdColor);
+        categoryTableBody.appendChild(tr);
+      }
+    }
+
+    function getClassificationConfig(min, max) {
+      const count = getCategoryCount();
+      if (!count) return { mode: 'continuous' };
+
+      const rows = Array.from(categoryTableBody.querySelectorAll('tr'));
+      let categories = rows.map((tr) => ({
+        max: Number(tr.querySelector('input[data-role="max"]').value),
+        color: tr.querySelector('input[data-role="color"]').value
+      })).filter(cat => Number.isFinite(cat.max));
+
+      if (categories.length !== count) {
+        buildCategoryEditor(true, false);
+        return getClassificationConfig(min, max);
+      }
+
+      categories = categories.sort((a, b) => a.max - b.max);
+      if (Number.isFinite(max) && categories[categories.length - 1].max < max) {
+        categories[categories.length - 1].max = max;
+      }
+      if (Number.isFinite(min) && categories[0].max < min) {
+        categories[0].max = min;
+      }
+      return { mode: 'discrete', categories };
+    }
+
+    function getDiscreteColor(value, categories) {
+      for (const cat of categories) {
+        if (value <= cat.max) return cat.color;
+      }
+      return categories.length ? categories[categories.length - 1].color : null;
     }
 
     function findNearestInteriorSeed(x, y, radius = 20) {
@@ -674,7 +902,7 @@
       boundaryCtx.putImageData(boundaryImage, 0, 0);
     }
 
-    function drawLegend(title, paletteName, min, max, countFilled) {
+    function drawLegend(title, paletteName, min, max, countFilled, classification) {
       const w = mapCanvas.width;
       const h = mapCanvas.height;
       const topY = h - legendHeight;
@@ -700,37 +928,69 @@
         : 'Noch keine Werte eingegeben';
       ctx.fillText(subtitle, 40, topY + 68);
 
+      const hasRange = Number.isFinite(min) && Number.isFinite(max) && countFilled > 0;
       const gradX = 40;
       const gradY = topY + 82;
       const gradW = Math.min(420, w - 80);
       const gradH = 22;
-      const gradient = ctx.createLinearGradient(gradX, 0, gradX + gradW, 0);
-      const stops = palettes[paletteName] || palettes['Default'];
-      stops.forEach((color, i) => {
-        gradient.addColorStop(i / (stops.length - 1), color);
-      });
-      ctx.fillStyle = gradient;
-      ctx.fillRect(gradX, gradY, gradW, gradH);
-      ctx.strokeStyle = '#555';
-      ctx.strokeRect(gradX, gradY, gradW, gradH);
 
-      ctx.fillStyle = '#111827';
-      ctx.font = '13px Arial';
-      const hasRange = Number.isFinite(min) && Number.isFinite(max) && countFilled > 0;
-      const minText = hasRange ? String(min) : '–';
-      const maxText = hasRange ? String(max) : '–';
-      ctx.fillText(minText, gradX, gradY + 42);
-      const maxWidth = ctx.measureText(maxText).width;
-      ctx.fillText(maxText, gradX + gradW - maxWidth, gradY + 42);
+      if (classification?.mode === 'discrete' && classification.categories?.length) {
+        const cats = classification.categories;
+        const boxW = gradW / cats.length;
+        let lower = min;
+        cats.forEach((cat, i) => {
+          const x = gradX + i * boxW;
+          ctx.fillStyle = cat.color;
+          ctx.fillRect(x, gradY, boxW, gradH);
+          ctx.strokeStyle = '#555';
+          ctx.strokeRect(x, gradY, boxW, gradH);
 
-      ctx.fillStyle = '#6b7280';
-      ctx.font = '12px Arial';
-      ctx.fillText(`Palette: ${paletteName}`, gradX + gradW + 26, gradY + 16);
+          ctx.fillStyle = '#111827';
+          ctx.font = '11px Arial';
+          const upper = cat.max;
+          const label = Number.isFinite(lower) && Number.isFinite(upper)
+            ? `${roundNumber(lower)}–${roundNumber(upper)}`
+            : `≤ ${roundNumber(upper)}`;
+          ctx.fillText(label, x + 2, gradY + 38);
+          lower = upper;
+        });
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '12px Arial';
+        ctx.fillText(`Palette: ${paletteName} | Klassen: ${cats.length}`, gradX + gradW + 26, gradY + 16);
+      } else {
+        const gradient = ctx.createLinearGradient(gradX, 0, gradX + gradW, 0);
+        const stops = palettes[paletteName] || palettes['Default'];
+        stops.forEach((color, i) => {
+          gradient.addColorStop(i / (stops.length - 1), color);
+        });
+        ctx.fillStyle = gradient;
+        ctx.fillRect(gradX, gradY, gradW, gradH);
+        ctx.strokeStyle = '#555';
+        ctx.strokeRect(gradX, gradY, gradW, gradH);
+
+        ctx.fillStyle = '#111827';
+        ctx.font = '13px Arial';
+        const minText = hasRange ? String(min) : '–';
+        const maxText = hasRange ? String(max) : '–';
+        ctx.fillText(minText, gradX, gradY + 42);
+        const maxWidth = ctx.measureText(maxText).width;
+        ctx.fillText(maxText, gradX + gradW - maxWidth, gradY + 42);
+
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '12px Arial';
+        ctx.fillText(`Palette: ${paletteName}`, gradX + gradW + 26, gradY + 16);
+      }
       ctx.restore();
     }
 
     function renderMap() {
       if (!mapReady) return;
+
+      if (getCategoryCount() && !customClassificationDirty) {
+        buildCategoryEditor(true, false);
+      } else if (!getCategoryCount()) {
+        buildCategoryEditor(false, false);
+      }
 
       const values = getValues();
       const numeric = values.filter(v => v.value != null).map(v => v.value);
@@ -738,6 +998,7 @@
       const max = numeric.length ? Math.max(...numeric) : null;
       const paletteName = paletteSelect.value || 'Default';
       const title = titleInput.value.trim() || 'Indikator';
+      const classification = getClassificationConfig(min, max);
 
       ctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
       ctx.fillStyle = '#ffffff';
@@ -755,9 +1016,13 @@
 
       values.forEach((prov) => {
         if (prov.value == null) return;
-        const color = getColorForValue(prov.value, min, max, paletteName);
+        const color = classification.mode === 'discrete'
+          ? getDiscreteColor(prov.value, classification.categories)
+          : getColorForValue(prov.value, min, max, paletteName);
         if (!color) return;
-        const rgb = color.match(/\d+/g).map(Number);
+        const rgb = color.startsWith('#')
+          ? Object.values(hexToRgb(color))
+          : color.match(/\d+/g).map(Number);
         const pixels = getRegionPixels(prov);
         if (!pixels.length) return;
         filledCount += 1;
@@ -772,7 +1037,7 @@
 
       ctx.putImageData(fillLayer, 0, 0);
       ctx.drawImage(boundaryCanvas, 0, 0);
-      drawLegend(title, paletteName, min, max, filledCount);
+      drawLegend(title, paletteName, min, max, filledCount, classification);
 
       statusBadge.textContent = 'Karte bereit';
       filledBadge.textContent = `Eingefärbte Provinzen: ${filledCount}`;
@@ -788,11 +1053,16 @@
     }
 
     function exportXLS() {
+      const classCount = getCategoryCount();
+      const classConfig = classCount ? getClassificationConfig(null, null) : null;
       const rows = getValues().map(v => ({
         Provinz: v.name,
         Wert: v.value,
         Indikator: titleInput.value.trim(),
-        Palette: paletteSelect.value
+        Palette: paletteSelect.value,
+        Kategorien: classCount || '',
+        Klassengrenzen: classConfig ? classConfig.categories.map(c => c.max).join(' | ') : '',
+        Klassenfarben: classConfig ? classConfig.categories.map(c => c.color).join(' | ') : ''
       }));
       const ws = XLSX.utils.json_to_sheet(rows);
       const wb = XLSX.utils.book_new();
@@ -825,12 +1095,18 @@
           let imported = 0;
           let importedTitle = null;
           let importedPalette = null;
+          let importedCategoryCount = null;
+          let importedBreaks = null;
+          let importedColors = null;
 
           rows.forEach((row) => {
             const provinceKey = Object.keys(row).find(k => normalizeProvinceName(k).includes('provinz') || normalizeProvinceName(k).includes('province'));
             const valueKey = Object.keys(row).find(k => normalizeProvinceName(k) === 'wert' || normalizeProvinceName(k) === 'value');
             const indicatorKey = Object.keys(row).find(k => normalizeProvinceName(k).includes('indikator') || normalizeProvinceName(k).includes('titel') || normalizeProvinceName(k).includes('indicator'));
             const paletteKey = Object.keys(row).find(k => normalizeProvinceName(k).includes('palette'));
+            const categoriesKey = Object.keys(row).find(k => normalizeProvinceName(k).includes('kategorien') || normalizeProvinceName(k).includes('categories'));
+            const breaksKey = Object.keys(row).find(k => normalizeProvinceName(k).includes('klassengrenzen') || normalizeProvinceName(k).includes('break'));
+            const colorsKey = Object.keys(row).find(k => normalizeProvinceName(k).includes('klassenfarben') || normalizeProvinceName(k).includes('color'));
 
             const provinceName = provinceKey ? row[provinceKey] : row['Provinz'];
             const value = valueKey ? row[valueKey] : row['Wert'];
@@ -843,10 +1119,29 @@
             }
             if (!importedTitle && indicatorKey && row[indicatorKey]) importedTitle = row[indicatorKey];
             if (!importedPalette && paletteKey && row[paletteKey]) importedPalette = row[paletteKey];
+            if (!importedCategoryCount && categoriesKey && row[categoriesKey]) importedCategoryCount = Number(row[categoriesKey]);
+            if (!importedBreaks && breaksKey && row[breaksKey]) importedBreaks = String(row[breaksKey]);
+            if (!importedColors && colorsKey && row[colorsKey]) importedColors = String(row[colorsKey]);
           });
 
           if (importedTitle) titleInput.value = importedTitle;
           if (importedPalette && palettes[importedPalette]) paletteSelect.value = importedPalette;
+          if (Number.isInteger(importedCategoryCount) && importedCategoryCount >= 2) {
+            categoryCountSelect.value = String(importedCategoryCount);
+            customClassificationDirty = false;
+            buildCategoryEditor(true, true);
+            const breakValues = (importedBreaks || '').split('|').map(s => Number(String(s).trim())).filter(v => Number.isFinite(v));
+            const colorValues = (importedColors || '').split('|').map(s => String(s).trim()).filter(Boolean);
+            const rows = Array.from(categoryTableBody.querySelectorAll('tr'));
+            rows.forEach((tr, i) => {
+              if (Number.isFinite(breakValues[i])) tr.querySelector('input[data-role="max"]').value = breakValues[i];
+              if (colorValues[i]) tr.querySelector('input[data-role="color"]').value = colorValues[i];
+            });
+            if (breakValues.length || colorValues.length) customClassificationDirty = true;
+          } else {
+            categoryCountSelect.value = '';
+            buildCategoryEditor(false, false);
+          }
 
           statusBadge.textContent = `${imported} Werte importiert`;
           renderMap();
@@ -873,7 +1168,24 @@
 
     function bindEvents() {
       titleInput.addEventListener('input', renderMap);
-      paletteSelect.addEventListener('change', renderMap);
+      paletteSelect.addEventListener('change', () => {
+        if (getCategoryCount() && !customClassificationDirty) buildCategoryEditor(true, true);
+        renderMap();
+      });
+      categoryCountSelect.addEventListener('change', () => {
+        customClassificationDirty = false;
+        buildCategoryEditor(true, true);
+        renderMap();
+      });
+      autoClassesBtn.addEventListener('click', () => {
+        customClassificationDirty = false;
+        buildCategoryEditor(true, false);
+        renderMap();
+      });
+      resetClassColorsBtn.addEventListener('click', () => {
+        buildCategoryEditor(false, true);
+        renderMap();
+      });
       provinceFilter.addEventListener('change', applyProvinceFilter);
       exportPngBtn.addEventListener('click', exportPNG);
       exportXlsBtn.addEventListener('click', exportXLS);

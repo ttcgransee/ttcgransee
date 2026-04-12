@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Reibungskräfte – Zusammenfassung & Aufgaben</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin:0; padding:0; width:100%; min-height:100%;
+      background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif;
+    }
+
+    .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
+    .slide-header {
+      background:#2A3B32; color:#fff; padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title { margin:0; font-weight:700; font-size:2.05rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+
+    .slide-content {
+      flex:1 1 auto;
+      padding:1.2rem 2rem 1.25rem 2rem;
+      display:flex; flex-direction:column; gap:1rem;
+    }
+
+    .materials-grid {
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:1rem;
+      align-items:start;
+    }
+
+    .tasks-grid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:1rem;
+    }
+
+    .material {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+
+    .mat-head {
+      display:flex; align-items:center; gap:.6rem;
+      padding:.7rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+
+    .badge {
+      background:#2A3B32; color:#fff;
+      font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem;
+      border-radius:6px;
+      min-width:3rem; text-align:center;
+    }
+
+    .mat-title { font-weight:700; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:1rem; font-family:'Raleway',sans-serif; }
+
+    .info-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.7rem;
+      margin-top:.2rem;
+    }
+
+    .info-box {
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.8rem .9rem;
+    }
+
+    .info-box.full { grid-column:1 / -1; }
+
+    .info-label {
+      font-size:.72rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#374151;
+      margin-bottom:.3rem;
+    }
+
+    .info-box p, .info-box ul, .info-box ol {
+      font-size:.95rem;
+      line-height:1.5;
+      margin:0;
+    }
+
+    .info-box ul { margin-left:1.1rem; list-style:disc; }
+    .info-box ol { margin-left:1.15rem; list-style:decimal; }
+
+    .formula-line {
+      font-family:"Courier New", monospace;
+      font-size:1rem;
+      font-weight:700;
+      background:#EEF2EF;
+      border:1px solid #D7DED9;
+      border-radius:8px;
+      padding:.55rem .7rem;
+      display:flex;
+      margin:.15rem 0;
+      align-items: center;
+      justify-content: center;
+    
+    }
+
+    .highlight {
+      color:#2A3B32;
+      font-weight:700;
+    }
+
+    .coeff-table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:.92rem;
+      margin-top:.25rem;
+    }
+    .coeff-table th, .coeff-table td {
+      border:1px solid #D1D5DB;
+      padding:.5rem .55rem;
+      text-align:left;
+      vertical-align:top;
+    }
+    .coeff-table th {
+      background:#F3F4F6;
+      font-weight:700;
+      color:#374151;
+    }
+
+    .task-card {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .task-head {
+      display:flex; align-items:center; gap:.65rem;
+      padding:.75rem .9rem;
+      background:#F9FAFB;
+      border-bottom:1px solid #E5E7EB;
+    }
+
+    .task-badge {
+      background:#E6B400;
+      color:#2A3B32;
+      font-weight:800;
+      font-size:.82rem;
+      padding:.18rem .55rem;
+      border-radius:999px;
+      min-width:4.3rem;
+      text-align:center;
+    }
+
+    .task-body {
+      padding:.9rem 1rem 1rem 1rem;
+      font-family:'Raleway',sans-serif;
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+    }
+
+    .task-text {
+      font-size:.96rem;
+      line-height:1.5;
+    }
+
+    .solution-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+      background-color:#2A3B32;
+      color:white;
+      padding:.5rem 1rem;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      font-size:.9rem;
+      transition:all .2s ease;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+      width:max-content;
+    }
+    .solution-btn:hover {
+      background-color:#3D5245;
+      transform:translateY(-1px);
+      box-shadow:0 4px 6px rgba(0,0,0,.15);
+    }
+
+    .solution-box {
+      display:none;
+      background:#E9F0EC;
+      border:2px solid #2A3B32;
+      border-radius:10px;
+      padding:.85rem .95rem;
+      font-size:.93rem;
+      line-height:1.55;
+      color:#1F2937;
+    }
+
+    .solution-box.visible { display:block; }
+
+    .solution-box .solution-title {
+      font-weight:800;
+      color:#2A3B32;
+      margin-bottom:.35rem;
+      font-family:'Montserrat',sans-serif;
+    }
+
+    .small-note {
+      font-size:.84rem;
+      color:#6B7280;
+      margin-top:.25rem;
+    }
+
+    .footer {
+      padding:1rem 3rem;
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      color:#666; font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      flex-shrink:0;
+      background:#F5F5F5;
+    }
+
+    .footer-left { justify-self:start; }
+    .footer-center { display:flex; gap:1rem; justify-self:center; }
+    .footer-right { justify-self:end; }
+
+    .nav-btn, .nav-btn-disabled {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0.5rem 1.25rem;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      font-size:0.9rem;
+      min-width:100px;
+    }
+
+    .nav-btn {
+      background-color:#2A3B32;
+      color:white;
+      transition:all .2s ease;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+    }
+    .nav-btn:hover {
+      background-color:#3D5245;
+      transform:translateY(-1px);
+      box-shadow:0 4px 6px rgba(0,0,0,.15);
+    }
+
+    .nav-btn-disabled {
+      background:#D1D5DB;
+      color:#6B7280;
+      cursor:default;
+    }
+
+    @media (max-width:1100px){
+      .materials-grid, .tasks-grid { grid-template-columns:1fr; }
+    }
+
+    html, body{ margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container{ width:100%; min-height:720px; display:flex; flex-direction:column; }
+
+    .slide-header{ background:#2A3B32; color:#fff; padding:1.1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title{ margin:0; font-weight:700; font-size:1.95rem; }
+    .divider{ width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.5rem; }
+
+    .slide-content{ flex:1 1 auto; padding:.95rem 2rem 1.1rem 2rem; display:flex; flex-direction:column; gap:.75rem; }
+
+    .top-grid{ display:grid; grid-template-columns: 1.02fr .98fr; gap:.85rem; align-items:start; }
+    .card{ background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05); overflow:hidden; }
+    .card-head{ padding:.65rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; font-weight:700; color:#2A3B32; display:flex; align-items:center; gap:.6rem; }
+    .card-body{ padding:.8rem .9rem; font-family:'Raleway',sans-serif; font-size:.9rem; }
+
+    .badge {
+      background:#2A3B32; color:#fff; font-weight:700; font-size:.9rem;
+      padding:.15rem .55rem; border-radius:6px; min-width:3rem; text-align:center;
+    }
+
+    .eq-box{
+      background:#FFF7E6; border:1px solid #F59E0B; border-radius:12px;
+      padding:.65rem .8rem; display:flex; gap:.55rem; flex-wrap:wrap; align-items:center;
+      font-family:"Courier New", monospace; font-size:.98rem;
+    }
+    .formula-line {
+      font-family:"Calibri", monospace;
+      font-size:1.8rem;
+      font-weight:700;
+      background:#EEF2EF;
+      border:1px solid #D7DED9;
+      border-radius:8px;
+      padding:.55rem .7rem;
+      display:flex;
+      margin:.15rem 0;
+      align-items: center;
+      justify-content: center;
+    
+    }
+
+    .info-list{ margin:0; padding-left:1.1rem; }
+    .info-list li{ margin:.28rem 0; line-height:1.4; }
+
+    table.ref{ width:100%; border-collapse:collapse; font-size:.83rem; margin-top:.25rem; }
+    table.ref th, table.ref td{ border:1px solid #D1D5DB; padding:.34rem .4rem; text-align:left; vertical-align:top; }
+    table.ref th{ background:#F3F4F6; font-weight:700; }
+
+    .task-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:.75rem; align-items:start; }
+
+    .task-section{
+      position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px;
+      padding:.85rem .85rem .7rem .85rem; font-family:'Raleway',sans-serif; min-height:100%;
+    }
+    .task-label{
+      position:absolute; top:-12px; left:.9rem;
+      background:#2A3B32; color:#fff; padding:.22rem .65rem; border-radius:6px;
+      font-weight:600; font-size:.84rem;
+    }
+
+    .tasks{ margin:0; padding-left:1rem; }
+    .task-item{ margin:.55rem 0; line-height:1.42; font-size:.84rem; }
+    .task-item ul{ margin:.3rem 0 .2rem .4rem; padding-left:.9rem; list-style:disc; }
+    .task-controls{ margin-top:.42rem; display:flex; gap:.45rem; align-items:center; flex-wrap:wrap; }
+
+    .btn{
+      background:#2A3B32; color:#fff; border-radius:10px; padding:.38rem .68rem; font-weight:700; font-size:.77rem;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .btn.secondary{ background:#F9FAFB; color:#2A3B32; border:1px solid #D1D5DB; }
+    .btn:active{ transform: translateY(1px); }
+
+    .solution{
+      display:none;
+      margin-top:.45rem;
+      background:#ffffff;
+      border:1px solid #D1D5DB;
+      border-left:6px solid #10B981;
+      border-radius:10px;
+      padding:.55rem .7rem;
+      font-size:.8rem;
+      color:#111827;
+    }
+    .solution .sol-title{
+      font-weight:800;
+      color:#065F46;
+      margin-bottom:.2rem;
+      font-size:.74rem;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .solution .work{
+      font-family:"Courier New", monospace;
+      font-size:.76rem;
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:.45rem .55rem;
+      margin-top:.35rem;
+      white-space:normal;
+      line-height:1.34;
+    }
+    .solution .work .line{ margin:.18rem 0; }
+
+    .tiny{ font-size:.8rem; color:#6B7280; font-family:'Raleway',sans-serif; }
+    .small-note{ font-size:.8rem; color:#6B7280; margin-top:.3rem; font-family:'Raleway',sans-serif; }
+
+    .footer {
+      padding:.9rem 3rem;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      color:#666;
+      font-size:0.9rem;
+      font-family:'Raleway',sans-serif;
+      background: #F5F5F5;
+      border-top: none;
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .footer-left { text-align: left; }
+    .footer-right { text-align: right; }
+
+    .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .nav-btn, .nav-btn-disabled {
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content:center;
+        min-width:100px;
+    }
+
+    .nav-btn {
+        background-color: #2A3B32;
+        color: white;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .nav-btn:hover {
+        background-color: #3d5448;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    .nav-btn-disabled{
+        background:#D1D5DB;
+        color:#6B7280;
+        cursor:default;
+    }
+
+    @media (max-width:1200px){
+      .task-grid{ grid-template-columns:1fr; }
+      .top-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+
+    <div class="slide-header">
+      <div>
+        <h1 class="title">Zusammenfassung</h1>
+        <div class="divider"></div>
+      </div>
+      <p class="text-sm font-light">Physik | Klasse 9</p>
+    </div>
+
+    <div class="slide-content">
+      <div class="materials-grid">
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M1</span>
+            <div class="mat-title">Theorie</div>
+          </div>
+          <div class="mat-body">
+            <div class="info-grid">
+              <div class="info-box full">
+                <p>
+                  Reibungskräfte wirken der Bewegung oder einer drohenden Bewegung entgegen.
+                  Sie hängen auf waagerechter Unterlage von der <span class="highlight">Art der Oberflächen</span> (Reibungskoeffizient μ) und von der
+                  <span class="highlight">Gewichtskraft F<sub>G</sub></span> ab.
+                  Bei vielen Materialien gilt näherungsweise:
+                </p>
+                <div class="formula-line">F<sub>R</sub> = μ · F<sub>G</sub></div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Arten der Reibung</div>
+                <ul>
+                  <li><strong>Haftreibung:</strong> verhindert zunächst das Losrutschen</li>
+                  <li><strong>Gleitreibung:</strong> wirkt beim Rutschen</li>
+                  <li><strong>Rollreibung:</strong> ist meist deutlich kleiner</li>
+                </ul>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Merksätze</div>
+                <ul>
+                  <li>Mehr Masse → größere Reibungskraft</li>
+                  <li>Raue Oberflächen → größerer Reibungskoeffizient μ</li>
+                  <li>Rollen ist oft günstiger als Gleiten</li>
+                </ul>
+              </div>
+
+             
+            </div>
+          </div>
+        </section>
+
+        <section class="material">
+          <div class="mat-head">
+            <span class="badge">M2</span>
+            <div class="mat-title">Beispielhafte Reibungskoeffizienten</div>
+          </div>
+          <div class="mat-body">
+            <table class="coeff-table" aria-label="Beispielhafte Reibungskoeffizienten">
+              <tr>
+                <th>Kontakt</th>
+                <th>Art</th>
+                <th>typischer Wert für μ</th>
+              </tr>
+              <tr>
+                <td>Holz auf glattem Tisch</td>
+                <td>Gleitreibung</td>
+                <td>ca. 0,3</td>
+              </tr>
+              <tr>
+                <td>Holz auf Teppich</td>
+                <td>Gleitreibung</td>
+                <td>ca. 0,4 bis 0,5</td>
+              </tr>
+              <tr>
+                <td>Holz auf Sandpapier</td>
+                <td>Gleitreibung</td>
+                <td>ca. 0,6</td>
+              </tr>
+              <tr>
+                <td>Schuhsohle auf Boden</td>
+                <td>Haftreibung</td>
+                <td>oft größer als 0,6</td>
+              </tr>
+              <tr>
+                <td>Wagenrad auf glatter Fläche</td>
+                <td>Rollreibung</td>
+                <td>deutlich kleiner, z. B. 0,01 bis 0,05</td>
+              </tr>
+            </table>
+            
+          </div>
+        </section>
+      </div>
+
+
+      <div class="task-grid">
+        <section class="task-section">
+          <div class="task-label">Aufgaben – leicht</div>
+          <ol class="tasks">
+            <li class="task-item">
+              1. Nenne zwei Situationen, in denen große Reibung nützlich ist, und zwei Situationen, in denen kleine Reibung nützlich ist.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                Große Reibung ist zum Beispiel beim Laufen und beim Bremsen nützlich. Kleine Reibung ist zum Beispiel bei Wagenrädern, Kugellagern oder Schlittschuhen nützlich.
+              </div>
+            </li>
+
+            <li class="task-item">
+              2. Ein Holzklotz der Masse \(m=2{,}0\,\mathrm{kg}\) liegt auf einem Tisch. Für die Gleitreibung gilt \(\mu=0{,}35\). Berechne die Reibungskraft.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">Gegeben: \(m=2{,}0\,\mathrm{kg}\), \(\mu=0{,}35\), \(g=9{,}81\,\mathrm{m/s^2}\)</div>
+                  <div class="line">\(F_{\mathrm{N}}=F_{\mathrm{G}}=m\cdot g=2{,}0\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=19{,}62\,\mathrm{N}\)</div>
+                  <div class="line">\(F_{\mathrm{R}}=\mu\cdot F_{\mathrm{N}}=0{,}35\cdot 19{,}62\,\mathrm{N}=6{,}867\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(F_{\mathrm{R}}\approx 6{,}9\,\mathrm{N}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              3. Welche Reibungsart liegt vor: Ein Schuh haftet auf dem Boden, ein Karton rutscht, ein Wagen rollt?
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                Schuh auf dem Boden: Haftreibung. Karton rutscht: Gleitreibung. Wagen rollt: Rollreibung.
+              </div>
+            </li>
+
+            <li class="task-item">
+              4. Ein Körper hat die Masse \(m=500\,\mathrm{g}\). Berechne seine Gewichtskraft auf der Erde.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">Umrechnung: \(500\,\mathrm{g}=0{,}500\,\mathrm{kg}\)</div>
+                  <div class="line">\(F_{\mathrm{G}}=m\cdot g=0{,}500\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=4{,}905\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(F_{\mathrm{G}}\approx 4{,}91\,\mathrm{N}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              5. Ordne nach Größe: Haftreibung, Gleitreibung, Rollreibung.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                Typischerweise gilt: Haftreibung \(>\) Gleitreibung \(>\) Rollreibung.
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="task-section">
+          <div class="task-label">Aufgaben – mittel</div>
+          <ol class="tasks">
+            <li class="task-item">
+              1. Ein Holzklotz mit der Masse \(450\,\mathrm{g}\) wird über Sandpapier gezogen. Der Reibungskoeffizient beträgt \(\mu=0{,}60\). Berechne die Gleitreibungskraft.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(450\,\mathrm{g}=0{,}450\,\mathrm{kg}\)</div>
+                  <div class="line">\(F_{\mathrm{N}}=m\cdot g=0{,}450\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=4{,}4145\,\mathrm{N}\)</div>
+                  <div class="line">\(F_{\mathrm{R}}=\mu\cdot F_{\mathrm{N}}=0{,}60\cdot 4{,}4145\,\mathrm{N}=2{,}6487\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(F_{\mathrm{R}}\approx 2{,}65\,\mathrm{N}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              2. Ein Klotz mit der Masse \(300\,\mathrm{g}\) wird mit einer Kraft von \(1{,}2\,\mathrm{N}\) gleichförmig über eine waagerechte Fläche gezogen. Bestimme \(\mu\).
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">Bei gleichförmiger Bewegung gilt: \(F_{\mathrm{Zug}}=F_{\mathrm{R}}=1{,}2\,\mathrm{N}\)</div>
+                  <div class="line">\(300\,\mathrm{g}=0{,}300\,\mathrm{kg}\)</div>
+                  <div class="line">\(F_{\mathrm{N}}=m\cdot g=0{,}300\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=2{,}943\,\mathrm{N}\)</div>
+                  <div class="line">\(\mu=\dfrac{F_{\mathrm{R}}}{F_{\mathrm{N}}}=\dfrac{1{,}2\,\mathrm{N}}{2{,}943\,\mathrm{N}}=0{,}4077\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(\mu\approx 0{,}41\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              3. Ein Klotz mit \(m=0{,}80\,\mathrm{kg}\) wird über einen Tisch mit \(\mu=0{,}25\) gezogen. Berechne die Reibungskraft.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(F_{\mathrm{N}}=m\cdot g=0{,}80\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=7{,}848\,\mathrm{N}\)</div>
+                  <div class="line">\(F_{\mathrm{R}}=\mu\cdot F_{\mathrm{N}}=0{,}25\cdot 7{,}848\,\mathrm{N}=1{,}962\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(F_{\mathrm{R}}\approx 1{,}96\,\mathrm{N}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              4. Vergleiche die Reibungskraft eines Körpers mit \(m=1{,}0\,\mathrm{kg}\) auf Tisch \((\mu=0{,}30)\) und Teppich \((\mu=0{,}50)\).
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(F_{\mathrm{N}}=1{,}0\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=9{,}81\,\mathrm{N}\)</div>
+                  <div class="line">Tisch: \(F_{\mathrm{R,1}}=0{,}30\cdot 9{,}81\,\mathrm{N}=2{,}943\,\mathrm{N}\)</div>
+                  <div class="line">Teppich: \(F_{\mathrm{R,2}}=0{,}50\cdot 9{,}81\,\mathrm{N}=4{,}905\,\mathrm{N}\)</div>
+                  <div class="line">Differenz: \(4{,}905\,\mathrm{N}-2{,}943\,\mathrm{N}=1{,}962\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> Auf dem Teppich ist die Reibungskraft um \(1{,}96\,\mathrm{N}\) größer.</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              5. Ein Wagen mit \(m=5{,}0\,\mathrm{kg}\) hat Rollreibung mit \(\mu=0{,}03\). Berechne die Rollreibungskraft.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(F_{\mathrm{N}}=m\cdot g=5{,}0\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=49{,}05\,\mathrm{N}\)</div>
+                  <div class="line">\(F_{\mathrm{R}}=\mu\cdot F_{\mathrm{N}}=0{,}03\cdot 49{,}05\,\mathrm{N}=1{,}4715\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(F_{\mathrm{R}}\approx 1{,}47\,\mathrm{N}\)</div>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="task-section">
+          <div class="task-label">Aufgaben – schwer</div>
+          <ol class="tasks">
+            <li class="task-item">
+              1. Ein Auto fährt mit \(72\,\mathrm{km/h}\) und bremst auf trockener Straße. Der Reibungskoeffizient beträgt \(\mu=0{,}70\). Berechne den Bremsweg.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(72\,\mathrm{km/h}=20\,\mathrm{m/s}\)</div>
+                  <div class="line">\(a=\mu\cdot g=0{,}70\cdot 9{,}81\,\mathrm{m/s^2}=6{,}867\,\mathrm{m/s^2}\)</div>
+                  <div class="line">\(v^2=v_0^2-2as\)</div>
+                  <div class="line">\(0=(20\,\mathrm{m/s})^2-2\cdot 6{,}867\,\mathrm{m/s^2}\cdot s\)</div>
+                  <div class="line">\(s=\dfrac{400\,\mathrm{m^2/s^2}}{13{,}734\,\mathrm{m/s^2}}=29{,}13\,\mathrm{m}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(s\approx 29{,}1\,\mathrm{m}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              2. Ein Auto fährt durch eine ebene Kurve mit \(r=50\,\mathrm{m}\). Die Haftreibung beträgt \(\mu=0{,}60\). Berechne die maximale Kurvengeschwindigkeit.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(\mu \cdot m \cdot g=\dfrac{m v^2}{r}\)</div>
+                  <div class="line">\(v^2=\mu g r=0{,}60\cdot 9{,}81\,\mathrm{m/s^2}\cdot 50\,\mathrm{m}=294{,}3\,\mathrm{m^2/s^2}\)</div>
+                  <div class="line">\(v=\sqrt{294{,}3\,\mathrm{m^2/s^2}}=17{,}16\,\mathrm{m/s}\)</div>
+                  <div class="line">\(17{,}16\,\mathrm{m/s}\cdot 3{,}6=61{,}8\,\mathrm{km/h}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(v_{\max}\approx 61{,}8\,\mathrm{km/h}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              3. Ein Körper mit \(m=8{,}0\,\mathrm{kg}\) wird mit einer horizontalen Zugkraft von \(40\,\mathrm{N}\) über den Boden gezogen. Es gilt \(\mu=0{,}25\). Berechne die Beschleunigung.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(F_{\mathrm{N}}=m\cdot g=8{,}0\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=78{,}48\,\mathrm{N}\)</div>
+                  <div class="line">\(F_{\mathrm{R}}=\mu\cdot F_{\mathrm{N}}=0{,}25\cdot 78{,}48\,\mathrm{N}=19{,}62\,\mathrm{N}\)</div>
+                  <div class="line">Resultierende Kraft: \(F_{\mathrm{res}}=40\,\mathrm{N}-19{,}62\,\mathrm{N}=20{,}38\,\mathrm{N}\)</div>
+                  <div class="line">\(a=\dfrac{F_{\mathrm{res}}}{m}=\dfrac{20{,}38\,\mathrm{N}}{8{,}0\,\mathrm{kg}}=2{,}5475\,\mathrm{m/s^2}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(a\approx 2{,}55\,\mathrm{m/s^2}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              4. Ein Auto fährt mit \(54\,\mathrm{km/h}\). Die Reaktionszeit beträgt \(0{,}8\,\mathrm{s}\), anschließend wird auf nasser Straße mit \(\mu=0{,}40\) gebremst. Berechne den Anhalteweg.
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">\(54\,\mathrm{km/h}=15\,\mathrm{m/s}\)</div>
+                  <div class="line">Reaktionsweg: \(s_{\mathrm{R}}=v\cdot t=15\,\mathrm{m/s}\cdot 0{,}8\,\mathrm{s}=12\,\mathrm{m}\)</div>
+                  <div class="line">Bremsverzögerung: \(a=\mu g=0{,}40\cdot 9{,}81\,\mathrm{m/s^2}=3{,}924\,\mathrm{m/s^2}\)</div>
+                  <div class="line">Bremsweg: \(s_{\mathrm{B}}=\dfrac{v^2}{2a}=\dfrac{(15\,\mathrm{m/s})^2}{2\cdot 3{,}924\,\mathrm{m/s^2}}=\dfrac{225}{7{,}848}\,\mathrm{m}=28{,}67\,\mathrm{m}\)</div>
+                  <div class="line">Anhalteweg: \(s_{\mathrm{A}}=s_{\mathrm{R}}+s_{\mathrm{B}}=12\,\mathrm{m}+28{,}67\,\mathrm{m}=40{,}67\,\mathrm{m}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> \(s_{\mathrm{A}}\approx 40{,}7\,\mathrm{m}\)</div>
+                </div>
+              </div>
+            </li>
+
+            <li class="task-item">
+              5. Ein Klotz mit \(m=3{,}0\,\mathrm{kg}\) liegt auf einer waagerechten Fläche mit \(\mu=0{,}30\). Welche minimale horizontale Zugkraft ist nötig, damit er sich gerade in Bewegung setzt?
+              <div class="task-controls"><button class="btn toggleBtn" type="button">Lösung anzeigen</button></div>
+              <div class="solution">
+                <div class="sol-title">Musterlösung</div>
+                <div class="work">
+                  <div class="line">Zum Losgleiten muss die Zugkraft mindestens so groß sein wie die maximale Reibungskraft.</div>
+                  <div class="line">\(F_{\mathrm{N}}=m\cdot g=3{,}0\,\mathrm{kg}\cdot 9{,}81\,\mathrm{m/s^2}=29{,}43\,\mathrm{N}\)</div>
+                  <div class="line">\(F_{\mathrm{R,max}}=\mu\cdot F_{\mathrm{N}}=0{,}30\cdot 29{,}43\,\mathrm{N}=8{,}829\,\mathrm{N}\)</div>
+                  <div class="line"><strong>Ergebnis:</strong> Die Zugkraft muss mindestens \(8{,}83\,\mathrm{N}\) betragen.</div>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </section>
+      </div>
+    </div>
+
+
+    <div class="footer">
+      <div class="footer-left">
+        <p>Theo Schierbaum – Reibungskräfte</p>
+      </div>
+      <div class="nav-buttons">
+        <a class="nav-btn" href="3.html">← Zurück</a>
+        <span class="nav-btn-disabled">Ende</span>
+      </div>
+      <div class="footer-right">
+        <p>4</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.toggleBtn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const sol = this.parentElement.nextElementSibling;
+        if(!sol) return;
+        const visible = sol.style.display === 'block';
+        sol.style.display = visible ? 'none' : 'block';
+        this.textContent = visible ? 'Lösung anzeigen' : 'Lösung ausblenden';
+      });
+    });
+  </script>
+</body>
+</html>

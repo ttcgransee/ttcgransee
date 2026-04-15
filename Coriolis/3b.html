@@ -132,56 +132,63 @@
     .task-section ol { margin-left:1.2rem; }
     .task-section li { margin:.45rem 0; line-height:1.55; font-size:.95rem; }
 
-    /* GIF block (200×280) */
-    .gif-row{
+    /* Neuer zweispaltiger Bereich oberhalb der Tabelle */
+    .top-layout{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap:1rem;
+      align-items:start;
+    }
+    .left-column{
       display:flex;
+      flex-direction:column;
       gap:.8rem;
-      align-items:flex-start;
-      justify-content:space-between;
-      margin-top:.6rem;
     }
-    .gif-box{
-      width:200px; height:280px;
-      border-radius:10px;
+    .right-column{
+      display:flex;
+      flex-direction:column;
+      gap:.8rem;
+    }
+    .sketch-row{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.8rem;
+    }
+    .sketch-card{
+      background:#F9FAFB;
       border:1px solid #E5E7EB;
-      background:#fff;
-      overflow:hidden;
-      flex: 0 0 auto;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .gif-box img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .gif-placeholder{
-      text-align:center;
-      color:#6B7280;
-      font-size:.85rem;
+      border-radius:10px;
       padding:.6rem;
-      font-family:'Raleway',sans-serif;
+      text-align:center;
     }
-    .formula {
-      font-family:"Courier New", monospace;
-      font-size:.9rem;
-      background:#E5E7EB;
-      padding:0 .3rem;
-      border-radius:4px;
-      white-space:nowrap;
+    .sketch-card img{
+      width:100%;
+      height:300px;
+      object-fit:contain;
+      display:block;
+      border-radius:8px;
+      background:#fff;
+      border:1px solid #E5E7EB;
+    }
+    .sketch-caption{
+      margin-top:.45rem;
+      font-size:.85rem;
+      color:#4B5563;
+      line-height:1.35;
     }
 
     .footer {
       padding:1rem 3rem;
       display:grid;
-      grid-template-columns: 1fr auto 1fr; /* Left text, Center buttons, Right text */
+      grid-template-columns: 1fr auto 1fr;
       align-items:center;
       color:#666; font-size:0.9rem;
       font-family:'Raleway',sans-serif;
       flex-shrink:0;
-      background: #F5F5F5; /* Matches body bg */
-      margin-top: auto; /* pushes footer to bottom if content is short */
-      border-top: none; /* no footer separator line */
-      }
+      background: #F5F5F5;
+      margin-top: auto;
+      border-top: none;
+    }
     
     .footer-left { justify-self: start; }
     .footer-center { 
@@ -217,8 +224,9 @@
 
     @media (max-width:980px){
       .materials-grid{ grid-template-columns:1fr; }
-      .gif-row{ flex-direction:column; }
-      .gif-box{ width:100%; max-width:260px; height:280px; }
+      .top-layout{ grid-template-columns:1fr; }
+      .sketch-row{ grid-template-columns:1fr; }
+      .sketch-card img{ height:220px; }
     }
 
     @media print {
@@ -232,6 +240,7 @@
       transform: translateY(-2px);
       box-shadow:0 10px 18px rgba(0,0,0,.10);
     }
+
     /* Tabelle (wie in 2.html) */
     table.measure-table {
       width:100%;
@@ -261,7 +270,7 @@
       height:2.0rem;
       background:#fff;
     }
-</style>
+  </style>
 </head>
 
 <body>
@@ -277,55 +286,81 @@
     </div>
 
     <div class="slide-content">
-
       <div class="materials-grid">
 
-        <!-- LINKS: Erklärung -->
-        
-
-        <!-- RECHTS: Versuch -->
         <section class="material">
- 
-
           <div class="mat-body">
-              <div class="info-box full">
-                <div class="info-label">Ziel:</div>
-                <ul>
-                  <li>1. Ablenkrichtung auf NHK &amp; SHK bestimmen bei Bewegung (a) <i>Pol &rarr; Äquator</i> und (b) <i>Äquator &rarr; Pol</i> bestimmen</li>
-                  <li>3. Abhängigkeit der Ablenkung von (a) <i>Drehgeschwindigkeit der Erde</i> und <span style="color: seagreen;">(b) <i>Bewegungsgeschwindkeit der Luft</i></span> bestimmen</li>
-		  <li><span style="color: seagreen;">4. Abhängigkeit der Ablenkung von der geographischen Breite bestimmen</span></li>
-                </ul>
-              </div><br>
 
 
-            <div class="task-section">
-              <div class="task-label"><i class="fas fa-flask mr-2"></i>Durchführung</div>
-              <ol>
-                <li><strong>1. Bewegung Pol &rarr; Äquator (<i>blauer Stift</i>) und Bewegung Äquator &rarr; Pol (<i>roter Stift</i>)</strong><br/>
-                      <strong><i>(a)</strong></i> Scheibe (NHK+SHK) auf den Tisch legen. Partner A fixiert den <i>Pol</i> (Mitte) mit einem Finger.
+<div class="info-box full">
+                  <div class="info-label">Ziel:</div>
+                  <ul>
+                    <li>1. Ablenkrichtung auf NHK &amp; SHK bestimmen bei Bewegung (a) <i>Pol &rarr; Äquator</i> und (b) <i>Äquator &rarr; Pol</i> bestimmen</li>
+                    <li>2. Abhängigkeit der Ablenkung von (a) <i>Drehgeschwindigkeit der Erde</i> und <span style="color: seagreen;">(b) <i>Bewegungsgeschwindigkeit der Luft</i></span> bestimmen</li>
+                    <li><span style="color: seagreen;">3. Abhängigkeit der Ablenkung von der geographischen Breite bestimmen</span></li>
+                  </ul>
+                </div>
+            <!-- Oberer Bereich in zwei Spalten -->
+            <div class="top-layout" style="margin-top:1rem;">
+
+              <!-- Linke Spalte: Ziel + Aufgabe -->
+              <div class="left-column">
+                
+
+                <div class="task-section">
+                  <div class="task-label"><i class="fas fa-flask mr-2"></i>Durchführung</div>
+                  <ol>
+                    <li>
+                      <strong>1. Bewegung Pol &rarr; Äquator (<i>blauer Stift</i>) und Bewegung Äquator &rarr; Pol (<i>roter Stift</i>)</strong><br/>
+                      <strong><i>(a)</i></strong> Scheibe (NHK+SHK) auf den Tisch legen. Partner A fixiert den <i>Pol</i> (Mitte) mit einem Finger.
                       Partner B dreht die Scheibe leicht in Erddrehrichtung und zeichnet eine
-                      gerade Linie (bezogen auf den Tisch) vom Pol Richtung Äquator.<br>
-                      <strong><i>(b)</strong></i> Markiert einen Punkt am <i>Äquator</i> und fixiert ihn mit einem Finger.
+                      gerade Linie (bezogen auf den Tisch) vom Pol Richtung Äquator.<br/>
+                      <strong><i>(b)</i></strong> Markiert einen Punkt am <i>Äquator</i> und fixiert ihn mit einem Finger.
                       Rotiert die Scheibe in Erddrehrichtung um diesen Fixpunkt und zeichnet eine gerade Linie
-                      vom Äquator in Richtung der <i>anfänglichen</i> Pol‑Position.
-                <li><strong>2. Bewegungsgeschwindigkeit der Luftteilchen und Drehgeschwindigkeit (Rotation) der Erde</strong><br/>
-                 
-                  <strong><i>(a)</strong></i> Wählt einen neuen Startpunkt und wiederholt die Versuche (1a) und (1b) je zweimal von diesem neuen Startpunkt. Bei gleicher Bewegungsgeschwindigkeit der Luft soll sich die Erde einmal schneller drehen und einmal langsamer.<br>
-                   <span style="color: seagreen;"><strong><i>(b)</strong></i> Wählt einen neuen Startpunkt und wiederholt die Versuche (1a) und (1b) je zweimal von diesem neuen Startpunkt. In beiden Versuchen soll der "Zeichner" den Strich exakt <i>zwei Sekunden</i> lang zeichnen (Zeit stoppen). Bei gleicher Drehgeschwindigkeit der Erde bewegen sich die Luftmassen einmal schneller (<i>Strich schnell ziehen</i>), einmal langsamer (<i>Strich langsam ziehen</i>).</span>
-                </li>
-                <li><span style="color: seagreen;"><strong>4. Abhängigkeit der Ablenkung von der geographischen Breite</strong><br/>
-                  Schätzt die Ost-West-Ablenkung (Winkel) der Bahnkurve des Luftpakets zwischen zwei Breitenkreisen <i>in Äquatornähe</i> und <i>in Polnähe</i> (in °) und vergleicht die Werte miteinander.
-                </li></span>
+                      vom Äquator in Richtung der <i>anfänglichen</i> Pol-Position.
+                    </li>
+                    <li>
+                      <strong>2. Bewegungsgeschwindigkeit der Luftteilchen und Drehgeschwindigkeit (Rotation) der Erde</strong><br/>
+                      <strong><i>(a)</i></strong> Wählt einen neuen Startpunkt und wiederholt die Versuche (1a) und (1b) je zweimal von diesem neuen Startpunkt. Bei gleicher Bewegungsgeschwindigkeit der Luft soll sich die Erde einmal schneller drehen und einmal langsamer.<br/>
+                      <span style="color: seagreen;">
+                        <strong><i>(b)</i></strong> Wählt einen neuen Startpunkt und wiederholt die Versuche (1a) und (1b) je zweimal von diesem neuen Startpunkt. In beiden Versuchen soll der "Zeichner" den Strich exakt <i>zwei Sekunden</i> lang zeichnen (Zeit stoppen). Bei gleicher Drehgeschwindigkeit der Erde bewegen sich die Luftmassen einmal schneller (<i>Strich schnell ziehen</i>), einmal langsamer (<i>Strich langsam ziehen</i>).
+                      </span>
+                    </li>
+                    <li>
+                      <span style="color: seagreen;">
+                        <strong>3. Abhängigkeit der Ablenkung von der geographischen Breite</strong><br/>
+                        Schätzt die Ost-West-Ablenkung (Winkel) der Bahnkurve des Luftpakets zwischen zwei Breitenkreisen <i>in Äquatornähe</i> und <i>in Polnähe</i> (in °) und vergleicht die Werte miteinander.
+                      </span>
+                    </li>
+                  </ol>
+                </div>
+              </div>
 
-              </ol>
+              <!-- Rechte Spalte: zwei Bilder nebeneinander -->
+              <div class="right-column">
+                <div class="sketch-row">
+                  <figure class="sketch-card">
+                    <img src="Skizze1.png" alt="Skizze 1 zur Versuchsanordnung"/>
+                    <figcaption class="sketch-caption"><strong>Abb 1:</strong> Bei Luftbewegungen vom Pol zum Äquator wird der Pol fixiert und die Erdscheibe entsprechend der Erdrotation gedreht. Der Strich wird konsequent nach oben (in Bezug auf den Tisch) gezeichnet.</figcaption>
+                  </figure>
+
+                  <figure class="sketch-card">
+                    <img src="Skizze2.png" alt="Skizze 2 zur Versuchsanordnung"/>
+                    <figcaption class="sketch-caption"><strong>Abb 2:</strong> Bei Luftbewegungen vom Äquator zum Pol wird ein Punkt am Äquator fixiert und die Erde rotiert um diesen Punkt. Der Strich wird konsequent nach oben (in Bezug auf den Tisch) gezeichnet.</figcaption>
+                  </figure>
+                </div>
+              </div>
+
             </div>
 
-           <div class="info-box full" style="margin-top:.6rem;">
+            <!-- Messwertetabelle bleibt unten in voller Breite -->
+            <div class="info-box full" style="margin-top:1rem;">
+              <div class="info-label">Messwertetabelle</div>
               <div style="overflow-x:auto; padding-bottom:.25rem;">
                 <table class="measure-table" aria-label="Messwertetabelle Corioliskraft (transponiert)">
                   <colgroup>
                     <col style="width: 6rem;">
-		    <col style="width: 7rem;">
+                    <col style="width: 7rem;">
                     <col style="width: 5rem;">
                     <col style="width: 8rem;">
                     <col style="width: 8rem;">
@@ -341,14 +376,14 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <th  colspan="3" class="rowhead">Bewegungsrichtung der Luftteilchen</th>
+                      <th colspan="3" class="rowhead">Bewegungsrichtung der Luftteilchen</th>
                       <td><span style="font-weight:600; color:#374151;">Pol → Äquator</span></td>
                       <td><span style="font-weight:600; color:#374151;">Äquator → Pol</span></td>
                       <td><span style="font-weight:600; color:#374151;">Pol → Äquator</span></td>
                       <td><span style="font-weight:600; color:#374151;">Äquator → Pol</span></td>
                     </tr>
                     <tr>
-                      <th  colspan="3" class="rowhead">Richtung der Ablenkung (rechts/links)</th>
+                      <th colspan="3" class="rowhead">Richtung der Ablenkung (rechts/links)</th>
                       <td></td><td></td><td></td><td></td>
                     </tr>
                     <tr>
@@ -367,28 +402,27 @@
                   </tbody>
                 </table>
               </div>
-
             </div>
+
           </div>
         </section>
 
       </div>
-
     </div>
 
-     <!-- Footer with Navigation -->
-<div class="footer">
-<div class="footer-left">
-<p>Theo Schierbaum – Corioliskraft</p>
-</div>
-<div class="footer-center">
-<a class="nav-btn" href="3a.html">← Zurück</a>
-<a class="nav-btn" href="4.html">Nächste →</a>
-</div>
-<div class="footer-right">
-<p>Seite 3b</p>
-</div>
-</div>
+    <!-- Footer with Navigation -->
+    <div class="footer">
+      <div class="footer-left">
+        <p>Theo Schierbaum – Corioliskraft</p>
+      </div>
+      <div class="footer-center">
+        <a class="nav-btn" href="3a.html">← Zurück</a>
+        <a class="nav-btn" href="4.html">Nächste →</a>
+      </div>
+      <div class="footer-right">
+        <p>Seite 3b</p>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -414,7 +448,7 @@
     render();
   })();
 
-(function(){
+  (function(){
     const btn = document.getElementById('toggleGifBtn');
     const panel = document.getElementById('InfoPanel');
     if(!btn || !panel) return;
@@ -435,7 +469,6 @@
 
     render();
   })();
-
 </script>
 
 </body>

@@ -17,9 +17,13 @@
     }
     .slide-container { width:100%; min-height:720px; display:flex; flex-direction:column; }
 
-    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; }
-    .title { margin:0; font-weight:700; font-size:2.1rem; }
-    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-header {
+      background:#2A3B32; color:#fff;
+      padding:1.25rem 2rem;
+      display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    }
+    .title { margin:0; font-weight:700; font-size:2.05rem; line-height:1.1; }
+    .divider { width:110px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
 
     .slide-content {
       flex:1 1 auto;
@@ -113,6 +117,15 @@
     .task-section ol { margin-left:1.15rem; }
     .task-section li { margin:.45rem 0; line-height:1.52; font-size:.94rem; }
 
+    .formula {
+      font-family:"Courier New", monospace;
+      font-size:.9rem;
+      background:#E5E7EB;
+      padding:0 .3rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
     table.measure-table {
       width:100%;
       border-collapse:collapse;
@@ -131,6 +144,10 @@
       background:#f3f4f6;
       font-weight:700;
     }
+    table.measure-table .subhead {
+      background:#fafafa;
+      font-weight:600;
+    }
     table.measure-table .rowhead {
       text-align:left;
       font-weight:700;
@@ -138,35 +155,21 @@
       background:#fafafa;
     }
     table.measure-table td {
-      height:2.35rem;
+      height:1.9rem;
       background:#fff;
-      padding:.2rem;
     }
     table.measure-table tr.rowgrey td,
     table.measure-table tr.rowgrey th { background:#F0F0F2 !important; }
 
-    .editable-cell {
-      width:100%;
-      min-height:1.8rem;
-      border:none;
-      outline:none;
-      background:transparent;
-      text-align:center;
-      font-size:.82rem;
-      font-family:'Raleway',sans-serif;
-      color:#111827;
-      padding:.1rem .15rem;
+    .section-title {
+      display:flex; align-items:center; gap:.45rem;
+      margin:.1rem 0 .2rem 0;
+      color:#2A3B32; font-weight:700; font-size:1rem;
+      font-family:'Montserrat',sans-serif;
     }
-    .editable-cell:focus {
-      background:#ECFDF5;
-      box-shadow: inset 0 0 0 2px #10B981;
-      border-radius:4px;
-    }
-    .editable-cell:empty:before {
-      content:"";
-    }
+    .section-title i { color:#E6B400; }
 
-    .footer {
+   .footer {
       padding:1rem 3rem;
       display:grid;
       grid-template-columns: 1fr auto 1fr;
@@ -218,10 +221,6 @@
       .slide-header, .footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .material, .task-section { box-shadow:none; }
       a { color:inherit; text-decoration:none; }
-      .editable-cell:focus {
-        box-shadow:none;
-        background:transparent;
-      }
     }
   </style>
 </head>
@@ -232,42 +231,32 @@
         <h1 class="title"><i>Schülerexperiment:</i> Reibungskräfte untersuchen</h1>
         <div class="divider"></div>
       </div>
-      <strong><i><h2 style="margin:0; font-size:1.3rem;">Zeit: 25 min</h2></i></strong>
+      <strong><i><h2 style="margin:0; font-size:1.3rem;">Zeit: 20 min</h2></i></strong>
     </div>
 
     <div class="slide-content">
       <p class="tiny">
-        <strong>Aufgabe:</strong> Untersuche experimentell, von welchen Größen die <strong>Haftreibungskraft</strong> und die <strong>Gleitreibungskraft</strong> abhängen. Prüfe dabei den Einfluss von
-        <strong><i>Gewichtskraft</i></strong>, <strong><i>Unterlage</i></strong> und <strong><i>Auflagefläche</i></strong>. Vergleiche zudem mit der <strong>Rollreibungskraft</strong>.
+        <strong>Aufgabe:</strong> Untersucht experimentell, wovon die Reibungskraft abhängt. Prüft dabei den Einfluss von
+        <strong>Masse</strong>, <strong>Unterlage</strong> und <strong>Auflagefläche</strong> und vergleicht 
+        <strong>Gleitreibung</strong>, <strong>Haftreibung</strong> und <strong>Rollreibung</strong>.
       </p>
 
       <div class="materials-grid">
         <section class="material">
           <div class="mat-head">
             <span class="badge">A</span>
-            <div class="mat-title">Planung</div>
+            <div class="mat-title">Vorgehen</div>
           </div>
           <div class="mat-body">
-            <div class="info-grid">
-              <div class="info-box">
-                <div class="info-label">Material</div>
-                <ul>
-                  <li>Holzklotz (<i>m<sub>Holzklotz</sub> = 90 g</i>)</li>
-                  <li>kleiner Wagen (<i>m<sub>Wagen</sub> = 50 g</i>)</li>
-                  <li>Zusatzmassen</li>
-                  <li>Federkraftmesser</li>
-                  <li>Unterlagen (<i>Sandpapier, Teppich</i>)</li>
-                </ul>
-              </div>
+           
 
-              <div class="info-box">
-                <div class="info-label">Definitionen</div>
-                <ul>
-                  <li><strong>Haftreibung:</strong> größter Kraftwert kurz vor dem Losgleiten</li>
-                  <li><strong>Gleitreibung:</strong> Kraftwert beim gleichmäßigen Ziehen</li>
-                  <li><strong>Rollreibung:</strong> Reibung rollender Körper</li>
-                </ul>
-              </div>
+            <div class="task-section">
+              <div class="task-label"><i class="fas fa-flask mr-2"></i>Durchführung</div>
+              <ol>
+                <li><strong>A – Masse und Unterlage:</strong> Zieht den Holzklotz auf zwei Unterlagen bei gleicher Geschwindigkeit. Variiert die Beladung des Klotzes und messt jeweils Haft- und Gleitreibung.</li>
+                <li><strong>B – Auflagefläche:</strong> Dreht den Holzklotz auf eine andere Seite, sodass sich die Auflagefläche ändert. Verwendet dieselbe Unterlage und dieselbe Gesamtmasse.</li>
+                <li><strong>C – Rollreibung:</strong> Messt die Zugkraft (Rollreibungskraft) für denselben Klotz wie in A auf dem Wagen.</li>
+              </ol>
             </div>
 
             <div class="info-grid" style="margin-top:.75rem;">
@@ -276,99 +265,141 @@
                 <img src="Skizze1.png"><img src="Skizze2.png">
               </div>
             </div>
-          </div>
         </section>
 
         <section class="material">
           <div class="mat-head">
             <span class="badge">B</span>
-            <div class="mat-title">Durchführung</div>
+            <div class="mat-title">Messwertetabellen</div>
           </div>
           <div class="mat-body">
+            <div class="section-title">A – Einfluss von Masse und Unterlage</div>
+            <p class="tiny" style="margin-bottom:.35rem;">
+              Messt jeweils die maximale Zugkraft kurz vor dem Losgleiten <i>(Haftreibung)</i> und die Zugkraft beim gleichmäßigen Ziehen <i>(Gleitreibung)</i>.
+            </p>
+            <div style="overflow-x:auto; padding-bottom:.25rem;">
+              <table class="measure-table" aria-label="Teil A Reibungskraft und Masse">
+                <colgroup>
+                  <col style="width:7rem;">
+                  <col style="width:5.4rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:5rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:5rem;">
+                </colgroup>
+                <tr>
+                  <th>Unterlage</th>
+                  
+                  <th colspan="2">Tisch</th>
+                  <th colspan="2">Teppich</th>
+                  <th colspan="2">Schleifpapier</th>
+                </tr>
+                <tr class="subhead">
+                  <th>Masse (<i>Beladung</i>)<br><i>m</i> in kg</th>
+                  <th><i>[klein]</i></th>
+                  <th><i>[groß]</i></th>
+                  <th><i>[klein]</i></th>
+                  <th><i>[groß]</i></th>
+                  <th><i>[klein]</i></th>
+                  <th><i>[groß]</i></th>
+                </tr>
+                <tr>
+                  <th class="rowhead">Haftreibung<br><i>F<sub>HR</sub></i> in N</th>
+                  <td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
 
-            <div class="task-section">
-              <div class="task-label"><i class="fas fa-flask mr-2"></i>Anleitung</div>
-              <ol>
-                <li><strong>1.</strong> Ziehe den leeren Holzklotz (<i>m<sub>leer</sub> = 90 g</i>) mit dem Federkraftmesser über eine Unterlage (z.B. Tisch). Lies die Zugkraft beim Gleiten (=Gleitreibungskraft) am Federkraftmesser ab. Bestücke den Holzklotz anschließend mit Massestücken (<i>m<sub>beladen</sub> = 90 g + xx g</i>) und miss die Zugkraft erneut.</li>
-                <li><strong>2.</strong> Wiederhole Versuch 1. Beginne jedoch sehr langsam zu ziehen und lies am Federkraftmesser die Kraft ab, kurz <i>bevor</i> der Holzklotz zu gleiten beginnt (=Haftreibungskraft).</li>
-                <li><strong>3.</strong> Wiederhole die Versuche 1 und 2 mit (a) der Unterlage <i>Sandpapier</i> und (b) der Unterlage <i>Teppich</i>.</li>
-                <li><strong>4.</strong> Wiederhole die Versuche 1 und 3. Setze den Holzklotz dieses Mal jedoch auf einen Wagen (beachte: <i>m<sub>Wagen</sub> = 50 g</i>) und lies am Federkraftmesser die Zugkraft beim Rollen ab (=Rollreibungskraft).</li>
-              </ol>
+
+                <tr>
+                  <th class="rowhead">Gleitreibung<br><i>F<sub>GR</sub></i> in N</th>
+                  <td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+
+              </table>
+            </div>
+
+            <div class="section-title" style="margin-top:.9rem;">B – Einfluss der Auflagefläche</div>
+            <p class="tiny" style="margin-bottom:.35rem;">
+              Beladet den Holzklotz mit <strong>100 g</strong> und wählt für die Messungen immer <strong>dieselbe Unterlage</strong>. Dreht nur den Holzklotz <i>(hochkant=kleine Auflagefläche)</i>.
+            </p>
+            <div style="overflow-x:auto; padding-bottom:.25rem;">
+              <table class="measure-table" aria-label="Teil B Auflagefläche">
+                <colgroup>
+                  <col style="width:7.2rem;">
+                  <col style="width:5.4rem;">
+                  <col style="width:5.4rem;">
+                  <col style="width:4.5rem;">
+                  <col style="width:4.5rem;">
+                  <col style="width:4.8rem;">
+                  <col style="width:4.5rem;">
+                  <col style="width:4.5rem;">
+                  <col style="width:4.8rem;">
+                </colgroup>
+                <tr>
+                  <th>Auflagefläche</th>
+                  <th>Haftreibung<br><i>F<sub>HR</sub></i> in N</th>
+                  <th>Gleitreibung<br><i>F<sub>GR</sub></i> in N</th>
+                </tr>
+                <tr>
+                  <th class="rowhead">klein</th>
+                  <td></td><td></td>
+                </tr>
+                <tr>
+                  <th class="rowhead">groß</th>
+                  <td></td><td></td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="section-title" style="margin-top:.9rem;">C – Gleitreibung und Rollreibung vergleichen</div>
+            <p class="tiny" style="margin-bottom:.35rem;">
+              Stellt den Holzklotz auf einen Wagen und messt für dieselben Massen und Unterlagen wie in (A) die Rollreibungskraft.
+            </p>
+            <div style="overflow-x:auto; padding-bottom:.25rem;">
+              <table class="measure-table" aria-label="Teil A Reibungskraft und Masse">
+                <colgroup>
+                  <col style="width:7rem;">
+                  <col style="width:5.4rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:5rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:4.7rem;">
+                  <col style="width:5rem;">
+                </colgroup>
+                <tr>
+                  <th>Unterlage</th>
+                  
+                  <th colspan="2">Tisch</th>
+                  <th colspan="2">Teppich</th>
+                  <th colspan="2">Schleifpapier</th>
+                </tr>
+                <tr class="subhead">
+                  <th>Masse (<i>Beladung</i>)<br><i>m</i> in kg</th>
+                  <th><i>[klein]</i></th>
+                  <th><i>[groß]</i></th>
+                  <th><i>[klein]</i></th>
+                  <th><i>[groß]</i></th>
+                  <th><i>[klein]</i></th>
+                  <th><i>[groß]</i></th>
+                </tr
+
+                <tr>
+                  <th class="rowhead">Rollreibung<br><i>F<sub>RR</sub></i> in N</th>
+                  <td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+
+              </table>
             </div>
 
             <div class="info-box full" style="margin-top:.8rem;">
-              <div style="overflow-x:auto; padding-bottom:.25rem;">
-                <table class="measure-table" aria-label="Teil A Reibungskraft und Masse">
-                  <tr>
-                    <th rowspan="2">Unterlage</th>
-                    <th rowspan="2">Gewichtskraft<br><i>F<sub>G</sub></i> in N<br><br>(F<sub>G</sub> = m · 9,81 N/kg)</th>
-                    <th colspan="2">Haftreibung<br><i>F<sub>HR</sub></i> in N</th>
-                    <th colspan="2">Gleitreibung<br><i>F<sub>GR</sub></i> in N</th>
-                    <th rowspan="2">Rollreibung<br><i>F<sub>RR</sub></i> in N</th>
-                  </tr>
-                  <tr class="rowgrey">
-                    <td>kleine<br>Auflagefläche</td>
-                    <td>große<br>Auflagefläche</td>
-                    <td>kleine<br>Auflagefläche</td>
-                    <td>große<br>Auflagefläche</td>
-                  </tr>
-                  <tr>
-                    <th class="rowhead" rowspan="2">Tisch</th>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                  </tr>
-                  <tr>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                  </tr>
-
-                  <tr>
-                    <th class="rowhead" rowspan="2">Sandpapier</th>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                  </tr>
-                  <tr>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                  </tr>
-
-                  <tr>
-                    <th class="rowhead" rowspan="2">Teppich</th>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                  </tr>
-                  <tr>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                    <td><div class="editable-cell" contenteditable="true"></div></td>
-                  </tr>
-                </table>
-              </div>
+              <div class="info-label">Auswertung</div>
+              <ul>
+                <li>Formuliert zu jedem Teilversuch ein Ergebnis in einem vollständigen Satz.</li>
+                
+              </ul>
             </div>
-
           </div>
         </section>
       </div>

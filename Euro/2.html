@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Der Euro als Gemeinschaftswährung – Vertiefung</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container { width:100%; min-height:100vh; display:flex; flex-direction:column; }
+    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .title { margin:0; font-weight:700; font-size:2.05rem; letter-spacing:-.02em; }
+    .subtitle { font-size:1rem; font-weight:400; opacity:.86; margin-top:.2rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content { flex:1 1 auto; padding:1.25rem 2rem 1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+    .materials-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .material { background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05); overflow:hidden; display:flex; flex-direction:column; }
+    .mat-head { display:flex; align-items:center; gap:.6rem; padding:.7rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+    .badge { background:#2A3B32; color:#fff; font-weight:700; font-size:.9rem; padding:.15rem .55rem; border-radius:6px; min-width:2.6rem; text-align:center; }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; line-height:1.25; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; flex:1; }
+    .tiny { font-size:.84rem; color:#4B5563; line-height:1.45; }
+    .tiny strong { color:#111827; }
+    .small { font-size:.92rem; color:#374151; line-height:1.52; }
+    .chart-wrapper { position:relative; width:100%; height:270px; }
+    .chart-wrapper-small { position:relative; width:100%; height:245px; }
+    .full-span { grid-column:1 / -1; }
+    .two-col { display:grid; grid-template-columns:1.25fr .95fr; gap:1rem; align-items:stretch; }
+    .source { margin-top:.55rem; font-size:.72rem; color:#6B7280; font-family:'Raleway',sans-serif; line-height:1.35; }
+    .note { margin-top:.65rem; background:#FEF3C7; border:1px solid #FBBF24; border-radius:8px; padding:.45rem .6rem; }
+
+    .image-placeholder { margin-top:.7rem; border:2px dashed #9CA3AF; background:#F9FAFB; border-radius:12px; min-height:118px; display:flex; align-items:center; justify-content:center; text-align:center; color:#4B5563; font-family:'Raleway',sans-serif; }
+    .image-placeholder .img-name { font-weight:700; color:#2A3B32; font-size:.95rem; }
+    .image-placeholder .img-hint { font-size:.78rem; color:#6B7280; margin-top:.15rem; }
+    .mini-note { background:#E9F0EC; border-left:4px solid #2A3B32; border-radius:8px; padding:.55rem .7rem; margin-top:.6rem; }
+
+    /* Info- und Begriffsbausteine */
+    .fact-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.55rem; margin-top:.65rem; }
+    .fact-item { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:.55rem .65rem; display:flex; gap:.55rem; align-items:flex-start; }
+    .fact-icon { color:#2A3B32; font-size:1rem; margin-top:.12rem; flex-shrink:0; }
+    .fact-title { color:#2A3B32; font-size:.83rem; font-weight:700; margin-bottom:.12rem; }
+    .fact-text { font-size:.78rem; color:#374151; line-height:1.4; }
+    .tag-wrap { margin-top:.65rem; display:flex; flex-wrap:wrap; gap:.25rem; }
+    .tag { display:inline-block; background:#E9F0EC; color:#2A3B32; font-size:.74rem; font-weight:600; padding:.12rem .45rem; border-radius:4px; }
+    .tag-gold { background:#FEF3C7; color:#7C5B00; border:1px solid #FBBF24; }
+
+    /* Tabellen */
+    table.compact { width:100%; border-collapse:separate; border-spacing:0; font-size:.79rem; }
+    table.compact th, table.compact td { padding:.38rem .48rem; border-bottom:1px solid #E5E7EB; text-align:left; vertical-align:top; }
+    table.compact th { background:#2A3B32; color:#fff; font-weight:600; }
+    table.compact tr:nth-child(even) td { background:#F9FAFB; }
+    table.compact td:first-child { font-weight:700; color:#2A3B32; white-space:nowrap; }
+    table.compare { width:100%; border-collapse:separate; border-spacing:0; font-size:.8rem; }
+    .compare th, .compare td { padding:.42rem .52rem; border-bottom:1px solid #E5E7EB; text-align:left; vertical-align:top; }
+    .compare th { background:#2A3B32; color:#fff; font-weight:600; }
+    .compare tr:nth-child(even) td { background:#F9FAFB; }
+    .compare td:first-child { font-weight:700; color:#2A3B32; width:22%; }
+    .plus { color:#16A34A; font-weight:700; }
+    .minus { color:#DC2626; font-weight:700; }
+
+    /* Prozessdiagramme */
+    .flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:.45rem; margin:.3rem 0 .5rem; }
+    .flow-box { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:10px; padding:.6rem .7rem; min-height:78px; }
+    .flow-title { color:#2A3B32; font-weight:700; font-size:.84rem; margin-bottom:.2rem; }
+    .flow-text { color:#374151; font-size:.78rem; line-height:1.42; }
+    .flow-arrow { display:flex; align-items:center; justify-content:center; color:#9CA3AF; font-size:1.25rem; }
+    .dilemma-grid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+    .dilemma-card { border-radius:10px; padding:.65rem .75rem; border:1px solid #E5E7EB; background:#F9FAFB; }
+    .dilemma-card.good { background:#ECFDF5; border-color:#A7F3D0; }
+    .dilemma-card.risk { background:#FEF2F2; border-color:#FECACA; }
+    .dilemma-title { font-weight:700; font-size:.86rem; color:#2A3B32; margin-bottom:.25rem; }
+    .dilemma-card.risk .dilemma-title { color:#991B1B; }
+    .dilemma-text { font-size:.8rem; color:#374151; line-height:1.45; }
+
+    /* Raumkarten */
+    .region-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.55rem; }
+    .region-card { border:1px solid #E5E7EB; background:#F9FAFB; border-radius:10px; padding:.62rem .72rem; }
+    .region-title { color:#2A3B32; font-weight:700; font-size:.85rem; margin-bottom:.2rem; }
+    .region-text { font-size:.78rem; color:#374151; line-height:1.42; }
+
+    /* Aufgaben */
+    .task-section { position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:1rem; font-family:'Raleway',sans-serif; margin-top:.5rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px; font-weight:600; font-size:.9rem; }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.4rem 0; line-height:1.5; font-size:.9rem; }
+
+    .footer { padding:1rem 3rem; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; color:#666; font-size:.9rem; font-family:'Raleway',sans-serif; flex-shrink:0; background:#F5F5F5; }
+    .footer-left { justify-self:start; }
+    .footer-center { display:flex; gap:1rem; justify-self:center; }
+    .footer-right { justify-self:end; }
+    .nav-btn { display:inline-flex; align-items:center; justify-content:center; background-color:#2A3B32; color:white; padding:.5rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:.9rem; transition:all .2s ease; box-shadow:0 2px 4px rgba(0,0,0,.1); min-width:100px; }
+    .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); box-shadow:0 4px 6px rgba(0,0,0,.15); }
+
+    @media (max-width:1100px) { .two-col{ grid-template-columns:1fr; } .region-grid{ grid-template-columns:1fr; } }
+    @media (max-width:980px) { .materials-grid{ grid-template-columns:1fr; } .full-span{ grid-column:auto; } .fact-grid{ grid-template-columns:1fr; } .flow{ grid-template-columns:1fr; } .flow-arrow{ transform:rotate(90deg); padding:.1rem 0; } .dilemma-grid{ grid-template-columns:1fr; } .footer{ grid-template-columns:1fr; gap:.6rem; text-align:center; } .footer-left,.footer-center,.footer-right{ justify-self:center; } }
+  </style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="slide-header">
+    <div>
+      <h1 class="title">Der Euro als Gemeinschaftswährung</h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light">Geographie | Klasse 10</p>
+  </div>
+
+  <div class="slide-content">
+    <div class="materials-grid">
+
+      <!-- M1: Grundidee und Vertiefung -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M1</div>
+          <div class="mat-title">Was ist eine Gemeinschaftswährung?</div>
+        </div>
+        <div class="mat-body">
+          <p class="small">Der <strong>Euro (€)</strong> ist mehr als ein Zahlungsmittel: Er verbindet Staaten mit unterschiedlichen Wirtschaftsstrukturen zu einem gemeinsamen <strong>Währungsraum</strong>. Innerhalb dieses Raums entfallen Wechselkurse; gleichzeitig gibt es eine gemeinsame Geldpolitik für alle Euro-Länder.</p>
+          <div class="fact-grid">
+            <div class="fact-item">
+              <i class="fas fa-coins fact-icon"></i>
+              <div><div class="fact-title">Gemeinsames Geld</div><div class="fact-text">Preise, Löhne, Kredite und Ersparnisse werden in derselben Währung berechnet.</div></div>
+            </div>
+            <div class="fact-item">
+              <i class="fas fa-landmark fact-icon"></i>
+              <div><div class="fact-title">Eine Geldpolitik</div><div class="fact-text">Die EZB setzt Leitzinsen für den gesamten Euro-Raum; Ziel ist Preisstabilität.</div></div>
+            </div>
+            <div class="fact-item">
+              <i class="fas fa-equals fact-icon"></i>
+              <div><div class="fact-title">Euro ≠ EU</div><div class="fact-text">2026 nutzen 21 von 27 EU-Staaten den Euro; einige EU-Länder behalten eigene Währungen.</div></div>
+            </div>
+            <div class="fact-item">
+              <i class="fas fa-clipboard-check fact-icon"></i>
+              <div><div class="fact-title">Beitrittskriterien</div><div class="fact-text">Staaten müssen u.a. stabile Preise, solide Staatsfinanzen und Wechselkursstabilität nachweisen.</div></div>
+            </div>
+          </div>
+          <div class="note">
+            <p class="tiny"><strong>Vertiefung:</strong> Die zentrale Frage lautet nicht nur „Ist der Euro praktisch?“, sondern: <em>Passt eine gemeinsame Währung zu sehr unterschiedlichen Regionen Europas?</em></p>
+          </div>
+          <div class="image-placeholder" aria-label="Bildplatzhalter für Bild.png">
+            <div>
+             <img src="Bild.png">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- M2: Liniendiagramm mit linearer Zeitachse -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M2</div>
+          <div class="mat-title">Euro-Raum 1999–2026: Entwicklung der Mitgliedstaaten</div>
+        </div>
+        <div class="mat-body">
+           <div class="chart-wrapper">
+            <canvas id="euroMembersChart"></canvas>
+          </div>
+          <p class="source">Quelle: Europäische Kommission / EZB, Stand Mai 2026.</p>
+          <div>
+            <table class="compact">
+              <thead>
+                <tr><th>Jahr</th><th>Neue Euro-Länder</th><th>Gesamtzahl</th><th>räumliche Bedeutung</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1999</td><td>Belgien, Deutschland, Finnland, Frankreich, Irland, Italien, Luxemburg, Niederlande, Österreich, Portugal, Spanien</td><td>11</td><td>Start vor allem in West-, Nord- und Südeuropa</td></tr>
+                <tr><td>2001</td><td>Griechenland</td><td>12</td><td>Erweiterung im südöstlichen Mittelmeerraum</td></tr>
+                <tr><td>2007</td><td>Slowenien</td><td>13</td><td>erstes neues EU-Mitglied Mittel-/Südosteuropas im Euro</td></tr>
+                <tr><td>2008</td><td>Malta, Zypern</td><td>15</td><td>Inselstaaten im Mittelmeer werden Teil des Währungsraums</td></tr>
+                <tr><td>2009</td><td>Slowakei</td><td>16</td><td>Ausbreitung nach Mitteleuropa</td></tr>
+                <tr><td>2011</td><td>Estland</td><td>17</td><td>Beginn der baltischen Euro-Erweiterung</td></tr>
+                <tr><td>2014</td><td>Lettland</td><td>18</td><td>baltischer Raum wird stärker eingebunden</td></tr>
+                <tr><td>2015</td><td>Litauen</td><td>19</td><td>alle drei baltischen Staaten im Euro-Raum</td></tr>
+                <tr><td>2023</td><td>Kroatien</td><td>20</td><td>Adriaraum stärker integriert</td></tr>
+                <tr><td>2026</td><td>Bulgarien</td><td>21</td><td>weitere Ausdehnung nach Südosteuropa</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small mt-3"><strong>Nicht-Euro-Länder der EU 2026:</strong> Dänemark, Polen, Rumänien, Schweden, Tschechien und Ungarn nutzen weiterhin nationale Währungen. Damit bleibt Europa währungspolitisch zweigeteilt.</p>
+        </div>
+
+      </div>
+
+
+      <!-- M3: Wirkungsmodell Vorteile -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M3</div>
+          <div class="mat-title">Wirkungsmodell: Warum erleichtert der Euro den Binnenmarkt?</div>
+        </div>
+        <div class="mat-body">
+          <div class="flow">
+            <div class="flow-box">
+              <div class="flow-title"><i class="fas fa-exchange-alt mr-1"></i>1. Wechselkurse entfallen</div>
+              <div class="flow-text">Unternehmen müssen innerhalb des Euro-Raums keine Währungen umtauschen und weniger Kursschwankungen absichern.</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+              <div class="flow-title"><i class="fas fa-tags mr-1"></i>2. Preise werden vergleichbarer</div>
+              <div class="flow-text">Konsumenten und Unternehmen können Angebote aus anderen Euro-Ländern leichter vergleichen.</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+              <div class="flow-title"><i class="fas fa-truck mr-1"></i>3. Handel wird planbarer</div>
+              <div class="flow-text">Grenzüberschreitende Lieferketten, Investitionen und Kredite lassen sich mit geringerem Währungsrisiko kalkulieren.</div>
+            </div>
+          </div>
+          <div class="mini-note">
+            <p class="tiny"><strong>Wichtig:</strong> Der Euro erklärt den europäischen Handel nicht allein. Auch Binnenmarkt, Infrastruktur, EU-Regeln, Unternehmensnetzwerke und Nachbarschaftseffekte sind entscheidend.</p>
+          </div><br><br>
+          <p class="tiny mb-2">EU-Warenexporte 2025 in Milliarden Euro. Die Daten beziehen sich auf die EU insgesamt, nicht nur auf den Euro-Raum.</p>
+          <div class="chart-wrapper-small">
+            <canvas id="tradeChart"></canvas>
+          </div>
+          <p class="source">Quelle: Eurostat, vorläufige Jahreswerte 2025. Intra-EU-Handel: 4.143,2 Mrd. €; Extra-EU-Exporte: 2.644,1 Mrd. €.</p>
+        </div>
+      </div>
+
+      <!-- M4: Chancen und Herausforderungen -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M4</div>
+          <div class="mat-title">Chancen und Herausforderungen des Euro</div>
+        </div>
+        <div class="mat-body">
+          <table class="compare">
+            <thead>
+              <tr><th>Bereich</th><th><span class="plus">+</span> Chancen</th><th><span class="minus">−</span> Herausforderungen / Grenzen</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alltag &amp; Reisen</td>
+                <td>Menschen können in vielen Ländern ohne Geldwechsel bezahlen. Preise für Hotels, Bahnfahrten oder Produkte lassen sich direkter vergleichen.</td>
+                <td>Preissteigerungen werden nach Währungsumstellungen oft besonders stark wahrgenommen; außerdem bleiben Lebenshaltungskosten regional sehr verschieden.</td>
+              </tr>
+              <tr>
+                <td>Unternehmen &amp; Handel</td>
+                <td>Wechselgebühren und Wechselkursrisiken innerhalb des Euro-Raums entfallen. Das erleichtert Kalkulation, Lieferverträge und Investitionen über Grenzen hinweg.</td>
+                <td>Der Euro beseitigt keine Unterschiede bei Löhnen, Steuern, Energiepreisen, Infrastruktur oder Produktivität. Wettbewerb kann deshalb regionalen Druck erhöhen.</td>
+              </tr>
+              <tr>
+                <td>Binnenmarkt</td>
+                <td>Eine gemeinsame Währung ergänzt den EU-Binnenmarkt: Waren, Dienstleistungen, Kapital und Arbeit können leichter über Grenzen fließen.</td>
+                <td>Der Euro ist nicht allein für Handel verantwortlich. Auch Lage, Verkehrsnetze, gemeinsame Regeln, Unternehmensnetzwerke und politische Stabilität spielen eine Rolle.</td>
+              </tr>
+              <tr>
+                <td>Stabilität</td>
+                <td>Eine große gemeinsame Währung kann Vertrauen schaffen, Kapitalmärkte vertiefen und den Euro-Raum international sichtbarer machen.</td>
+                <td>Krisen in einzelnen Ländern können schneller auf andere Länder übergreifen, weil Banken, Staaten und Unternehmen finanziell eng verflochten sind.</td>
+              </tr>
+              <tr>
+                <td>Wirtschaftspolitik</td>
+                <td>Euro-Staaten müssen stärker zusammenarbeiten und gemeinsame Regeln beachten. Das kann Haushaltsdisziplin und Koordination fördern.</td>
+                <td>Ein einzelnes Land kann seine Währung nicht mehr abwerten, um Exporte billiger zu machen. Anpassung muss über Preise, Löhne, Produktivität oder staatliche Reformen erfolgen.</td>
+              </tr>
+              <tr>
+                <td>Raumentwicklung</td>
+                <td>Grenzräume, exportstarke Industrieregionen und Tourismusregionen können von leichterem Zahlungsverkehr und größerem Absatzraum profitieren.</td>
+                <td>Schwächere Regionen profitieren nicht automatisch. Ohne Investitionen in Bildung, Infrastruktur und Wettbewerbsfähigkeit können Unterschiede bestehen bleiben oder wachsen.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="note">
+            <p class="tiny"><strong>Kernproblem:</strong> Der Euro verbindet sehr unterschiedliche Räume mit einer gemeinsamen Geldpolitik. Das schafft Vorteile für Handel und Alltag, macht aber regionale Unterschiede nicht automatisch kleiner.</p>
+          </div>
+        </div>
+      </div>
+
+
+      
+
+    </div>
+
+    <!-- Aufgaben -->
+    <section class="task-section">
+      <div class="task-label">Aufgaben</div>
+      <ol>
+        <li>1. <strong>Beschreibe</strong> M2 und M2+: In welchen Beitrittsphasen breitete sich der Euro-Raum räumlich aus? Arbeite mindestens drei Erweiterungsschritte mit Ländern und Regionen heraus.</li>
+        <li>2. <strong>Erkläre</strong> mithilfe von M3, wie aus dem Wegfall von Wechselkursen Vorteile für Unternehmen und Verbraucher entstehen. Nutze die Begriffe <em>Transaktionskosten</em>, <em>Preistransparenz</em> und <em>Planungssicherheit</em>.</li>
+        <li>3. <strong>Analysiere</strong> M4: Warum kann eine gemeinsame Geldpolitik für unterschiedliche Volkswirtschaften problematisch sein? Erkläre dies an einem selbst gewählten Beispiel, z.B. Immobilienboom, Exportkrise oder hohe Staatsverschuldung.</li>
+        <li>4. <strong>Werte</strong> M5 aus: Was zeigt der Vergleich von Intra-EU- und Extra-EU-Handel über die Bedeutung europäischer Binnenmärkte? Formuliere auch eine Einschränkung der Aussagekraft.</li>
+        <li>5. <strong>Beurteile</strong> mithilfe aller Materialien: Ist der Euro eher ein Motor räumlicher Integration oder ein Verstärker regionaler Ungleichheiten? Begründe dein Urteil mit mindestens vier Argumenten.</li>
+      </ol>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-left"><p>Geographie – Europa und wirtschaftliche Räume</p></div>
+    <div class="footer-center">
+      <a class="nav-btn" href="index.html">← Übersicht</a>
+      <a class="nav-btn" href="2.html">Weiter →</a>
+    </div>
+    <div class="footer-right"><p>Vertiefung</p></div>
+  </div>
+</div>
+
+<script>
+  // M2: Liniendiagramm mit linearer Zeitachse
+  const memberData = [
+    { x: 1999, y: 11 },
+    { x: 2001, y: 12 },
+    { x: 2007, y: 13 },
+    { x: 2008, y: 15 },
+    { x: 2009, y: 16 },
+    { x: 2011, y: 17 },
+    { x: 2014, y: 18 },
+    { x: 2015, y: 19 },
+    { x: 2023, y: 20 },
+    { x: 2026, y: 21 }
+  ];
+  const joinedCountriesByYear = {
+    1999: 'Startländer: Belgien, Deutschland, Finnland, Frankreich, Irland, Italien, Luxemburg, Niederlande, Österreich, Portugal, Spanien',
+    2001: '+ Griechenland',
+    2007: '+ Slowenien',
+    2008: '+ Malta, Zypern',
+    2009: '+ Slowakei',
+    2011: '+ Estland',
+    2014: '+ Lettland',
+    2015: '+ Litauen',
+    2023: '+ Kroatien',
+    2026: '+ Bulgarien'
+  };
+  const importantYears = [1999, 2001, 2007, 2008, 2009, 2011, 2014, 2015, 2023, 2026];
+
+  new Chart(document.getElementById('euroMembersChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Anzahl der Euro-Länder',
+        data: memberData,
+        borderColor: '#2A3B32',
+        backgroundColor: 'rgba(42,59,50,.12)',
+        borderWidth: 3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: '#E6B400',
+        pointBorderColor: '#2A3B32',
+        pointBorderWidth: 2,
+        tension: .15,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      parsing: false,
+      plugins: {
+        legend: { labels: { font: { family: 'Montserrat' } } },
+        tooltip: {
+          callbacks: {
+            title: ctx => 'Jahr ' + ctx[0].parsed.x,
+            label: ctx => ctx.parsed.y + ' Euro-Länder',
+            afterLabel: ctx => joinedCountriesByYear[ctx.parsed.x] || ''
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          min: 1999,
+          max: 2026,
+          title: { display: true, text: 'Jahr (lineare Zeitachse)', font: { family: 'Montserrat', weight: '600' } },
+          grid: { color: 'rgba(209,213,219,.45)' },
+          ticks: {
+            stepSize: 1,
+            autoSkip: false,
+            maxRotation: 55,
+            minRotation: 55,
+            font: { family:'Montserrat', size: 8 },
+            callback: value => importantYears.includes(value) ? value : ''
+          }
+        },
+        y: {
+          title: { display: true, text: 'Mitgliedstaaten im Euro-Raum', font: { family: 'Montserrat', weight: '600' } },
+          min: 10,
+          max: 22,
+          ticks: { stepSize: 1, precision: 0 },
+          grid: { color: 'rgba(209,213,219,.5)' }
+        }
+      }
+    }
+  });
+
+  // M5: Handelsverflechtung als Datenbezug
+  new Chart(document.getElementById('tradeChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Intra-EU-Handel', 'Extra-EU-Exporte'],
+      datasets: [{
+        label: 'Warenexporte 2025 (Mrd. €)',
+        data: [4143.2, 2644.1],
+        backgroundColor: ['rgba(42,59,50,.84)', 'rgba(230,180,0,.82)'],
+        borderColor: ['#2A3B32', '#B88900'],
+        borderWidth: 1,
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.parsed.y.toLocaleString('de-DE') + ' Mrd. €'
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display:false }, ticks: { font: { family:'Montserrat', size:11 } } },
+        y: {
+          title: { display: true, text: 'Mrd. Euro', font: { family:'Montserrat', weight:'600' } },
+          beginAtZero: true,
+          grid: { color:'rgba(209,213,219,.5)' },
+          ticks: { callback: value => value.toLocaleString('de-DE') }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

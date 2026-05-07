@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Übungstest Physik Klasse 9: Newtonsche Gesetze, Reibung und Zentripetalkraft</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)'], ['$', '$']], displayMath: [['\\[','\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root{
+      --green:#2A3B32;
+      --green2:#3D5245;
+      --gold:#E6B400;
+      --paper:#F5F5F5;
+      --light:#E9F0EC;
+      --border:#D1D5DB;
+      --text:#1F2937;
+      --muted:#6B7280;
+      --white:#FFFFFF;
+      --success:#10B981;
+      --success-bg:#ECFDF5;
+    }
+
+    *{box-sizing:border-box;}
+
+    html,body{
+      margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+      background:var(--paper);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+      line-height:1.48;
+    }
+
+    .page{
+      width:100%;
+      max-width:none;
+      margin:0;
+      padding:clamp(12px,2vw,28px);
+    }
+
+    header{
+      width:100%;
+      background:var(--green);
+      color:#fff;
+      border-radius:18px;
+      padding:24px clamp(18px,3vw,38px);
+      box-shadow:0 5px 18px rgba(0,0,0,.12);
+    }
+
+    header h1{
+      margin:0;
+      font-size:clamp(1.45rem,2.2vw,2.25rem);
+      line-height:1.15;
+    }
+
+    header .sub{
+      margin-top:8px;
+      color:#F3F4F6;
+      font-size:1.02rem;
+    }
+
+    .divider{
+      width:105px;
+      height:5px;
+      background:var(--gold);
+      border-radius:999px;
+      margin-top:14px;
+    }
+
+    .info-strip{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin:18px 0;
+    }
+
+    .info-box{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px 14px;
+      box-shadow:0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .info-label{
+      font-size:.76rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:4px;
+    }
+
+    .info-value{
+      font-weight:800;
+      color:var(--green);
+    }
+
+    .notice{
+      background:#fff;
+      border-left:7px solid var(--gold);
+      border-radius:12px;
+      padding:14px 16px;
+      margin:16px 0 22px 0;
+      box-shadow:0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .notice p{margin:.2rem 0;}
+
+    .formula-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .formula-chip{
+      background:#F9FAFB;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:7px 12px;
+      font-weight:700;
+      color:var(--green);
+      white-space:nowrap;
+    }
+
+    .task{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      margin:18px 0;
+      overflow:hidden;
+      box-shadow:0 2px 10px rgba(0,0,0,.05);
+      width:100%;
+    }
+
+    .task-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:#F9FAFB;
+      border-bottom:1px solid var(--border);
+      padding:14px 18px;
+    }
+
+    .task-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      color:var(--green);
+      font-size:1.12rem;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:44px;
+      height:32px;
+      border-radius:999px;
+      background:var(--green);
+      color:#fff;
+      font-weight:800;
+      font-size:.9rem;
+    }
+
+    .points{
+      background:var(--gold);
+      color:var(--green);
+      font-weight:900;
+      border-radius:999px;
+      padding:6px 12px;
+      white-space:nowrap;
+    }
+
+    .task-body{
+      padding:18px clamp(16px,2vw,26px) 20px;
+    }
+
+    .task-body p{
+      margin-top:0;
+      max-width:125ch;
+    }
+
+    .task-block{
+      background:var(--light);
+      border:1px solid #C9D5CF;
+      border-radius:12px;
+      padding:12px 14px;
+      margin:12px 0;
+    }
+
+    .task-block strong{color:var(--green);}
+
+    ol.parts{
+      margin:10px 0 0 1.3rem;
+      padding:0;
+    }
+
+    ol.parts li{
+      margin:.45rem 0;
+      padding-left:.2rem;
+    }
+
+    .solution-btn{
+      margin-top:12px;
+      background:var(--green);
+      color:#fff;
+      border:none;
+      border-radius:999px;
+      padding:10px 15px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 2px 5px rgba(0,0,0,.15);
+    }
+
+    .solution-btn:hover{background:var(--green2);}
+    .solution-btn:active{transform:translateY(1px);}
+
+    .solution{
+      display:none;
+      margin-top:14px;
+      background:#FFFFFF;
+      border:2px solid var(--green);
+      border-radius:14px;
+      padding:15px 16px;
+    }
+
+    .solution.visible{display:block;}
+
+    .solution h3{
+      margin:0 0 9px 0;
+      color:var(--green);
+      font-size:1.05rem;
+    }
+
+    .solution h4{
+      margin:12px 0 6px 0;
+      color:var(--green);
+    }
+
+    .step{
+      background:#F9FAFB;
+      border:1px solid #E5E7EB;
+      border-radius:10px;
+      padding:10px 12px;
+      margin:8px 0;
+    }
+
+    .result{
+      background:var(--success-bg);
+      border-left:6px solid var(--success);
+      border-radius:10px;
+      padding:9px 12px;
+      margin:10px 0;
+      font-weight:700;
+    }
+
+    .points-table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      font-size:.95rem;
+    }
+
+    .points-table th,.points-table td{
+      border:1px solid var(--border);
+      padding:8px 9px;
+      text-align:left;
+      vertical-align:top;
+    }
+
+    .points-table th{
+      background:#F3F4F6;
+      color:var(--green);
+    }
+
+    .points-table td:last-child,
+    .points-table th:last-child{
+      width:110px;
+      text-align:center;
+      font-weight:800;
+    }
+
+    .total{
+      background:#fff;
+      border:2px solid var(--green);
+      border-radius:14px;
+      padding:13px 16px;
+      margin:22px 0;
+      font-weight:800;
+      text-align:right;
+      color:var(--green);
+    }
+
+    footer{
+      color:var(--muted);
+      font-size:.9rem;
+      text-align:center;
+      margin:26px 0 8px 0;
+    }
+
+    @media (max-width:820px){
+      .info-strip{grid-template-columns:1fr;}
+      .task-head{align-items:flex-start;flex-direction:column;}
+      .formula-chip{white-space:normal;}
+    }
+
+    @media print{
+      body{background:#fff;}
+      .page{padding:0;}
+      header,.task,.notice,.info-box{box-shadow:none;}
+      .solution-btn{display:none;}
+      .solution{display:none !important;}
+      .task{break-inside:avoid;page-break-inside:avoid;}
+      a[href]:after{content:"";}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>Übungstest: Newtonsche Gesetze, Reibung und Zentripetalkraft</h1>
+      <div class="sub">Klasse 9 · Physik · Theo Schierbaum · 25 Punkte</div>
+      <div class="divider"></div>
+    </header>
+
+    <section class="info-strip" aria-label="Testdaten">
+      <div class="info-box"><div class="info-label">Bearbeitungszeit</div><div class="info-value">45 Minuten</div></div>
+      <div class="info-box"><div class="info-label">Hilfsmittel</div><div class="info-value">Taschenrechner · Formelsammlung nach Vorgabe</div></div>
+      <div class="info-box"><div class="info-label">Gesamtpunktzahl</div><div class="info-value">25 Punkte</div></div>
+    </section>
+
+    <section class="notice">
+      <p><strong>Hinweise:</strong> Rechne mit \(g=9{,}81\,\mathrm{m/s^2}\). Runde sinnvoll und schreibe in den Rechnungen Ansätze, eingesetzte Werte und Einheiten auf.</p>
+      <div class="formula-row">
+        <span class="formula-chip">\(F_G=m\cdot g\)</span>
+        <span class="formula-chip">\(F_R=\mu\cdot F_G\) auf waagerechter Fläche</span>
+        <span class="formula-chip">\(F_\text{res}=m\cdot a\)</span>
+        <span class="formula-chip">\(F_z=m\cdot\frac{v^2}{r}\)</span>
+        <span class="formula-chip">\(\omega=\frac{v}{r}\)</span>
+        <span class="formula-chip">gleichförmig: \(F_\text{res}=0\)</span>
+      </div>
+    </section>
+
+    <article class="task" id="aufgabe1">
+      <div class="task-head">
+        <div class="task-title"><span class="badge">1</span> Gleichmäßig geschobener Werkzeugkoffer</div>
+        <div class="points">5 Punkte</div>
+      </div>
+      <div class="task-body">
+        <p>Ein schwerer Werkzeugkoffer wird auf einem waagerechten Boden mit einer horizontalen Schubkraft von \(F_\text{Schub}=120\,\mathrm{N}\) geschoben. Er bewegt sich gleichförmig, also mit konstanter Geschwindigkeit. Die Gewichtskraft des Werkzeugkoffers beträgt \(F_G=392{,}4\,\mathrm{N}\).</p>
+        <div class="task-block"><strong>Aufgaben:</strong>
+          <ol class="parts">
+            <li>Berechne die resultierende Kraft \(F_\text{res}\). <strong>(1 P)</strong></li>
+            <li>Berechne die Reibungskraft \(F_R\). <strong>(1 P)</strong></li>
+            <li>Berechne die Masse \(m\) des Werkzeugkoffers. <strong>(2 P)</strong></li>
+            <li>Berechne den Reibungskoeffizienten \(\mu\). <strong>(1 P)</strong></li>
+          </ol>
+        </div>
+        <button class="solution-btn" type="button" onclick="toggleSolution('sol1', this)">Musterlösung anzeigen</button>
+        <section class="solution" id="sol1">
+          <h3>Musterlösung zu Aufgabe 1</h3>
+          <div class="step"><strong>Ansatz:</strong> Bei gleichförmiger Bewegung ist die resultierende Kraft in horizontaler Richtung \(0\,\mathrm{N}\). Daher ist die Reibungskraft betragsmäßig so groß wie die Schubkraft. Auf waagerechter Fläche gilt \(F_R=\mu\cdot F_G\).</div>
+          <div class="step"><strong>Einsetzen und Rechnen:</strong><br>
+            \[F_\text{res}=0\,\mathrm{N}\]
+            \[F_R=F_\text{Schub}=120\,\mathrm{N}\]
+            \[m=\frac{F_G}{g}=\frac{392{,}4\,\mathrm{N}}{9{,}81\,\mathrm{m/s^2}}=40{,}0\,\mathrm{kg}\]
+            \[\mu=\frac{F_R}{F_G}=\frac{120\,\mathrm{N}}{392{,}4\,\mathrm{N}}\approx0{,}306\]
+          </div>
+          <div class="result">Ergebnis: \(F_\text{res}=0\,\mathrm{N}\), \(F_R=120\,\mathrm{N}\), \(m=40{,}0\,\mathrm{kg}\), \(\mu\approx0{,}31\).</div>
+          <h4>Punktevergabe</h4>
+          <table class="points-table">
+            <tr><th>Teilleistung</th><th>Punkte</th></tr>
+            <tr><td>Resultierende Kraft korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Reibungskraft korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Masse mit Formel, Einsetzen, Rechnung und Einheit berechnet</td><td>2</td></tr>
+            <tr><td>Reibungskoeffizient mit Formel und Einsetzen berechnet</td><td>1</td></tr>
+            <tr><th>Summe</th><th>5</th></tr>
+          </table>
+        </section>
+      </div>
+    </article>
+
+    <article class="task" id="aufgabe2">
+      <div class="task-head">
+        <div class="task-title"><span class="badge">2</span> Beschleunigter Transportwagen</div>
+        <div class="points">7 Punkte</div>
+      </div>
+      <div class="task-body">
+        <p>Ein Transportwagen der Masse \(m=15{,}0\,\mathrm{kg}\) wird auf waagerechtem Boden aus dem Stand mit einer konstanten horizontalen Zugkraft von \(F_\text{Zug}=65\,\mathrm{N}\) gezogen. Der Reibungskoeffizient beträgt \(\mu=0{,}15\). Die Zugkraft wirkt \(t=4{,}0\,\mathrm{s}\) lang.</p>
+        <div class="task-block"><strong>Aufgaben:</strong>
+          <ol class="parts">
+            <li>Berechne die Gewichtskraft \(F_G\) des Transportwagens. <strong>(1 P)</strong></li>
+            <li>Berechne die Reibungskraft \(F_R\). <strong>(1 P)</strong></li>
+            <li>Berechne die resultierende Kraft \(F_\text{res}\). <strong>(1 P)</strong></li>
+            <li>Berechne die Beschleunigung \(a\). <strong>(2 P)</strong></li>
+            <li>Berechne die Geschwindigkeit \(v\) nach \(4{,}0\,\mathrm{s}\). <strong>(2 P)</strong></li>
+          </ol>
+        </div>
+        <button class="solution-btn" type="button" onclick="toggleSolution('sol2', this)">Musterlösung anzeigen</button>
+        <section class="solution" id="sol2">
+          <h3>Musterlösung zu Aufgabe 2</h3>
+          <div class="step"><strong>Ansatz:</strong> Auf waagerechter Fläche wird mit \(F_R=\mu\cdot F_G\) gerechnet. Die resultierende Kraft ist \(F_\text{res}=F_\text{Zug}-F_R\). Danach gilt \(F_\text{res}=m\cdot a\). Da der Wagen aus dem Stand startet, gilt \(v=a\cdot t\).</div>
+          <div class="step"><strong>Einsetzen und Rechnen:</strong><br>
+            \[F_G=m\cdot g=15{,}0\,\mathrm{kg}\cdot9{,}81\,\mathrm{m/s^2}=147{,}15\,\mathrm{N}\]
+            \[F_R=\mu\cdot F_G=0{,}15\cdot147{,}15\,\mathrm{N}=22{,}0725\,\mathrm{N}\]
+            \[F_\text{res}=F_\text{Zug}-F_R=65\,\mathrm{N}-22{,}0725\,\mathrm{N}=42{,}9275\,\mathrm{N}\]
+            \[a=\frac{F_\text{res}}{m}=\frac{42{,}9275\,\mathrm{N}}{15{,}0\,\mathrm{kg}}\approx2{,}862\,\mathrm{m/s^2}\]
+            \[v=a\cdot t=2{,}862\,\mathrm{m/s^2}\cdot4{,}0\,\mathrm{s}\approx11{,}45\,\mathrm{m/s}\]
+          </div>
+          <div class="result">Ergebnis: \(F_G=147{,}15\,\mathrm{N}\), \(F_R\approx22{,}07\,\mathrm{N}\), \(F_\text{res}\approx42{,}93\,\mathrm{N}\), \(a\approx2{,}86\,\mathrm{m/s^2}\), \(v\approx11{,}45\,\mathrm{m/s}\).</div>
+          <h4>Punktevergabe</h4>
+          <table class="points-table">
+            <tr><th>Teilleistung</th><th>Punkte</th></tr>
+            <tr><td>Gewichtskraft mit Formel, Einsetzen und Einheit berechnet</td><td>1</td></tr>
+            <tr><td>Reibungskraft korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Resultierende Kraft korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Beschleunigung mit Formel, Einsetzen und Einheit berechnet</td><td>2</td></tr>
+            <tr><td>Geschwindigkeit mit Formel, Einsetzen und Einheit berechnet</td><td>2</td></tr>
+            <tr><th>Summe</th><th>7</th></tr>
+          </table>
+        </section>
+      </div>
+    </article>
+
+    <article class="task" id="aufgabe3">
+      <div class="task-head">
+        <div class="task-title"><span class="badge">3</span> Abbremsender Kunststoffblock</div>
+        <div class="points">6 Punkte</div>
+      </div>
+      <div class="task-body">
+        <p>Ein Kunststoffblock der Masse \(m=12{,}0\,\mathrm{kg}\) gleitet auf einer waagerechten Fläche. Seine Anfangsgeschwindigkeit beträgt \(v_0=4{,}0\,\mathrm{m/s}\). Der Reibungskoeffizient beträgt \(\mu=0{,}25\). Es wirkt keine Zugkraft mehr.</p>
+        <div class="task-block"><strong>Aufgaben:</strong>
+          <ol class="parts">
+            <li>Berechne die Gewichtskraft \(F_G\) des Kunststoffblocks. <strong>(1 P)</strong></li>
+            <li>Berechne die Reibungskraft \(F_R\). <strong>(1 P)</strong></li>
+            <li>Berechne die Bremsbeschleunigung \(a\) als Betrag. <strong>(1 P)</strong></li>
+            <li>Berechne die Zeit \(t\) bis zum Stillstand. <strong>(1 P)</strong></li>
+            <li>Berechne den Bremsweg \(s\). <strong>(2 P)</strong></li>
+          </ol>
+        </div>
+        <button class="solution-btn" type="button" onclick="toggleSolution('sol3', this)">Musterlösung anzeigen</button>
+        <section class="solution" id="sol3">
+          <h3>Musterlösung zu Aufgabe 3</h3>
+          <div class="step"><strong>Ansatz:</strong> Die Reibungskraft bremst den Körper. Die Bremsbeschleunigung wird als positiver Betrag berechnet. Es gelten \(F_R=\mu\cdot F_G\), \(F_R=m\cdot a\), \(t=\frac{v_0}{a}\) und \(s=\frac{v_0^2}{2a}\).</div>
+          <div class="step"><strong>Einsetzen und Rechnen:</strong><br>
+            \[F_G=m\cdot g=12{,}0\,\mathrm{kg}\cdot9{,}81\,\mathrm{m/s^2}=117{,}72\,\mathrm{N}\]
+            \[F_R=\mu\cdot F_G=0{,}25\cdot117{,}72\,\mathrm{N}=29{,}43\,\mathrm{N}\]
+            \[a=\frac{F_R}{m}=\frac{29{,}43\,\mathrm{N}}{12{,}0\,\mathrm{kg}}=2{,}4525\,\mathrm{m/s^2}\]
+            \[t=\frac{v_0}{a}=\frac{4{,}0\,\mathrm{m/s}}{2{,}4525\,\mathrm{m/s^2}}\approx1{,}63\,\mathrm{s}\]
+            \[s=\frac{v_0^2}{2a}=\frac{(4{,}0\,\mathrm{m/s})^2}{2\cdot2{,}4525\,\mathrm{m/s^2}}\approx3{,}26\,\mathrm{m}\]
+          </div>
+          <div class="result">Ergebnis: \(F_G=117{,}72\,\mathrm{N}\), \(F_R=29{,}43\,\mathrm{N}\), \(a\approx2{,}45\,\mathrm{m/s^2}\), \(t\approx1{,}63\,\mathrm{s}\), \(s\approx3{,}26\,\mathrm{m}\).</div>
+          <h4>Punktevergabe</h4>
+          <table class="points-table">
+            <tr><th>Teilleistung</th><th>Punkte</th></tr>
+            <tr><td>Gewichtskraft korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Reibungskraft korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Bremsbeschleunigung korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Zeit bis zum Stillstand korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Bremsweg mit Formel, Einsetzen und Einheit berechnet</td><td>2</td></tr>
+            <tr><th>Summe</th><th>6</th></tr>
+          </table>
+        </section>
+      </div>
+    </article>
+
+    <article class="task" id="aufgabe4">
+      <div class="task-head">
+        <div class="task-title"><span class="badge">4</span> Gummiball auf waagerechter Kreisbahn</div>
+        <div class="points">7 Punkte</div>
+      </div>
+      <div class="task-body">
+        <p>Ein Gummiball der Masse \(m=0{,}50\,\mathrm{kg}\) bewegt sich auf einer waagerechten Kreisbahn mit dem Radius \(r=0{,}75\,\mathrm{m}\). Die Bahngeschwindigkeit beträgt \(v=3{,}0\,\mathrm{m/s}\).</p>
+        <div class="task-block"><strong>Aufgaben:</strong>
+          <ol class="parts">
+            <li>Berechne die Zentripetalbeschleunigung \(a_z\). <strong>(1 P)</strong></li>
+            <li>Berechne die Zentripetalkraft \(F_z\). <strong>(2 P)</strong></li>
+            <li>Berechne die Umlaufdauer \(T\). <strong>(1 P)</strong></li>
+            <li>Berechne die Kreisfrequenz \(\omega\). <strong>(1 P)</strong></li>
+            <li>Berechne die Zentripetalkraft bei \(v=6{,}0\,\mathrm{m/s}\). <strong>(2 P)</strong></li>
+          </ol>
+        </div>
+        <button class="solution-btn" type="button" onclick="toggleSolution('sol4', this)">Musterlösung anzeigen</button>
+        <section class="solution" id="sol4">
+          <h3>Musterlösung zu Aufgabe 4</h3>
+          <div class="step"><strong>Ansatz:</strong> Für eine Kreisbewegung gilt \(a_z=\frac{v^2}{r}\) und \(F_z=m\cdot a_z=m\cdot\frac{v^2}{r}\). Die Umlaufdauer ergibt sich aus Umfang und Geschwindigkeit: \(T=\frac{2\pi r}{v}\). Die Kreisfrequenz ist \(\omega=\frac{v}{r}\), gleichwertig \(\omega=\frac{2\pi}{T}\).</div>
+          <div class="step"><strong>Einsetzen und Rechnen:</strong><br>
+            \[a_z=\frac{v^2}{r}=\frac{(3{,}0\,\mathrm{m/s})^2}{0{,}75\,\mathrm{m}}=12{,}0\,\mathrm{m/s^2}\]
+            \[F_z=m\cdot a_z=0{,}50\,\mathrm{kg}\cdot12{,}0\,\mathrm{m/s^2}=6{,}0\,\mathrm{N}\]
+            \[T=\frac{2\pi r}{v}=\frac{2\pi\cdot0{,}75\,\mathrm{m}}{3{,}0\,\mathrm{m/s}}\approx1{,}57\,\mathrm{s}\]
+            \[\omega=\frac{v}{r}=\frac{3{,}0\,\mathrm{m/s}}{0{,}75\,\mathrm{m}}=4{,}0\,\mathrm{rad/s}\]
+            \[F_{z,\,v=6{,}0}=m\cdot\frac{v^2}{r}=0{,}50\,\mathrm{kg}\cdot\frac{(6{,}0\,\mathrm{m/s})^2}{0{,}75\,\mathrm{m}}=24{,}0\,\mathrm{N}\]
+          </div>
+          <div class="result">Ergebnis: \(a_z=12{,}0\,\mathrm{m/s^2}\), \(F_z=6{,}0\,\mathrm{N}\), \(T\approx1{,}57\,\mathrm{s}\), \(\omega=4{,}0\,\mathrm{rad/s}\), bei \(v=6{,}0\,\mathrm{m/s}\) gilt \(F_z=24{,}0\,\mathrm{N}\).</div>
+          <h4>Punktevergabe</h4>
+          <table class="points-table">
+            <tr><th>Teilleistung</th><th>Punkte</th></tr>
+            <tr><td>Zentripetalbeschleunigung korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Zentripetalkraft mit Formel, Einsetzen und Einheit berechnet</td><td>2</td></tr>
+            <tr><td>Umlaufdauer korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Kreisfrequenz korrekt berechnet</td><td>1</td></tr>
+            <tr><td>Zentripetalkraft bei neuer Geschwindigkeit mit Formel, Einsetzen und Einheit berechnet</td><td>2</td></tr>
+            <tr><th>Summe</th><th>7</th></tr>
+          </table>
+        </section>
+      </div>
+    </article>
+
+    <div class="total">Gesamt: 25 Punkte</div>
+
+    <footer>Theo Schierbaum · Physik · Klasse 9 · Newtonsche Gesetze · Reibung · Zentripetalkraft</footer>
+  </main>
+
+  <script>
+    function toggleSolution(id, button){
+      const box = document.getElementById(id);
+      const visible = box.classList.toggle('visible');
+      button.textContent = visible ? 'Musterlösung ausblenden' : 'Musterlösung anzeigen';
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([box]);
+      }
+    }
+  </script>
+</body>
+</html>

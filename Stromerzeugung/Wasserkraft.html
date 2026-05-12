@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>Wasserkraft</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"/>
+  <style>
+    html, body { margin:0; padding:0; background:#f3f4f6; color:#1f2937; font-family:'Montserrat',sans-serif; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+    .header { background:#2A3B32; color:white; padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
+    .title { margin:0; font-size:2rem; font-weight:700; }
+    .divider { width:88px; height:4px; background:#E6B400; border-radius:3px; margin-top:.55rem; }
+    .content { padding:1.2rem 2rem 1.3rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .chart-wrap {
+      height: 520px;
+    }
+
+    .legend-note {
+      margin-top: 14px;
+      font-size: 0.95rem;
+    }
+
+    .green { color: #008000; font-weight: 700; }
+    .red { color: #ff0000; font-weight: 700; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .head { display:flex; align-items:center; gap:.7rem; padding:.75rem .95rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; }
+    .badge { min-width:3.2rem; text-align:center; padding:.15rem .6rem; border-radius:7px; background:#2A3B32; color:white; font-weight:700; font-size:.9rem; }
+    .h { font-size:1.02rem; font-weight:600; color:#2A3B32; }
+    .body { padding:1rem; font-family:'Raleway',sans-serif; }
+    .small { font-size:.9rem; color:#4b5563; line-height:1.45; }
+    .xs { font-size:.82rem; color:#4b5563; line-height:1.35; }
+    .note { background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.65rem .8rem; margin-bottom:.75rem; }
+    .warn { background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:.65rem .8rem; margin-bottom:.75rem; }
+    .img-box { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .img-box img { width:100%; height:auto; object-fit:cover; display:block; background:#e5e7eb; }
+    .cap { padding:.5rem .65rem; font-size:.82rem; color:#4b5563; }
+    .mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    .mini-card { border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .mini-card h4 { margin:0 0 .35rem 0; font-size:.95rem; color:#111827; font-weight:700; }
+    .keyfacts { display:grid; grid-template-columns:repeat(2, 1fr); gap:.6rem; margin-top:.7rem; }
+    .fact { border:1px solid #e5e7eb; border-radius:10px; padding:.6rem; background:#fafafa; }
+    .fact .l { font-size:.72rem; text-transform:uppercase; color:#6b7280; }
+    .fact .v { font-weight:700; font-size:.98rem; margin-top:.2rem; color:#111827; }
+    .schema-box, .svg-box { border:1px solid #e5e7eb; border-radius:12px; background:#fbfdff; padding:.45rem; }
+    .formula-step { display:grid; grid-template-columns:36px 1fr; gap:.55rem; align-items:flex-start; margin-bottom:.55rem; }
+    .num { width:1.75rem; height:1.75rem; border-radius:999px; background:#2A3B32; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.82rem; }
+    .boxline { border:1px solid #e5e7eb; border-radius:10px; padding:.55rem .65rem; background:#fafafa; }
+    .formula { background:#f8fafc; border:1px solid #dbe4ea; border-radius:10px; padding:.55rem .7rem; margin:.45rem 0; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#111827; font-size:.98rem; }
+    ul.clean { margin:.2rem 0 0 1rem; padding:0; }
+    ul.clean li { margin:.28rem 0; }
+    table { width:100%; border-collapse:collapse; font-size:.84rem; }
+    th, td { border:1px solid #e5e7eb; padding:.42rem .5rem; text-align:left; vertical-align:top; }
+    th { background:#f9fafb; }
+    .type-grid { display:grid; gap:.75rem; }
+    .type-item { display:grid; grid-template-columns:220px 1fr; gap:.8rem; border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .type-item .text h4 { margin:0 0 .25rem 0; font-size:.96rem; font-weight:700; }
+    .type-item2 { display:grid; grid-template-columns:550px 1fr; gap:.8rem; border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .turbine-img { width:120px; height:70px; object-fit:contain; display:block; background:#ffffff; border:1px solid #e5e7eb; border-radius:8px; padding:.2rem; }
+    .task { position:relative; background:#e9f0ec; border:2px solid #2A3B32; border-radius:14px; padding:1rem; margin-top:1rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:white; padding:.25rem .75rem; border-radius:6px; font-size:.9rem; font-weight:600; }
+    .task ol { margin:0 0 0 1rem; }
+    .task li { margin:.45rem 0; line-height:1.46; font-size:.92rem; font-family:'Raleway',sans-serif; }
+    .footer { padding:1rem 2rem 1.2rem; color:#6b7280; font-size:.84rem; display:flex; justify-content:space-between; gap:1rem; font-family:'Raleway',sans-serif; }
+
+    .m11-intro, .m11-summary { margin:.15rem 0 .8rem; font-family:'Raleway',sans-serif; font-size:.92rem; line-height:1.45; color:#374151; }
+    .m11-summary { margin:.8rem 0 0; background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.65rem .8rem; }
+    .type-item2 .text h4 { margin:0 0 .35rem 0; font-family:'Montserrat',sans-serif; font-size:.98rem; font-weight:700; color:#2A3B32; }
+    .type-item2 .text { font-family:'Raleway',sans-serif; }
+    .type-item2 img { width:100%; height:auto; display:block; border-radius:8px; }
+    .material-task-title { font-weight:700; color:#2A3B32; font-family:'Montserrat',sans-serif; }
+    @media (max-width:1100px) {
+      .grid, .mini-grid { grid-template-columns:1fr; }
+      .type-item, .type-item2 { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="title">Wasserkraft</h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light text-right">Physik | Klasse 8</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+
+      <section class="card">
+        <div class="head"><span class="badge">M1</span><div class="h">Bild und Grundidee</div></div>
+        <div class="body">
+          <div class="img-box">
+            <img src="Bild.jpg" alt="Bild eines Wasserkraftwerks">
+          </div> 
+   <div class="mini-grid mt-3">
+            <div class="mini-card xs"><strong>1</strong> Stausee: Wasser besitzt Lageenergie</div>
+            <div class="mini-card xs"><strong>2</strong> Druckrohrleitung: Wasser strömt zur Turbine</div>
+            <div class="mini-card xs"><strong>3</strong> Turbine: Wasser setzt sie in Drehung</div>
+            <div class="mini-card xs"><strong>4</strong> Generator + Transformator: Stromerzeugung & Netzeinspeisung</div>
+          </div>
+        </div>
+      </section>
+
+<section class="card">
+        <div class="head"><span class="badge">M2</span><div class="h">Bild und Grundidee</div></div>
+        <div class="body">
+          <div class="img-box">
+            <img src="Aufbau.png" alt="Bild eines Wasserkraftwerks">
+          </div> 
+   
+        </div>
+      </section>
+     </div>
+     
+      <section class="task">
+      <div class="task-label"><strong>A</strong> Aufgaben: Energieumwandlung im Wasserkraftwerk</div>
+      <ol>
+        <li>1. Beschreibe den Aufbau eines Wasserkraftwerks.</i>.</li>
+        <li>2. Gib die Energieumwandlungskette im Wasserkraftwerk an <i>(Energiewandler und Energieformen)</i>.</li>
+        <li>3. Leite eine Formel zur Berechnung der elektrischen Leistung eines Wasserkraftwerks her:
+          <ol>
+           <li>a. Gib die allgemeine Formel zur Berechnung der Leistung bei gegebener Energie an.</li>
+           <li>b. Setze die allgemeine Formel zur Berechnung der Lageenergie des Wassers im Stausee in die Formel für die Leistung ein. Nutze die Höhe des Wasserspiegels im Stausee.</li>
+           <li>c. Ersetze die Gewichtskraft durch die allgemeine Berechnungsformel.</li>
+           <li>d. Ersetze die Masse durch Dichte und Volumen.</li>
+           <li>e. Setze den Durchfluss Q in die Formel ein. Dieser gibt an, wie viel Wasser (in m³) pro Zeiteinheit durch das Kraftwerk fließen.</li>
+           <li>f. Setze nun noch den Wirkungsgrad in die Berechnungsformel ein.</li>
+
+        </li>
+      </ol>
+    </section><br>
+
+
+
+      
+
+      <div class="grid">
+
+      <section class="card">
+        <div class="head"><span class="badge">M3</span><div class="h">Arten von Wasserkraftwerken</div></div>
+        <div class="body">
+          <div class="type-grid">
+            <div class="type-item">
+              <div class="svg-box">
+                <svg viewBox="0 0 220 120" width="100%" aria-label="Skizze Laufwasserkraftwerk">
+                  <rect x="0" y="0" width="220" height="120" fill="#fbfdff"/>
+                  <path d="M0 50 C24 50, 44 50, 68 50 C92 50, 112 77, 136 72 C160 67, 182 77, 220 72 L220 102 L0 102 Z" fill="#93c5fd"/>
+                  <rect x="92" y="48" width="18" height="28" fill="#9ca3af" stroke="#4b5563"/>
+                  <circle cx="118" cy="76" r="12" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+                  <path d="M118 64 L118 88 M106 76 L130 76 M110 68 L126 84 M126 68 L110 84" stroke="#78350f" stroke-width="2.4"/>
+                  <line x1="10" y1="74" x2="60" y2="74" stroke="#2563eb" stroke-width="4"/>
+                  <polygon points="60,74 52,70 52,78" fill="#2563eb"/>
+                  <line x1="145" y1="74" x2="205" y2="74" stroke="#2563eb" stroke-width="4"/>
+                  <polygon points="205,74 197,70 197,78" fill="#2563eb"/>
+                  <text x="12" y="22" font-size="13" font-weight="700" fill="#111827">Fluss</text>
+                  <text x="63" y="30" font-size="12" font-weight="700" fill="#111827">kleine Fallhöhe</text>
+                  <line x1="88" y1="50" x2="88" y2="72" stroke="#111827" stroke-width="1.6" stroke-dasharray="4 3"/>
+                  <line x1="82" y1="50" x2="94" y2="50" stroke="#111827" stroke-width="1.6"/>
+                  <line x1="82" y1="72" x2="94" y2="72" stroke="#111827" stroke-width="1.6"/>
+                  <text x="76" y="64" font-size="14" font-weight="700" fill="#111827">h</text>
+                  <text x="20" y="114" font-size="11" fill="#374151">Flusswasser treibt Turbine direkt an</text>
+                </svg>
+              </div>
+              <div class="text">
+                <h4>Laufwasserkraftwerk</h4>
+                <div class="xs"><strong>Anwendungsgebiet:</strong> große Flüsse mit relativ gleichmäßigem Wasserfluss.</div>
+                <div class="xs"><strong>Typisch:</strong> kleine Fallhöhe, dafür großer Durchfluss.</div>
+              </div>
+            </div>
+            <div class="type-item">
+              <div class="svg-box">
+                <svg viewBox="0 0 220 120" width="100%" aria-label="Skizze Speicherkraftwerk">
+                  <rect x="0" y="0" width="220" height="120" fill="#fbfdff"/>
+                  <rect x="8" y="30" width="84" height="56" fill="#93c5fd"/>
+                  <path d="M92 16 L118 16 L118 86 L92 86 Z" fill="#9ca3af" stroke="#4b5563"/>
+                  <circle cx="168" cy="90" r="12" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+                  <path d="M168 78 L168 102 M156 90 L180 90 M160 82 L176 98 M176 82 L160 98" stroke="#78350f" stroke-width="2.4"/>
+                  <path d="M105 46 C132 46, 147 58, 160 78" fill="none" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+                  <path d="M170 102 C178 104, 190 106, 220 106" fill="none" stroke="#60a5fa" stroke-width="8"/>
+                  <text x="12" y="20" font-size="13" font-weight="700" fill="#111827">Stausee</text>
+                  <text x="122" y="16" font-size="12" font-weight="700" fill="#111827">Druckrohrleitung</text>
+                  <text x="86" y="110" font-size="11" fill="#374151">gut regelbar</text>
+                  <line x1="130" y1="30" x2="130" y2="90" stroke="#111827" stroke-width="1.6" stroke-dasharray="4 3"/>
+                  <line x1="124" y1="30" x2="136" y2="30" stroke="#111827" stroke-width="1.6"/>
+                  <line x1="124" y1="90" x2="136" y2="90" stroke="#111827" stroke-width="1.6"/>
+                  <text x="118" y="63" font-size="14" font-weight="700" fill="#111827">h</text>
+                </svg>
+              </div>
+              <div class="text">
+                <h4>Speicherkraftwerk</h4>
+                <div class="xs"><strong>Anwendungsgebiet:</strong> Gebirge, Täler, Regionen mit Stauseen.</div>
+                <div class="xs"><strong>Typisch:</strong> größere Fallhöhe, Wasser kann gespeichert werden.</div>
+              </div>
+            </div>
+            <div class="type-item">
+              <div class="svg-box">
+                <svg viewBox="0 0 220 120" width="100%" aria-label="Skizze Pumpspeicherkraftwerk">
+                  <rect x="0" y="0" width="220" height="120" fill="#fbfdff"/>
+                  <rect x="10" y="18" width="64" height="20" fill="#93c5fd"/>
+                  <rect x="146" y="80" width="64" height="20" fill="#93c5fd"/>
+                  <path d="M74 28 C108 28, 120 48, 146 90" fill="none" stroke="#2563eb" stroke-width="8" stroke-linecap="round"/>
+                  <circle cx="112" cy="58" r="12" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+                  <path d="M112 46 L112 70 M100 58 L124 58 M104 50 L120 66 M120 50 L104 66" stroke="#78350f" stroke-width="2.4"/>
+                  <line x1="148" y1="68" x2="130" y2="42" stroke="#16a34a" stroke-width="3"/>
+                  <polygon points="129,41 129,45 134,42" fill="#16a34a"/>
+                  <line x1="86" y1="74" x2="60" y2="46" stroke="#2563eb" stroke-width="3"/>
+                  <polygon points="87,75 80,74 86,70" fill="#2563eb"/>
+                  <text x="10" y="14" font-size="11" font-weight="700" fill="#111827">oberes Becken</text>
+                  <text x="132" y="114" font-size="11" font-weight="700" fill="#111827">unteres Becken</text>
+                  <text x="126" y="36" font-size="11" font-weight="700" fill="#16a34a">hochpumpen</text>
+                  <text x="14" y="58" font-size="11" font-weight="700" fill="#2563eb">ablassen</text>
+                  <line x1="92" y1="28" x2="92" y2="90" stroke="#111827" stroke-width="1.6" stroke-dasharray="4 3"/>
+                  <line x1="86" y1="28" x2="98" y2="28" stroke="#111827" stroke-width="1.6"/>
+                  <line x1="86" y1="90" x2="98" y2="90" stroke="#111827" stroke-width="1.6"/>
+                  <text x="80" y="62" font-size="14" font-weight="700" fill="#111827">h</text>
+                </svg>
+              </div>
+              <div class="text">
+                <h4>Pumpspeicherkraftwerk</h4>
+                <div class="xs"><strong>Anwendungsgebiet:</strong> Energiespeicher im Stromnetz.</div>
+                <div class="xs"><strong>Typisch:</strong> Wasser wird bei Stromüberschuss nach oben gepumpt und später wieder genutzt.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M4</span><div class="h">Turbinenarten</div></div>
+        <div class="body">
+          <table>
+            <thead>
+              <tr><th>Turbine</th><th>Abbildung</th><th>Geeignet für</th><th>Anwendungsgebiet</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Kaplan</strong></td>
+                <td><img class="turbine-img" src="Kaplan.svg" alt="Kaplan-Turbine"></td>
+                <td>kleine Fallhöhe, großer Durchfluss</td>
+                <td>Flusskraftwerke, Laufwasserkraftwerke</td>
+              </tr>
+              <tr>
+                <td><strong>Francis</strong></td>
+                <td><img class="turbine-img" src="Francis.svg" alt="Francis-Turbine"></td>
+                <td>mittlere Fallhöhe, mittlerer Durchfluss</td>
+                <td>viele Speicher- und Laufwasserkraftwerke</td>
+              </tr>
+              <tr>
+                <td><strong>Pelton</strong></td>
+                <td><img class="turbine-img" src="Pelton.svg" alt="Pelton-Turbine"></td>
+                <td>große Fallhöhe, kleiner Durchfluss</td>
+                <td>Hochgebirge, Speicherkraftwerke</td>
+              </tr>
+            </tbody>
+          </table>
+          <img src="Turbinen.svg">
+        </div>
+      </section>
+
+</div>
+
+ <section class="task">
+      <div class="task-label"><strong>B</strong> Aufgaben: Arten von Wasserkraftwerken</div>
+      <ol>
+        <li>1. Vergleiche die drei Arten von Wasserkraftwerken.</i>.</li>
+        <li>2. Ordne die Turbinenarten den passenden Kraftwerken zu.</li>
+      </ol>
+    </section><br>
+
+<div class="grid">
+
+
+
+      <section class="card">
+        <div class="head"><span class="badge">M5</span><div class="h">Weltweite Stromerzeugung durch Wasserkraft (2025)</div></div>
+        <div class="body">
+          <img src="Wasserkraft1.png">
+        </div>
+      </section>
+
+ <section class="card">
+        <div class="head"><span class="badge">M6</span><div class="h">Anteil der Wasserkraft an der Stromerzeugung (2025)</div></div>
+        <div class="body">
+          <img src="Wasserkraft2.png">
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M7</span><div class="h">Vor- und Nachteile</div></div>
+        <div class="body">
+          <div class="mini-grid">
+            <div class="mini-card">
+              <h4>Vorteile</h4>
+              <ul class="clean xs">
+                <li>erneuerbare Energiequelle</li>
+                <li>im Betrieb wenig CO₂</li>
+                <li>hoher Wirkungsgrad</li>
+                <li>gut regelbar</li>
+                <li>lange Lebensdauer</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h4>Nachteile</h4>
+              <ul class="clean xs">
+                <li>Eingriff in Natur und Flüsse</li>
+                <li>Überflutung von Flächen</li>
+                <li>Fische werden behindert</li>
+                <li>hohe Baukosten</li>
+                <li>nicht überall möglich</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="card">
+        <div class="head"><span class="badge">M8</span><div class="h">Fallbeispiel und größte Kraftwerke</div></div>
+        <div class="body">
+          <table>
+            <thead><tr><th>Kraftwerk</th><th>Land</th><th>Leistung</th></tr></thead>
+            <tbody>
+              <tr><td>Drei-Schluchten-Damm</td><td>China</td><td>22,5 GW</td></tr>
+              <tr><td>Baihetan</td><td>China</td><td>16,0 GW</td></tr>
+              <tr><td>Itaipu</td><td>Brasilien / Paraguay</td><td>14,0 GW</td></tr>
+              <tr><td>Xiluodu</td><td>China</td><td>13,9 GW</td></tr>
+              <tr><td>Belo Monte</td><td>Brasilien</td><td>11,2 GW</td></tr>
+              <tr><td>...</td><td>...</td><td>...</td></tr>
+              <tr><td>Goldisthal <i>(eines der größten Wasserkraftwerke Europas)</i></td><td>Deutschland</td><td>1,1 GW</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>C</strong> Weltweite Verteilung der Wasserkraft</div>
+      <ol>
+        <li>1. Beschreibe die Verteilung der weltweiten Stromerzeugung durch Wasserkraft - sowohl hinsichtlich der tatsächlichen Menge erzeugter elektrischer Energie (M5) als auch hinsichtlich des Anteils der Wasserkraft an der Stromerzeugung eines Landes (M6).</li>
+        <li>2. Stelle Vor-und Nachteile der Wasserkraft einander gegenüber und fälle ein eigenes Urteil, inwieweit Wasserkraft eine sinnvolle Energiequelle ist.</li>
+        <li>3. Berechne für die in M8 aufgelisteten Wasserkraftwerke jeweils, wie viele Menschen durch das Kraftwerk jeweils mit Strom versorgt werden können (Stromverbrauch pro Kopf: 0,1 kW/Person (<i>Entwicklungsländer</i>) bis 1 kW/Person (<i>Industrieländer</i>)).</li>
+      </ol>
+    </section>
+<br>
+<div class="grid">
+
+
+
+      <section class="card">
+        <div class="head"><span class="badge">M9</span><div class="h">Pumpspeicherkraftwerk Goldisthal (Thüringen)</div></div>
+        <div class="body">
+          <div class="img-box">
+           <img src="Goldisthal.png">
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M10</span><div class="h">Pumpspeicherkraftwerk Hohenwarte (Thüringen)</div></div>
+        <div class="body">
+          <div class="img-box">
+           <img src="Hohenwarte.jpg">
+          </div>
+        </div>
+      </section>
+
+
+ <section class="card">
+        <div class="head"><span class="badge">M11</span><div class="h">Funktionsweise von Pumpspeicherkraftwerken</div></div>
+        <div class="body">
+          <p class="m11-intro">Ein Pumpspeicherkraftwerk hat zwei Becken in unterschiedlicher Höhe. Je nach Bedarf wird Wasser hochgepumpt oder zur Stromerzeugung wieder abgelassen.</p>
+          <div class="type-grid">
+            <div class="type-item2">
+              <div class="svg-box">
+                <img src="Pumpspeicher2.png">
+              </div>
+              <div class="text">
+                <h4>Strom speichern (<i>Pumpen</i>)</h4>
+                <div class="xs">Wenn viel Strom vorhanden ist (z.B. aus Wind oder Sonne), wird das Wasser vom tieferen Becken in das obere Becken gepumpt.</div>
+              </div>
+            </div>
+            <div class="type-item2">
+              <div class="svg-box">
+                <img src="Pumpspeicher2.png">
+              </div>
+              <div class="text">
+                <h4>Strom erzeugen (<i>Ablassen</i>)</h4>
+                <div class="xs">Wenn Strom gebraucht wird, fließt das Wasser vom oberen Becken durch die Turbine ins untere Becken. Dabei wird Strom erzeugt.</div>
+              </div>
+            </div>
+            
+          </div>
+          <p class="m11-summary"><strong>Merksatz:</strong> Pumpspeicherkraftwerke speichern Energie in Form von Wasser in der Höhe (<i>potenzielle Energie</i>). Sie helfen, Strom zu speichern und bei Bedarf wieder bereitzustellen. Beim Hin- und Herwandeln geht aber ein Teil der Energie verloren.</p>
+        </div>
+      </section>
+
+
+      <section class="card">
+        <div class="head"><span class="badge">M12</span><div class="h">Leistung im Tagesverlauf</div></div>
+        <div class="body">
+          <h1>Pumpspeicherkraftwerk: Leistung im Tagesverlauf</h1>
+    <p>
+      Negative Werte bedeuten: Das Kraftwerk verbraucht Strom zum <strong>Pumpen</strong>.
+      Positive Werte bedeuten: Das Kraftwerk erzeugt Strom durch <strong>Ablassen des Wassers</strong>.
+    </p>
+
+    <div class="chart-wrap">
+      <canvas id="pumpspeicherChart"></canvas>
+    </div>
+
+    <p class="legend-note">
+      <span class="green">Grün:</span> Pumpbetrieb, Wasser wird ins obere Becken gepumpt.<br>
+      <span class="red">Rot:</span> Turbinenbetrieb, Wasser fließt nach unten und erzeugt Strom.
+    </p>
+        </div>
+      </section>
+
+
+
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>D</strong> Aufgaben: Pumpspeicherkraftwerke</div>
+      <ol>
+        <li>1. Beschreibe anhand der Bilder, warum Pumpspeicherkraftwerke meistens in bergigen Regionen gebaut werden. Nutze die Begriffe <i>oberes Becken</i>, <i>unteres Becken</i> und <i>Fallhöhe</i>.</li>
+        <li>2. Erstelle eine kurze Erklärung in zwei Schritten: <strong>1. Strom speichern</strong> und <strong>2. Strom erzeugen</strong>. Verwende dabei die Wörter <i>Pumpe</i>, <i>Turbine</i>, <i>Generator</i> und <i>Lageenergie</i>.</li>
+        <li>3. Markiere im Diagramm M12 eine Zeitspanne, in der Strom verbraucht wird, und eine Zeitspanne, in der Strom erzeugt wird. Erkläre, woran du das erkennst.</li>
+        <li>4. Lies aus M12 eine möglichst große positive Leistung ab. Berechne überschlagsweise, wie viele Menschen damit gleichzeitig versorgt werden könnten. Nutze als Faustregel: <strong>1 MW reicht für etwa 1.000 Personen</strong> bei 1 kW pro Person.</li>
+        <li>5. Beurteile, ob ein Pumpspeicherkraftwerk eher ein <i>Kraftwerk</i> oder ein <i>Energiespeicher</i> ist. Begründe deine Meinung in 3–4 Sätzen.</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>Theo Schierbaum - Wasserkraft</div>
+    <div class="text-right">Ziel: Überblick, Formelverständnis und einfache Anwendungen.</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('pumpspeicherChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    // x = Uhrzeit, y = Leistung in Megawatt.
+    // Negative Werte: Pumpbetrieb. Positive Werte: Stromerzeugung.
+    const pumpData = [
+      {x:0.0,y:-500},{x:1.2,y:-720},{x:4.6,y:-720},{x:4.6,y:-450},
+      {x:5.0,y:-450},{x:5.0,y:-280},{x:6.0,y:-280},{x:6.0,y:-320},
+      {x:6.8,y:-320},{x:6.8,y:0},{x:9.0,y:0},{x:9.1,y:-160},
+      {x:9.5,y:-160},{x:9.5,y:0},{x:16.1,y:0},{x:16.2,y:-160},
+      {x:16.5,y:-160},{x:16.5,y:0},{x:17.6,y:0},{x:17.7,y:-160},
+      {x:18.0,y:-160},{x:18.0,y:0},{x:22.8,y:0},{x:22.9,y:-500},
+      {x:23.5,y:-500},{x:23.6,y:-380},{x:24.0,y:-380}
+    ];
+
+    const generationData = [
+      {x:0.0,y:0},{x:7.2,y:0},{x:7.4,y:300},{x:7.7,y:600},
+      {x:8.1,y:420},{x:8.3,y:620},{x:8.8,y:700},{x:9.6,y:1000},
+      {x:10.0,y:680},{x:10.2,y:500},{x:10.8,y:500},{x:11.3,y:360},
+      {x:12.0,y:200},{x:12.3,y:650},{x:12.6,y:220},{x:13.5,y:500},
+      {x:14.1,y:300},{x:15.3,y:800},{x:15.9,y:120},{x:16.1,y:0},
+      {x:18.1,y:0},{x:18.3,y:680},{x:18.6,y:350},{x:19.1,y:300},
+      {x:19.5,y:1050},{x:20.6,y:0},{x:21.3,y:0},{x:21.6,y:300},
+      {x:22.1,y:0},{x:24.0,y:0}
+    ];
+
+    new Chart(canvas, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'Pumpleistung',
+            data: pumpData,
+            borderColor: 'green',
+            backgroundColor: 'rgba(0, 128, 0, 0.9)',
+            fill: { target: 'origin' },
+            stepped: true,
+            pointRadius: 0,
+            borderWidth: 1.5
+          },
+          {
+            label: 'Erzeugungsleistung',
+            data: generationData,
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.9)',
+            fill: { target: 'origin' },
+            tension: 0,
+            pointRadius: 0,
+            borderWidth: 1.5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              title: items => 'Uhrzeit: ' + items[0].parsed.x.toFixed(1) + ' h',
+              label: item => item.dataset.label + ': ' + item.parsed.y + ' MW'
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: 24,
+            title: { display: true, text: 'Tageszeit in Stunden' },
+            ticks: { stepSize: 6 }
+          },
+          y: {
+            min: -800,
+            max: 1100,
+            title: { display: true, text: 'Leistung in Megawatt' },
+            ticks: { stepSize: 250 },
+            grid: {
+              color: context => context.tick.value === 0 ? '#111827' : '#d1d5db',
+              lineWidth: context => context.tick.value === 0 ? 2 : 1
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>

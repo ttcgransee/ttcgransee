@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>Windkraft</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"/>
+  <style>
+    html, body { margin:0; padding:0; background:#f3f4f6; color:#1f2937; font-family:'Montserrat',sans-serif; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+    .header { background:#2A3B32; color:white; padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
+    .title { margin:0; font-size:2rem; font-weight:700; }
+    .divider { width:88px; height:4px; background:#E6B400; border-radius:3px; margin-top:.55rem; }
+    .content { padding:1.2rem 2rem 1.3rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .head { display:flex; align-items:center; gap:.7rem; padding:.75rem .95rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; }
+    .badge { min-width:3.2rem; text-align:center; padding:.15rem .6rem; border-radius:7px; background:#2A3B32; color:white; font-weight:700; font-size:.9rem; }
+    .h { font-size:1.02rem; font-weight:600; color:#2A3B32; }
+    .body { padding:1rem; font-family:'Raleway',sans-serif; }
+    .small { font-size:.9rem; color:#4b5563; line-height:1.45; }
+    .xs { font-size:.82rem; color:#4b5563; line-height:1.35; }
+    .note { background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.65rem .8rem; margin-bottom:.75rem; }
+    .warn { background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:.65rem .8rem; margin-bottom:.75rem; }
+    .img-box { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .img-box img { width:100%; height:auto; object-fit:cover; display:block; background:#e5e7eb; }
+    .cap { padding:.5rem .65rem; font-size:.82rem; color:#4b5563; }
+    .mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    .mini-card { border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .mini-card h4 { margin:0 0 .35rem 0; font-size:.95rem; color:#111827; font-weight:700; }
+    .keyfacts { display:grid; grid-template-columns:repeat(2, 1fr); gap:.6rem; margin-top:.7rem; }
+    .fact { border:1px solid #e5e7eb; border-radius:10px; padding:.6rem; background:#fafafa; }
+    .fact .l { font-size:.72rem; text-transform:uppercase; color:#6b7280; }
+    .fact .v { font-weight:700; font-size:.98rem; margin-top:.2rem; color:#111827; }
+    .schema-box, .svg-box { border:1px solid #e5e7eb; border-radius:12px; background:#fbfdff; padding:.45rem; }
+    .formula-step { display:grid; grid-template-columns:36px 1fr; gap:.55rem; align-items:flex-start; margin-bottom:.55rem; }
+    .num { width:1.75rem; height:1.75rem; border-radius:999px; background:#2A3B32; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.82rem; }
+    .boxline { border:1px solid #e5e7eb; border-radius:10px; padding:.55rem .65rem; background:#fafafa; }
+    .formula { background:#f8fafc; border:1px solid #dbe4ea; border-radius:10px; padding:.55rem .7rem; margin:.45rem 0; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#111827; font-size:.98rem; }
+    ul.clean { margin:.2rem 0 0 1rem; padding:0; }
+    ul.clean li { margin:.28rem 0; }
+    table { width:100%; border-collapse:collapse; font-size:.84rem; }
+    th, td { border:1px solid #e5e7eb; padding:.42rem .5rem; text-align:left; vertical-align:top; }
+    th { background:#f9fafb; }
+    .type-grid { display:grid; gap:.75rem; }
+    .type-item { display:grid; grid-template-columns:220px 1fr; gap:.8rem; border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .type-item .text h4 { margin:0 0 .25rem 0; font-size:.96rem; font-weight:700; }
+    .task { position:relative; background:#e9f0ec; border:2px solid #2A3B32; border-radius:14px; padding:1rem; margin-top:1rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:white; padding:.25rem .75rem; border-radius:6px; font-size:.9rem; font-weight:600; }
+    .task ol { margin:0 0 0 1rem; }
+    .task li { margin:.45rem 0; line-height:1.46; font-size:.92rem; font-family:'Raleway',sans-serif; }
+    .chart-wrap { height:420px; }
+    .footer { padding:1rem 2rem 1.2rem; color:#6b7280; font-size:.84rem; display:flex; justify-content:space-between; gap:1rem; font-family:'Raleway',sans-serif; }
+    @media (max-width:1100px) { .grid, .mini-grid { grid-template-columns:1fr; } .type-item { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="title">Windkraft</h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light text-right">Physik | Klasse 8</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M1</span><div class="h">Bild und Grundidee</div></div>
+        <div class="body">
+          <div class="img-box"><img src="Windrad.jpg" alt="Windkraftanlage an Land"></div>
+          <div class="mini-grid mt-3">
+            <div class="mini-card xs"><strong>1</strong> Wind besitzt Bewegungsenergie.</div>
+            <div class="mini-card xs"><strong>2</strong> Rotorblätter werden durch den Wind gedreht.</div>
+            <div class="mini-card xs"><strong>3</strong> Generator wandelt Drehbewegung in elektrische Energie um.</div>
+            <div class="mini-card xs"><strong>4</strong> Transformator passt die Spannung für das Stromnetz an.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M2</span><div class="h">Aufbau einer Windkraftanlage</div></div>
+        <div class="body">
+          <div class="img-box"><img src="Aufbau.jpg" alt="Aufbau einer Windkraftanlage"></div>
+          <div class="keyfacts">
+            <div class="fact"><div class="l">Rotor</div><div class="v">nimmt Windenergie auf</div></div>
+            <div class="fact"><div class="l">Gondel</div><div class="v">enthält Generator</div></div>
+            <div class="fact"><div class="l">Turm</div><div class="v">bringt Rotor in windstarke Höhe</div></div>
+            <div class="fact"><div class="l">Netzanschluss</div><div class="v">leitet Strom weiter</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>A</strong> Aufgaben: Energieumwandlung in der Windkraftanlage</div>
+      <ol>
+        <li>1. Beschreibe den Aufbau einer Windkraftanlage mit den Begriffen <i>Rotorblätter</i>, <i>Gondel</i>, <i>Generator</i>, <i>Turm</i> und <i>Nachführmotor</i>.</li>
+        <li>2. Gib die Energieumwandlungskette an: Welche Energieform steckt im Wind, welche entsteht am Ende?</li>
+        <li>3. Erkläre, warum Windkraftanlagen möglichst hoch gebaut werden.</li>
+        <li>4. Überlege: Warum liefern Windkraftanlagen nicht zu jeder Zeit gleich viel Strom?</li>
+      </ol>
+    </section><br>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M3</span><div class="h">Onshore- und Offshore-Windkraft</div></div>
+        <div class="body">
+          <div class="type-grid">
+            <div class="type-item">
+              <div class="svg-box">
+                <svg viewBox="0 0 220 120" width="100%" aria-label="Skizze Onshore-Windkraft">
+                  <rect width="220" height="120" fill="#fbfdff"/>
+                  <path d="M0 88 C30 78 58 95 95 84 C135 72 174 90 220 78 L220 120 L0 120 Z" fill="#bbf7d0"/>
+                  <line x1="110" y1="88" x2="110" y2="38" stroke="#6b7280" stroke-width="6" stroke-linecap="round"/>
+                  <circle cx="110" cy="34" r="6" fill="#374151"/>
+                  <path d="M110 34 L110 8" stroke="#374151" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M110 34 L134 47" stroke="#374151" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M110 34 L86 47" stroke="#374151" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M18 28 C40 18 56 18 78 28" fill="none" stroke="#60a5fa" stroke-width="4" stroke-linecap="round"/>
+                  <polygon points="78,28 67,23 69,33" fill="#60a5fa"/>
+                  <text x="14" y="18" font-size="12" font-weight="700" fill="#111827">Wind an Land</text>
+                  <text x="66" y="112" font-size="11" fill="#374151">Onshore: auf dem Land</text>
+                </svg>
+              </div>
+              <div class="text">
+                <h4>Onshore-Windkraft</h4>
+                <div class="xs"><strong>Standort:</strong> auf dem Land, z. B. Felder, Höhenzüge, windreiche Ebenen.</div>
+                <div class="xs"><strong>Typisch:</strong> leichter erreichbar und günstiger zu bauen, aber oft Konflikte mit Anwohnern und Landschaftsschutz.</div>
+              </div>
+            </div>
+            <div class="type-item">
+              <div class="svg-box">
+                <svg viewBox="0 0 220 120" width="100%" aria-label="Skizze Offshore-Windkraft">
+                  <rect width="220" height="120" fill="#fbfdff"/>
+                  <rect x="0" y="82" width="220" height="38" fill="#93c5fd"/>
+                  <path d="M0 84 C18 78 34 90 52 84 C70 78 86 90 104 84 C122 78 138 90 156 84 C174 78 190 90 220 84" fill="none" stroke="#2563eb" stroke-width="3"/>
+                  <line x1="110" y1="82" x2="110" y2="35" stroke="#6b7280" stroke-width="6" stroke-linecap="round"/>
+                  <circle cx="110" cy="31" r="6" fill="#374151"/>
+                  <path d="M110 31 L110 5" stroke="#374151" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M110 31 L134 44" stroke="#374151" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M110 31 L86 44" stroke="#374151" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M16 26 C40 14 62 14 84 26" fill="none" stroke="#60a5fa" stroke-width="4" stroke-linecap="round"/>
+                  <polygon points="84,26 73,21 75,31" fill="#60a5fa"/>
+                  <text x="14" y="18" font-size="12" font-weight="700" fill="#111827">starker Meereswind</text>
+                  <text x="50" y="114" font-size="11" fill="#374151">Offshore: auf dem Meer</text>
+                </svg>
+              </div>
+              <div class="text">
+                <h4>Offshore-Windkraft</h4>
+                <div class="xs"><strong>Standort:</strong> im Meer, meist viele Kilometer vor der Küste.</div>
+                <div class="xs"><strong>Typisch:</strong> stärkere und gleichmäßigere Winde, aber höhere Bau- und Wartungskosten.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M4</span><div class="h">Leistungsberechnung</div></div>
+        <div class="body">
+          <div class="note small"><strong>Grundidee:</strong> Je stärker der Wind ist, desto viel mehr Leistung kann eine Windkraftanlage liefern. Besonders wichtig ist die Windgeschwindigkeit.</div>
+          <div class="formula">P = 0,5 · ρ · A · v³ · η</div>
+          <table>
+            <thead><tr><th>Symbol</th><th>Bedeutung</th><th>Einheit</th></tr></thead>
+            <tbody>
+              <tr><td>P</td><td>elektrische Leistung</td><td>W</td></tr>
+              <tr><td>ρ</td><td>Dichte der Luft, ungefähr 1,2</td><td>kg/m³</td></tr>
+              <tr><td>A</td><td>Rotorfläche</td><td>m²</td></tr>
+              <tr><td>v</td><td>Windgeschwindigkeit</td><td>m/s</td></tr>
+              <tr><td>η</td><td>Wirkungsgrad der Anlage</td><td>ohne Einheit</td></tr>
+            </tbody>
+          </table>
+          <div class="warn small mt-3"><strong>Wichtig:</strong> Oft genügt die qualitative Regel: doppelte Windgeschwindigkeit bedeutet ungefähr achtfache Windleistung, weil v³ in der Formel steht.</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>B</strong> Aufgaben: Onshore, Offshore und Leistung</div>
+      <ol>
+        <li>1. Vergleiche Onshore- und Offshore-Windkraft in einer Tabelle mit mindestens vier Kriterien.</li>
+        <li>2. Erkläre, warum Offshore-Anlagen trotz höherer Kosten häufig mehr Strom erzeugen können.</li>
+        <li>3. Berechne näherungsweise die Rotorfläche einer Anlage mit 100 m Rotordurchmesser. Nutze: A = π · r².</li>
+        <li>4. Erkläre mit eigenen Worten, warum die Windgeschwindigkeit für die Leistung besonders wichtig ist.</li>
+        <li>5. Berechne die elektrische Leistung, die das Windrad bei einer Windgeschwindigkeit von 10 m/s und einem Wirkungsgrad von 85% erzeugt.</li>
+      </ol>
+    </section><br>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M5</span><div class="h">Mittlere Windgeschwindigkeiten</div></div>
+        <div class="body"><div class="img-box"><img src="Speed.png" alt="Karte oder Diagramm zur weltweiten Windstromerzeugung"></div></div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M6</span><div class="h">Installierte Gesamtleistung von Windkraft</div></div>
+        <div class="body"><div class="img-box"><img src="Capacity.svg" alt="Karte oder Diagramm zum Anteil der Windkraft"></div></div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M7</span><div class="h">Vor- und Nachteile</div></div>
+        <div class="body">
+          <div class="mini-grid">
+            <div class="mini-card">
+              <h4>Vorteile</h4>
+              <ul class="clean xs">
+                <li>erneuerbare Energiequelle</li>
+                <li>im Betrieb kaum CO₂-Ausstoß</li>
+                <li>kein Brennstoff nötig</li>
+                <li>relativ schneller Bau möglich</li>
+                <li>Flächen unter Onshore-Anlagen können oft weiter genutzt werden</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h4>Nachteile</h4>
+              <ul class="clean xs">
+                <li>Stromproduktion schwankt mit dem Wind</li>
+                <li>Eingriff ins Landschaftsbild</li>
+                <li>Lärm- und Schattenwurf können stören</li>
+                <li>Gefahr für Vögel und Fledermäuse</li>
+                <li>Netzausbau und Speicher werden wichtiger</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M8</span><div class="h">Fallbeispiele großer Windparks</div></div>
+        <div class="body">
+          <table>
+            <thead><tr><th>Windpark</th><th>Typ</th><th>Land/Region</th><th>Leistung</th></tr></thead>
+            <tbody>
+              <tr><td>Gansu Wind Farm</td><td>Onshore</td><td>China</td><td>mehrere GW</td></tr>
+              <tr><td>Alta Wind Energy Center</td><td>Onshore</td><td>USA</td><td>ca. 1,5 GW</td></tr>
+              <tr><td>Hornsea</td><td>Offshore</td><td>Großbritannien/Nordsee</td><td>mehrere GW</td></tr>
+              <tr><td>Borkum Riffgrund</td><td>Offshore</td><td>Deutschland/Nordsee</td><td>mehrere 100 MW</td></tr>
+              <tr><td>Beispiel regionaler Windpark</td><td>Onshore</td><td>Deutschland</td><td>z. B. 30–100 MW</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>C</strong> Aufgaben: Verteilung und Bewertung</div>
+      <ol>
+        <li>1. Bestimme günstige Orte weltweit für (a) Offshore- und (b) Onshore-Windkraftanlagen.</li>
+        <li>2. Beschreibe die weltweite Entwicklung der installierten Windkraftleistung und beurteile den Anteil und die Entwicklung Deutschlands.</li>
+        <li>3. Stelle Vor- und Nachteile der Windkraft einander gegenüber und formuliere ein begründetes Urteil.</li>
+        <li>4. Berechne für die in M8 dargestellten Windparks, wie viele Personen sie jeweils gleichzeitig mit Elektrizität versorgen könnten. Nutze: 1 kW pro Person.</li>
+        <li>5. Diskutiere: Warum braucht ein Stromnetz mit viel Windkraft auch Speicher, flexible Kraftwerke oder Stromleitungen?</li>
+      </ol>
+    </section><br>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M9</span><div class="h">Windgeschwindigkeit und Leistung</div></div>
+        <div class="body">
+          <p class="small">Die Leistung einer Windkraftanlage steigt nicht gleichmäßig, sondern sehr stark mit der Windgeschwindigkeit. Unterhalb der Einschaltgeschwindigkeit steht die Anlage still. Bei Sturm wird sie zum Schutz abgeschaltet.</p>
+          <div class="chart-wrap"><canvas id="leistungsKurveChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M10</span><div class="h">Tagesverlauf eines Windparks</div></div>
+        <div class="body">
+          <p class="small">Windstrom schwankt. Manchmal liefert ein Windpark viel Strom, manchmal wenig. Deshalb müssen Stromnetze flexibel reagieren.</p>
+          <div class="chart-wrap"><canvas id="tagesverlaufChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M11</span><div class="h">Standortwahl für Windkraftanlagen</div></div>
+        <div class="body">
+          <div class="img-box"><img src="Standort.png" alt="Karte zur Standortwahl für Windkraft"></div>
+          <div class="mini-grid mt-3">
+            <div class="mini-card xs"><strong>Windangebot:</strong> je stärker und regelmäßiger, desto besser.</div>
+            <div class="mini-card xs"><strong>Abstand:</strong> Wohngebiete und Schutzgebiete müssen beachtet werden.</div>
+            <div class="mini-card xs"><strong>Netzanschluss:</strong> Stromleitungen müssen erreichbar sein.</div>
+            <div class="mini-card xs"><strong>Natur:</strong> Vögel, Fledermäuse und Landschaftsschutz spielen eine Rolle.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M12</span><div class="h">Onshore vs. Offshore im Vergleich</div></div>
+        <div class="body">
+          <table>
+            <thead><tr><th>Kriterium</th><th>Onshore</th><th>Offshore</th></tr></thead>
+            <tbody>
+              <tr><td>Wind</td><td>stärker schwankend</td><td>oft stärker und gleichmäßiger</td></tr>
+              <tr><td>Baukosten</td><td>geringer</td><td>höher</td></tr>
+              <tr><td>Wartung</td><td>einfacher</td><td>schwieriger auf See</td></tr>
+              <tr><td>Akzeptanz</td><td>häufig lokale Konflikte</td><td>weniger sichtbar, aber Eingriffe ins Meer</td></tr>
+              <tr><td>Netzanschluss</td><td>meist kürzer</td><td>Seekabel nötig</td></tr>
+            </tbody>
+          </table>
+          <div class="note small mt-3"><strong>Merksatz:</strong> Onshore ist meist günstiger, Offshore liefert oft gleichmäßiger Strom. Beide Formen ergänzen sich.</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>D</strong> Aufgaben: Windkraft im Stromnetz</div>
+      <ol>
+        <li>1. Lies aus M9 ab: Ab welcher Windgeschwindigkeit beginnt die Anlage ungefähr Strom zu erzeugen?</li>
+        <li>2. Erkläre, warum die Leistung ab einer bestimmten Windgeschwindigkeit nicht weiter steigt.</li>
+        <li>3. Beschreibe den Tagesverlauf in M10: Wann ist die Leistung niedrig, wann hoch?</li>
+        <li>4. Plane einen geeigneten Standort für einen Windpark. Begründe deine Entscheidung mit mindestens vier Standortfaktoren aus M11.</li>
+        <li>Entscheide begründet: Soll eine Gemeinde eher Onshore-Windräder bauen oder sich an einem Offshore-Windpark beteiligen?</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>Theo Schierbaum - Windkraft</div>
+    <div class="text-right">Ziel: Überblick, Formelverständnis und einfache Anwendungen.</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Chart === 'undefined') return;
+
+    const leistungsCanvas = document.getElementById('leistungsKurveChart');
+    if (leistungsCanvas) {
+      new Chart(leistungsCanvas, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: 'Leistung der Windkraftanlage',
+            data: [
+              {x:0,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:80},{x:5,y:180},{x:6,y:350},
+              {x:7,y:620},{x:8,y:950},{x:9,y:1300},{x:10,y:1650},{x:11,y:1900},
+              {x:12,y:2000},{x:13,y:2000},{x:14,y:2000},{x:15,y:2000},{x:20,y:2000},
+              {x:24,y:2000},{x:25,y:0},{x:30,y:0}
+            ],
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37,99,235,0.18)',
+            fill: true,
+            pointRadius: 2,
+            tension: 0.25
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            x: { type:'linear', min:0, max:30, title:{display:true, text:'Windgeschwindigkeit in m/s'} },
+            y: { min:0, max:2200, title:{display:true, text:'Leistung in kW'} }
+          }
+        }
+      });
+    }
+
+    const tagesCanvas = document.getElementById('tagesverlaufChart');
+    if (tagesCanvas) {
+      new Chart(tagesCanvas, {
+        type: 'line',
+        data: {
+          labels: ['0','2','4','6','8','10','12','14','16','18','20','22','24'],
+          datasets: [{
+            label: 'Windparkleistung',
+            data: [30,22,18,35,75,120,95,70,130,165,145,80,45],
+            borderColor: '#16a34a',
+            backgroundColor: 'rgba(22,163,74,0.18)',
+            fill: true,
+            pointRadius: 3,
+            tension: 0.35
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            x: { title:{display:true, text:'Tageszeit in Stunden'} },
+            y: { min:0, max:180, title:{display:true, text:'Leistung in MW'} }
+          }
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

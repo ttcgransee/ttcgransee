@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Wechselkurse, Handelsbilanzen und das Euro-Dilemma</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container { width:100%; min-height:100vh; display:flex; flex-direction:column; }
+    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .title { margin:0; font-weight:700; font-size:2.05rem; letter-spacing:-.02em; }
+    .subtitle { font-size:1rem; font-weight:400; opacity:.86; margin-top:.2rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content { flex:1 1 auto; padding:1.25rem 2rem 1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+    .materials-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .material { background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05); overflow:hidden; display:flex; flex-direction:column; }
+    .material.full-span { grid-column:1 / -1; }
+    .mat-head { display:flex; align-items:center; gap:.6rem; padding:.7rem .9rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+    .badge { background:#2A3B32; color:#fff; font-weight:700; font-size:.9rem; padding:.15rem .55rem; border-radius:6px; min-width:2.6rem; text-align:center; }
+    .mat-title { font-weight:600; color:#2A3B32; font-size:1.05rem; }
+    .mat-body { padding:.9rem; font-family:'Raleway',sans-serif; flex:1; }
+    .tiny { font-size:.84rem; color:#4B5563; line-height:1.45; }
+    .tiny strong { color:#111827; }
+    .small { font-size:.92rem; color:#374151; line-height:1.55; }
+    .source { margin-top:.55rem; font-size:.72rem; color:#6B7280; font-family:'Raleway',sans-serif; }
+    .chart-wrapper { position:relative; width:100%; height:260px; }
+    .chart-wrapper.tall { height:310px; }
+    .task-section { position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:1rem; font-family:'Raleway',sans-serif; margin-top:.5rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px; font-weight:600; font-size:.9rem; }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; font-size:.9rem; }
+    .footer { padding:1rem 3rem; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; color:#666; font-size:.9rem; font-family:'Raleway',sans-serif; flex-shrink:0; background:#F5F5F5; }
+    .footer-left { justify-self:start; }
+    .footer-center { display:flex; gap:1rem; justify-self:center; }
+    .footer-right { justify-self:end; }
+    .nav-btn { display:inline-flex; align-items:center; justify-content:center; background-color:#2A3B32; color:white; padding:.5rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:.9rem; transition:all .2s ease; box-shadow:0 2px 4px rgba(0,0,0,.1); min-width:100px; }
+    .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); box-shadow:0 4px 6px rgba(0,0,0,.15); }
+
+    /* Fachliche Bausteine */
+    .key-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.55rem; margin-top:.65rem; }
+    .key-card { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9px; padding:.55rem .65rem; display:flex; gap:.55rem; align-items:flex-start; }
+    .key-icon { color:#2A3B32; font-size:1rem; margin-top:.1rem; flex-shrink:0; }
+    .key-title { color:#2A3B32; font-size:.84rem; font-weight:700; margin-bottom:.12rem; }
+    .key-text { font-size:.78rem; color:#374151; line-height:1.42; }
+    .note { margin-top:.65rem; background:#FEF3C7; border:1px solid #FBBF24; border-radius:8px; padding:.45rem .6rem; }
+    .danger-note { margin-top:.65rem; background:#FEE2E2; border:1px solid #FCA5A5; border-radius:8px; padding:.45rem .6rem; }
+    .tag-wrap { margin-top:.65rem; display:flex; flex-wrap:wrap; gap:.25rem; }
+    .tag { display:inline-block; background:#E9F0EC; color:#2A3B32; font-size:.75rem; font-weight:600; padding:.12rem .45rem; border-radius:4px; }
+
+    .flow { display:flex; gap:.45rem; align-items:stretch; margin:.4rem 0 .6rem; }
+    .flow-box { flex:1; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9px; padding:.55rem .55rem; font-size:.78rem; line-height:1.38; color:#374151; }
+    .flow-box strong { color:#2A3B32; }
+    .flow-arrow { display:flex; align-items:center; justify-content:center; color:#9CA3AF; font-size:1.05rem; min-width:20px; }
+
+    table.compare { width:100%; border-collapse:separate; border-spacing:0; font-size:.8rem; }
+    .compare th, .compare td { padding:.46rem .58rem; border-bottom:1px solid #E5E7EB; text-align:left; vertical-align:top; }
+    .compare th { background:#2A3B32; color:#fff; font-weight:600; }
+    .compare tr:nth-child(even) td { background:#F9FAFB; }
+    .compare td:first-child { font-weight:700; color:#2A3B32; width:21%; }
+    .plus { color:#16A34A; font-weight:700; }
+    .minus { color:#DC2626; font-weight:700; }
+
+    .calc-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.7rem; margin-top:.4rem; }
+    .calc-card { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:10px; padding:.7rem; }
+    .calc-title { font-weight:700; color:#2A3B32; font-size:.86rem; margin-bottom:.3rem; }
+    .calc-line { display:flex; justify-content:space-between; gap:.6rem; font-size:.82rem; border-bottom:1px dashed #D1D5DB; padding:.22rem 0; }
+    .calc-line:last-child { border-bottom:0; }
+    .calc-big { margin-top:.35rem; font-weight:700; color:#111827; font-size:.86rem; }
+
+    .dilemma-wrap { display:grid; grid-template-columns:1fr auto 1fr; gap:.75rem; align-items:stretch; margin-top:.4rem; }
+    .dilemma-side { border:1px solid #E5E7EB; border-radius:10px; padding:.75rem; background:#F9FAFB; }
+    .dilemma-center { display:flex; align-items:center; justify-content:center; color:#9CA3AF; font-size:1.5rem; }
+    .dilemma-title { font-weight:700; color:#2A3B32; font-size:.9rem; margin-bottom:.35rem; }
+    .dilemma-side ul { list-style:disc; padding-left:1.05rem; color:#374151; font-size:.82rem; line-height:1.52; }
+
+    .option-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.55rem; }
+    .option-card { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9px; padding:.6rem .65rem; min-height:96px; }
+    .option-title { font-weight:700; color:#2A3B32; font-size:.83rem; margin-bottom:.18rem; }
+    .option-text { color:#374151; font-size:.78rem; line-height:1.43; }
+
+    .image-placeholder { height:210px; border:2px dashed #9CA3AF; border-radius:12px; background:linear-gradient(135deg,#F9FAFB,#E9F0EC); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#4B5563; }
+    .image-placeholder i { color:#2A3B32; font-size:2rem; margin-bottom:.4rem; }
+    .image-placeholder .file { font-weight:700; color:#2A3B32; font-family:'Montserrat',sans-serif; }
+
+    @media (max-width:1100px) { .materials-grid{ grid-template-columns:1fr; } .material.full-span{ grid-column:auto; } .key-grid{ grid-template-columns:1fr; } .flow{ flex-direction:column; } .flow-arrow{ transform:rotate(90deg); } .calc-grid{ grid-template-columns:1fr; } .dilemma-wrap{ grid-template-columns:1fr; } .dilemma-center{ transform:rotate(90deg); } .option-grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="slide-header">
+    <div>
+      <h1 class="title">Wechselkurse, Handelsbilanzen und das Euro-Dilemma</h1>
+      <div class="divider"></div>
+      <div class="subtitle">Warum eigene Währungen Ungleichgewichte ausgleichen können – und warum das im Euro-Raum schwieriger ist</div>
+    </div>
+    <p class="text-sm font-light">Geographie | Klasse 10</p>
+  </div>
+
+  <div class="slide-content">
+    <div class="materials-grid">
+
+      <!-- M1 -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M1</div>
+          <div class="mat-title">Grundbegriffe: Was wird eigentlich ausgeglichen?</div>
+        </div>
+        <div class="mat-body">
+          <p class="small">Die <strong>Handelsbilanz</strong> vergleicht den Wert der Warenexporte und Warenimporte eines Landes. Ein Überschuss bedeutet: Das Land verkauft mehr Waren ins Ausland, als es von dort kauft. Ein Defizit bedeutet: Das Land kauft mehr Waren aus dem Ausland, als es verkauft.</p>
+          <div class="key-grid">
+            <div class="key-card"><i class="fas fa-arrow-up-right-dots key-icon"></i><div><div class="key-title">Exportüberschuss</div><div class="key-text">Exporte &gt; Importe. Das Ausland bezahlt mehr an das Inland, als umgekehrt gezahlt wird.</div></div></div>
+            <div class="key-card"><i class="fas fa-arrow-down-wide-short key-icon"></i><div><div class="key-title">Importüberschuss</div><div class="key-text">Importe &gt; Exporte. Das Land braucht Finanzierung aus dem Ausland: Kredite, Kapitalzuflüsse oder Vermögensverkauf.</div></div></div>
+            <div class="key-card"><i class="fas fa-scale-balanced key-icon"></i><div><div class="key-title">Leistungsbilanz</div><div class="key-text">Weiter als Handelsbilanz: Waren + Dienstleistungen + Einkommen + Übertragungen. Für Ungleichgewichte oft aussagekräftiger.</div></div></div>
+            <div class="key-card"><i class="fas fa-money-bill-transfer key-icon"></i><div><div class="key-title">Wechselkurs</div><div class="key-text">Preis einer Währung in einer anderen Währung. Er beeinflusst, ob Produkte im Ausland billig oder teuer wirken.</div></div></div>
+          </div>
+          <div class="note"><p class="tiny"><strong>Merksatz:</strong> Handelsbilanzsalden sind keine „Punktestände“. Ein dauerhafter Überschuss eines Landes bedeutet spiegelbildlich, dass andere Länder Defizite oder Schulden aufbauen müssen.</p></div>
+        </div>
+      </div>
+
+      <!-- M2 -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M2</div>
+          <div class="mat-title">Modell: Automatischer Ausgleich bei flexiblen Wechselkursen</div>
+        </div>
+        <div class="mat-body">
+          <p class="tiny mb-2">Stark vereinfachtes Modell: Ein Überschussland wertet auf, ein Defizitland wertet ab. Dadurch verändern sich Preise und Handelsströme.</p>
+          <div class="chart-wrapper">
+            <canvas id="adjustmentChart"></canvas>
+          </div>
+          <div class="flow">
+            <div class="flow-box"><strong>1 Defizit</strong><br/>Ein Land importiert dauerhaft mehr, als es exportiert.</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box"><strong>2 Währung unter Druck</strong><br/>Mehr eigene Währung wird angeboten, um Importe zu bezahlen.</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box"><strong>3 Abwertung</strong><br/>Importe werden teurer, Exporte werden für andere billiger.</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box"><strong>4 Ausgleich</strong><br/>Defizit sinkt; beim Überschussland wirkt es umgekehrt.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- M3 -->
+      <div class="material full-span">
+        <div class="mat-head">
+          <div class="badge">M3</div>
+          <div class="mat-title">Rechenbeispiel: Wie Aufwertung und Abwertung Preise verändern</div>
+        </div>
+        <div class="mat-body">
+          <div class="calc-grid">
+            <div class="calc-card">
+              <div class="calc-title"><i class="fas fa-arrow-trend-up mr-1"></i>Aufwertung der Überschusswährung</div>
+              <div class="calc-line"><span>Ausgangslage:</span><strong>1 € = 1,00 $</strong></div>
+              <div class="calc-line"><span>Euro wertet auf:</span><strong>1 € = 1,20 $</strong></div>
+              <div class="calc-line"><span>EU-Produkt kostet 100 €:</span><strong>im Ausland 120 $</strong></div>
+              <div class="calc-line"><span>US-Produkt kostet 100 $:</span><strong>in der EU nur 83,33 €</strong></div>
+              <div class="calc-big">Folge: EU-Exporte werden teurer, Importe günstiger → Überschuss sinkt.</div>
+            </div>
+            <div class="calc-card">
+              <div class="calc-title"><i class="fas fa-arrow-trend-down mr-1"></i>Abwertung der Defizitwährung</div>
+              <div class="calc-line"><span>Ausgangslage:</span><strong>1 D = 1,00 €</strong></div>
+              <div class="calc-line"><span>Defizitwährung wertet ab:</span><strong>1 D = 0,80 €</strong></div>
+              <div class="calc-line"><span>Import aus Euro-Raum kostet 100 €:</span><strong>125 D</strong></div>
+              <div class="calc-line"><span>Eigenes Produkt kostet 100 D:</span><strong>im Euro-Raum 80 €</strong></div>
+              <div class="calc-big">Folge: Importe werden teurer, Exporte günstiger → Defizit sinkt.</div>
+            </div>
+          </div>
+          <div class="chart-wrapper mt-3">
+            <canvas id="priceEffectChart"></canvas>
+          </div>
+          <p class="source">Hinweis: Die Zahlen sind ein didaktisches Rechenmodell, keine historischen Wechselkurse.</p>
+        </div>
+      </div>
+
+      <!-- M4 -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M4</div>
+          <div class="mat-title">Das Euro-Dilemma: eine Währung, verschiedene Volkswirtschaften</div>
+        </div>
+        <div class="mat-body">
+          <div class="dilemma-wrap">
+            <div class="dilemma-side">
+              <div class="dilemma-title"><i class="fas fa-flag mr-1"></i>Mit eigenen Währungen</div>
+              <ul>
+                <li>Deutschland hätte z.B. eine eigene Mark, Griechenland eine eigene Drachme.</li>
+                <li>Bei starken Exportüberschüssen würde die Mark tendenziell aufwerten.</li>
+                <li>Bei Defiziten würde die Drachme tendenziell abwerten.</li>
+                <li>Preise würden sich automatisch anpassen: Exporte des Überschusslands werden teurer, Exporte des Defizitlands billiger.</li>
+              </ul>
+            </div>
+            <div class="dilemma-center">⇄</div>
+            <div class="dilemma-side">
+              <div class="dilemma-title"><i class="fas fa-euro-sign mr-1"></i>Im Euro-Raum</div>
+              <ul>
+                <li>Deutschland und Griechenland nutzen dieselbe Währung.</li>
+                <li>Es gibt keinen Wechselkurs „Deutschland–Griechenland“ mehr.</li>
+                <li>Preis- und Wettbewerbsunterschiede verschwinden nicht automatisch.</li>
+                <li>Ausgleich muss über Löhne, Produktivität, Investitionen, Migration, Nachfrage oder politische Hilfen erfolgen.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="danger-note"><p class="tiny"><strong>Problemkern:</strong> Der Euro beseitigt Wechselkursrisiken im Binnenmarkt – aber auch einen wichtigen Anpassungsmechanismus zwischen ungleichen Volkswirtschaften.</p></div>
+        </div>
+      </div>
+
+      <!-- M5 -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M5</div>
+          <div class="mat-title">Datenbezug: Warenbilanz ausgewählter Euro-Länder 2024</div>
+        </div>
+        <div class="mat-body">
+          <p class="tiny mb-2">Saldo des Warenhandels in Milliarden Euro. Positive Werte = Warenexportüberschuss, negative Werte = Warenimportüberschuss.</p>
+          <div class="chart-wrapper tall">
+            <canvas id="goodsBalanceChart"></canvas>
+          </div>
+          <p class="source">Quelle: Eurostat, Balance of payments statistics, Werte für 2024. Warenbilanz ist nur ein Teil der Leistungsbilanz.</p>
+        </div>
+      </div>
+
+      <!-- M6 -->
+      <div class="material full-span">
+        <div class="mat-head">
+          <div class="badge">M6</div>
+          <div class="mat-title">Chancen und Herausforderungen des Euro – vertiefter Überblick</div>
+        </div>
+        <div class="mat-body">
+          <table class="compare">
+            <thead>
+              <tr><th>Bereich</th><th><span class="plus">+</span> Chancen</th><th><span class="minus">−</span> Herausforderungen bei Ungleichgewichten</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Alltag &amp; Reisen</td>
+                <td>Kein Geldwechsel, keine Umtauschgebühren, Preise lassen sich im Euro-Raum leichter vergleichen.</td>
+                <td>Preisunterschiede zwischen Regionen bleiben trotzdem bestehen; gleiche Währung bedeutet nicht gleiche Kaufkraft.</td>
+              </tr>
+              <tr>
+                <td>Unternehmen</td>
+                <td>Planungssicherheit: Lieferverträge im Euro-Raum sind nicht mehr von Wechselkursschwankungen zwischen Mitgliedstaaten abhängig.</td>
+                <td>Unternehmen in schwächeren Regionen können ihre Wettbewerbsfähigkeit nicht durch eine nationale Abwertung verbessern.</td>
+              </tr>
+              <tr>
+                <td>Handel</td>
+                <td>Der Euro stärkt grenzüberschreitende Lieferketten und senkt Transaktionskosten im Binnenmarkt.</td>
+                <td>Exportstarke Länder können dauerhaft Überschüsse aufbauen; Defizitländer müssen sich anpassen oder finanzieren.</td>
+              </tr>
+              <tr>
+                <td>Geldpolitik</td>
+                <td>Eine gemeinsame Zentralbank kann Preisstabilität für den gesamten Euro-Raum verfolgen.</td>
+                <td>Ein Zinssatz passt nie perfekt zu allen Ländern: Boomregionen und Krisenregionen brauchen oft unterschiedliche Impulse.</td>
+              </tr>
+              <tr>
+                <td>Raumstruktur</td>
+                <td>Der Euro macht Europa als Wirtschaftsraum enger vernetzt und erleichtert Standortentscheidungen über Grenzen hinweg.</td>
+                <td>Starke Zentren können Kapital und Fachkräfte stärker anziehen; periphere Regionen geraten unter Anpassungsdruck.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- M7 -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M7</div>
+          <div class="mat-title">Wie kann ein Land ohne Abwertung reagieren?</div>
+        </div>
+        <div class="mat-body">
+          <div class="option-grid">
+            <div class="option-card"><div class="option-title"><i class="fas fa-gears mr-1"></i>Produktivität steigern</div><div class="option-text">Bildung, Digitalisierung, Infrastruktur, Forschung. Ziel: gleiche Löhne, aber mehr Leistung pro Stunde.</div></div>
+            <div class="option-card"><div class="option-title"><i class="fas fa-sack-dollar mr-1"></i>Interne Abwertung</div><div class="option-text">Löhne und Preise steigen langsamer oder sinken. Problem: sozial hart und politisch konfliktträchtig.</div></div>
+            <div class="option-card"><div class="option-title"><i class="fas fa-chart-line mr-1"></i>Investitionen lenken</div><div class="option-text">Industriepolitik, Energiepreise, Verkehrsnetze und Häfen verbessern Standortqualität.</div></div>
+            <div class="option-card"><div class="option-title"><i class="fas fa-hand-holding-heart mr-1"></i>EU-Transfers</div><div class="option-text">Fördermittel können schwächere Regionen stabilisieren, ersetzen aber keine dauerhafte Wettbewerbsfähigkeit.</div></div>
+            <div class="option-card"><div class="option-title"><i class="fas fa-people-arrows mr-1"></i>Arbeitsmigration</div><div class="option-text">Menschen wandern dorthin, wo Arbeitsplätze entstehen. Das gleicht regional aus, kann aber Abwanderungsräume schwächen.</div></div>
+            <div class="option-card"><div class="option-title"><i class="fas fa-cart-shopping mr-1"></i>Überschussland stärkt Nachfrage</div><div class="option-text">Höhere Löhne, mehr Investitionen und mehr Importe im Überschussland können Ungleichgewichte abbauen.</div></div>
+          </div>
+          <div class="note"><p class="tiny"><strong>Transfergedanke:</strong> Ohne Wechselkursausgleich wird Anpassung politischer: Wer trägt die Kosten – Defizitländer, Überschussländer oder die Euro-Zone gemeinsam?</p></div>
+        </div>
+      </div>
+
+      <!-- M8 -->
+      <div class="material">
+        <div class="mat-head">
+          <div class="badge">M8</div>
+          <div class="mat-title">Länderspezifische reale Wechselkurse</div>
+        </div>
+        <div class="mat-body">
+          <img src="Kurs.png">
+          
+          <div class="tag-wrap">
+            <span class="tag">Aufwertung</span>
+            <span class="tag">Abwertung</span>
+            <span class="tag">Handelsbilanz</span>
+            <span class="tag">Leistungsbilanz</span>
+            <span class="tag">Euro-Dilemma</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Aufgaben -->
+    <section class="task-section">
+      <div class="task-label">Aufgaben</div>
+      <ol>
+        <li>1. <strong>Klärt die Begriffe</strong> Handelsbilanz, Leistungsbilanz, Aufwertung und Abwertung mithilfe von M1 in eigenen Worten. Nutzt jeweils ein Beispiel.</li>
+        <li>2. <strong>Beschreibt</strong> das Modell in M2: Warum nähern sich Überschuss und Defizit im Zeitverlauf an? Formuliert die Wirkungskette in vier Schritten.</li>
+        <li>3. <strong>Rechnet und erklärt</strong> mit M3: Wie verändert eine Aufwertung die Preise von Exporten und Importen? Übertragt das Beispiel anschließend auf eine Abwertung.</li>
+        <li>4. <strong>Analysiert</strong> mithilfe von M4 und M5, warum der Euro den automatischen Handelsbilanzausgleich zwischen ungleichen Euro-Ländern erschwert.</li>
+        <li>5. <strong>Bewertet</strong> zwei Handlungsoptionen aus M7: Welche sind kurzfristig wirksam, welche langfristig sinnvoll? Welche sozialen oder räumlichen Nebenwirkungen können entstehen?</li>
+        <li>6. <strong>Beurteilt</strong> die Aussage: „Exportüberschüsse sind immer ein Zeichen wirtschaftlicher Stärke.“ Nutzt mindestens drei Materialien der Folie.</li>
+      </ol>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-left"><p>Geographie – Europa, Binnenmarkt und regionale Ungleichgewichte</p></div>
+    <div class="footer-center">
+      <a class="nav-btn" href="euro_als_gemeinschaftswaehrung_vertieft_v2.html">← Zurück</a>
+      <a class="nav-btn" href="3.html">Weiter →</a>
+    </div>
+    <div class="footer-right"><p>2</p></div>
+  </div>
+</div>
+
+<script>
+  const green = '#2A3B32';
+  const green2 = '#3D5245';
+  const gold = '#E6B400';
+  const red = '#C53030';
+  const grid = 'rgba(209,213,219,.55)';
+
+  // M2: didaktisches Modell des Handelsbilanzausgleichs
+  new Chart(document.getElementById('adjustmentChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'Überschussland: Handelsbilanzsaldo (% des BIP)',
+          data: [{x:0,y:6},{x:1,y:5},{x:2,y:3.8},{x:3,y:2.4},{x:4,y:1.5},{x:5,y:.8},{x:6,y:.2}],
+          borderColor: green,
+          backgroundColor: 'rgba(42,59,50,.12)',
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: green,
+          tension: .25
+        },
+        {
+          label: 'Defizitland: Handelsbilanzsaldo (% des BIP)',
+          data: [{x:0,y:-6},{x:1,y:-5},{x:2,y:-3.8},{x:3,y:-2.4},{x:4,y:-1.5},{x:5,y:-.8},{x:6,y:-.2}],
+          borderColor: red,
+          backgroundColor: 'rgba(197,48,48,.10)',
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: red,
+          tension: .25
+        }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ labels:{ font:{ family:'Montserrat', size:11 } } },
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' %' } }
+      },
+      scales:{
+        x:{ type:'linear', min:0, max:6, ticks:{ stepSize:1, callback:v=>'Jahr '+v }, title:{ display:true, text:'Zeit nach Beginn des Ungleichgewichts', font:{family:'Montserrat',weight:'600'} }, grid:{ color:grid } },
+        y:{ min:-7, max:7, ticks:{ stepSize:2, callback:v=>v+' %' }, title:{ display:true, text:'Handelsbilanzsaldo in % des BIP', font:{family:'Montserrat',weight:'600'} }, grid:{ color:grid } }
+      }
+    }
+  });
+
+  // M3: Preiswirkung
+  new Chart(document.getElementById('priceEffectChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['EU-Produkt im Ausland', 'US-Produkt in der EU'],
+      datasets: [
+        { label: 'vor Aufwertung (Index)', data: [100,100], backgroundColor:'rgba(42,59,50,.78)', borderRadius:4 },
+        { label: 'nach Euro-Aufwertung (Index)', data: [120,83.3], backgroundColor:'rgba(230,180,0,.85)', borderRadius:4 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ font:{family:'Montserrat', size:11} } }, tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) } } },
+      scales:{
+        x:{ ticks:{ font:{family:'Montserrat'} }, grid:{ display:false } },
+        y:{ beginAtZero:true, max:130, title:{ display:true, text:'Preisindex (Ausgangslage = 100)', font:{family:'Montserrat',weight:'600'} }, grid:{ color:grid } }
+      }
+    }
+  });
+
+  // M5: Eurostat Warenbilanz 2024
+  new Chart(document.getElementById('goodsBalanceChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Deutschland', 'Italien', 'Griechenland', 'Frankreich'],
+      datasets: [{
+        label: 'Warenbilanzsaldo 2024 (Mrd. €)',
+        data: [235.5, 64.0, -35.7, -58.1],
+        backgroundColor: ctx => ctx.raw >= 0 ? 'rgba(42,59,50,.82)' : 'rgba(197,48,48,.82)',
+        borderRadius:4
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ font:{family:'Montserrat', size:11} } }, tooltip:{ callbacks:{ label: ctx => ctx.parsed.x.toFixed(1) + ' Mrd. €' } } },
+      scales:{
+        x:{ min:-80, max:250, title:{ display:true, text:'Saldo in Milliarden Euro', font:{family:'Montserrat',weight:'600'} }, grid:{ color:grid } },
+        y:{ grid:{ display:false }, ticks:{ font:{family:'Montserrat'} } }
+      }
+    }
+  });
+</script>
+</body>
+</html>

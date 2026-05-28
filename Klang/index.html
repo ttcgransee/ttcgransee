@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Physik der Musik – Schwingungen, Klang und Melodie</title>
+  <style>
+    :root {
+      --panel-width: 430px;
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --line: #d7dde4;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2A3B32;
+      --accent-2: #E6B400;
+      --soft: #E9F0EC;
+      --danger: #a61d24;
+      --blue-soft: #eef5ff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .slide-header { background:#2A3B32; color:#fff; padding:1.25rem 2rem; display:flex; justify-content:space-between; align-items:center; gap: 1rem; }
+    .title { margin:0; font-weight:700; font-size:2.1rem; }
+    .subtitle { font-size:1rem; font-weight:400; opacity:.82; margin-top:.2rem; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .header-meta { text-align:right; font-size:.92rem; line-height:1.35; opacity:.9; }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(0, var(--panel-width)) minmax(0, 1fr);
+      min-height: calc(100vh - 96px);
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .panel, .main-wrap, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+    }
+
+    .panel { padding: 18px; overflow: auto; min-width: 0; }
+    .main-wrap { padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; overflow: hidden; }
+
+    h1 { font-size: 22px; margin: 0 0 6px 0; }
+    h2 { font-size: 18px; margin: 0 0 8px 0; }
+    .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; line-height: 1.45; }
+    .section-title { font-size: 14px; font-weight: 700; margin: 18px 0 8px; }
+
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    input[type="text"], input[type="number"], select, button, textarea {
+      width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; background: #fff;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    input[type="range"]::-webkit-slider-thumb { cursor: grab; }
+    input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; }
+    .range-number-grid { display:grid; grid-template-columns: 1fr 86px; gap:8px; align-items:center; }
+    .field-value { color: var(--muted); font-weight: 700; }
+    input:focus, select:focus, button:focus, textarea:focus { outline: 2px solid rgba(42,59,50,0.16); border-color: var(--accent); }
+    .row { margin-bottom: 12px; }
+    .inline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    button { background:#fff; cursor:pointer; font-weight:700; transition: all .15s ease; }
+    button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+    button.warn { border-color: #efc8ca; color: var(--danger); }
+    button:hover { filter: brightness(0.98); transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+    button:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .actions { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    .small { font-size:12px; color:var(--muted); line-height:1.45; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between; }
+    .toolbar-left, .toolbar-right { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .badge { font-size:12px; color:var(--muted); background:#f8fafc; border:1px solid var(--line); border-radius:999px; padding:6px 10px; }
+    .badge.strong { color:#fff; background:var(--accent); border-color:var(--accent); }
+
+    .timeline-card { border:1px solid var(--line); background:#fbfcfd; border-radius:14px; padding:12px; margin-bottom:12px; min-width:0; max-width:100%; overflow:hidden; }
+    .timeline-head { display:flex; justify-content:space-between; align-items:flex-end; gap:10px; margin-bottom:10px; }
+    .timeline-title { font-weight:700; font-size:14px; }
+    .timeline-scale { font-size:11px; color:var(--muted); white-space:nowrap; }
+    .timeline-bar { display:flex; min-height:76px; width:100%; border:1px solid var(--line); border-radius:12px; overflow-x:auto; overflow-y:hidden; background:#fff; scroll-behavior:smooth; }
+    .timeline-bar::-webkit-scrollbar, .chart-holder::-webkit-scrollbar { height:10px; }
+    .timeline-bar::-webkit-scrollbar-thumb, .chart-holder::-webkit-scrollbar-thumb { background:#cbd5df; border-radius:999px; }
+    .timeline-bar::-webkit-scrollbar-track, .chart-holder::-webkit-scrollbar-track { background:#eef2f7; border-radius:999px; }
+    .time-segment { position:relative; min-width:42px; padding:8px 7px; border-right:1px solid rgba(31,41,55,.12); background:linear-gradient(180deg,#fff,#f7faf8); cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; gap:5px; transition:background .15s ease, box-shadow .15s ease; }
+    .time-segment:last-child { border-right:none; }
+    .time-segment.active { background:linear-gradient(180deg,#E9F0EC,#fff); box-shadow: inset 0 0 0 2px var(--accent); }
+    .time-segment.playing { background:linear-gradient(180deg,#fff3c4,#fff); }
+    .segment-index { font-size:11px; font-weight:700; color:#4b5563; }
+    .segment-freq { font-size:13px; font-weight:800; line-height:1.05; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .segment-time { font-size:11px; color:var(--muted); }
+    .segment-progress { position:absolute; left:0; bottom:0; height:4px; width:0%; background:var(--accent-2); transition:width .08s linear; }
+
+    .interval-editor { border:1px solid var(--line); border-radius:14px; background:#f8fafc; padding:13px; }
+    .interval-editor-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
+    .interval-editor-title { font-weight:800; }
+    .editor-meta { font-size:12px; color:var(--muted); margin-top:3px; }
+    .mini-btn { width:auto; padding:7px 10px; font-size:12px; border-radius:8px; }
+    .partials { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .partial-row { display:grid; grid-template-columns: 1.1fr .9fr .85fr auto; gap:7px; align-items:end; border-top:1px solid #e6ebf1; padding-top:8px; }
+    .partial-row select, .partial-row input { padding:8px 9px; font-size:12px; }
+    .remove-btn { width:36px; height:36px; padding:0; border-radius:9px; color:var(--danger); }
+
+    .canvas-holder { width:100%; overflow:hidden; border:1px solid var(--line); border-radius:12px; background:#fff; padding:8px; min-height: 320px; display:flex; align-items:center; justify-content:center; }
+    #waveCanvas { width:100%; height:320px; display:block; background:#fff; }
+    .chart-card { border:1px solid var(--line); border-radius:14px; background:#fff; padding:12px; min-width:0; max-width:100%; overflow:hidden; }
+    .chart-head { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:8px; }
+    .chart-title { font-weight:800; }
+    .scale-toggle { display:flex; gap:6px; flex-wrap:wrap; }
+    .scale-toggle button { width:auto; padding:7px 10px; font-size:12px; }
+    .scale-toggle button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .chart-holder { width:100%; max-width:100%; min-width:0; overflow-x:auto; overflow-y:hidden; border:1px solid var(--line); border-radius:12px; padding:6px; background:#fbfcfd; }
+    #frequencyCanvas { height:270px; display:block; }
+
+    .info-grid { display:grid; grid-template-columns: minmax(0,1.25fr) minmax(0,.75fr); gap:12px; min-width:0; }
+    .info-card { border:1px solid var(--line); border-radius:12px; background:#f8fafc; padding:12px; min-height:115px; }
+    .frequency-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .freq-pill { background:#fff; border:1px solid var(--line); border-radius:999px; padding:6px 9px; font-size:12px; }
+    .note-box { font-size:20px; font-weight:700; margin:6px 0; }
+    .keyboard { display:flex; height:74px; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:#eee; margin-top:10px; position:relative; }
+    .white-key { flex:1; background:#fff; border-right:1px solid #e5e7eb; position:relative; }
+    .white-key:last-child { border-right:none; }
+    .white-key span { position:absolute; bottom:5px; left:50%; transform:translateX(-50%); font-size:10px; color:#9ca3af; }
+    .black-key { position:absolute; top:0; width:4.8%; height:43px; background:#111827; border-radius:0 0 5px 5px; z-index:3; transform:translateX(-50%); }
+    .key-marker { position:absolute; top:0; width:3px; height:100%; background:var(--accent-2); z-index:5; box-shadow:0 0 0 2px rgba(230,180,0,.25); }
+
+    .task-section { position:relative; background:#E9F0EC; border:2px solid #2A3B32; border-radius:12px; padding:1rem; font-family:Arial, Helvetica, sans-serif; margin:0 16px 16px; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:#fff; padding:.25rem .75rem; border-radius:6px; font-weight:600; font-size:.9rem; }
+    .task-section ol { margin-left:1rem; }
+    .task-section li { margin:.45rem 0; line-height:1.55; }
+    .footer { padding:1rem 3rem; display:grid; grid-template-columns: 1fr auto 1fr; align-items:center; color:#666; font-size:0.9rem; font-family:Arial, Helvetica, sans-serif; flex-shrink:0; background:#F5F5F5; }
+    .footer-left { justify-self:start; } .footer-center { display:flex; gap:1rem; justify-self:center; } .footer-right { justify-self:end; }
+    .nav-btn { display:inline-flex; align-items:center; justify-content:center; background-color:#2A3B32; color:white; padding:.5rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:.9rem; transition:all .2s ease; box-shadow:0 2px 4px rgba(0,0,0,.1); min-width:100px; }
+    .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); box-shadow:0 4px 6px rgba(0,0,0,.15); }
+
+    @media (max-width: 1100px) { .app, .info-grid { grid-template-columns:1fr; } .header-meta { text-align:left; } .timeline-bar { min-height:70px; } }
+    @media (max-width: 620px) { .partial-row, .inline-grid, .actions { grid-template-columns:1fr; } .app { padding:10px; } .title { font-size:1.5rem; } .time-segment { min-width:58px; } }
+  </style>
+</head>
+<body>
+  <div class="slide-header">
+    <div>
+      <h1 class="title">Physik der Musik</h1>
+      <div class="subtitle">Interaktives Klanglabor</div>
+      <div class="divider"></div>
+    </div>
+    <p class="header-meta">Physik | Klasse 10</p>
+  </div>
+
+  <div class="app">
+    <aside class="panel">
+      <h1>Klang-Sequenz</h1>
+      <div class="sub">Die Intervalle erscheinen als Zeit-Balken. Je länger ein Abschnitt dauert, desto breiter wird er dargestellt. Zum Bearbeiten Abschnitt anklicken.</div>
+
+      <div class="actions" style="margin-bottom:10px;">
+        <button class="primary" id="playBtn">▶ Play</button>
+        <button id="stopBtn">■ Stop</button>
+      </div>
+      <div class="actions" style="margin-bottom:10px;">
+        <button id="addIntervalBtn">Intervall hinzufügen</button>
+        <button id="demoBtn">Demo-Melodie</button>
+      </div>
+
+      <div class="row">
+        <label for="masterVolume">Gesamtlautstärke: <span id="masterVolumeValue">35</span>%</label>
+        <input id="masterVolume" type="range" min="0" max="100" value="35" />
+      </div>
+
+      <div id="sequenceTimeline" class="timeline-card"></div>
+      <div id="intervalEditor" class="interval-editor"></div>
+      <div class="footer-note small" style="margin-top:10px;"><i>Hinweis</i>: Die Zahl im Balken ist die Grundfrequenz. Zusatzschwingungen werden erst im Editor des angeklickten Intervalls sichtbar.</div>
+    </aside>
+
+    <main class="main-wrap">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span class="badge strong" id="statusBadge">Bereit</span>
+          <span class="badge" id="timeBadge">t = 0,00 s</span>
+          <span class="badge" id="intervalBadge">Intervall: –</span>
+        </div>
+        <div class="toolbar-right"><span class="badge" id="durationBadge">Gesamtdauer: –</span></div>
+      </div>
+
+      <div class="canvas-holder"><canvas id="waveCanvas" width="1200" height="360"></canvas></div>
+
+      <section class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Grundfrequenz über die Zeit</div>
+            <div class="small" id="scaleHint">Lineare Skala: gleiche Hz-Abstände haben gleiche Höhe.</div>
+          </div>
+          <div class="scale-toggle" aria-label="Skalierung wählen">
+            <button id="linearScaleBtn" class="active" type="button">linear</button>
+            <button id="logScaleBtn" type="button">logarithmisch / Töne</button>
+          </div>
+        </div>
+        <div class="chart-holder" id="frequencyChartScroll"><canvas id="frequencyCanvas" width="1200" height="300"></canvas></div>
+      </section>
+
+      <div class="info-grid">
+        <section class="info-card">
+          <h2>Gerade erklingende Frequenzen</h2>
+          <div class="small">Angezeigt werden Grundfrequenz und alle aktiven Zusatzschwingungen des aktuellen Intervalls.</div>
+          <div id="frequencyList" class="frequency-list"></div>
+        </section>
+        <section class="info-card">
+          <h2>Position auf der Klaviatur</h2>
+          <div class="note-box" id="noteBox">–</div>
+          <div class="small" id="noteDetails">Drücke Play oder wähle ein Intervall aus.</div>
+          <div class="keyboard" id="keyboard"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <section class="task-section">
+    <div class="task-label">Arbeitsauftrag</div>
+    <ol>
+  <li>Erzeuge reine Töne (jeweils eine einzelne Sinusschwingung) mit verschiedenen Frequenzen und beschreibe den Zusammenhang zwischen Frequenz und Tonhöhe.</li>
+
+  <li>Vergleiche die Schwingungsdauer verschiedener Frequenzen und überprüfe den Zusammenhang T = 1/f.</li>
+
+  <li>Füge Oberschwingungen hinzu und untersuche, wie sich die Klangfarbe verändert.</li>
+
+  <li>Erzeuge harmonische und unharmonische Frequenzkombinationen und vergleiche den Höreindruck.</li>
+
+  <li>Baue einen komplexen Klang nur aus Sinusschwingungen auf und beobachte die entstehende Gesamtwelle.</li>
+
+  <li>Untersuche die Frequenzen harmonischer Oberschwingungen und bestimme ihre mathematischen Verhältnisse.</li>
+
+  <li>Vergleiche lineare und logarithmische Frequenzskalen und erkläre die Bedeutung der Oktave.</li>
+
+  <li>Erstelle eine kurze Melodie und analysiere Verlauf, Sprünge und Muster im Frequenzdiagramm.</li>
+
+  <li>Erzeuge Schwebungen mit fast gleichen Frequenzen und bestimme die Schwebungsfrequenz.</li>
+
+  <li>Versuche typische Instrumentenklänge durch geeignete Oberschwingungen nachzubilden.</li>
+</ol>
+  </section>
+
+  <div class="footer">
+    <div class="footer-left"><p>Theo Schierbaum – Schwingungen und Schall</p></div>
+    <div class="footer-center"><a class="nav-btn" href="#">← Zurück</a><a class="nav-btn" href="#">Nächste →</a></div>
+    <div class="footer-right"><p>Interaktive Simulation</p></div>
+  </div>
+
+<script>
+(() => {
+  const A4 = 440;
+  const noteNames = ['C', 'C♯/D♭', 'D', 'D♯/E♭', 'E', 'F', 'F♯/G♭', 'G', 'G♯/A♭', 'A', 'A♯/B♭', 'H'];
+  const whiteNotes = ['C','D','E','F','G','A','H','C'];
+  const blackPositions = [9.3, 23.6, 52.2, 66.5, 80.8];
+  const MIN_F = 20, MAX_F = 20000;
+
+  const state = {
+    intervals: [], playing: false, currentIndex: 0, audioCtx: null, scheduled: [], startTime: 0, raf: null,
+    previewIndex: 0, frequencyScale: 'linear', playbackElapsed: 0
+  };
+
+  const $ = id => document.getElementById(id);
+  const sequenceTimeline = $('sequenceTimeline');
+  const intervalEditor = $('intervalEditor');
+  const canvas = $('waveCanvas');
+  const ctx = canvas.getContext('2d');
+  const frequencyCanvas = $('frequencyCanvas');
+  const fctx = frequencyCanvas.getContext('2d');
+
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, Number(v) || 0)); }
+  function sanitizeFrequency(f) { return clamp(f, MIN_F, MAX_F); }
+  function totalDuration() { return state.intervals.reduce((s, it) => s + Number(it.duration), 0); }
+  function fmt(n, d=2) { return Number(n).toLocaleString('de-DE', { minimumFractionDigits:d, maximumFractionDigits:d }); }
+  function frequencyToMidi(f) { return 69 + 12 * Math.log2(f / A4); }
+  function midiToFrequency(m) { return A4 * Math.pow(2, (m - 69) / 12); }
+  function midiToNoteName(midi) {
+    const r = Math.round(midi), name = noteNames[((r % 12) + 12) % 12], octave = Math.floor(r / 12) - 1;
+    return `${name}${octave}`;
+  }
+  function noteDescription(f) {
+    const midi = frequencyToMidi(f), lower = Math.floor(midi), upper = Math.ceil(midi);
+    if (Math.abs(midi - Math.round(midi)) < 0.03) return `${midiToNoteName(midi)} (${fmt(midiToFrequency(Math.round(midi)),1)} Hz)`;
+    const p = Math.round((midi - lower) * 100);
+    return `zwischen ${midiToNoteName(lower)} und ${midiToNoteName(upper)} (${p}% zum höheren Ton)`;
+  }
+  function createInterval(freq=440, duration=0.8) {
+    return { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()), duration, baseFrequency: freq, baseAmplitude: 1, partials: [] };
+  }
+  function getComponents(interval) {
+    const base = sanitizeFrequency(interval.baseFrequency);
+    const comps = [{ freq: base, amp: clamp(interval.baseAmplitude, 0, 1), label: 'Grundton' }];
+    interval.partials.forEach(p => {
+      const freq = p.mode === 'harmonic' ? base * clamp(p.harmonic, 1, 64) : sanitizeFrequency(p.frequency);
+      if (freq >= MIN_F && freq <= MAX_F) comps.push({ freq, amp: clamp(p.amplitude, 0, 1), label: p.mode === 'harmonic' ? `${p.harmonic}. Oberschwingung` : 'frei' });
+    });
+    const ampSum = comps.reduce((s,c)=>s+Math.abs(c.amp),0) || 1;
+    return comps.map(c => ({...c, normAmp: c.amp / ampSum}));
+  }
+
+  function render() {
+    renderTimeline(); renderEditor();
+    $('durationBadge').textContent = `Gesamtdauer: ${fmt(totalDuration(),2)} s`;
+    $('masterVolumeValue').textContent = $('masterVolume').value;
+    const current = state.intervals[state.previewIndex] || state.intervals[0];
+    drawWaveform(current, state.previewIndex);
+    updateInfo(current, state.previewIndex);
+    drawFrequencyChart();
+  }
+
+  function renderTimeline() {
+    const total = Math.max(totalDuration(), 0.1);
+    sequenceTimeline.innerHTML = `<div class="timeline-head"><div><div class="timeline-title">Sequenzübersicht</div><div class="small">Klicken öffnet den Editor.</div></div><div class="timeline-scale">${fmt(total,2)} s gesamt</div></div><div class="timeline-bar"></div>`;
+    const bar = sequenceTimeline.querySelector('.timeline-bar');
+    const timelineWidth = Math.max(760, state.intervals.length * 86, total * 120);
+    state.intervals.forEach((it, index) => {
+      const seg = document.createElement('button');
+      seg.type = 'button';
+      seg.className = 'time-segment' + (index === state.previewIndex ? ' active' : '') + (index === state.currentIndex && state.playing ? ' playing' : '');
+      const segmentWidth = Math.max(64, (it.duration / total) * timelineWidth);
+      seg.style.flex = `0 0 ${segmentWidth}px`;
+      const progress = index === state.currentIndex && state.playing ? intervalProgressPercent(index) : 0;
+      seg.innerHTML = `<span class="segment-index">${index + 1}</span><span class="segment-freq">${fmt(it.baseFrequency,1)} Hz</span><span class="segment-time">${fmt(it.duration,2)} s</span><span class="segment-progress" style="width:${progress}%"></span>`;
+      seg.addEventListener('click', () => { state.previewIndex = index; render(); });
+      bar.appendChild(seg);
+    });
+    const active = bar.querySelector('.time-segment.active');
+    if (active) requestAnimationFrame(() => active.scrollIntoView({ block: 'nearest', inline: 'center' }));
+  }
+
+  function intervalStart(index) { return state.intervals.slice(0, index).reduce((s,it)=>s+Number(it.duration),0); }
+  function intervalProgressPercent(index) {
+    const start = intervalStart(index), dur = Number(state.intervals[index]?.duration || 1);
+    return Math.max(0, Math.min(100, ((state.playbackElapsed - start) / dur) * 100));
+  }
+
+  function renderEditor() {
+    const it = state.intervals[state.previewIndex];
+    if (!it) { intervalEditor.innerHTML = '<div class="small">Kein Intervall vorhanden.</div>'; return; }
+    intervalEditor.innerHTML = `
+      <div class="interval-editor-head">
+        <div><div class="interval-editor-title">Intervall ${state.previewIndex + 1} bearbeiten</div><div class="editor-meta">Grundfrequenz: ${fmt(it.baseFrequency,1)} Hz · Dauer: ${fmt(it.duration,2)} s</div></div>
+        <button class="mini-btn warn" data-action="remove" ${state.intervals.length <= 1 ? 'disabled' : ''}>löschen</button>
+      </div>
+      <div class="inline-grid">
+        <div><label>Dauer: <span class="field-value" data-label="duration">${fmt(it.duration,2)}</span> s</label><div class="range-number-grid"><input data-field="duration" data-kind="range" type="range" min="0.1" max="4" step="0.01" value="${it.duration}"><input data-field="duration" data-kind="number" type="number" inputmode="decimal" min="0.1" max="20" step="0.01" value="${it.duration}"></div></div>
+        <div><label>Grundfrequenz: <span class="field-value" data-label="baseFrequency">${fmt(it.baseFrequency,1)}</span> Hz</label><input data-field="baseFrequency" type="range" min="20" max="2000" step="0.1" value="${Math.min(2000, it.baseFrequency)}"></div>
+      </div>
+      <div class="inline-grid">
+        <div><label>Frequenz exakt / Hz</label><input data-field="baseFrequencyNumber" type="number" inputmode="decimal" min="20" max="20000" step="0.1" value="${it.baseFrequency}"></div>
+        <div><label>Amplitude Grundton</label><input data-field="baseAmplitude" type="number" inputmode="decimal" min="0" max="1" step="0.01" value="${it.baseAmplitude}"></div>
+      </div>
+      <div class="partials"></div>
+      <button class="mini-btn" data-action="addPartial" style="margin-top:10px; width:100%;">+ Schwingung aufmodulieren</button>`;
+
+    const partials = intervalEditor.querySelector('.partials');
+    it.partials.forEach((p, pi) => partials.appendChild(renderPartial(it, p, pi, state.previewIndex)));
+  }
+
+  function renderPartial(interval, p, pi, intervalIndex) {
+    const row = document.createElement('div');
+    row.className = 'partial-row';
+    const frequencyControl = p.mode === 'harmonic'
+      ? `<input data-pfield="harmonic" type="number" inputmode="numeric" min="1" max="64" step="1" value="${p.harmonic}">`
+      : `<div class="range-number-grid"><input data-pfield="frequency" data-kind="range" type="range" min="20" max="20000" step="0.1" value="${p.frequency}"><input data-pfield="frequency" data-kind="number" type="number" inputmode="decimal" min="20" max="20000" step="0.1" value="${p.frequency}"></div>`;
+    row.innerHTML = `
+      <div><label>Art</label><select data-pfield="mode"><option value="harmonic" ${p.mode==='harmonic'?'selected':''}>Oberschwingung</option><option value="free" ${p.mode==='free'?'selected':''}>frei</option></select></div>
+      <div><label>${p.mode==='harmonic'?'Ordnung':'Frequenz / Hz'}</label>${frequencyControl}</div>
+      <div><label>Amplitude</label><div class="range-number-grid"><input data-pfield="amplitude" data-kind="range" type="range" min="0" max="1" step="0.01" value="${p.amplitude}"><input data-pfield="amplitude" data-kind="number" type="number" inputmode="decimal" min="0" max="1" step="0.01" value="${p.amplitude}"></div></div>
+      <button class="remove-btn" data-remove="1" title="Schwingung entfernen">×</button>`;
+    row.addEventListener('input', e => {
+      const f = e.target.dataset.pfield; if (!f) return;
+      const raw = e.target.value;
+      if (f === 'mode') { p.mode = raw; state.previewIndex = intervalIndex; render(); return; }
+      if (raw === '' || Number.isNaN(Number(raw))) return;
+      if (f === 'harmonic') p.harmonic = Math.round(clamp(raw, 1, 64));
+      if (f === 'frequency') p.frequency = sanitizeFrequency(raw);
+      if (f === 'amplitude') p.amplitude = clamp(raw, 0, 1);
+      row.querySelectorAll(`[data-pfield="${f}"]`).forEach(input => { if (input !== e.target) input.value = f === 'harmonic' ? p.harmonic : (f === 'frequency' ? p.frequency : p.amplitude); });
+      drawWaveform(interval, intervalIndex); updateInfo(interval, intervalIndex);
+    });
+    row.addEventListener('click', e => { if (e.target.dataset.remove) { interval.partials.splice(pi, 1); render(); } });
+    return row;
+  }
+
+  intervalEditor.addEventListener('input', e => {
+    const it = state.intervals[state.previewIndex], field = e.target.dataset.field;
+    if (!it || !field) return;
+    const raw = e.target.value; if (raw === '' || Number.isNaN(Number(raw))) return;
+    if (field === 'baseFrequencyNumber' || field === 'baseFrequency') it.baseFrequency = sanitizeFrequency(raw);
+    else if (field === 'duration') it.duration = clamp(raw, .1, 20);
+    else if (field === 'baseAmplitude') it.baseAmplitude = clamp(raw, 0, 1);
+
+    // Nicht den ganzen Editor während des Ziehens neu zeichnen – sonst wird der
+    // gerade benutzte Schieberegler ersetzt und lässt sich nicht sauber ziehen.
+    const durationLabel = intervalEditor.querySelector('[data-label="duration"]');
+    const freqLabel = intervalEditor.querySelector('[data-label="baseFrequency"]');
+    const meta = intervalEditor.querySelector('.editor-meta');
+    if (durationLabel) durationLabel.textContent = fmt(it.duration, 2);
+    if (freqLabel) freqLabel.textContent = fmt(it.baseFrequency, 1);
+    if (meta) meta.textContent = `Grundfrequenz: ${fmt(it.baseFrequency,1)} Hz · Dauer: ${fmt(it.duration,2)} s`;
+
+    if (field === 'duration') {
+      intervalEditor.querySelectorAll('input[data-field="duration"]').forEach(input => { if (input !== e.target) input.value = it.duration; });
+    }
+    if (field === 'baseFrequency' || field === 'baseFrequencyNumber') {
+      const freqRange = intervalEditor.querySelector('input[data-field="baseFrequency"]');
+      const freqNumber = intervalEditor.querySelector('input[data-field="baseFrequencyNumber"]');
+      if (freqRange && e.target !== freqRange) freqRange.value = Math.min(2000, it.baseFrequency);
+      if (freqNumber && e.target !== freqNumber) freqNumber.value = it.baseFrequency;
+    }
+
+    $('durationBadge').textContent = `Gesamtdauer: ${fmt(totalDuration(),2)} s`;
+    $('masterVolumeValue').textContent = $('masterVolume').value;
+    renderTimeline();
+    drawWaveform(it, state.previewIndex);
+    updateInfo(it, state.previewIndex);
+    drawFrequencyChart();
+  });
+  intervalEditor.addEventListener('click', e => {
+    const it = state.intervals[state.previewIndex], action = e.target.dataset.action;
+    if (!it || !action) return;
+    if (action === 'remove' && state.intervals.length > 1) { state.intervals.splice(state.previewIndex, 1); state.previewIndex = Math.max(0, state.previewIndex - 1); render(); }
+    if (action === 'addPartial') { it.partials.push({mode:'harmonic', harmonic:2, frequency:it.baseFrequency*2, amplitude:0.3}); render(); }
+  });
+
+  function drawGrid(width, height) {
+    ctx.clearRect(0,0,width,height); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,width,height);
+    ctx.strokeStyle = '#eef2f7'; ctx.lineWidth = 1;
+    for (let x=60; x<width-20; x+=(width-90)/10) { ctx.beginPath(); ctx.moveTo(x,24); ctx.lineTo(x,height-42); ctx.stroke(); }
+    for (let y=32; y<height-42; y+=(height-78)/6) { ctx.beginPath(); ctx.moveTo(58,y); ctx.lineTo(width-22,y); ctx.stroke(); }
+    ctx.strokeStyle = '#9ca3af'; ctx.beginPath(); ctx.moveTo(58, height/2); ctx.lineTo(width-22, height/2); ctx.stroke();
+    ctx.fillStyle = '#6b7280'; ctx.font = '14px Arial'; ctx.fillText('Auslenkung y', 14, 28); ctx.fillText('Zeit t', width-72, height-14);
+  }
+  function drawWaveform(interval, intervalIndex) {
+    const width = canvas.width, height = canvas.height; drawGrid(width, height); if (!interval) return;
+    const comps = getComponents(interval), minF = Math.min(...comps.map(c=>c.freq)), period = 1 / minF;
+    const left=60, right=width-24, mid=height/2, amp=(height-92)/2;
+    ctx.strokeStyle = '#2A3B32'; ctx.lineWidth = 2.4; ctx.beginPath();
+    for (let px=left; px<=right; px++) {
+      const t = ((px-left)/(right-left)) * period;
+      const y = comps.reduce((s,c)=>s + c.normAmp * Math.sin(2*Math.PI*c.freq*t), 0);
+      const cy = mid - y * amp * 0.9; if (px===left) ctx.moveTo(px, cy); else ctx.lineTo(px, cy);
+    }
+    ctx.stroke(); ctx.fillStyle = '#1f2937'; ctx.font = '16px Arial';
+    ctx.fillText(`Intervall ${intervalIndex + 1}: eine Periode der kleinsten Frequenz (${fmt(minF,1)} Hz)`, 72, 38);
+    ctx.fillStyle = '#6b7280'; ctx.font = '13px Arial'; ctx.fillText(`Zeitskala: 0 bis ${fmt(period*1000,2)} ms – stark gestauchte Darstellung`, 72, 60);
+  }
+
+  function drawFrequencyChart() {
+    const chartWidth = Math.max(1200, state.intervals.length * 92, totalDuration() * 150);
+    frequencyCanvas.width = Math.round(chartWidth);
+    frequencyCanvas.style.width = `${Math.round(chartWidth)}px`;
+    const w = frequencyCanvas.width, h = frequencyCanvas.height;
+    fctx.clearRect(0,0,w,h); fctx.fillStyle = '#fbfcfd'; fctx.fillRect(0,0,w,h);
+    if (!state.intervals.length) return;
+    const left=72, right=w-26, top=24, bottom=h-46, total=totalDuration();
+    const freqs = state.intervals.map(it => sanitizeFrequency(it.baseFrequency));
+    let minF = Math.min(...freqs), maxF = Math.max(...freqs);
+    if (Math.abs(maxF-minF) < 1) { minF = Math.max(MIN_F, minF*0.9); maxF = Math.min(MAX_F, maxF*1.1 + 1); }
+    const pad = state.frequencyScale === 'linear' ? (maxF-minF)*0.12 : 1;
+    minF = Math.max(MIN_F, minF - (state.frequencyScale === 'linear' ? pad : 0));
+    maxF = Math.min(MAX_F, maxF + (state.frequencyScale === 'linear' ? pad : 0));
+    const minMidi = Math.floor(Math.min(...freqs.map(frequencyToMidi))) - 1;
+    const maxMidi = Math.ceil(Math.max(...freqs.map(frequencyToMidi))) + 1;
+    const yOf = f => {
+      if (state.frequencyScale === 'log') {
+        const m = frequencyToMidi(f); return bottom - ((m - minMidi) / Math.max(1, maxMidi - minMidi)) * (bottom-top);
+      }
+      return bottom - ((f - minF) / Math.max(1, maxF - minF)) * (bottom-top);
+    };
+    const xOf = t => left + (t / Math.max(0.001, total)) * (right-left);
+
+    fctx.strokeStyle = '#e7edf3'; fctx.lineWidth = 1; fctx.font = '12px Arial'; fctx.fillStyle = '#6b7280';
+    if (state.frequencyScale === 'log') {
+      for (let m=minMidi; m<=maxMidi; m++) {
+        const y = bottom - ((m - minMidi) / Math.max(1, maxMidi - minMidi)) * (bottom-top);
+        fctx.beginPath(); fctx.moveTo(left,y); fctx.lineTo(right,y); fctx.stroke();
+        if (m % 2 === 0) fctx.fillText(midiToNoteName(m), 18, y+4);
+      }
+    } else {
+      for (let i=0; i<=5; i++) {
+        const f = minF + (i/5)*(maxF-minF), y = yOf(f);
+        fctx.beginPath(); fctx.moveTo(left,y); fctx.lineTo(right,y); fctx.stroke();
+        fctx.fillText(`${fmt(f,0)} Hz`, 15, y+4);
+      }
+    }
+    for (let i=0; i<=Math.min(10, Math.ceil(total)); i++) {
+      const t = (i/Math.min(10, Math.ceil(total)||1))*total, x = xOf(t);
+      fctx.beginPath(); fctx.moveTo(x,top); fctx.lineTo(x,bottom); fctx.stroke();
+    }
+    fctx.strokeStyle = '#9ca3af'; fctx.lineWidth = 1.4; fctx.strokeRect(left, top, right-left, bottom-top);
+    fctx.fillStyle = '#374151'; fctx.font = '13px Arial'; fctx.fillText('Zeit / s', right-48, h-16);
+
+    let acc = 0;
+    state.intervals.forEach((it, index) => {
+      const x1=xOf(acc), x2=xOf(acc+it.duration), y=yOf(it.baseFrequency);
+      fctx.fillStyle = index === state.previewIndex ? 'rgba(230,180,0,.16)' : 'rgba(42,59,50,.06)';
+      fctx.fillRect(x1, top, x2-x1, bottom-top);
+      fctx.strokeStyle = '#2A3B32'; fctx.lineWidth = 3; fctx.beginPath(); fctx.moveTo(x1,y); fctx.lineTo(x2,y); fctx.stroke();
+      fctx.fillStyle = '#1f2937'; fctx.font = '12px Arial';
+      if (x2-x1 > 54) fctx.fillText(`${fmt(it.baseFrequency,0)} Hz`, x1+6, Math.max(top+15, y-7));
+      acc += Number(it.duration);
+    });
+    if (state.playing) {
+      const x=xOf(Math.min(state.playbackElapsed, total));
+      fctx.strokeStyle = '#E6B400'; fctx.lineWidth = 2; fctx.beginPath(); fctx.moveTo(x, top-4); fctx.lineTo(x, bottom+4); fctx.stroke();
+    }
+  }
+
+  function updateInfo(interval, index) {
+    if (!interval) return;
+    const comps = getComponents(interval); $('intervalBadge').textContent = `Intervall: ${index + 1}`;
+    const list = $('frequencyList'); list.innerHTML = '';
+    comps.forEach(c => { const pill = document.createElement('span'); pill.className = 'freq-pill'; pill.textContent = `${c.label}: ${fmt(c.freq,1)} Hz · A=${fmt(c.amp,2)}`; list.appendChild(pill); });
+    const base = sanitizeFrequency(interval.baseFrequency); $('noteBox').textContent = noteDescription(base);
+    $('noteDetails').textContent = `Grundton: ${fmt(base,1)} Hz. Die Klangfarbe entsteht durch ${Math.max(0, comps.length-1)} zusätzliche Schwingung(en).`;
+    updateKeyboard(base);
+  }
+  function setupKeyboard() {
+    const kb = $('keyboard'); kb.innerHTML = '';
+    whiteNotes.forEach(n => { const key = document.createElement('div'); key.className='white-key'; key.innerHTML=`<span>${n}</span>`; kb.appendChild(key); });
+    blackPositions.forEach(p => { const b=document.createElement('div'); b.className='black-key'; b.style.left=p+'%'; kb.appendChild(b); });
+    const m=document.createElement('div'); m.className='key-marker'; m.id='keyMarker'; kb.appendChild(m);
+  }
+  function updateKeyboard(freq) { $('keyMarker').style.left = `${(((frequencyToMidi(freq) % 12) + 12) % 12 / 12) * 100}%`; }
+
+  async function play() {
+    stop(false); state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const master = state.audioCtx.createGain(); master.gain.value = Number($('masterVolume').value) / 100; master.connect(state.audioCtx.destination);
+    let t = state.audioCtx.currentTime + 0.05; state.startTime = t; state.playing = true; state.playbackElapsed = 0; $('statusBadge').textContent = 'Spielt …';
+    state.intervals.forEach(interval => {
+      const comps = getComponents(interval), gain = state.audioCtx.createGain();
+      gain.gain.setValueAtTime(0.0001, t); gain.gain.exponentialRampToValueAtTime(0.9, t + 0.015); gain.gain.setValueAtTime(0.9, t + interval.duration - 0.03); gain.gain.exponentialRampToValueAtTime(0.0001, t + interval.duration); gain.connect(master);
+      comps.forEach(c => { const osc = state.audioCtx.createOscillator(), og = state.audioCtx.createGain(); osc.type = 'sine'; osc.frequency.value = c.freq; og.gain.value = c.normAmp; osc.connect(og); og.connect(gain); osc.start(t); osc.stop(t + interval.duration + 0.02); state.scheduled.push(osc); });
+      t += interval.duration;
+    });
+    animatePlayback();
+  }
+  function animatePlayback() {
+    if (!state.playing || !state.audioCtx) return;
+    const elapsed = Math.max(0, state.audioCtx.currentTime - state.startTime); state.playbackElapsed = elapsed;
+    $('timeBadge').textContent = `t = ${fmt(elapsed,2)} s`;
+    let acc = 0, idx = state.intervals.length - 1;
+    for (let i=0; i<state.intervals.length; i++) { if (elapsed < acc + state.intervals[i].duration) { idx = i; break; } acc += state.intervals[i].duration; }
+    state.currentIndex = idx; state.previewIndex = idx; renderTimeline(); drawWaveform(state.intervals[idx], idx); updateInfo(state.intervals[idx], idx); drawFrequencyChart();
+    if (elapsed >= totalDuration()) { stop(false); return; }
+    state.raf = requestAnimationFrame(animatePlayback);
+  }
+  function stop(resetTime=true) {
+    if (state.raf) cancelAnimationFrame(state.raf);
+    state.scheduled.forEach(o => { try { o.stop(); } catch(e) {} }); state.scheduled = [];
+    if (state.audioCtx) { try { state.audioCtx.close(); } catch(e) {} }
+    state.audioCtx = null; state.playing = false; state.playbackElapsed = 0; $('statusBadge').textContent = 'Bereit'; if (resetTime) $('timeBadge').textContent = 't = 0,00 s';
+    renderTimeline(); drawFrequencyChart();
+  }
+  function loadDemo() {
+    const freqs = [261.63, 293.66, 329.63, 392.00, 349.23, 329.63, 293.66, 261.63];
+    state.intervals = freqs.map((f, i) => { const it = createInterval(f, i===3 ? 1.0 : 0.55); it.partials = [{mode:'harmonic', harmonic:2, frequency:f*2, amplitude:0.25},{mode:'harmonic', harmonic:3, frequency:f*3, amplitude:0.12}]; return it; });
+    state.previewIndex = 0; render();
+  }
+
+  $('playBtn').addEventListener('click', play);
+  $('stopBtn').addEventListener('click', () => stop(true));
+  $('addIntervalBtn').addEventListener('click', () => { state.intervals.push(createInterval(440, .8)); state.previewIndex = state.intervals.length-1; render(); });
+  $('demoBtn').addEventListener('click', loadDemo);
+  $('masterVolume').addEventListener('input', () => { $('masterVolumeValue').textContent = $('masterVolume').value; });
+  $('linearScaleBtn').addEventListener('click', () => { state.frequencyScale = 'linear'; $('linearScaleBtn').classList.add('active'); $('logScaleBtn').classList.remove('active'); $('scaleHint').textContent = 'Lineare Skala: gleiche Hz-Abstände haben gleiche Höhe.'; drawFrequencyChart(); });
+  $('logScaleBtn').addEventListener('click', () => { state.frequencyScale = 'log'; $('logScaleBtn').classList.add('active'); $('linearScaleBtn').classList.remove('active'); $('scaleHint').textContent = 'Logarithmische Tonskala: gleiche Halbtonschritte liegen gleich weit auseinander.'; drawFrequencyChart(); });
+
+  setupKeyboard();
+  state.intervals = [createInterval(440, 1.0)];
+  state.intervals[0].partials = [{mode:'harmonic', harmonic:2, frequency:880, amplitude:0.35}];
+  render();
+})();
+</script>
+</body>
+</html>

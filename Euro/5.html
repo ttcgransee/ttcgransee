@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planspiel Runde 2 – Gleiche Währung Schritt für Schritt</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
+    .slide-container { width:100%; min-height:100vh; display:flex; flex-direction:column; }
+    .slide-header { background:#2A3B32; color:#fff; padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+    .title { margin:0; font-weight:700; font-size:2.0rem; }
+    .subtitle { font-size:.98rem; font-weight:400; opacity:.85; margin-top:.25rem; font-family:'Raleway',sans-serif; }
+    .divider { width:90px; height:4px; background:#E6B400; border-radius:3px; margin-top:.6rem; }
+    .slide-content { flex:1 1 auto; padding:1.25rem 2rem 1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+    .step-card { background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.045); overflow:hidden; }
+    .step-head { display:flex; align-items:center; gap:.65rem; padding:.75rem .95rem; background:#F9FAFB; border-bottom:1px solid #E5E7EB; }
+    .badge { background:#2A3B32; color:#fff; font-weight:700; font-size:.78rem; padding:.18rem .55rem; border-radius:6px; min-width:5.2rem; text-align:center; }
+    .step-title { font-weight:700; color:#2A3B32; font-size:1.05rem; }
+    .step-body { padding:.95rem; font-family:'Raleway',sans-serif; }
+    .auftrag { background:#E9F0EC; border-left:6px solid #2A3B32; border-radius:8px; padding:.7rem .85rem; margin-bottom:.8rem; color:#203027; }
+    .auftrag-title { font-family:'Montserrat',sans-serif; font-weight:700; color:#2A3B32; font-size:.9rem; margin-bottom:.2rem; }
+    .auftrag p, .auftrag li { font-size:.9rem; line-height:1.5; margin:0; }
+    .hint { background:#FEF3C7; border:1px solid #FBBF24; border-radius:8px; padding:.55rem .7rem; font-size:.84rem; color:#4B5563; margin:.65rem 0; }
+    .warn { background:#FEE2E2; border:1px solid #FCA5A5; border-radius:8px; padding:.55rem .7rem; font-size:.84rem; color:#7F1D1D; margin:.65rem 0; }
+    .formula { background:#F3F4F6; border:1px solid #E5E7EB; border-radius:8px; padding:.45rem .6rem; font-family:'Montserrat',sans-serif; font-weight:600; font-size:.82rem; color:#374151; display:inline-block; margin:.15rem .2rem .15rem 0; }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.85rem; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.85rem; }
+    .mini-box { background:#F9FAFB; border:1px solid #E5E7EB; border-radius:8px; padding:.65rem .75rem; }
+    .mini-title { font-family:'Montserrat',sans-serif; font-weight:700; color:#2A3B32; font-size:.85rem; margin-bottom:.35rem; }
+    .tiny { font-size:.82rem; color:#4B5563; line-height:1.45; }
+    table { width:100%; border-collapse:collapse; font-size:.83rem; }
+    th { background:#2A3B32; color:#fff; padding:.45rem .5rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:600; border:1px solid #2A3B32; }
+    td { border:1px solid #E5E7EB; padding:.42rem .5rem; vertical-align:middle; }
+    tr:nth-child(even) td { background:#FAFAFA; }
+    .center { text-align:center; }
+    .right { text-align:right; }
+    .blank { color:#9CA3AF; font-style:italic; }
+    .pos { color:#15803D; font-weight:700; }
+    .neg { color:#DC2626; font-weight:700; }
+    .neutral { color:#374151; font-weight:700; }
+    .small-table th, .small-table td { font-size:.8rem; padding:.35rem .45rem; }
+    .wide-scroll { overflow-x:auto; }
+    .btn-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.65rem; }
+    .solve-btn { background:#2A3B32; color:#fff; border:0; border-radius:8px; padding:.5rem .8rem; font-family:'Montserrat',sans-serif; font-weight:600; font-size:.82rem; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,.12); }
+    .solve-btn:hover { background:#3D5245; }
+    .chart-wrapper { position:relative; width:100%; height:255px; }
+    .chart-note { text-align:center; font-size:.8rem; color:#6B7280; margin-top:.35rem; font-family:'Raleway',sans-serif; }
+    .footer { padding:1rem 3rem; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; color:#666; font-size:.9rem; font-family:'Raleway',sans-serif; flex-shrink:0; background:#F5F5F5; }
+    .footer-left { justify-self:start; }
+    .footer-center { display:flex; gap:1rem; justify-self:center; }
+    .footer-right { justify-self:end; }
+    .nav-btn { display:inline-flex; align-items:center; justify-content:center; background-color:#2A3B32; color:white; padding:.5rem 1.25rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:.9rem; transition:all .2s ease; box-shadow:0 2px 4px rgba(0,0,0,.1); min-width:100px; }
+    .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); }
+    @media (max-width:980px) { .grid-2,.grid-3{ grid-template-columns:1fr; } .slide-header{ align-items:flex-start; flex-direction:column; gap:.6rem; } }
+    @media print { .solve-btn, .footer-center { display:none !important; } .step-card{ break-inside:avoid; box-shadow:none; } body{ background:#fff; } }
+  </style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="slide-header">
+    <div>
+      <h1 class="title">Planspiel Runde 2: Gleiche Währung</h1>
+      <div class="divider"></div>
+      <div class="subtitle">Keine Wechselkurse → gleiche Handelsströme → dauerhafte Salden → Kreditproblem</div>
+    </div>
+    <p class="text-sm font-light">Geographie | Klasse 10</p>
+  </div>
+
+  <div class="slide-content">
+
+    <!-- Schritt 1 -->
+    <section class="step-card">
+      <div class="step-head">
+        <span class="badge">Schritt 1</span>
+        <div class="step-title">Ausgangslage: Der Euro wird eingeführt</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Lest die neue Ausgangslage. Markiert den wichtigsten Unterschied zu Runde 1: Es gibt jetzt <strong>keine eigene Währung</strong> mehr und deshalb auch <strong>keine Auf- oder Abwertung</strong>.</p>
+        </div>
+        <div class="grid-3">
+          <div class="mini-box">
+            <div class="mini-title"><i class="fas fa-map mr-1"></i>Länder</div>
+            <table class="small-table">
+              <thead><tr><th>Land</th><th>Währung</th><th class="right">Startkonto</th></tr></thead>
+              <tbody>
+                <tr><td>A-Land</td><td>Euro</td><td class="right">12 €</td></tr>
+                <tr><td>B-Land</td><td>Euro</td><td class="right">12 €</td></tr>
+                <tr><td>C-Land</td><td>Euro</td><td class="right">12 €</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mini-box">
+            <div class="mini-title"><i class="fas fa-boxes mr-1"></i>Produkte und Preise</div>
+            <table class="small-table">
+              <thead><tr><th>Verkäufer</th><th>Produkt</th><th class="right">Preis</th></tr></thead>
+              <tbody>
+                <tr><td>A-Land</td><td>Maschinen</td><td class="right">6 €</td></tr>
+                <tr><td>B-Land</td><td>Medikamente</td><td class="right">4 €</td></tr>
+                <tr><td>C-Land</td><td>Lebensmittel</td><td class="right">3 €</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mini-box">
+            <div class="mini-title"><i class="fas fa-scale-balanced mr-1"></i>Buchungsregel</div>
+            <p class="tiny"><strong>Export/Haben</strong>: Einnahmen durch Verkäufe ins Ausland.</p>
+            <p class="tiny"><strong>Import/Soll</strong>: Ausgaben für Käufe aus dem Ausland.</p>
+            <p class="tiny"><strong>Saldo</strong> = Export/Haben − Import/Soll.</p>
+            <p class="tiny"><strong>Konto</strong> = altes Konto + Saldo.</p>
+          </div>
+        </div>
+        <div class="hint"><strong>Modellannahme:</strong> Die Pflichtkäufe bleiben in jeder Runde gleich. Wenn ein Land nicht genug Euro besitzt, wird der fehlende Betrag als Kreditbedarf notiert.</div>
+      </div>
+    </section>
+
+    <!-- Schritt 2 -->
+    <section class="step-card">
+      <div class="step-head">
+        <span class="badge">Schritt 2</span>
+        <div class="step-title">Pflichtkäufe bleiben gleich</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Übertragt die Pflichtkäufe aus Runde 1. Achtet darauf: Die Preise werden jetzt immer in Euro bezahlt. Es muss nichts mehr in eine andere Währung umgerechnet werden.</p>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Land</th><th>muss kaufen bei …</th><th>muss kaufen bei …</th><th>Folge für die Handelsbilanz</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>A-Land</strong></td><td>B-Land: Medikamente für 4 €</td><td>C-Land: Lebensmittel für 3 €</td><td>A kauft eher günstige Waren.</td></tr>
+            <tr><td><strong>B-Land</strong></td><td>A-Land: Maschinen für 6 €</td><td>C-Land: Lebensmittel für 3 €</td><td>B kauft eine teure und eine günstige Ware.</td></tr>
+            <tr><td><strong>C-Land</strong></td><td>A-Land: Maschinen für 6 €</td><td>B-Land: Medikamente für 4 €</td><td>C kauft relativ teure Waren.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Schritt 3 -->
+    <section class="step-card sol-section" id="step3">
+      <div class="step-head">
+        <span class="badge">Schritt 3</span>
+        <div class="step-title">Durchgang 1 durchführen: kaufen, bezahlen, buchen</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Führt die sechs Pflichtkäufe aus. Tragt ein, wie viel Euro vom Käufer zum Verkäufer fließen. Da alle Länder dieselbe Währung nutzen, gibt es keine Wechselbank.</p>
+        </div>
+        <div class="wide-scroll">
+          <table>
+            <thead>
+              <tr><th>Käufer</th><th>Verkäufer</th><th>Ware</th><th class="right">Preis</th><th class="center">Menge</th><th class="right">Zahlung in Euro</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>A-Land</td><td>B-Land</td><td>Medikamente</td><td class="right">4 €</td><td class="center">1</td><td class="right sol" data-solution="4 €"><span class="blank">_____</span></td></tr>
+              <tr><td>A-Land</td><td>C-Land</td><td>Lebensmittel</td><td class="right">3 €</td><td class="center">1</td><td class="right sol" data-solution="3 €"><span class="blank">_____</span></td></tr>
+              <tr><td>B-Land</td><td>A-Land</td><td>Maschinen</td><td class="right">6 €</td><td class="center">1</td><td class="right sol" data-solution="6 €"><span class="blank">_____</span></td></tr>
+              <tr><td>B-Land</td><td>C-Land</td><td>Lebensmittel</td><td class="right">3 €</td><td class="center">1</td><td class="right sol" data-solution="3 €"><span class="blank">_____</span></td></tr>
+              <tr><td>C-Land</td><td>A-Land</td><td>Maschinen</td><td class="right">6 €</td><td class="center">1</td><td class="right sol" data-solution="6 €"><span class="blank">_____</span></td></tr>
+              <tr><td>C-Land</td><td>B-Land</td><td>Medikamente</td><td class="right">4 €</td><td class="center">1</td><td class="right sol" data-solution="4 €"><span class="blank">_____</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step3', this)">Zahlungen ein-/ausblenden</button></div>
+      </div>
+    </section>
+
+    <!-- Schritt 4 -->
+    <section class="step-card sol-section" id="step4">
+      <div class="step-head">
+        <span class="badge">Schritt 4</span>
+        <div class="step-title">Bilanzbuch Durchgang 1 ausfüllen</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Addiert alle Exporteinnahmen und alle Importausgaben. Berechnet dann den Saldo. Vergleicht das Ergebnis mit Runde 1 vor der ersten Wechselkursanpassung.</p>
+        </div>
+        <table>
+          <thead><tr><th>Land</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th>Bilanzlage</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+12 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−7 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+5 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='pos'>Überschuss</span>"><span class="blank">_____</span></td></tr>
+            <tr><td><strong>B-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+8 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−9 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='neg'>kleines Defizit</span>"><span class="blank">_____</span></td></tr>
+            <tr><td><strong>C-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+6 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−10 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='neg'>deutliches Defizit</span>"><span class="blank">_____</span></td></tr>
+          </tbody>
+        </table>
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step4', this)">Bilanzlösung ein-/ausblenden</button></div>
+      </div>
+    </section>
+
+    <!-- Schritt 5 -->
+    <section class="step-card sol-section" id="step5">
+      <div class="step-head">
+        <span class="badge">Schritt 5</span>
+        <div class="step-title">Prüfen: Warum ändert sich diesmal kein Wechselkurs?</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Füllt die Wechselkurstafel aus. Leitet daraus ab, warum sich die Preise und Kaufmengen in Durchgang 2 nicht automatisch verändern.</p>
+        </div>
+        <div class="hint"><strong>Regel in Runde 2:</strong> Alle Länder verwenden Euro. Deshalb gibt es zwischen A, B und C keinen Wechselkurs mehr. Ein Defizit von C-Land kann die C-Lira nicht abwerten, weil es keine C-Lira mehr gibt.</div>
+        <table>
+          <thead><tr><th>Durchgang</th><th class="right">A-Land</th><th class="right">B-Land</th><th class="right">C-Land</th><th>Folge für Handel und Preise</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="sol" data-solution="Start: alle zahlen in Euro"><span class="blank">_____</span></td></tr>
+            <tr><td>2</td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="sol" data-solution="keine Abwertung, keine Aufwertung"><span class="blank">_____</span></td></tr>
+            <tr><td>3</td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="sol" data-solution="Preise bleiben gleich"><span class="blank">_____</span></td></tr>
+            <tr><td>4</td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="sol" data-solution="Handelsströme bleiben gleich"><span class="blank">_____</span></td></tr>
+            <tr><td>5</td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="right sol" data-solution="1 Euro"><span class="blank">_____</span></td><td class="sol" data-solution="Ungleichgewicht bleibt bestehen"><span class="blank">_____</span></td></tr>
+          </tbody>
+        </table>
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step5', this)">Euro-Tafel ein-/ausblenden</button></div>
+      </div>
+    </section>
+
+    <!-- Schritt 6 -->
+    <section class="step-card sol-section" id="step6">
+      <div class="step-head">
+        <span class="badge">Schritt 6</span>
+        <div class="step-title">Durchgänge 2 bis 5 berechnen</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Wiederholt denselben Handel vier weitere Male. Da sich kein Wechselkurs anpasst, bleiben Exporte, Importe und Salden in jedem Durchgang gleich. Tragt die Salden ein.</p>
+        </div>
+        <div>
+          <span class="formula">Saldo je Durchgang = Export/Haben − Import/Soll</span>
+          <span class="formula">A-Land: +12 − 7 = +5</span>
+          <span class="formula">B-Land: +8 − 9 = −1</span>
+          <span class="formula">C-Land: +6 − 10 = −4</span>
+        </div>
+        <table style="margin-top:.65rem;">
+          <thead><tr><th>Durchgang</th><th class="right">A-Land Saldo</th><th class="right">B-Land Saldo</th><th class="right">C-Land Saldo</th><th>Was fällt auf?</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="right sol" data-solution="<span class='pos'>+5 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="A gewinnt, C verliert"><span class="blank">_____</span></td></tr>
+            <tr><td>2</td><td class="right sol" data-solution="<span class='pos'>+5 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="derselbe Saldo wiederholt sich"><span class="blank">_____</span></td></tr>
+            <tr><td>3</td><td class="right sol" data-solution="<span class='pos'>+5 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="kein automatischer Ausgleich"><span class="blank">_____</span></td></tr>
+            <tr><td>4</td><td class="right sol" data-solution="<span class='pos'>+5 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="C braucht nun Kredit"><span class="blank">_____</span></td></tr>
+            <tr><td>5</td><td class="right sol" data-solution="<span class='pos'>+5 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="C verschuldet sich weiter"><span class="blank">_____</span></td></tr>
+          </tbody>
+        </table>
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step6', this)">Salden der Durchgänge ein-/ausblenden</button></div>
+      </div>
+    </section>
+
+    <!-- Schritt 7 -->
+    <section class="step-card sol-section" id="step7">
+      <div class="step-head">
+        <span class="badge">Schritt 7</span>
+        <div class="step-title">Kassenbuch: Wann entsteht ein Kreditproblem?</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Rechnet den Kontostand nach jedem Durchgang aus. Startet bei 12 €. Addiert nach jedem Durchgang den Saldo. Negative Werte bedeuten: Das Land muss sich Geld leihen.</p>
+        </div>
+        <div>
+          <span class="formula">neuer Kontostand = alter Kontostand + Saldo des Durchgangs</span>
+          <span class="formula">negative Kontostände = Kreditbedarf</span>
+        </div>
+        <div class="wide-scroll" style="margin-top:.65rem;">
+          <table>
+            <thead><tr><th>Land</th><th class="right">Start</th><th class="right">nach D1</th><th class="right">nach D2</th><th class="right">nach D3</th><th class="right">nach D4</th><th class="right">nach D5</th><th>Deutung</th></tr></thead>
+            <tbody>
+              <tr><td><strong>A-Land</strong></td><td class="right">12 €</td><td class="right sol" data-solution="<span class='pos'>17 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>22 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>27 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>32 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>37 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Euro-Guthaben wächst"><span class="blank">_____</span></td></tr>
+              <tr><td><strong>B-Land</strong></td><td class="right">12 €</td><td class="right sol" data-solution="11 €"><span class="blank">_____</span></td><td class="right sol" data-solution="10 €"><span class="blank">_____</span></td><td class="right sol" data-solution="9 €"><span class="blank">_____</span></td><td class="right sol" data-solution="8 €"><span class="blank">_____</span></td><td class="right sol" data-solution="7 €"><span class="blank">_____</span></td><td class="sol" data-solution="langsamer Geldabfluss"><span class="blank">_____</span></td></tr>
+              <tr><td><strong>C-Land</strong></td><td class="right">12 €</td><td class="right sol" data-solution="8 €"><span class="blank">_____</span></td><td class="right sol" data-solution="4 €"><span class="blank">_____</span></td><td class="right sol" data-solution="0 €"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4 €</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−8 €</span>"><span class="blank">_____</span></td><td class="sol" data-solution="ab D4 Kreditbedarf"><span class="blank">_____</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="warn"><strong>Wichtig:</strong> C-Land ist nicht „automatisch bankrott“. Genau gesagt entsteht eine Zahlungs- und Schuldenkrise: C-Land kann seine Pflichtkäufe nur noch mit Krediten finanzieren.</div>
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step7', this)">Kassenbuch ein-/ausblenden</button></div>
+      </div>
+    </section>
+
+    <!-- Schritt 8 -->
+    <section class="step-card sol-section" id="step8">
+      <div class="step-head">
+        <span class="badge">Schritt 8</span>
+        <div class="step-title">Sicherung: Was ist anders als in Runde 1?</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Füllt zuerst beide Sicherungstabellen aus. Klickt anschließend auf den Button und vergleicht eure Werte mit der Lösung. Deutet danach die beiden Diagramme.</p>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="mini-title"><i class="fas fa-file-invoice-dollar mr-1"></i>Tabelle A: Salden je Durchgang</div>
+            <table class="small-table">
+              <thead><tr><th>Durchgang</th><th class="right">A-Land</th><th class="right">B-Land</th><th class="right">C-Land</th><th>Deutung</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="A Überschuss, C Defizit"><span class="blank">_____</span></td></tr>
+                <tr><td>2</td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="keine Veränderung"><span class="blank">_____</span></td></tr>
+                <tr><td>3</td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="keine Nulllinien-Annäherung"><span class="blank">_____</span></td></tr>
+                <tr><td>4</td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Defizit bleibt dauerhaft"><span class="blank">_____</span></td></tr>
+                <tr><td>5</td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Ungleichgewicht verfestigt sich"><span class="blank">_____</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="mini-title"><i class="fas fa-wallet mr-1"></i>Tabelle B: Kontostände / Kreditbedarf</div>
+            <table class="small-table">
+              <thead><tr><th>Durchgang</th><th class="right">A-Land</th><th class="right">B-Land</th><th class="right">C-Land</th><th>Deutung</th></tr></thead>
+              <tbody>
+                <tr><td>Start</td><td class="right sol" data-solution="12"><span class="blank">_____</span></td><td class="right sol" data-solution="12"><span class="blank">_____</span></td><td class="right sol" data-solution="12"><span class="blank">_____</span></td><td class="sol" data-solution="alle starten gleich"><span class="blank">_____</span></td></tr>
+                <tr><td>1</td><td class="right sol" data-solution="<span class='pos'>17</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="11"><span class="blank">_____</span></td><td class="right sol" data-solution="8"><span class="blank">_____</span></td><td class="sol" data-solution="Geld fließt zu A"><span class="blank">_____</span></td></tr>
+                <tr><td>2</td><td class="right sol" data-solution="<span class='pos'>22</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="10"><span class="blank">_____</span></td><td class="right sol" data-solution="4"><span class="blank">_____</span></td><td class="sol" data-solution="C-Konto sinkt stark"><span class="blank">_____</span></td></tr>
+                <tr><td>3</td><td class="right sol" data-solution="<span class='pos'>27</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="9"><span class="blank">_____</span></td><td class="right sol" data-solution="0"><span class="blank">_____</span></td><td class="sol" data-solution="C hat keine Reserve mehr"><span class="blank">_____</span></td></tr>
+                <tr><td>4</td><td class="right sol" data-solution="<span class='pos'>32</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="8"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="C braucht Kredit"><span class="blank">_____</span></td></tr>
+                <tr><td>5</td><td class="right sol" data-solution="<span class='pos'>37</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="7"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−8</span>"><span class="blank">_____</span></td><td class="sol" data-solution="C verschuldet sich weiter"><span class="blank">_____</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutionsAndCharts('step8', this)">Sicherungstabellen und Diagramme anzeigen</button></div>
+
+        <div class="grid-2" style="margin-top:.85rem;">
+          <div>
+            <div class="mini-title"><i class="fas fa-chart-area mr-1"></i>Diagramm A: Salden je Durchgang</div>
+            <div class="chart-wrapper"><canvas id="saldoChart"></canvas></div>
+            <div id="saldoChartNote" class="chart-note">Das Saldendiagramm wird erst nach Klick auf den Button ausgefüllt.</div>
+          </div>
+          <div>
+            <div class="mini-title"><i class="fas fa-chart-line mr-1"></i>Diagramm B: Kontostände / Kreditbedarf</div>
+            <div class="chart-wrapper"><canvas id="kontoChart"></canvas></div>
+            <div id="kontoChartNote" class="chart-note">Das Kontodiagramm wird erst nach Klick auf den Button ausgefüllt.</div>
+          </div>
+        </div>
+
+        <div class="hint"><strong>Merksatz:</strong> Bei gleicher Währung entfällt der Wechselkurs als Ausgleichsmechanismus. Das Defizitland kann nicht abwerten; sein Defizit wiederholt sich und wird zum Kreditproblem. Das Überschussland sammelt dauerhaft Zahlungsüberschüsse an.</div>
+      </div>
+    </section>
+
+    <!-- Schritt 9 -->
+    <section class="step-card sol-section" id="step9">
+      <div class="step-head">
+        <span class="badge">Schritt 9</span>
+        <div class="step-title">Auswertung: Verbindung zum Euro-Raum</div>
+      </div>
+      <div class="step-body">
+        <div class="auftrag">
+          <div class="auftrag-title">Arbeitsauftrag</div>
+          <p>Vergleicht Runde 1 und Runde 2. Ergänzt die Auswertungssätze. Nutzt dabei die Begriffe <strong>Abwertung</strong>, <strong>Aufwertung</strong>, <strong>Handelsbilanzdefizit</strong>, <strong>Kreditbedarf</strong> und <strong>Gemeinschaftswährung</strong>.</p>
+        </div>
+        <table>
+          <thead><tr><th>Aspekt</th><th>Runde 1: eigene Währungen</th><th>Runde 2: gleiche Währung</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Reaktion auf Defizit</strong></td><td class="sol" data-solution="Defizitland wertet ab."><span class="blank">_____</span></td><td class="sol" data-solution="Defizitland kann nicht abwerten."><span class="blank">_____</span></td></tr>
+            <tr><td><strong>Preiswirkung</strong></td><td class="sol" data-solution="Exporte des Defizitlandes werden billiger; Importe werden teurer."><span class="blank">_____</span></td><td class="sol" data-solution="Preise verändern sich nicht automatisch durch Wechselkurse."><span class="blank">_____</span></td></tr>
+            <tr><td><strong>Handelsbilanz</strong></td><td class="sol" data-solution="Salden pendeln und können kleiner werden."><span class="blank">_____</span></td><td class="sol" data-solution="Salden bleiben bestehen und summieren sich."><span class="blank">_____</span></td></tr>
+            <tr><td><strong>Problem</strong></td><td class="sol" data-solution="Wechselkurse können ausgleichen, aber sie schwanken."><span class="blank">_____</span></td><td class="sol" data-solution="Ungleichgewichte müssen über Löhne, Preise, Kredite, Sparpolitik, Investitionen oder Transfers ausgeglichen werden."><span class="blank">_____</span></td></tr>
+          </tbody>
+        </table>
+        <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step9', this)">Auswertungssätze ein-/ausblenden</button></div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-left"><p>Theo Schierbaum – Euro, Wechselkurse und Handelsbilanzen</p></div>
+    <div class="footer-center">
+      <a class="nav-btn" href="4.html">← Runde 1</a>
+      <a class="nav-btn" href="5.html">Auswertung →</a>
+    </div>
+    <div class="footer-right"><p>Runde 2</p></div>
+  </div>
+</div>
+
+<script>
+  function toggleSolutions(sectionId, btn){
+    const section = document.getElementById(sectionId);
+    const cells = section.querySelectorAll('.sol');
+    const showing = section.getAttribute('data-showing') === 'true';
+    cells.forEach(cell => {
+      if (!cell.dataset.original) cell.dataset.original = cell.innerHTML;
+      cell.innerHTML = showing ? cell.dataset.original : cell.dataset.solution;
+    });
+    section.setAttribute('data-showing', showing ? 'false' : 'true');
+    if (btn) btn.textContent = showing ? btn.textContent.replace('ausblenden','einblenden') : btn.textContent.replace('einblenden','ausblenden');
+  }
+
+  const saldoChartData = {
+    labels: ['D1','D2','D3','D4','D5'],
+    a: [5,5,5,5,5],
+    b: [-1,-1,-1,-1,-1],
+    c: [-4,-4,-4,-4,-4]
+  };
+
+  const kontoChartData = {
+    labels: ['Start','D1','D2','D3','D4','D5'],
+    a: [12,17,22,27,32,37],
+    b: [12,11,10,9,8,7],
+    c: [12,8,4,0,-4,-8]
+  };
+
+  const emptySaldo = [null, null, null, null, null];
+  const emptyKonto = [null, null, null, null, null, null];
+
+  const saldoChart = new Chart(document.getElementById('saldoChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: saldoChartData.labels,
+      datasets: [
+        { label:'A-Land Saldo', data:[...emptySaldo], borderColor:'#15803D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:0 },
+        { label:'B-Land Saldo', data:[...emptySaldo], borderColor:'#6B7280', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:0 },
+        { label:'C-Land Saldo', data:[...emptySaldo], borderColor:'#DC2626', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:0 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ font:{family:'Montserrat', size:11} } } },
+      scales:{
+        x:{ title:{ display:true, text:'Durchgang', font:{family:'Montserrat', weight:'600'} }, grid:{color:'rgba(209,213,219,.5)'} },
+        y:{ title:{ display:true, text:'Saldo je Durchgang', font:{family:'Montserrat', weight:'600'} }, min:-5, max:6, grid:{color:'rgba(209,213,219,.5)'} }
+      }
+    }
+  });
+
+  const kontoChart = new Chart(document.getElementById('kontoChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: kontoChartData.labels,
+      datasets: [
+        { label:'A-Land Konto', data:[...emptyKonto], borderColor:'#15803D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:0 },
+        { label:'B-Land Konto', data:[...emptyKonto], borderColor:'#6B7280', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:0 },
+        { label:'C-Land Konto', data:[...emptyKonto], borderColor:'#DC2626', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:0 }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ font:{family:'Montserrat', size:11} } } },
+      scales:{
+        x:{ title:{ display:true, text:'Durchgang', font:{family:'Montserrat', weight:'600'} }, grid:{color:'rgba(209,213,219,.5)'} },
+        y:{ title:{ display:true, text:'Kontostand / Kreditbedarf', font:{family:'Montserrat', weight:'600'} }, min:-10, max:40, grid:{color:'rgba(209,213,219,.5)'} }
+      }
+    }
+  });
+
+  function setChartsVisible(show){
+    saldoChart.data.datasets[0].data = show ? saldoChartData.a : [...emptySaldo];
+    saldoChart.data.datasets[1].data = show ? saldoChartData.b : [...emptySaldo];
+    saldoChart.data.datasets[2].data = show ? saldoChartData.c : [...emptySaldo];
+    saldoChart.update();
+
+    kontoChart.data.datasets[0].data = show ? kontoChartData.a : [...emptyKonto];
+    kontoChart.data.datasets[1].data = show ? kontoChartData.b : [...emptyKonto];
+    kontoChart.data.datasets[2].data = show ? kontoChartData.c : [...emptyKonto];
+    kontoChart.update();
+
+    const saldoNote = document.getElementById('saldoChartNote');
+    const kontoNote = document.getElementById('kontoChartNote');
+    if (saldoNote) saldoNote.textContent = show ? 'Die Salden bleiben gleich: Es gibt keinen Wechselkurs, der sie verändert.' : 'Das Saldendiagramm wird erst nach Klick auf den Button ausgefüllt.';
+    if (kontoNote) kontoNote.textContent = show ? 'Die Kontostände laufen auseinander: A sammelt Euro, C rutscht in den Kreditbedarf.' : 'Das Kontodiagramm wird erst nach Klick auf den Button ausgefüllt.';
+  }
+
+  function toggleSolutionsAndCharts(sectionId, btn){
+    toggleSolutions(sectionId, null);
+    const section = document.getElementById(sectionId);
+    const showing = section.getAttribute('data-showing') === 'true';
+    setChartsVisible(showing);
+    if (btn) btn.textContent = showing ? 'Sicherungstabellen und Diagramme ausblenden' : 'Sicherungstabellen und Diagramme anzeigen';
+  }
+</script>
+</body>
+</html>

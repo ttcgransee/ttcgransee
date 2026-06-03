@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Planspiel Runde 1 – Eigene Währungen Schritt für Schritt (pendelnde Wechselkurse)</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Planspiel Runde 1 – Eigene Währungen Schritt für Schritt (pendelnde Wechselkurse)</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Raleway:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
     html, body { margin:0; padding:0; width:100%; min-height:100%; background:#F5F5F5; color:#333; font-family:'Montserrat',sans-serif; }
     .slide-container { width:100%; min-height:100vh; display:flex; flex-direction:column; }
     .slide-header { background:#2A3B32; color:#fff; padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:center; }
@@ -58,404 +59,536 @@
     .nav-btn:hover { background-color:#3D5245; transform:translateY(-1px); }
     @media (max-width:980px) { .grid-2,.grid-3{ grid-template-columns:1fr; } .slide-header{ align-items:flex-start; flex-direction:column; gap:.6rem; } }
     @media print { .solve-btn, .footer-center { display:none !important; } .step-card{ break-inside:avoid; box-shadow:none; } body{ background:#fff; } }
-  </style>
+  
+    .io-toolbar { background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:.75rem .95rem; display:flex; gap:.65rem; flex-wrap:wrap; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,.045); }
+    .io-toolbar .io-label { font-family:'Montserrat',sans-serif; font-weight:700; color:#2A3B32; margin-right:.25rem; }
+    .io-toolbar .io-hint { color:#6B7280; font-family:'Raleway',sans-serif; font-size:.82rem; flex-basis:100%; }
+    td.editable-cell { background:#fff !important; min-width:4.6rem; cursor:text; outline:none; }
+    td.editable-cell:focus { box-shadow:inset 0 0 0 2px #E6B400; background:#FFFBEB !important; }
+    td.editable-cell .blank { color:#9CA3AF; font-style:italic; }
+    td.editable-cell.cell-pos { color:#15803D; font-weight:700; }
+    td.editable-cell.cell-neg { color:#DC2626; font-weight:700; }
+    td.editable-cell.cell-neutral { color:#374151; font-weight:700; }
+    .sync-note { margin-top:.45rem; color:#6B7280; font-size:.78rem; }
+    .file-input-hidden { display:none; }
+</style>
 </head>
 <body>
 <div class="slide-container">
-  <div class="slide-header">
-    <div>
-      <h1 class="title">Planspiel Runde 1: Eigene Währungen</h1>
-      <div class="divider"></div>
-      <div class="subtitle">Handelsbilanz → Devisenmarkt → Wechselkurs → veränderte Kaufkraft</div>
-    </div>
-    <p class="text-sm font-light">Geographie | Klasse 10</p>
-  </div>
-
-  <div class="slide-content">
-
-    <!-- Ausgangslage -->
-    <section class="step-card">
-      <div class="step-head">
-        <span class="badge">Schritt 1</span>
-        <div class="step-title">Ausgangslage des Planspiels</div>
-      </div>
-      <div class="step-body">
-        <div class="grid-3">
-          <div class="mini-box">
-            <div class="mini-title"><i class="fas fa-map mr-1"></i>Länder und Währungen</div>
-            <table class="small-table">
-              <thead><tr><th>Land</th><th>Währung</th></tr></thead>
-              <tbody>
-                <tr><td>A-Land</td><td>A-Mark</td></tr>
-                <tr><td>B-Land</td><td>B-Taler</td></tr>
-                <tr><td>C-Land</td><td>C-Lira</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="mini-box">
-            <div class="mini-title"><i class="fas fa-boxes mr-1"></i>Produkte und Preise im Verkäuferland</div>
-            <table class="small-table">
-              <thead><tr><th>Verkäufer</th><th>Produkt</th><th class="right">Preis</th></tr></thead>
-              <tbody>
-                <tr><td>A-Land</td><td>Maschinen</td><td class="right">6 A-Mark</td></tr>
-                <tr><td>B-Land</td><td>Medikamente</td><td class="right">4 B-Taler</td></tr>
-                <tr><td>C-Land</td><td>Lebensmittel</td><td class="right">3 C-Lira</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="mini-box">
-            <div class="mini-title"><i class="fas fa-scale-balanced mr-1"></i>Buchungsregel</div>
-            <p class="tiny"><strong>Export/Haben</strong>: Einnahmen durch Verkäufe ins Ausland.</p>
-            <p class="tiny"><strong>Import/Soll</strong>: Ausgaben für Käufe aus dem Ausland.</p>
-            <p class="tiny"><strong>Saldo</strong> = Export/Haben − Import/Soll.</p>
-            <p class="tiny"><span class="pos">positiv</span> = Überschuss, <span class="neg">negativ</span> = Defizit.</p>
-          </div>
-        </div>
-        <div class="hint"><strong>Wichtig:</strong> In Runde 1 gilt zuerst: 1 A-Mark = 1 B-Taler = 1 C-Lira. Danach ändern sich die Wechselkurse je nach Handelsbilanz.</div>
-      </div>
-    </section>
-
-    <!-- Schritt 1 -->
-    <section class="step-card">
-      <div class="step-head">
-        <span class="badge">Schritt 2</span>
-        <div class="step-title">Pflichtkäufe festlegen</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Lest ab, welche zwei Waren euer Land in jeder Handelsrunde kaufen muss. Tragt noch nichts in die Bilanz ein — hier wird nur geklärt, wer von wem kauft.</p>
-        </div>
-        <table>
-          <thead>
-            <tr><th>Land</th><th>muss kaufen bei …</th><th>muss kaufen bei …</th><th>Warum entsteht Ungleichheit?</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td>B-Land: Medikamente</td><td>C-Land: Lebensmittel</td><td>A kauft eher günstige Waren.</td></tr>
-            <tr><td><strong>B-Land</strong></td><td>A-Land: Maschinen</td><td>C-Land: Lebensmittel</td><td>B kauft eine teure und eine günstige Ware.</td></tr>
-            <tr><td><strong>C-Land</strong></td><td>A-Land: Maschinen</td><td>B-Land: Medikamente</td><td>C kauft relativ teure Waren.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Schritt 2 -->
-    <section class="step-card sol-section" id="step2">
-      <div class="step-head">
-        <span class="badge">Schritt 3</span>
-        <div class="step-title">Runde 1 durchführen: kaufen, bezahlen, buchen</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Führt die sechs Pflichtkäufe aus. Da alle Währungen am Anfang gleich viel wert sind, entspricht der <strong>Preis im Verkäuferland</strong> zugleich dem Preis, den der Käufer in seiner eigenen Währung bezahlt. Tragt die Zahlungen in das Transaktionsbuch ein.</p>
-        </div>
-        <div class="wide-scroll">
-          <table>
-            <thead>
-              <tr><th>Käufer</th><th>Verkäufer</th><th>Ware</th><th class="right">Preis</th><th class="center">Menge</th><th class="right">Zahlung</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>A-Land</td><td>B-Land</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="center">1</td><td class="right sol" data-solution="4 B-Taler"><span class="blank">_____</span></td></tr>
-              <tr><td>A-Land</td><td>C-Land</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="center">1</td><td class="right sol" data-solution="3 C-Lira"><span class="blank">_____</span></td></tr>
-              <tr><td>B-Land</td><td>A-Land</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="center">1</td><td class="right sol" data-solution="6 A-Mark"><span class="blank">_____</span></td></tr>
-              <tr><td>B-Land</td><td>C-Land</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="center">1</td><td class="right sol" data-solution="3 C-Lira"><span class="blank">_____</span></td></tr>
-              <tr><td>C-Land</td><td>A-Land</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="center">1</td><td class="right sol" data-solution="6 A-Mark"><span class="blank">_____</span></td></tr>
-              <tr><td>C-Land</td><td>B-Land</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="center">1</td><td class="right sol" data-solution="4 B-Taler"><span class="blank">_____</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step2', this)">Zahlungen ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 3 -->
-    <section class="step-card sol-section" id="step3">
-      <div class="step-head">
-        <span class="badge">Schritt 4</span>
-        <div class="step-title">Bilanzbuch Runde 1: Wer hat Überschuss, wer Defizit?</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Übertragt die Zahlungen aus Schritt 2 in das Bilanzbuch. Addiert zuerst alle Exporteinnahmen, dann alle Importausgaben. Berechnet anschließend den Saldo.</p>
-        </div>
-        <table>
-          <thead><tr><th>Land</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th>Bilanzlage</th></tr></thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+12</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−7</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='pos'>Überschuss</span>"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>B-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+8</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−9</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='neg'>kleines Defizit</span>"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>C-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+6</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−10</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='neg'>deutliches Defizit</span>"><span class="blank">_____</span></td></tr>
-          </tbody>
-        </table>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step3', this)">Bilanzlösung ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 4 -->
-    <section class="step-card sol-section" id="step4">
-      <div class="step-head">
-        <span class="badge">Schritt 5</span>
-        <div class="step-title">Vom Bilanzsaldo zum Wechselkurs</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Leitet aus dem Bilanzsaldo ab, was auf dem Devisenmarkt passiert. Tragt anschließend den neuen Währungsindex für Runde 2 ein.</p>
-        </div>
-        <div class="hint"><strong>Regel im Spiel:</strong> Überschuss → ausländische Käufer brauchen diese Währung → Nachfrage steigt → Währung wertet auf. Defizit → Land braucht fremde Währungen und bietet eigene Währung an → eigene Währung wertet ab.</div>
-        <div class="formula">neuer Währungsindex = alter Index + 0,10 × Saldo</div>
-        <div class="formula">Startindex in Runde 1 = 1,00</div>
-        <table>
-          <thead><tr><th>Land</th><th class="right">Saldo aus Runde 1</th><th>Devisenmarkt</th><th>Wechselkursfolge</th><th class="right">Index Runde 2</th></tr></thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td class="right sol" data-solution="<span class='pos'>+5</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Nachfrage nach A-Mark steigt"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='pos'>A-Mark wertet auf</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>1,50</span>"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>B-Land</strong></td><td class="right sol" data-solution="<span class='neg'>−1</span>"><span class="blank">_____</span></td><td class="sol" data-solution="leichter Angebotsdruck auf B-Taler"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='neg'>B-Taler wertet leicht ab</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>0,90</span>"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>C-Land</strong></td><td class="right sol" data-solution="<span class='neg'>−4</span>"><span class="blank">_____</span></td><td class="sol" data-solution="C-Lira wird angeboten, aber wenig nachgefragt"><span class="blank">_____</span></td><td class="sol" data-solution="<span class='neg'>C-Lira wertet ab</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>0,60</span>"><span class="blank">_____</span></td></tr>
-          </tbody>
-        </table>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step4', this)">Wechselkurslösung ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 5 -->
-    <section class="step-card sol-section" id="step5">
-      <div class="step-head">
-        <span class="badge">Schritt 6</span>
-        <div class="step-title">Runde 2 vorbereiten: neue Preise und Kaufmengen berechnen</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Berechnet für Runde 2 jeden Pflichtkauf in drei Teilschritten: <strong>1.</strong> Preis in Käuferwährung berechnen, <strong>2.</strong> gekaufte Warenmenge berechnen, <strong>3.</strong> Exportwert des Verkäufers berechnen. Nutzt in allen Zeilen dieselben Begriffe wie in den Formeln.</p>
-        </div>
-        <div class="hint"><strong>Begriffe:</strong> <em>Preis im Verkäuferland</em> ist der feste Listenpreis der Ware im Land des Verkäufers, z.B. 6 A-Mark für Maschinen. <em>Einkaufsbudget des Käufers</em> ist der Betrag, den der Käufer für diesen Pflichtkauf in seiner eigenen Währung ausgeben darf, z.B. 6 C-Lira für Maschinen. Das ist nicht dasselbe.</div>
-        <div class="hint"><strong>Warum kauft ein Land mit schwacher Währung weniger?</strong> C-Land hat weiterhin nur 6 C-Lira als Einkaufsbudget für Maschinen. Nach der Abwertung kostet 1 Maschine aber 15,00 C-Lira. Deshalb kann C-Land nur noch 6 ÷ 15,00 = 0,40 Maschinenpunkte kaufen.</div>
-        <div>
-          <span class="formula">Preis in Käuferwährung = Preis im Verkäuferland × Index Verkäufer ÷ Index Käufer</span>
-          <span class="formula">gekaufte Warenmenge = Einkaufsbudget des Käufers ÷ Preis in Käuferwährung</span>
-          <span class="formula">Exportwert des Verkäufers = gekaufte Warenmenge × Preis im Verkäuferland</span>
-        </div>
-        <div class="wide-scroll">
-          <table class="small-table">
-            <thead>
-              <tr><th>Käufer</th><th>Verkäufer</th><th>Ware</th><th class="right">Preis im Verkäuferland</th><th class="right">Einkaufsbudget des Käufers</th><th class="right">Preis in Käuferwährung</th><th class="right">gekaufte Warenmenge</th><th class="right">Exportwert des Verkäufers</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>A</td><td>B</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="right">4 A-Mark</td><td class="right sol" data-solution="2,40 A-Mark"><span class="blank">_____</span></td><td class="right sol" data-solution="1,67"><span class="blank">_____</span></td><td class="right sol" data-solution="6,67 B-Taler"><span class="blank">_____</span></td></tr>
-              <tr><td>A</td><td>C</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="right">3 A-Mark</td><td class="right sol" data-solution="1,20 A-Mark"><span class="blank">_____</span></td><td class="right sol" data-solution="2,50"><span class="blank">_____</span></td><td class="right sol" data-solution="7,50 C-Lira"><span class="blank">_____</span></td></tr>
-              <tr><td>B</td><td>A</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="right">6 B-Taler</td><td class="right sol" data-solution="10,00 B-Taler"><span class="blank">_____</span></td><td class="right sol" data-solution="0,60"><span class="blank">_____</span></td><td class="right sol" data-solution="3,60 A-Mark"><span class="blank">_____</span></td></tr>
-              <tr><td>B</td><td>C</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="right">3 B-Taler</td><td class="right sol" data-solution="2,00 B-Taler"><span class="blank">_____</span></td><td class="right sol" data-solution="1,50"><span class="blank">_____</span></td><td class="right sol" data-solution="4,50 C-Lira"><span class="blank">_____</span></td></tr>
-              <tr><td>C</td><td>A</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="right">6 C-Lira</td><td class="right sol" data-solution="15,00 C-Lira"><span class="blank">_____</span></td><td class="right sol" data-solution="0,40"><span class="blank">_____</span></td><td class="right sol" data-solution="2,40 A-Mark"><span class="blank">_____</span></td></tr>
-              <tr><td>C</td><td>B</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="right">4 C-Lira</td><td class="right sol" data-solution="6,00 C-Lira"><span class="blank">_____</span></td><td class="right sol" data-solution="0,67"><span class="blank">_____</span></td><td class="right sol" data-solution="2,67 B-Taler"><span class="blank">_____</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step5', this)">Runde-2-Kaufkraftlösung ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 6 -->
-    <section class="step-card sol-section" id="step6">
-      <div class="step-head">
-        <span class="badge">Schritt 7</span>
-        <div class="step-title">Bilanzbuch Runde 2 ausfüllen</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Übertragt die <strong>Exportwerte des Verkäufers</strong> aus Schritt 5 in das Bilanzbuch. Die <strong>Importausgaben</strong> entsprechen dem jeweiligen <strong>Einkaufsbudget des Käufers</strong>, weil dieser Betrag tatsächlich ausgegeben wird. Berechnet wieder den Saldo und passt danach den Wechselkurs für Runde 3 an.</p>
-        </div>
-        <table>
-          <thead><tr><th>Land</th><th class="right">Index Runde 2</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th class="right">Index Runde 3</th></tr></thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td class="right">1,50</td><td class="right sol" data-solution="<span class='pos'>+6,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−7,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>1,40</span>"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>B-Land</strong></td><td class="right">0,90</td><td class="right sol" data-solution="<span class='pos'>+9,33</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−9,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,33</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>0,93</span>"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>C-Land</strong></td><td class="right">0,60</td><td class="right sol" data-solution="<span class='pos'>+12,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−10,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+2,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>0,80</span>"><span class="blank">_____</span></td></tr>
-          </tbody>
-        </table>
-        <!--  <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step6', this)">Bilanz Runde 2 ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 7 -->
-    <section class="step-card sol-section" id="step7">
-      <div class="step-head">
-        <span class="badge">Schritt 8</span>
-        <div class="step-title">Runde 3 berechnen: gleiche Methode, neue Wechselkurse</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Verwendet die Indizes aus Schritt 6 als Startwerte für Runde 3. Rechnet wie in Schritt 5 die Kaufmengen aus oder nutzt direkt die zusammenfassende Tabelle. Tragt Exporte, Importe, Salden und neue Indizes ein.</p>
-        </div>
-        <table>
-          <thead><tr><th>Land</th><th class="right">Startindex Runde 3</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th class="right">Index Runde 4</th></tr></thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td class="right sol" data-solution="1,40"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+7,41</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−7,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,41</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="1,44"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>B-Land</strong></td><td class="right sol" data-solution="0,93"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+9,46</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−9,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,46</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="0,98"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>C-Land</strong></td><td class="right sol" data-solution="0,80"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+8,74</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−10,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1,26</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="0,67"><span class="blank">_____</span></td></tr>
-          </tbody>
-        </table>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step7', this)">Runde 3 ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 8 -->
-    <section class="step-card sol-section" id="step8">
-      <div class="step-head">
-        <span class="badge">Schritt 9</span>
-        <div class="step-title">Runde 4 berechnen: Salden pendeln um 0</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Wiederholt die Rechnung ein weiteres Mal. Achtet darauf, ob einzelne Salden nun die Seite wechseln: Aus einem Überschuss kann ein kleines Defizit werden und umgekehrt. Genau dieses Pendeln zeigt die Suche nach einem Wechselkursgleichgewicht.</p>
-        </div>
-        <table>
-          <thead><tr><th>Land</th><th class="right">Startindex Runde 4</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th class="right">Index Runde 5</th></tr></thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td class="right sol" data-solution="1,44"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+6,88</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−7,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,84</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="1,42"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>B-Land</strong></td><td class="right sol" data-solution="0,98"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+8,61</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−9,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−0,39</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="0,94"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>C-Land</strong></td><td class="right sol" data-solution="0,67"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+10,84</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−10,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−0,12</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="0,75"><span class="blank">_____</span></td></tr>
-          </tbody>
-        </table>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step8', this)">Runde 4 ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 9 -->
-    <section class="step-card sol-section" id="step9">
-      <div class="step-head">
-        <span class="badge">Schritt 10</span>
-        <div class="step-title">Runde 5 berechnen: kleinere Ausschläge</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Rechnet die letzte Runde. Vergleicht anschließend die Salden aus Runde 1 und Runde 5: Sind die Ausschläge kleiner geworden? Vergleicht besonders A-Land und C-Land.</p>
-        </div>
-        <table>
-          <thead><tr><th>Land</th><th class="right">Startindex Runde 5</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th>Ergebnis</th></tr></thead>
-          <tbody>
-            <tr><td><strong>A-Land</strong></td><td class="right sol" data-solution="1,42"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+7,14</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−7,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,14</span>"><span class="blank">_____</span></td><td class="sol" data-solution="kleiner Überschuss"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>B-Land</strong></td><td class="right sol" data-solution="0,94"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+9,23</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−9,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,23</span>"><span class="blank">_____</span></td><td class="sol" data-solution="kleiner Überschuss"><span class="blank">_____</span></td></tr>
-            <tr><td><strong>C-Land</strong></td><td class="right sol" data-solution="0,75"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+9,44</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−10,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−0,56</span>"><span class="blank">_____</span></td><td class="sol" data-solution="kleines Defizit"><span class="blank">_____</span></td></tr>
-          </tbody>
-        </table>
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step9', this)">Runde 5 ein-/ausblenden</button></div> -->
-      </div>
-    </section>
-
-    <!-- Schritt 10 -->
-    <section class="step-card sol-section" id="step10">
-      <div class="step-head">
-        <span class="badge">Schritt 11</span>
-        <div class="step-title">Sicherung: Salden und Wechselkurse im Verlauf</div>
-      </div>
-      <div class="step-body">
-        <div class="auftrag">
-          <div class="auftrag-title">Arbeitsauftrag</div>
-          <p>Füllt zuerst <strong>beide Tabellen</strong> aus: links die Handelsbilanzsalden, rechts die Wechselkursindizes. Blendet danach die Lösung und beide Diagramme ein. Vergleicht: Wie reagieren die Wechselkurse auf Überschüsse und Defizite?</p>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <div class="mini-title"><i class="fas fa-chart-line mr-1"></i>Tabelle A: Handelsbilanzsalden je Runde</div>
-            <table class="small-table">
-              <thead>
-                <tr><th>Runde</th><th class="right">A-Land Saldo</th><th class="right">B-Land Saldo</th><th class="right">C-Land Saldo</th><th>Deutung</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td class="right sol" data-solution="<span class='pos'>+5,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−4,00</span>"><span class="blank">_____</span></td><td class="sol" data-solution="stark unausgeglichen"><span class="blank">_____</span></td></tr>
-                <tr><td>2</td><td class="right sol" data-solution="<span class='neg'>−1,00</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,33</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+2,00</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Richtung gewechselt: A Defizit, C Überschuss"><span class="blank">_____</span></td></tr>
-                <tr><td>3</td><td class="right sol" data-solution="<span class='pos'>+0,41</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,46</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−1,26</span>"><span class="blank">_____</span></td><td class="sol" data-solution="erneuter Richtungswechsel"><span class="blank">_____</span></td></tr>
-                <tr><td>4</td><td class="right sol" data-solution="<span class='neg'>−0,12</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−0,39</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,84</span>"><span class="blank">_____</span></td><td class="sol" data-solution="A und B nun leicht im Defizit"><span class="blank">_____</span></td></tr>
-                <tr><td>5</td><td class="right sol" data-solution="<span class='pos'>+0,14</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>+0,23</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>−0,56</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Ausschläge deutlich kleiner"><span class="blank">_____</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div>
-            <div class="mini-title"><i class="fas fa-money-bill-trend-up mr-1"></i>Tabelle B: Wechselkursindizes je Runde</div>
-            <table class="small-table">
-              <thead>
-                <tr><th>Runde</th><th class="right">A-Mark Index</th><th class="right">B-Taler Index</th><th class="right">C-Lira Index</th><th>Deutung</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td class="right sol" data-solution="1,00"><span class="blank">_____</span></td><td class="right sol" data-solution="1,00"><span class="blank">_____</span></td><td class="right sol" data-solution="1,00"><span class="blank">_____</span></td><td class="sol" data-solution="Start: alle gleich"><span class="blank">_____</span></td></tr>
-                <tr><td>2</td><td class="right sol" data-solution="<span class='pos'>1,50</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>0,90</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>0,60</span>"><span class="blank">_____</span></td><td class="sol" data-solution="A wertet auf, C ab"><span class="blank">_____</span></td></tr>
-                <tr><td>3</td><td class="right sol" data-solution="<span class='pos'>1,40</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>0,93</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>0,80</span>"><span class="blank">_____</span></td><td class="sol" data-solution="A wird wieder günstiger, C wieder teurer"><span class="blank">_____</span></td></tr>
-                <tr><td>4</td><td class="right sol" data-solution="<span class='pos'>1,44</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>0,98</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>0,67</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Gegenbewegung nach Überschuss/Defizit"><span class="blank">_____</span></td></tr>
-                <tr><td>5</td><td class="right sol" data-solution="<span class='pos'>1,42</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='neg'>0,94</span>"><span class="blank">_____</span></td><td class="right sol" data-solution="<span class='pos'>0,75</span>"><span class="blank">_____</span></td><td class="sol" data-solution="Ausschläge werden kleiner"><span class="blank">_____</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutionsAndCharts('step10', this)">Sicherungstabellen und Diagramme anzeigen</button></div> -->
-
-        <div class="grid-2" style="margin-top:.85rem;">
-          <div>
-            <div class="mini-title"><i class="fas fa-chart-area mr-1"></i>Diagramm A: Salden</div>
-            <div class="chart-wrapper"><canvas id="saldoChart"></canvas></div>
-            <div id="saldoChartNote" class="chart-note">Das Saldendiagramm wird erst nach Klick auf den Button ausgefüllt.</div>
-          </div>
-          <div>
-            <div class="mini-title"><i class="fas fa-chart-line mr-1"></i>Diagramm B: Wechselkurse</div>
-            <div class="chart-wrapper"><canvas id="indexChart"></canvas></div>
-            <div id="indexChartNote" class="chart-note">Das Wechselkursdiagramm wird erst nach Klick auf den Button ausgefüllt.</div>
-          </div>
-        </div>
-
-        <div class="hint"><strong>Merksatz:</strong> Eine Aufwertung macht die Produkte des Überschusslandes für das Ausland teurer. Eine Abwertung macht die Produkte des Defizitlandes günstiger, aber Importe werden für dieses Land teurer. Dadurch können Handelsbilanzungleichgewichte über mehrere Runden um die Nulllinie pendeln und kleiner werden.</div>
-      </div>
-    </section>
-  </div>
-
-  <div class="footer">
-    <div class="footer-left"><p>Theo Schierbaum – Euro, Wechselkurse und Handelsbilanzen</p></div>
-    <div class="footer-center">
-      <a class="nav-btn" href="3.html">← Zurück</a>
-      <a class="nav-btn" href="5.html">Runde 2 →</a>
-    </div>
-    <div class="footer-right"><p>Runde 1</p></div>
-  </div>
+<div class="slide-header">
+<div>
+<h1 class="title">Planspiel Runde 1: Eigene Währungen</h1>
+<div class="divider"></div>
+<div class="subtitle">Handelsbilanz → Devisenmarkt → Wechselkurs → veränderte Kaufkraft</div>
 </div>
+<p class="text-sm font-light">Geographie | Klasse 10</p>
+</div>
+<div class="slide-content">
+<section class="io-toolbar">
+<span class="io-label"><i class="fas fa-floppy-disk mr-1"></i>Eintragungen</span>
+<button class="solve-btn" onclick="saveEntriesAsJson()" type="button">Speichern / Export als JSON</button>
+<button class="solve-btn subtle-btn" onclick="document.getElementById('jsonImportInput').click()" type="button">Import aus JSON</button>
+<input accept="application/json,.json" class="file-input-hidden" id="jsonImportInput" onchange="loadEntriesFromJson(event)" type="file"/>
+<div class="io-hint">Alle beschreibbaren Tabellenfelder können direkt angeklickt werden. Gleiche Werte, z.B. Salden und Wechselkursindizes, werden automatisch in die nächsten Tabellen übernommen.</div>
+</section>
 
+<!-- Ausgangslage -->
+<section class="step-card">
+<div class="step-head">
+<span class="badge">Schritt 1</span>
+<div class="step-title">Ausgangslage des Planspiels</div>
+</div>
+<div class="step-body">
+<div class="grid-3">
+<div class="mini-box">
+<div class="mini-title"><i class="fas fa-map mr-1"></i>Länder und Währungen</div>
+<table class="small-table">
+<thead><tr><th>Land</th><th>Währung</th></tr></thead>
+<tbody>
+<tr><td>A-Land</td><td>A-Mark</td></tr>
+<tr><td>B-Land</td><td>B-Taler</td></tr>
+<tr><td>C-Land</td><td>C-Lira</td></tr>
+</tbody>
+</table>
+</div>
+<div class="mini-box">
+<div class="mini-title"><i class="fas fa-boxes mr-1"></i>Produkte und Preise im Verkäuferland</div>
+<table class="small-table">
+<thead><tr><th>Verkäufer</th><th>Produkt</th><th class="right">Preis</th></tr></thead>
+<tbody>
+<tr><td>A-Land</td><td>Maschinen</td><td class="right">6 A-Mark</td></tr>
+<tr><td>B-Land</td><td>Medikamente</td><td class="right">4 B-Taler</td></tr>
+<tr><td>C-Land</td><td>Lebensmittel</td><td class="right">3 C-Lira</td></tr>
+</tbody>
+</table>
+</div>
+<div class="mini-box">
+<div class="mini-title"><i class="fas fa-scale-balanced mr-1"></i>Buchungsregel</div>
+<p class="tiny"><strong>Export/Haben</strong>: Einnahmen durch Verkäufe ins Ausland.</p>
+<p class="tiny"><strong>Import/Soll</strong>: Ausgaben für Käufe aus dem Ausland.</p>
+<p class="tiny"><strong>Saldo</strong> = Export/Haben − Import/Soll.</p>
+<p class="tiny"><span class="pos">positiv</span> = Überschuss, <span class="neg">negativ</span> = Defizit.</p>
+</div>
+</div>
+<div class="hint"><strong>Wichtig:</strong> In Runde 1 gilt zuerst: 1 A-Mark = 1 B-Taler = 1 C-Lira. Danach ändern sich die Wechselkurse je nach Handelsbilanz.</div>
+</div>
+</section>
+<!-- Schritt 1 -->
+<section class="step-card">
+<div class="step-head">
+<span class="badge">Schritt 2</span>
+<div class="step-title">Pflichtkäufe festlegen</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Lest ab, welche zwei Waren euer Land in jeder Handelsrunde kaufen muss. Tragt noch nichts in die Bilanz ein — hier wird nur geklärt, wer von wem kauft.</p>
+</div>
+<table>
+<thead>
+<tr><th>Land</th><th>muss kaufen bei …</th><th>muss kaufen bei …</th><th>Warum entsteht Ungleichheit?</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td>B-Land: Medikamente</td><td>C-Land: Lebensmittel</td><td>A kauft eher günstige Waren.</td></tr>
+<tr><td><strong>B-Land</strong></td><td>A-Land: Maschinen</td><td>C-Land: Lebensmittel</td><td>B kauft eine teure und eine günstige Ware.</td></tr>
+<tr><td><strong>C-Land</strong></td><td>A-Land: Maschinen</td><td>B-Land: Medikamente</td><td>C kauft relativ teure Waren.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Schritt 2 -->
+<section class="step-card sol-section" id="step2">
+<div class="step-head">
+<span class="badge">Schritt 3</span>
+<div class="step-title">Runde 1 durchführen: kaufen, bezahlen, buchen</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Führt die sechs Pflichtkäufe aus. Da alle Währungen am Anfang gleich viel wert sind, entspricht der <strong>Preis im Verkäuferland</strong> zugleich dem Preis, den der Käufer in seiner eigenen Währung bezahlt. Tragt die Zahlungen in das Transaktionsbuch ein.</p>
+</div>
+<div class="wide-scroll">
+<table>
+<thead>
+<tr><th>Käufer</th><th>Verkäufer</th><th>Ware</th><th class="right">Preis</th><th class="center">Menge</th><th class="right">Zahlung</th></tr>
+</thead>
+<tbody>
+<tr><td>A-Land</td><td>B-Land</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="center">1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-001" data-solution="4 B-Taler"><span class="blank">_____</span></td></tr>
+<tr><td>A-Land</td><td>C-Land</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="center">1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-002" data-solution="3 C-Lira"><span class="blank">_____</span></td></tr>
+<tr><td>B-Land</td><td>A-Land</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="center">1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-003" data-solution="6 A-Mark"><span class="blank">_____</span></td></tr>
+<tr><td>B-Land</td><td>C-Land</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="center">1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-004" data-solution="3 C-Lira"><span class="blank">_____</span></td></tr>
+<tr><td>C-Land</td><td>A-Land</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="center">1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-005" data-solution="6 A-Mark"><span class="blank">_____</span></td></tr>
+<tr><td>C-Land</td><td>B-Land</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="center">1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-006" data-solution="4 B-Taler"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+</div>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step2', this)">Zahlungen ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 3 -->
+<section class="step-card sol-section" id="step3">
+<div class="step-head">
+<span class="badge">Schritt 4</span>
+<div class="step-title">Bilanzbuch Runde 1: Wer hat Überschuss, wer Defizit?</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Übertragt die Zahlungen aus Schritt 2 in das Bilanzbuch. Addiert zuerst alle Exporteinnahmen, dann alle Importausgaben. Berechnet anschließend den Saldo.</p>
+</div>
+<table>
+<thead><tr><th>Land</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th>Bilanzlage</th></tr></thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-007" data-solution="&lt;span class='pos'&gt;+12&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-008" data-solution="&lt;span class='neg'&gt;−7&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-009" data-solution="&lt;span class='pos'&gt;+5&lt;/span&gt;" data-sync="saldo_A_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-010" data-solution="&lt;span class='pos'&gt;Überschuss&lt;/span&gt;"><span class="blank">_____</span></td></tr>
+<tr><td><strong>B-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-011" data-solution="&lt;span class='pos'&gt;+8&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-012" data-solution="&lt;span class='neg'&gt;−9&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-013" data-solution="&lt;span class='neg'&gt;−1&lt;/span&gt;" data-sync="saldo_B_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-014" data-solution="&lt;span class='neg'&gt;kleines Defizit&lt;/span&gt;"><span class="blank">_____</span></td></tr>
+<tr><td><strong>C-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-015" data-solution="&lt;span class='pos'&gt;+6&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-016" data-solution="&lt;span class='neg'&gt;−10&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-017" data-solution="&lt;span class='neg'&gt;−4&lt;/span&gt;" data-sync="saldo_C_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-018" data-solution="&lt;span class='neg'&gt;deutliches Defizit&lt;/span&gt;"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step3', this)">Bilanzlösung ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 4 -->
+<section class="step-card sol-section" id="step4">
+<div class="step-head">
+<span class="badge">Schritt 5</span>
+<div class="step-title">Vom Bilanzsaldo zum Wechselkurs</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Leitet aus dem Bilanzsaldo ab, was auf dem Devisenmarkt passiert. Tragt anschließend den neuen Währungsindex für Runde 2 ein.</p>
+</div>
+<div class="hint"><strong>Regel im Spiel:</strong> Überschuss → ausländische Käufer brauchen diese Währung → Nachfrage steigt → Währung wertet auf. Defizit → Land braucht fremde Währungen und bietet eigene Währung an → eigene Währung wertet ab.</div>
+<div class="formula">neuer Währungsindex = alter Index + 0,10 × Saldo</div>
+<div class="formula">Startindex in Runde 1 = 1,00</div>
+<table>
+<thead><tr><th>Land</th><th class="right">Saldo aus Runde 1</th><th>Devisenmarkt</th><th>Wechselkursfolge</th><th class="right">Index Runde 2</th></tr></thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-019" data-solution="&lt;span class='pos'&gt;+5&lt;/span&gt;" data-sync="saldo_A_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-020" data-solution="Nachfrage nach A-Mark steigt"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-021" data-solution="&lt;span class='pos'&gt;A-Mark wertet auf&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-022" data-solution="&lt;span class='pos'&gt;1,50&lt;/span&gt;" data-sync="idx_A_r2"><span class="blank">_____</span></td></tr>
+<tr><td><strong>B-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-023" data-solution="&lt;span class='neg'&gt;−1&lt;/span&gt;" data-sync="saldo_B_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-024" data-solution="leichter Angebotsdruck auf B-Taler"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-025" data-solution="&lt;span class='neg'&gt;B-Taler wertet leicht ab&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-026" data-solution="&lt;span class='neg'&gt;0,90&lt;/span&gt;" data-sync="idx_B_r2"><span class="blank">_____</span></td></tr>
+<tr><td><strong>C-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-027" data-solution="&lt;span class='neg'&gt;−4&lt;/span&gt;" data-sync="saldo_C_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-028" data-solution="C-Lira wird angeboten, aber wenig nachgefragt"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-029" data-solution="&lt;span class='neg'&gt;C-Lira wertet ab&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-030" data-solution="&lt;span class='neg'&gt;0,60&lt;/span&gt;" data-sync="idx_C_r2"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step4', this)">Wechselkurslösung ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 5 -->
+<section class="step-card sol-section" id="step5">
+<div class="step-head">
+<span class="badge">Schritt 6</span>
+<div class="step-title">Runde 2 vorbereiten: neue Preise und Kaufmengen berechnen</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Berechnet für Runde 2 jeden Pflichtkauf in drei Teilschritten: <strong>1.</strong> Preis in Käuferwährung berechnen, <strong>2.</strong> gekaufte Warenmenge berechnen, <strong>3.</strong> Exportwert des Verkäufers berechnen. Nutzt in allen Zeilen dieselben Begriffe wie in den Formeln.</p>
+</div>
+<div class="hint"><strong>Begriffe:</strong> <em>Preis im Verkäuferland</em> ist der feste Listenpreis der Ware im Land des Verkäufers, z.B. 6 A-Mark für Maschinen. <em>Einkaufsbudget des Käufers</em> ist der Betrag, den der Käufer für diesen Pflichtkauf in seiner eigenen Währung ausgeben darf, z.B. 6 C-Lira für Maschinen. Das ist nicht dasselbe.</div>
+<div class="hint"><strong>Warum kauft ein Land mit schwacher Währung weniger?</strong> C-Land hat weiterhin nur 6 C-Lira als Einkaufsbudget für Maschinen. Nach der Abwertung kostet 1 Maschine aber 15,00 C-Lira. Deshalb kann C-Land nur noch 6 ÷ 15,00 = 0,40 Maschinenpunkte kaufen.</div>
+<div>
+<span class="formula">Preis in Käuferwährung = Preis im Verkäuferland × Index Verkäufer ÷ Index Käufer</span>
+<span class="formula">gekaufte Warenmenge = Einkaufsbudget des Käufers ÷ Preis in Käuferwährung</span>
+<span class="formula">Exportwert des Verkäufers = gekaufte Warenmenge × Preis im Verkäuferland</span>
+</div>
+<div class="wide-scroll">
+<table class="small-table">
+<thead>
+<tr><th>Käufer</th><th>Verkäufer</th><th>Ware</th><th class="right">Preis im Verkäuferland</th><th class="right">Einkaufsbudget des Käufers</th><th class="right">Preis in Käuferwährung</th><th class="right">gekaufte Warenmenge</th><th class="right">Exportwert des Verkäufers</th></tr>
+</thead>
+<tbody>
+<tr><td>A</td><td>B</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="right">4 A-Mark</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-031" data-solution="2,40 A-Mark"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-032" data-solution="1,67"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-033" data-solution="6,67 B-Taler"><span class="blank">_____</span></td></tr>
+<tr><td>A</td><td>C</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="right">3 A-Mark</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-034" data-solution="1,20 A-Mark"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-035" data-solution="2,50"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-036" data-solution="7,50 C-Lira"><span class="blank">_____</span></td></tr>
+<tr><td>B</td><td>A</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="right">6 B-Taler</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-037" data-solution="10,00 B-Taler"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-038" data-solution="0,60"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-039" data-solution="3,60 A-Mark"><span class="blank">_____</span></td></tr>
+<tr><td>B</td><td>C</td><td>Lebensmittel</td><td class="right">3 C-Lira</td><td class="right">3 B-Taler</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-040" data-solution="2,00 B-Taler"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-041" data-solution="1,50"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-042" data-solution="4,50 C-Lira"><span class="blank">_____</span></td></tr>
+<tr><td>C</td><td>A</td><td>Maschinen</td><td class="right">6 A-Mark</td><td class="right">6 C-Lira</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-043" data-solution="15,00 C-Lira"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-044" data-solution="0,40"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-045" data-solution="2,40 A-Mark"><span class="blank">_____</span></td></tr>
+<tr><td>C</td><td>B</td><td>Medikamente</td><td class="right">4 B-Taler</td><td class="right">4 C-Lira</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-046" data-solution="6,00 C-Lira"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-047" data-solution="0,67"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-048" data-solution="2,67 B-Taler"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+</div>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step5', this)">Runde-2-Kaufkraftlösung ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 6 -->
+<section class="step-card sol-section" id="step6">
+<div class="step-head">
+<span class="badge">Schritt 7</span>
+<div class="step-title">Bilanzbuch Runde 2 ausfüllen</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Übertragt die <strong>Exportwerte des Verkäufers</strong> aus Schritt 5 in das Bilanzbuch. Die <strong>Importausgaben</strong> entsprechen dem jeweiligen <strong>Einkaufsbudget des Käufers</strong>, weil dieser Betrag tatsächlich ausgegeben wird. Berechnet wieder den Saldo und passt danach den Wechselkurs für Runde 3 an.</p>
+</div>
+<table>
+<thead><tr><th>Land</th><th class="right">Index Runde 2</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th class="right">Index Runde 3</th></tr></thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td class="editable-cell right sol" contenteditable="true" data-cell-id="cell-146" data-solution="1,50" data-sync="idx_A_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-049" data-solution="&lt;span class='pos'&gt;+6,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-050" data-solution="&lt;span class='neg'&gt;−7,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-051" data-solution="&lt;span class='neg'&gt;−1,00&lt;/span&gt;" data-sync="saldo_A_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-052" data-solution="&lt;span class='neg'&gt;1,40&lt;/span&gt;" data-sync="idx_A_r3"><span class="blank">_____</span></td></tr>
+<tr><td><strong>B-Land</strong></td><td class="editable-cell right sol" contenteditable="true" data-cell-id="cell-147" data-solution="0,90" data-sync="idx_B_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-053" data-solution="&lt;span class='pos'&gt;+9,33&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-054" data-solution="&lt;span class='neg'&gt;−9,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-055" data-solution="&lt;span class='pos'&gt;+0,33&lt;/span&gt;" data-sync="saldo_B_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-056" data-solution="&lt;span class='pos'&gt;0,93&lt;/span&gt;" data-sync="idx_B_r3"><span class="blank">_____</span></td></tr>
+<tr><td><strong>C-Land</strong></td><td class="editable-cell right sol" contenteditable="true" data-cell-id="cell-148" data-solution="0,60" data-sync="idx_C_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-057" data-solution="&lt;span class='pos'&gt;+12,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-058" data-solution="&lt;span class='neg'&gt;−10,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-059" data-solution="&lt;span class='pos'&gt;+2,00&lt;/span&gt;" data-sync="saldo_C_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-060" data-solution="&lt;span class='pos'&gt;0,80&lt;/span&gt;" data-sync="idx_C_r3"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step6', this)">Bilanz Runde 2 ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 7 -->
+<section class="step-card sol-section" id="step7">
+<div class="step-head">
+<span class="badge">Schritt 8</span>
+<div class="step-title">Runde 3 berechnen: gleiche Methode, neue Wechselkurse</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Verwendet die Indizes aus Schritt 6 als Startwerte für Runde 3. Rechnet wie in Schritt 5 die Kaufmengen aus oder nutzt direkt die zusammenfassende Tabelle. Tragt Exporte, Importe, Salden und neue Indizes ein.</p>
+</div>
+<table>
+<thead><tr><th>Land</th><th class="right">Startindex Runde 3</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th class="right">Index Runde 4</th></tr></thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-061" data-solution="1,40" data-sync="idx_A_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-062" data-solution="&lt;span class='pos'&gt;+7,41&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-063" data-solution="&lt;span class='neg'&gt;−7,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-064" data-solution="&lt;span class='pos'&gt;+0,41&lt;/span&gt;" data-sync="saldo_A_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-065" data-solution="1,44" data-sync="idx_A_r4"><span class="blank">_____</span></td></tr>
+<tr><td><strong>B-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-066" data-solution="0,93" data-sync="idx_B_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-067" data-solution="&lt;span class='pos'&gt;+9,46&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-068" data-solution="&lt;span class='neg'&gt;−9,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-069" data-solution="&lt;span class='pos'&gt;+0,46&lt;/span&gt;" data-sync="saldo_B_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-070" data-solution="0,98" data-sync="idx_B_r4"><span class="blank">_____</span></td></tr>
+<tr><td><strong>C-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-071" data-solution="0,80" data-sync="idx_C_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-072" data-solution="&lt;span class='pos'&gt;+8,74&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-073" data-solution="&lt;span class='neg'&gt;−10,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-074" data-solution="&lt;span class='neg'&gt;−1,26&lt;/span&gt;" data-sync="saldo_C_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-075" data-solution="0,67" data-sync="idx_C_r4"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step7', this)">Runde 3 ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 8 -->
+<section class="step-card sol-section" id="step8">
+<div class="step-head">
+<span class="badge">Schritt 9</span>
+<div class="step-title">Runde 4 berechnen: Salden pendeln um 0</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Wiederholt die Rechnung ein weiteres Mal. Achtet darauf, ob einzelne Salden nun die Seite wechseln: Aus einem Überschuss kann ein kleines Defizit werden und umgekehrt. Genau dieses Pendeln zeigt die Suche nach einem Wechselkursgleichgewicht.</p>
+</div>
+<table>
+<thead><tr><th>Land</th><th class="right">Startindex Runde 4</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th class="right">Index Runde 5</th></tr></thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-076" data-solution="1,44" data-sync="idx_A_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-077" data-solution="&lt;span class='pos'&gt;+6,88&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-078" data-solution="&lt;span class='neg'&gt;−7,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-079" data-solution="&lt;span class='neg'&gt;−0,12&lt;/span&gt;" data-sync="saldo_A_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-080" data-solution="1,42" data-sync="idx_A_r5"><span class="blank">_____</span></td></tr>
+<tr><td><strong>B-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-081" data-solution="0,98" data-sync="idx_B_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-082" data-solution="&lt;span class='pos'&gt;+8,61&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-083" data-solution="&lt;span class='neg'&gt;−9,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-084" data-solution="&lt;span class='neg'&gt;−0,39&lt;/span&gt;" data-sync="saldo_B_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-085" data-solution="0,94" data-sync="idx_B_r5"><span class="blank">_____</span></td></tr>
+<tr><td><strong>C-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-086" data-solution="0,67" data-sync="idx_C_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-087" data-solution="&lt;span class='pos'&gt;+10,84&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-088" data-solution="&lt;span class='neg'&gt;−10,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-089" data-solution="&lt;span class='pos'&gt;+0,84&lt;/span&gt;" data-sync="saldo_C_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-090" data-solution="0,75" data-sync="idx_C_r5"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step8', this)">Runde 4 ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 9 -->
+<section class="step-card sol-section" id="step9">
+<div class="step-head">
+<span class="badge">Schritt 10</span>
+<div class="step-title">Runde 5 berechnen: kleinere Ausschläge</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Rechnet die letzte Runde. Vergleicht anschließend die Salden aus Runde 1 und Runde 5: Sind die Ausschläge kleiner geworden? Vergleicht besonders A-Land und C-Land.</p>
+</div>
+<table>
+<thead><tr><th>Land</th><th class="right">Startindex Runde 5</th><th class="right">Export/Haben</th><th class="right">Import/Soll</th><th class="right">Saldo</th><th>Ergebnis</th></tr></thead>
+<tbody>
+<tr><td><strong>A-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-091" data-solution="1,42" data-sync="idx_A_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-092" data-solution="&lt;span class='pos'&gt;+7,14&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-093" data-solution="&lt;span class='neg'&gt;−7,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-094" data-solution="&lt;span class='pos'&gt;+0,14&lt;/span&gt;" data-sync="saldo_A_r5"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-095" data-solution="kleiner Überschuss"><span class="blank">_____</span></td></tr>
+<tr><td><strong>B-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-096" data-solution="0,94" data-sync="idx_B_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-097" data-solution="&lt;span class='pos'&gt;+9,23&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-098" data-solution="&lt;span class='neg'&gt;−9,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-099" data-solution="&lt;span class='pos'&gt;+0,23&lt;/span&gt;" data-sync="saldo_B_r5"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-100" data-solution="kleiner Überschuss"><span class="blank">_____</span></td></tr>
+<tr><td><strong>C-Land</strong></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-101" data-solution="0,75" data-sync="idx_C_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-102" data-solution="&lt;span class='pos'&gt;+9,44&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-103" data-solution="&lt;span class='neg'&gt;−10,00&lt;/span&gt;"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-104" data-solution="&lt;span class='neg'&gt;−0,56&lt;/span&gt;" data-sync="saldo_C_r5"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-105" data-solution="kleines Defizit"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutions('step9', this)">Runde 5 ein-/ausblenden</button></div> -->
+</div>
+</section>
+<!-- Schritt 10 -->
+<section class="step-card sol-section" id="step10">
+<div class="step-head">
+<span class="badge">Schritt 11</span>
+<div class="step-title">Sicherung: Salden und Wechselkurse im Verlauf</div>
+</div>
+<div class="step-body">
+<div class="auftrag">
+<div class="auftrag-title">Arbeitsauftrag</div>
+<p>Füllt zuerst <strong>beide Tabellen</strong> aus: links die Handelsbilanzsalden, rechts die Wechselkursindizes. Zeichnet anschließend die Werte in das Diagramm. Vergleicht: Wie reagieren die Wechselkurse auf Überschüsse und Defizite?</p>
+</div><div class="sync-note"><strong>Hinweis:</strong> Die Diagramme werden live aus den eingetragenen Werten in Tabelle A und Tabelle B gezeichnet. Leere Felder erscheinen im Diagramm als Lücken.</div>
+<div class="grid-2">
+<div>
+<div class="mini-title"><i class="fas fa-chart-line mr-1"></i>Tabelle A: Handelsbilanzsalden je Runde</div>
+<table class="small-table">
+<thead>
+<tr><th>Runde</th><th class="right">A-Land Saldo</th><th class="right">B-Land Saldo</th><th class="right">C-Land Saldo</th><th>Deutung</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-106" data-solution="&lt;span class='pos'&gt;+5,00&lt;/span&gt;" data-sync="saldo_A_r1"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-107" data-solution="&lt;span class='neg'&gt;−1,00&lt;/span&gt;" data-sync="saldo_B_r1"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-108" data-solution="&lt;span class='neg'&gt;−4,00&lt;/span&gt;" data-sync="saldo_C_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-109" data-solution="stark unausgeglichen"><span class="blank">_____</span></td></tr>
+<tr><td>2</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-110" data-solution="&lt;span class='neg'&gt;−1,00&lt;/span&gt;" data-sync="saldo_A_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-111" data-solution="&lt;span class='pos'&gt;+0,33&lt;/span&gt;" data-sync="saldo_B_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-112" data-solution="&lt;span class='pos'&gt;+2,00&lt;/span&gt;" data-sync="saldo_C_r2"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-113" data-solution="Richtung gewechselt: A Defizit, C Überschuss"><span class="blank">_____</span></td></tr>
+<tr><td>3</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-114" data-solution="&lt;span class='pos'&gt;+0,41&lt;/span&gt;" data-sync="saldo_A_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-115" data-solution="&lt;span class='pos'&gt;+0,46&lt;/span&gt;" data-sync="saldo_B_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-116" data-solution="&lt;span class='neg'&gt;−1,26&lt;/span&gt;" data-sync="saldo_C_r3"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-117" data-solution="erneuter Richtungswechsel"><span class="blank">_____</span></td></tr>
+<tr><td>4</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-118" data-solution="&lt;span class='neg'&gt;−0,12&lt;/span&gt;" data-sync="saldo_A_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-119" data-solution="&lt;span class='neg'&gt;−0,39&lt;/span&gt;" data-sync="saldo_B_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-120" data-solution="&lt;span class='pos'&gt;+0,84&lt;/span&gt;" data-sync="saldo_C_r4"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-121" data-solution="A und B nun leicht im Defizit"><span class="blank">_____</span></td></tr>
+<tr><td>5</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-122" data-solution="&lt;span class='pos'&gt;+0,14&lt;/span&gt;" data-sync="saldo_A_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-123" data-solution="&lt;span class='pos'&gt;+0,23&lt;/span&gt;" data-sync="saldo_B_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-124" data-solution="&lt;span class='neg'&gt;−0,56&lt;/span&gt;" data-sync="saldo_C_r5"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-125" data-solution="Ausschläge deutlich kleiner"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+</div>
+<div>
+<div class="mini-title"><i class="fas fa-money-bill-trend-up mr-1"></i>Tabelle B: Wechselkursindizes je Runde</div>
+<table class="small-table">
+<thead>
+<tr><th>Runde</th><th class="right">A-Mark Index</th><th class="right">B-Taler Index</th><th class="right">C-Lira Index</th><th>Deutung</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-126" data-solution="1,00" data-sync="idx_A_r1"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-127" data-solution="1,00" data-sync="idx_B_r1"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-128" data-solution="1,00" data-sync="idx_C_r1"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-129" data-solution="Start: alle gleich"><span class="blank">_____</span></td></tr>
+<tr><td>2</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-130" data-solution="&lt;span class='pos'&gt;1,50&lt;/span&gt;" data-sync="idx_A_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-131" data-solution="&lt;span class='neg'&gt;0,90&lt;/span&gt;" data-sync="idx_B_r2"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-132" data-solution="&lt;span class='neg'&gt;0,60&lt;/span&gt;" data-sync="idx_C_r2"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-133" data-solution="A wertet auf, C ab"><span class="blank">_____</span></td></tr>
+<tr><td>3</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-134" data-solution="&lt;span class='pos'&gt;1,40&lt;/span&gt;" data-sync="idx_A_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-135" data-solution="&lt;span class='pos'&gt;0,93&lt;/span&gt;" data-sync="idx_B_r3"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-136" data-solution="&lt;span class='pos'&gt;0,80&lt;/span&gt;" data-sync="idx_C_r3"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-137" data-solution="A wird wieder günstiger, C wieder teurer"><span class="blank">_____</span></td></tr>
+<tr><td>4</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-138" data-solution="&lt;span class='pos'&gt;1,44&lt;/span&gt;" data-sync="idx_A_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-139" data-solution="&lt;span class='pos'&gt;0,98&lt;/span&gt;" data-sync="idx_B_r4"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-140" data-solution="&lt;span class='neg'&gt;0,67&lt;/span&gt;" data-sync="idx_C_r4"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-141" data-solution="Gegenbewegung nach Überschuss/Defizit"><span class="blank">_____</span></td></tr>
+<tr><td>5</td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-142" data-solution="&lt;span class='pos'&gt;1,42&lt;/span&gt;" data-sync="idx_A_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-143" data-solution="&lt;span class='neg'&gt;0,94&lt;/span&gt;" data-sync="idx_B_r5"><span class="blank">_____</span></td><td class="right sol editable-cell" contenteditable="true" data-cell-id="cell-144" data-solution="&lt;span class='pos'&gt;0,75&lt;/span&gt;" data-sync="idx_C_r5"><span class="blank">_____</span></td><td class="sol editable-cell" contenteditable="true" data-cell-id="cell-145" data-solution="Ausschläge werden kleiner"><span class="blank">_____</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- <div class="btn-row"><button class="solve-btn" onclick="toggleSolutionsAndCharts('step10', this)">Sicherungstabellen und Diagramme anzeigen</button></div> -->
+<div class="grid-2" style="margin-top:.85rem;">
+<div>
+<div class="mini-title"><i class="fas fa-chart-area mr-1"></i>Diagramm A: Salden</div>
+<div class="chart-wrapper"><canvas id="saldoChart"></canvas></div>
+<div class="chart-note" id="saldoChartNote">Das Saldendiagramm wird erst nach Klick auf den Button ausgefüllt.</div>
+</div>
+<div>
+<div class="mini-title"><i class="fas fa-chart-line mr-1"></i>Diagramm B: Wechselkurse</div>
+<div class="chart-wrapper"><canvas id="indexChart"></canvas></div>
+<div class="chart-note" id="indexChartNote">Das Wechselkursdiagramm wird erst nach Klick auf den Button ausgefüllt.</div>
+</div>
+</div>
+<div class="hint"><strong>Merksatz:</strong> Eine Aufwertung macht die Produkte des Überschusslandes für das Ausland teurer. Eine Abwertung macht die Produkte des Defizitlandes günstiger, aber Importe werden für dieses Land teurer. Dadurch können Handelsbilanzungleichgewichte über mehrere Runden um die Nulllinie pendeln und kleiner werden.</div>
+</div>
+</section>
+</div>
+<div class="footer">
+<div class="footer-left"><p>Theo Schierbaum – Euro, Wechselkurse und Handelsbilanzen</p></div>
+<div class="footer-center">
+<a class="nav-btn" href="3.html">← Zurück</a>
+<a class="nav-btn" href="5.html">Runde 2 →</a>
+</div>
+<div class="footer-right"><p>Runde 1</p></div>
+</div>
+</div>
 <script>
-  function toggleSolutions(sectionId, btn){
-    const section = document.getElementById(sectionId);
-    const cells = section.querySelectorAll('.sol');
-    const showing = section.getAttribute('data-showing') === 'true';
-    cells.forEach(cell => {
-      if (!cell.dataset.original) cell.dataset.original = cell.innerHTML;
-      cell.innerHTML = showing ? cell.dataset.original : cell.dataset.solution;
-    });
-    section.setAttribute('data-showing', showing ? 'false' : 'true');
-    if (btn) btn.textContent = showing ? btn.textContent.replace('ausblenden','einblenden') : btn.textContent.replace('einblenden','ausblenden');
+  const BLANK_HTML = '<span class="blank">_____</span>';
+
+  function plainFromHtml(html){
+    const div = document.createElement('div');
+    div.innerHTML = html || '';
+    return (div.textContent || '').trim();
   }
 
-  const saldoChartData = {
-    labels: ['R1','R2','R3','R4','R5'],
-    a: [5.00,-1.00,0.41,-0.12,0.14],
-    b: [-1.00,0.33,0.46,-0.39,0.23],
-    c: [-4.00,2.00,-1.26,0.84,-0.56]
-  };
+  function normalizeText(text){
+    return (text || '')
+      .replace(/\u00a0/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
 
-  const indexChartData = {
-    labels: ['R1','R2','R3','R4','R5'],
-    a: [1.00,1.50,1.40,1.44,1.42],
-    b: [1.00,0.90,0.93,0.98,0.94],
-    c: [1.00,0.60,0.80,0.67,0.75]
-  };
+  function isBlankText(text){
+    const t = normalizeText(text);
+    return t === '' || t === '_____' || t === '—' || t.toLowerCase() === 'hier eintragen';
+  }
 
+  function parseGermanNumber(text){
+    let t = normalizeText(text)
+      .replace(/<[^>]*>/g, '')
+      .replace(/−/g, '-')
+      .replace(/–/g, '-')
+      .replace(/\+/g, '')
+      .replace(/[^0-9,.-]/g, '')
+      .replace(/\.(?=\d{3}(\D|$))/g, '')
+      .replace(',', '.');
+    if (t === '' || t === '-' || t === '.' || t === '-.') return null;
+    const n = Number(t);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function applyNumberClass(cell, valueText){
+    cell.classList.remove('cell-pos','cell-neg','cell-neutral');
+    const n = parseGermanNumber(valueText);
+    if (n === null) return;
+    if (n > 0) cell.classList.add('cell-pos');
+    else if (n < 0) cell.classList.add('cell-neg');
+    else cell.classList.add('cell-neutral');
+  }
+
+  function escapeHtml(text){
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function setCellValue(cell, text, options={}){
+    const value = normalizeText(text);
+    if (isBlankText(value)) {
+      cell.innerHTML = BLANK_HTML;
+      cell.classList.remove('cell-pos','cell-neg','cell-neutral');
+    } else {
+      cell.textContent = value;
+      applyNumberClass(cell, value);
+    }
+    if (!options.silent) {
+      syncFromCell(cell);
+      updateChartsFromTables();
+    }
+  }
+
+  function getCellValue(cell){
+    const text = normalizeText(cell.textContent);
+    return isBlankText(text) ? '' : text;
+  }
+
+  function syncFromCell(source){
+    const key = source.dataset.sync;
+    if (!key) return;
+    const value = getCellValue(source);
+    document.querySelectorAll('[data-sync="' + CSS.escape(key) + '"]').forEach(cell => {
+      if (cell === source) return;
+      setCellValue(cell, value, {silent:true});
+    });
+  }
+
+  function initEditableCells(){
+    document.querySelectorAll('td.editable-cell').forEach(cell => {
+      cell.setAttribute('contenteditable', 'true');
+      cell.setAttribute('spellcheck', 'false');
+      if (!cell.dataset.cellId) cell.dataset.cellId = 'auto-' + Math.random().toString(36).slice(2);
+      if (isBlankText(cell.textContent)) cell.innerHTML = BLANK_HTML;
+      applyNumberClass(cell, cell.textContent);
+
+      cell.addEventListener('focus', () => {
+        if (isBlankText(cell.textContent)) cell.textContent = '';
+      });
+      cell.addEventListener('blur', () => {
+        if (isBlankText(cell.textContent)) cell.innerHTML = BLANK_HTML;
+        applyNumberClass(cell, cell.textContent);
+        syncFromCell(cell);
+        updateChartsFromTables();
+      });
+      cell.addEventListener('input', () => {
+        applyNumberClass(cell, cell.textContent);
+        syncFromCell(cell);
+        updateChartsFromTables();
+      });
+      cell.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          cell.blur();
+        }
+      });
+      cell.addEventListener('paste', (event) => {
+        event.preventDefault();
+        const text = (event.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+      });
+    });
+  }
+
+  function fillSolutions(sectionId){
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    section.querySelectorAll('.sol').forEach(cell => {
+      const solution = plainFromHtml(cell.dataset.solution || '');
+      setCellValue(cell, solution, {silent:false});
+    });
+    updateChartsFromTables();
+  }
+
+  function clearSolutions(sectionId){
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    section.querySelectorAll('.sol').forEach(cell => setCellValue(cell, '', {silent:false}));
+    updateChartsFromTables();
+  }
+
+  function toggleSolutions(sectionId, btn){
+    const section = document.getElementById(sectionId);
+    const showing = section.getAttribute('data-showing') === 'true';
+    if (showing) {
+      clearSolutions(sectionId);
+      section.setAttribute('data-showing', 'false');
+      if (btn) btn.textContent = btn.textContent.replace('ausblenden','einblenden').replace('zurücksetzen','eintragen');
+    } else {
+      fillSolutions(sectionId);
+      section.setAttribute('data-showing', 'true');
+      if (btn) btn.textContent = btn.textContent.replace('einblenden','ausblenden').replace('eintragen','zurücksetzen');
+    }
+  }
+
+  const chartLabels = ['R1','R2','R3','R4','R5'];
   const emptyLineData = [null, null, null, null, null];
+
+  function getSeries(prefix, land){
+    return [1,2,3,4,5].map(r => {
+      const cell = document.querySelector('[data-sync="' + prefix + '_' + land + '_r' + r + '"]');
+      return cell ? parseGermanNumber(cell.textContent) : null;
+    });
+  }
 
   const saldoChart = new Chart(document.getElementById('saldoChart').getContext('2d'), {
     type: 'line',
     data: {
-      labels: saldoChartData.labels,
+      labels: chartLabels,
       datasets: [
         { label:'A-Land Saldo', data:[...emptyLineData], borderColor:'#15803D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:.25 },
         { label:'B-Land Saldo', data:[...emptyLineData], borderColor:'#6B7280', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:.25 },
@@ -475,7 +608,7 @@
   const indexChart = new Chart(document.getElementById('indexChart').getContext('2d'), {
     type: 'line',
     data: {
-      labels: indexChartData.labels,
+      labels: chartLabels,
       datasets: [
         { label:'A-Mark Index', data:[...emptyLineData], borderColor:'#15803D', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:.25 },
         { label:'B-Taler Index', data:[...emptyLineData], borderColor:'#6B7280', backgroundColor:'transparent', borderWidth:2.5, pointRadius:4, tension:.25 },
@@ -492,30 +625,99 @@
     }
   });
 
-  function setChartsVisible(show){
-    saldoChart.data.datasets[0].data = show ? saldoChartData.a : [...emptyLineData];
-    saldoChart.data.datasets[1].data = show ? saldoChartData.b : [...emptyLineData];
-    saldoChart.data.datasets[2].data = show ? saldoChartData.c : [...emptyLineData];
-    saldoChart.update();
+  function updateChartsFromTables(){
+    saldoChart.data.datasets[0].data = getSeries('saldo','A');
+    saldoChart.data.datasets[1].data = getSeries('saldo','B');
+    saldoChart.data.datasets[2].data = getSeries('saldo','C');
+    saldoChart.update('none');
 
-    indexChart.data.datasets[0].data = show ? indexChartData.a : [...emptyLineData];
-    indexChart.data.datasets[1].data = show ? indexChartData.b : [...emptyLineData];
-    indexChart.data.datasets[2].data = show ? indexChartData.c : [...emptyLineData];
-    indexChart.update();
+    indexChart.data.datasets[0].data = getSeries('idx','A');
+    indexChart.data.datasets[1].data = getSeries('idx','B');
+    indexChart.data.datasets[2].data = getSeries('idx','C');
+    indexChart.update('none');
 
     const saldoNote = document.getElementById('saldoChartNote');
     const indexNote = document.getElementById('indexChartNote');
-    if (saldoNote) saldoNote.textContent = show ? 'Die Salden pendeln mit kleiner werdenden Ausschlägen um die Nulllinie.' : 'Das Saldendiagramm wird erst nach Klick auf den Button ausgefüllt.';
-    if (indexNote) indexNote.textContent = show ? 'Die Wechselkurse bewegen sich gegenläufig zu den vorherigen Salden und nähern sich einem stabileren Bereich an.' : 'Das Wechselkursdiagramm wird erst nach Klick auf den Button ausgefüllt.';
+    if (saldoNote) saldoNote.textContent = 'Das Diagramm wird live aus Tabelle A erstellt. Leere Felder erscheinen als Lücken.';
+    if (indexNote) indexNote.textContent = 'Das Diagramm wird live aus Tabelle B erstellt. Leere Felder erscheinen als Lücken.';
   }
 
   function toggleSolutionsAndCharts(sectionId, btn){
-    toggleSolutions(sectionId, null);
-    const section = document.getElementById(sectionId);
-    const showing = section.getAttribute('data-showing') === 'true';
-    setChartsVisible(showing);
-    if (btn) btn.textContent = showing ? 'Sicherungstabellen und Diagramme ausblenden' : 'Sicherungstabellen und Diagramme anzeigen';
+    toggleSolutions(sectionId, btn);
+    updateChartsFromTables();
+    if (btn) {
+      const section = document.getElementById(sectionId);
+      const showing = section.getAttribute('data-showing') === 'true';
+      btn.textContent = showing ? 'Sicherungstabellen zurücksetzen' : 'Musterwerte in Sicherungstabellen eintragen';
+    }
   }
+
+  function collectEntries(){
+    const entries = {};
+    document.querySelectorAll('td.editable-cell').forEach(cell => {
+      const key = cell.dataset.cellId;
+      entries[key] = getCellValue(cell);
+    });
+    const syncValues = {};
+    document.querySelectorAll('td.editable-cell[data-sync]').forEach(cell => {
+      const key = cell.dataset.sync;
+      const value = getCellValue(cell);
+      if (value !== '' && syncValues[key] === undefined) syncValues[key] = value;
+    });
+    return {
+      meta: {
+        title: document.title,
+        savedAt: new Date().toISOString(),
+        version: 'runde1-editierbar-live-json-v1'
+      },
+      entries,
+      syncValues
+    };
+  }
+
+  function saveEntriesAsJson(){
+    const payload = collectEntries();
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'planspiel-runde1-eintragungen.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function loadEntriesFromJson(event){
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const payload = JSON.parse(reader.result);
+        if (payload.entries) {
+          Object.entries(payload.entries).forEach(([id, value]) => {
+            const cell = document.querySelector('[data-cell-id="' + CSS.escape(id) + '"]');
+            if (cell) setCellValue(cell, value, {silent:true});
+          });
+        }
+        if (payload.syncValues) {
+          Object.entries(payload.syncValues).forEach(([key, value]) => {
+            document.querySelectorAll('[data-sync="' + CSS.escape(key) + '"]').forEach(cell => setCellValue(cell, value, {silent:true}));
+          });
+        }
+        updateChartsFromTables();
+      } catch (error) {
+        alert('Die JSON-Datei konnte nicht geladen werden. Bitte prüfe, ob es sich um eine gespeicherte Planspiel-Datei handelt.');
+      }
+      event.target.value = '';
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initEditableCells();
+    updateChartsFromTables();
+  });
 </script>
 </body>
 </html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>Photovoltaik</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"/>
+  <style>
+    html, body { margin:0; padding:0; background:#f3f4f6; color:#1f2937; font-family:'Montserrat',sans-serif; }
+    .page { min-height:100vh; display:flex; flex-direction:column; }
+    .header { background:#2A3B32; color:white; padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
+    .title { margin:0; font-size:2rem; font-weight:700; }
+    .divider { width:88px; height:4px; background:#E6B400; border-radius:3px; margin-top:.55rem; }
+    .content { padding:1.2rem 2rem 1.3rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .head { display:flex; align-items:center; gap:.7rem; padding:.75rem .95rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; }
+    .badge { min-width:3.2rem; text-align:center; padding:.15rem .6rem; border-radius:7px; background:#2A3B32; color:white; font-weight:700; font-size:.9rem; }
+    .h { font-size:1.02rem; font-weight:600; color:#2A3B32; }
+    .body { padding:1rem; font-family:'Raleway',sans-serif; }
+    .small { font-size:.9rem; color:#4b5563; line-height:1.45; }
+    .xs { font-size:.82rem; color:#4b5563; line-height:1.35; }
+    .note { background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.65rem .8rem; margin-bottom:.75rem; }
+    .warn { background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:.65rem .8rem; margin-bottom:.75rem; }
+    .img-box { background:#fafafa; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .img-box img { width:100%; height:auto; object-fit:cover; display:block; background:#e5e7eb; }
+    .cap { padding:.5rem .65rem; font-size:.82rem; color:#4b5563; }
+    .mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    .mini-card { border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .mini-card h4 { margin:0 0 .35rem 0; font-size:.95rem; color:#111827; font-weight:700; }
+    .keyfacts { display:grid; grid-template-columns:repeat(2, 1fr); gap:.6rem; margin-top:.7rem; }
+    .fact { border:1px solid #e5e7eb; border-radius:10px; padding:.6rem; background:#fafafa; }
+    .fact .l { font-size:.72rem; text-transform:uppercase; color:#6b7280; }
+    .fact .v { font-weight:700; font-size:.98rem; margin-top:.2rem; color:#111827; }
+    .schema-box, .svg-box { border:1px solid #e5e7eb; border-radius:12px; background:#fbfdff; padding:.45rem; }
+    .formula { background:#f8fafc; border:1px solid #dbe4ea; border-radius:10px; padding:.55rem .7rem; margin:.45rem 0; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#111827; font-size:.98rem; }
+    ul.clean { margin:.2rem 0 0 1rem; padding:0; }
+    ul.clean li { margin:.28rem 0; }
+    table { width:100%; border-collapse:collapse; font-size:.84rem; }
+    th, td { border:1px solid #e5e7eb; padding:.42rem .5rem; text-align:left; vertical-align:top; }
+    th { background:#f9fafb; }
+    .type-grid { display:grid; gap:.75rem; }
+    .type-item { display:grid; grid-template-columns:320px 1fr; gap:.8rem; border:1px solid #e5e7eb; border-radius:12px; padding:.7rem; background:#fafafa; }
+    .type-item .text h4 { margin:0 0 .25rem 0; font-size:.96rem; font-weight:700; }
+    .chart-wrap { height:420px; }
+    .task { position:relative; background:#e9f0ec; border:2px solid #2A3B32; border-radius:14px; padding:1rem; margin-top:1rem; }
+    .task-label { position:absolute; top:-12px; left:1rem; background:#2A3B32; color:white; padding:.25rem .75rem; border-radius:6px; font-size:.9rem; font-weight:600; }
+    .task ol { margin:0 0 0 1rem; }
+    .task li { margin:.45rem 0; line-height:1.46; font-size:.92rem; font-family:'Raleway',sans-serif; }
+    .footer { padding:1rem 2rem 1.2rem; color:#6b7280; font-size:.84rem; display:flex; justify-content:space-between; gap:1rem; font-family:'Raleway',sans-serif; }
+    .pv-intro, .pv-summary { margin:.15rem 0 .8rem; font-family:'Raleway',sans-serif; font-size:.92rem; line-height:1.45; color:#374151; }
+    .pv-summary { margin:.8rem 0 0; background:#eef6f1; border:1px solid #bfd7c9; border-radius:10px; padding:.65rem .8rem; }
+    @media (max-width:1100px) { .grid, .mini-grid { grid-template-columns:1fr; } .type-item { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="title">Photovoltaik</h1>
+      <div class="divider"></div>
+    </div>
+    <p class="text-sm font-light text-right">Physik | Klasse 8</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M1</span><div class="h">Bild und Grundidee</div></div>
+        <div class="body">
+          <div class="img-box"><img src="Bild1.png" alt="Photovoltaikanlage auf einem Dach"></div>
+          <div class="mini-grid mt-3">
+            <div class="mini-card xs"><strong>1</strong> Sonnenlicht trifft auf die Solarzellen.</div>
+            <div class="mini-card xs"><strong>2</strong> In der Zelle entsteht elektrische Spannung.</div>
+            <div class="mini-card xs"><strong>3</strong> Der Wechselrichter macht daraus nutzbaren Wechselstrom.</div>
+            <div class="mini-card xs"><strong>4</strong> Der Strom wird direkt genutzt, gespeichert oder ins Netz eingespeist.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M2</span><div class="h">Aufbau einer PV-Anlage</div></div>
+        <div class="body">
+          
+          <div class="img-box"><img src="Aufbau.jpg" alt="Photovoltaikanlage auf einem Dach"></div>
+          
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>A</strong> Aufgaben: Grundidee und Energieumwandlung</div>
+      <ol>
+        <li>1. Beschreibe den Aufbau einer Photovoltaikanlage mit den Begriffen <i>Solarmodul</i>, <i>Solarzelle</i>, <i>Wechselrichter</i> und <i>Stromnetz</i>.</li>
+        <li>2. Gib die Energieumwandlungskette an: Welche Energieform kommt von der Sonne, welche Energieform wird im Modul erzeugt?</li>
+        <li>3. Überlege, warum ein Wechselrichter nötig ist.</li>
+      </ol>
+    </section><br>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M3</span><div class="h">Funktionsweise einer Solarzelle</div></div>
+        <div class="body">
+          <p class="pv-intro">Eine Solarzelle besteht aus Halbleitermaterial, meist Silizium. Lichtteilchen treffen auf die Zelle und bringen Ladungen in Bewegung. Dadurch entsteht elektrische Spannung.</p>
+          <div class="type-grid">
+            <div class="type-item"><div class="svg-box"><img src="Solarzelle.png" alt="Schema Solarzelle"></div><div class="text"><h4>1. Licht trifft auf Silizium</h4><div class="xs">Sonnenlicht liefert Energie. In der Solarzelle werden Elektronen beweglich.</div></div><div class="text"><h4>2. Ladungen werden getrennt</h4><div class="xs">Durch den besonderen Aufbau der Zelle entsteht eine elektrische Spannung.</div></div><div class="text"><h4>3. Strom kann fließen</h4><div class="xs">Wird ein Verbraucher angeschlossen, fließt elektrischer Strom.</div></div></div>
+            
+          <p class="pv-summary"><strong>Merksatz:</strong> Photovoltaik wandelt Lichtenergie direkt in elektrische Energie um – ohne Turbine und ohne Generator.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M4</span><div class="h">Wichtige Größen und Berechnung</div></div>
+        <div class="body">
+          <div class="note small"><strong>Faustregel:</strong> Die Leistung einer PV-Anlage hängt vor allem von Fläche, Sonneneinstrahlung und Wirkungsgrad ab.</div>
+          <div class="formula">P = E<sub>Sonne</sub> · A · η</div>
+          <table>
+            <thead><tr><th>Zeichen</th><th>Bedeutung</th><th>Einheit</th></tr></thead>
+            <tbody>
+              <tr><td>P</td><td>elektrische Leistung</td><td>W</td></tr>
+              <tr><td>E<sub>Sonne</sub></td><td>Sonneneinstrahlung pro Fläche</td><td>W/m²</td></tr>
+              <tr><td>A</td><td>Modulfläche</td><td>m²</td></tr>
+              <tr><td>η</td><td>Wirkungsgrad</td><td>ohne Einheit</td></tr>
+            </tbody>
+          </table>
+          <div class="warn small mt-3"><strong>Beispiel:</strong> 20 m² Module, 800 W/m² Sonneneinstrahlung, Wirkungsgrad 20 %:<br><br><span class="formula">P = 800 · 20 · 0,20 = 3.200 W = 3,2 kW</span></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>B</strong> Aufgaben: Leistung berechnen</div>
+      <ol>
+        <li>1. Berechne die Leistung einer Anlage mit 30 m² Modulfläche, 700 W/m² Sonneneinstrahlung und 20 % Wirkungsgrad.</li>
+        <li>2. Erkläre, warum dieselbe Anlage morgens, mittags und abends unterschiedlich viel Leistung liefert.</li>
+        <li>3. Vergleiche eine kleine Dachanlage mit einer großen Freiflächenanlage. Welche Vorteile und Nachteile haben beide?</li>
+      </ol>
+    </section><br>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M5</span><div class="h">PV-Ertrag im Tagesverlauf</div></div>
+        <div class="body">
+          <p class="small">Die Stromerzeugung ist tagsüber am größten. Nachts liefert eine PV-Anlage keinen Strom.</p>
+          <div class="chart-wrap"><canvas id="pvDayChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M6</span><div class="h">PV-Ertrag im Jahresverlauf</div></div>
+        <div class="body">
+          <p class="small">Im Sommer ist der Ertrag meist höher als im Winter, weil die Sonne länger und stärker scheint.</p>
+          <div class="chart-wrap"><canvas id="pvYearChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M7</span><div class="h">Vor- und Nachteile</div></div>
+        <div class="body">
+          <div class="mini-grid">
+            <div class="mini-card"><h4>Vorteile</h4><ul class="clean xs"><li>erneuerbare Energiequelle</li><li>im Betrieb kaum CO₂</li><li>gut auf Dächern einsetzbar</li><li>keine beweglichen Teile</li><li>modular erweiterbar</li></ul></div>
+            <div class="mini-card"><h4>Nachteile</h4><ul class="clean xs"><li>abhängig von Wetter und Tageszeit</li><li>nachts keine Stromerzeugung</li><li>Speicher oder Netz notwendig</li><li>Flächenbedarf bei Solarparks</li><li>Rohstoffe und Recycling beachten</li></ul></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M8</span><div class="h">Anwendungsformen</div></div>
+        <div class="body">
+          <table>
+            <thead><tr><th>Form</th><th>Typischer Ort</th><th>Besonderheit</th></tr></thead>
+            <tbody>
+              <tr><td>Dachanlage</td><td>Wohnhaus, Schule, Halle</td><td>Strom kann direkt vor Ort genutzt werden</td></tr>
+              <tr><td>Balkonkraftwerk</td><td>Balkon, Terrasse</td><td>kleine Anlage für einzelne Haushalte</td></tr>
+              <tr><td>Solarpark</td><td>Freifläche</td><td>große Strommengen, aber Flächenbedarf</td></tr>
+              <tr><td>Agri-PV</td><td>Landwirtschaftliche Fläche</td><td>Stromerzeugung und Landwirtschaft kombiniert</td></tr>
+              <tr><td>Floating-PV</td><td>See oder Speicherbecken</td><td>Module schwimmen auf Wasserflächen</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>C</strong> Aufgaben: Nutzung und Bewertung</div>
+      <ol>
+        <li>1. Beschreibe mit M5, warum Photovoltaik gut zu einem Batteriespeicher passen kann.</li>
+        <li>2. Erkläre mit M6, warum im Winter andere Kraftwerke oder Speicher wichtiger werden.</li>
+        <li>3. Stelle Vor- und Nachteile der Photovoltaik gegenüber und formuliere ein begründetes Urteil.</li>
+        <li>4. Wähle eine Anwendungsform aus M8 für eure Schule und begründe deine Entscheidung.</li>
+      </ol>
+    </section><br>
+
+    <div class="grid">
+      <section class="card">
+        <div class="head"><span class="badge">M9</span><div class="h">Dachanlage auf einer Schule</div></div>
+        <div class="body"><div class="img-box"><img src="Schule.jpg" alt="PV-Anlage auf Schuldach"></div>
+      </section>
+
+ <section class="card">
+        <div class="head"><span class="badge">M10</span><div class="h">Fallbeispiel: PV-Anlage planen</div></div>
+        <div class="body">
+          <table>
+            <thead><tr><th>Größe</th><th>Wert</th></tr></thead>
+            <tbody>
+              <tr><td>verfügbare Dachfläche</td><td>180 m²</td></tr>
+              <tr><td>nutzbarer Anteil</td><td>70 %</td></tr>
+              <tr><td>Modulleistung</td><td>200 W pro m²</td></tr>
+              <tr><td>geschätzte Jahresproduktion</td><td>900 kWh pro kW installierter Leistung</td></tr>
+              <tr><td>Strombedarf der Schule</td><td>45.000 kWh pro Jahr</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M11</span><div class="h">PV mit Batteriespeicher</div></div>
+        <div class="body">
+          <p class="pv-intro">Ein Batteriespeicher kann überschüssigen Solarstrom aufnehmen. So kann ein Teil des Stroms abends oder nachts genutzt werden.</p>
+          <div class="svg-box"><img src="Speicher.jpg" alt="Schema Photovoltaik mit Batteriespeicher"></div>
+          <p class="pv-summary"><strong>Merksatz:</strong> Photovoltaik erzeugt Strom, wenn Licht vorhanden ist. Speicher helfen, Erzeugung und Verbrauch zeitlich besser zusammenzubringen.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="head"><span class="badge">M12</span><div class="h">Solarpark</div></div>
+        <div class="body"><div class="img-box"><img src="Solarpark.jpg" alt="Solarpark"></div></div>
+        <div class="body"><div class="img-box"><img src="Solarpark2.jpg" alt="Solarpark"></div></div>
+      </section>
+
+     
+    </div>
+
+    <section class="task">
+      <div class="task-label"><strong>D</strong> Aufgaben: Planung einer PV-Anlage</div>
+      <ol>
+        <li>1. Berechne die nutzbare Dachfläche der Schule aus M10.</li>
+        <li>2. Berechne die installierbare Leistung der PV-Anlage in kW.</li>
+        <li>3. Berechne die jährliche Stromproduktion der Anlage.</li>
+        <li>4. Vergleiche die jährliche Stromproduktion mit dem Strombedarf der Schule. Reicht die Anlage rechnerisch für den Jahresbedarf?</li>
+        <li>5. Diskutiere: Warum bedeutet „rechnerisch genug Strom im Jahr“ nicht automatisch, dass die Schule jederzeit vollständig mit Solarstrom versorgt ist?</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="footer">
+    <div>Theo Schierbaum - Photovoltaik</div>
+    <div class="text-right">Ziel: Überblick, Formelverständnis und einfache Anwendungen.</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Chart === 'undefined') return;
+
+    const dayCanvas = document.getElementById('pvDayChart');
+    if (dayCanvas) {
+      new Chart(dayCanvas, {
+        type: 'line',
+        data: {
+          labels: ['0','2','4','6','8','10','12','14','16','18','20','22','24'],
+          datasets: [{
+            label: 'PV-Leistung in kW',
+            data: [0,0,0,0.2,1.6,3.8,5.0,4.4,2.5,0.8,0,0,0],
+            borderColor: '#E6B400',
+            backgroundColor: 'rgba(230,180,0,0.35)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            x: { title: { display: true, text: 'Tageszeit in Stunden' } },
+            y: { min: 0, max: 6, title: { display: true, text: 'Leistung in kW' } }
+          }
+        }
+      });
+    }
+
+    const yearCanvas = document.getElementById('pvYearChart');
+    if (yearCanvas) {
+      new Chart(yearCanvas, {
+        type: 'bar',
+        data: {
+          labels: ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],
+          datasets: [{
+            label: 'Monatlicher Ertrag in kWh',
+            data: [120,180,310,430,520,560,540,490,360,240,140,100],
+            backgroundColor: 'rgba(230,180,0,0.75)',
+            borderColor: '#E6B400',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            x: { title: { display: true, text: 'Monat' } },
+            y: { min: 0, title: { display: true, text: 'Energie in kWh' } }
+          }
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

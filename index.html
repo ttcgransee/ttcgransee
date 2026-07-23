@@ -1,13 +1,14 @@
+
 <!DOCTYPE html>
+
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTC Gransee 98 e.V. - Tischtennisverein</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TTC Gransee 98 e.V. - Tischtennisverein</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
         :root {
             --primary-color: #000000;
             --accent-color: #00ff00;
@@ -156,490 +157,449 @@
         }
     </style>
 </head>
-
 <body class="bg-primary text-white smooth-scroll">
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-primary bg-opacity-95 backdrop-blur-sm z-50 border-b border-accent">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="text-xl font-bold text-accent">
-                    <i class="fas fa-table-tennis"></i>TTC Gransee 98 e.V.
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-primary bg-opacity-95 backdrop-blur-sm z-50 border-b border-accent">
+<div class="container mx-auto px-4 py-3">
+<div class="flex justify-between items-center">
+<div class="text-xl font-bold text-accent">
+<i class="fas fa-table-tennis"></i>TTC Gransee 98 e.V.
                 </div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#home" class="nav-link hover-accent">Start</a>
-                    <a href="#training" class="nav-link hover-accent">Training</a>
-                    <a href="#teams" class="nav-link hover-accent">Mannschaften</a>
-                    <a href="#gallery" class="nav-link hover-accent">Galerie</a>
-                    <a href="#contact" class="nav-link hover-accent">Kontakt</a>
-                    <a href="#impressum" class="nav-link hover-accent">Impressum</a>
-                </div>
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-accent">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="mobile-menu" class="md:hidden hidden mt-4 space-y-2">
-                <a href="#home" class="block py-2 hover-accent">Start</a>
-                <a href="#training" class="block py-2 hover-accent">Training</a>
-                <a href="#teams" class="block py-2 hover-accent">Mannschaften</a>
-                <a href="#gallery" class="block py-2 hover-accent">Galerie</a>
-                <a href="#contact" class="block py-2 hover-accent">Kontakt</a>
-                <a href="#impressum" class="block py-2 hover-accent">Impressum</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Header/Logo Section -->
-    <header id="home" class="section-spacing mt-16 text-center">
-        <div class="container mx-auto px-4">
-            <div class="mb-8">
-                <div class="w-32 h-32 mx-auto bg-accent rounded-full flex items-center justify-center mb-6">
-                    <i class="fas fa-table-tennis text-6xl text-black"></i>
-                </div>
-            </div>
-            <h1 class="text-5xl font-bold mb-4">
-                <span class="text-accent">TTC</span> Gransee 98 e.V.
+<div class="hidden md:flex space-x-6">
+<a class="nav-link hover-accent" href="#home">Start</a>
+<a class="nav-link hover-accent" href="#training">Training</a>
+<a class="nav-link hover-accent" href="#teams">Mannschaften</a>
+<a class="nav-link hover-accent" href="#gallery">Galerie</a>
+<a class="nav-link hover-accent" href="#contact">Kontakt</a>
+<a class="nav-link hover-accent" href="#impressum">Impressum</a>
+</div>
+<div class="md:hidden">
+<button class="text-accent" id="mobile-menu-btn">
+<i class="fas fa-bars text-xl"></i>
+</button>
+</div>
+</div>
+<div class="md:hidden hidden mt-4 space-y-2" id="mobile-menu">
+<a class="block py-2 hover-accent" href="#home">Start</a>
+<a class="block py-2 hover-accent" href="#training">Training</a>
+<a class="block py-2 hover-accent" href="#teams">Mannschaften</a>
+<a class="block py-2 hover-accent" href="#gallery">Galerie</a>
+<a class="block py-2 hover-accent" href="#contact">Kontakt</a>
+<a class="block py-2 hover-accent" href="#impressum">Impressum</a>
+</div>
+</div>
+</nav>
+<!-- Header/Logo Section -->
+<header class="section-spacing mt-16 text-center" id="home">
+<div class="container mx-auto px-4">
+<div class="mb-8">
+<div class="w-32 h-32 mx-auto bg-accent rounded-full flex items-center justify-center mb-6">
+<i class="fas fa-table-tennis text-6xl text-black"></i>
+</div>
+</div>
+<h1 class="text-5xl font-bold mb-4">
+<span class="text-accent">TTC</span> Gransee 98 e.V.
             </h1>
-            <p class="text-xl mb-8">Tischtennisverein in Gransee</p>
-            <div class="grid md:grid-cols-3 gap-6 mt-12">
-                <div class="bg-gray-900 p-6 rounded-lg card-hover">
-                    <i class="fas fa-users text-accent text-3xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">3 Mannschaften</h3>
-                    <p>Aktive Teams in verschiedenen Ligen</p>
-                </div>
-                <div class="bg-gray-900 p-6 rounded-lg card-hover">
-                    <i class="fas fa-clock text-accent text-3xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Regelmäßiges Training</h3>
-                    <p>Mehrmals wöchentlich für alle Altersgruppen</p>
-                </div>
-                <div class="bg-gray-900 p-6 rounded-lg card-hover">
-                    <i class="fas fa-trophy text-accent text-3xl mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Erfolgreicher Spielbetrieb</h3>
-                    <p>Gute Platzierungen in der Liga</p>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Aktuelle Informationen -->
-    <section class="section-spacing bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">
-                <span class="text-accent">Aktuelle</span> Informationen
+<p class="text-xl mb-8">Tischtennisverein in Gransee</p>
+<div class="grid md:grid-cols-3 gap-6 mt-12">
+<div class="bg-gray-900 p-6 rounded-lg card-hover">
+<i class="fas fa-users text-accent text-3xl mb-4"></i>
+<h3 class="text-xl font-bold mb-2">3 Mannschaften</h3>
+<p>Aktive Teams in verschiedenen Ligen</p>
+</div>
+<div class="bg-gray-900 p-6 rounded-lg card-hover">
+<i class="fas fa-clock text-accent text-3xl mb-4"></i>
+<h3 class="text-xl font-bold mb-2">Regelmäßiges Training</h3>
+<p>Mehrmals wöchentlich für alle Altersgruppen</p>
+</div>
+<div class="bg-gray-900 p-6 rounded-lg card-hover">
+<i class="fas fa-trophy text-accent text-3xl mb-4"></i>
+<h3 class="text-xl font-bold mb-2">Erfolgreicher Spielbetrieb</h3>
+<p>Gute Platzierungen in der Liga</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Aktuelle Informationen -->
+<section class="section-spacing bg-gray-900">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">
+<span class="text-accent">Aktuelle</span> Informationen
             </h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold mb-4 text-accent">
-                        <i class="fas fa-bullhorn"></i> Vereinsnachrichten
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-gray-800 p-6 rounded-lg">
+<h3 class="text-xl font-bold mb-4 text-accent">
+<i class="fas fa-bullhorn"></i> Vereinsnachrichten
                     </h3>
-                    <ul class="space-y-3">
-                        <li class="border-l-4 border-accent pl-4">
-                            <strong>Weihnachtsfeier:</strong> Am 19.12. beendeten Jung und Alt gemeinsam das Tischtennisjahr 2025. Impressionen siehe Galerie.
-                        </li>
-                        <li class="border-l-4 border-accent pl-4">
-                            <strong>Zwischen den Feiertagen:</strong> Training am 30.12.25, 17:00 Uhr
-                        </li>
-                        <li class="border-l-4 border-accent pl-4">
-                            <strong>Jahreshauptversammlung:</strong> Vorstand auf Mitgliederversammlung am 12.12.25 bestätigt
-                        </li>
-                    </ul>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg">
-                    <h3 class="text-xl font-bold mb-4 text-accent">
-                        <i class="fas fa-calendar-alt"></i> Nächste Termine
+<ul class="space-y-3"><li class="text-gray-400">Ab September 26 (Beginn der neuen Saison) können hier Spielberichte zu den Punktspielen der Mannschaften des TTC Gransee 98 e.V. gelesen werden.</li></ul>
+</div>
+<div class="bg-gray-800 p-6 rounded-lg">
+<h3 class="text-xl font-bold mb-4 text-accent">
+<i class="fas fa-calendar-alt"></i> Nächste Termine
                     </h3>
-                    <ul class="space-y-3">
-                        <li class="flex justify-between items-center border-b border-gray-700 pb-2">
-                            <span>Heimspiel Jugendmannschaft</span>
-                            <span class="text-accent">09.01.26, 17:30 Uhr</span>
-                        </li>
-                        <li class="flex justify-between items-center border-b border-gray-700 pb-2">
-                            <span>Heimspiel 1. Herren</span>
-                            <span class="text-accent">16.01.26, 19:30 Uhr</span>
-                        </li>
-                        <li class="flex justify-between items-center border-b border-gray-700 pb-2">
-                            <span>Auswärtsspiel 2. Herren (Motor Hennigsdorf VII)</span>
-                            <span class="text-accent">18.01.26, 14:00 Uhr</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Training -->
-    <section id="training" class="section-spacing">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">
-                <span class="text-accent">Training</span> & Spielstätte
+<ul class="space-y-3"><li class="flex justify-between gap-4 items-start border-b border-gray-700 pb-2">
+<span>Motor Hennigsdorf V – TTC Gransee<span class="block text-sm text-gray-400">1. Herren</span></span>
+<span class="text-accent whitespace-nowrap">13.09.26, 14:00 Uhr</span>
+</li><li class="flex justify-between gap-4 items-start border-b border-gray-700 pb-2">
+<span>FSV Germendorf – TTC Gransee<span class="block text-sm text-gray-400">1. Herren</span></span>
+<span class="text-accent whitespace-nowrap">17.09.26, 18:30 Uhr</span>
+</li><li class="flex justify-between gap-4 items-start border-b border-gray-700 pb-2">
+<span>SV Glienicke V – TTC Gransee II<span class="block text-sm text-gray-400">2. Herren</span></span>
+<span class="text-accent whitespace-nowrap">17.09.26, 18:30 Uhr</span>
+</li><li class="flex justify-between gap-4 items-start border-b border-gray-700 pb-2">
+<span>Kremmener SV III – TTC Gransee II<span class="block text-sm text-gray-400">2. Herren</span></span>
+<span class="text-accent whitespace-nowrap">21.09.26, 19:30 Uhr</span>
+</li></ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Training -->
+<section class="section-spacing" id="training">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">
+<span class="text-accent">Training</span> &amp; Spielstätte
             </h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gray-900 p-8 rounded-lg">
-                    <h3 class="text-2xl font-bold mb-6 text-accent">
-                        <i class="fas fa-clock"></i> Trainingszeiten
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-gray-900 p-8 rounded-lg">
+<h3 class="text-2xl font-bold mb-6 text-accent">
+<i class="fas fa-clock"></i> Trainingszeiten
                     </h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
-                            <div>
-                                <strong>Dienstag</strong>
-                                <div class="text-sm text-gray-400">alle Altersklassen</div>
-                            </div>
-                            <span class="text-accent font-bold">17:00 - 19:00</span>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
-                            <div>
-                                <strong>Donnerstag</strong>
-                                <div class="text-sm text-gray-400">Nachwuchstraining</div>
-                            </div>
-                            <span class="text-accent font-bold">17:00 - 19:00</span>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-gray-700 pb-3">
-                            <div>
-                                <strong>Freitag</strong>
-                                <div class="text-sm text-gray-400">Nachwuchstraining</div>
-                                <div class="text-sm text-gray-400">Erwachsenentraining</div>
-                            </div>
-                            <span class="text-accent font-bold"><br>17:00 - 19:00<br>19:00 - 21:00</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <strong>Wochenende</strong>
-                                <div class="text-sm text-gray-400">Punktspiele</div>
-                            </div>
-                            <span class="text-accent font-bold">[sowohl vormittags als auch nachmittags]</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-900 p-8 rounded-lg">
-                    <h3 class="text-2xl font-bold mb-6 text-accent">
-                        <i class="fas fa-map-marker-alt"></i> Trainingsort
+<div class="space-y-4">
+<div class="flex justify-between items-center border-b border-gray-700 pb-3">
+<div>
+<strong>Dienstag</strong>
+<div class="text-sm text-gray-400">alle Altersklassen</div>
+</div>
+<span class="text-accent font-bold">17:00 - 19:00</span>
+</div>
+<div class="flex justify-between items-center border-b border-gray-700 pb-3">
+<div>
+<strong>Donnerstag</strong>
+<div class="text-sm text-gray-400">Nachwuchstraining</div>
+</div>
+<span class="text-accent font-bold">17:00 - 19:00</span>
+</div>
+<div class="flex justify-between items-center border-b border-gray-700 pb-3">
+<div>
+<strong>Freitag</strong>
+<div class="text-sm text-gray-400">Nachwuchstraining</div>
+<div class="text-sm text-gray-400">Erwachsenentraining</div>
+</div>
+<span class="text-accent font-bold"><br/>17:00 - 19:00<br/>19:00 - 21:00</span>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<strong>Wochenende</strong>
+<div class="text-sm text-gray-400">Punktspiele</div>
+</div>
+<span class="text-accent font-bold">[sowohl vormittags als auch nachmittags]</span>
+</div>
+</div>
+</div>
+<div class="bg-gray-900 p-8 rounded-lg">
+<h3 class="text-2xl font-bold mb-6 text-accent">
+<i class="fas fa-map-marker-alt"></i> Trainingsort
                     </h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-bold text-lg mb-2">Sporthalle der Stadtschule Gransee</h4>
-                            <p class="text-gray-300 mb-4">
-                                Koliner Straße 5<br>
+<div class="space-y-4">
+<div>
+<h4 class="font-bold text-lg mb-2">Sporthalle der Stadtschule Gransee</h4>
+<p class="text-gray-300 mb-4">
+                                Koliner Straße 5<br/>
                                 16775 Gransee
                             </p>
-                        </div>
-                        <div class="bg-gray-800 p-4 rounded">
-                            <h5 class="font-bold mb-2 text-accent">Ausstattung:</h5>
-                            <ul class="text-sm space-y-1">
-                                <li><i class="fas fa-check text-accent mr-2"></i>8 Tischtennisplatten</li>
-                                <li><i class="fas fa-check text-accent mr-2"></i>Ballmaschine</li>
-                                <li><i class="fas fa-check text-accent mr-2"></i>Umkleidekabinen</li>
-                                <li><i class="fas fa-check text-accent mr-2"></i>Parkplätze vorhanden</li>
-                            </ul>
-                        </div>
-                        <div class="mt-4">
-                            <a href="#contact" class="inline-block bg-accent text-black px-6 py-2 rounded font-bold hover:bg-green-400 transition">
+</div>
+<div class="bg-gray-800 p-4 rounded">
+<h5 class="font-bold mb-2 text-accent">Ausstattung:</h5>
+<ul class="text-sm space-y-1">
+<li><i class="fas fa-check text-accent mr-2"></i>8 Tischtennisplatten</li>
+<li><i class="fas fa-check text-accent mr-2"></i>Ballmaschine</li>
+<li><i class="fas fa-check text-accent mr-2"></i>Umkleidekabinen</li>
+<li><i class="fas fa-check text-accent mr-2"></i>Parkplätze vorhanden</li>
+</ul>
+</div>
+<div class="mt-4">
+<a class="inline-block bg-accent text-black px-6 py-2 rounded font-bold hover:bg-green-400 transition" href="#contact">
                                 Probetraining anfragen
                             </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mannschaften -->
-    <section id="teams" class="section-spacing bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Mannschaften -->
+<section class="section-spacing bg-gray-900" id="teams">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">
                 Unsere <span class="text-accent">Mannschaften</span>
-            </h2>
-            <div class="grid lg:grid-cols-3 gap-8">
-
-                <!-- 1. Mannschaft -->
-                <div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
-                    <div class="bg-accent text-black p-4">
-                        <h3 class="text-xl font-bold text-center">
-                            <i class="fas fa-medal"></i> 1. Mannschaft
+</h2>
+<div class="grid lg:grid-cols-3 gap-8">
+<!-- 1. Mannschaft -->
+<div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
+<div class="bg-accent text-black p-4">
+<h3 class="text-xl font-bold text-center">
+<i class="fas fa-medal"></i> 1. Mannschaft
                         </h3>
-                        <p class="text-center text-sm">1. Kreisklasse Oberhavel</p>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="font-bold mb-4 text-accent">Spieler:</h4>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Ulf Bartel</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Stefan Reinsberg (Mannschaftsführer)</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Oliver Stiegat</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Diethardt Goldenbogen</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Michael Melchin</li>
-                        </ul>
-                        <div class="text-center">
-                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/1-Kreisklasse-Erwachsene/gruppe/493634/mannschaft/2956061/TTC-Gransee/spielplan/aktuell/"
-                               class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition">
-                                <i class="fas fa-external-link-alt mr-1"></i>
-                                Ergebnisse & Tabelle
+<p class="text-center text-sm">1. Kreisklasse Oberhavel</p>
+</div>
+<div class="p-6">
+<h4 class="font-bold mb-4 text-accent">Spieler:</h4>
+<ul class="space-y-2 mb-6">
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Ulf Bartel</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Stefan Reinsberg (Mannschaftsführer)</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Oliver Stiegat</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Diethardt Goldenbogen</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Michael Melchin</li>
+</ul>
+<div class="text-center">
+<a class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition" href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/1-Kreisklasse-Erwachsene/gruppe/493634/mannschaft/2956061/TTC-Gransee/spielplan/aktuell/">
+<i class="fas fa-external-link-alt mr-1"></i>
+                                Ergebnisse &amp; Tabelle
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Mannschaft -->
-                <div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
-                    <div class="bg-accent text-black p-4">
-                        <h3 class="text-xl font-bold text-center">
-                            <i class="fas fa-users"></i> 2. Mannschaft
+</div>
+</div>
+</div>
+<!-- 2. Mannschaft -->
+<div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
+<div class="bg-accent text-black p-4">
+<h3 class="text-xl font-bold text-center">
+<i class="fas fa-users"></i> 2. Mannschaft
                         </h3>
-                        <p class="text-center text-sm">5. Kreisklasse Oberhavel</p>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="font-bold mb-4 text-accent">Spieler:</h4>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Bernd Guth (Mannschaftsführer)</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Lutz Kade</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Peter Gogol</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Anica Erdmann</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Uwe Heiden</li>
-                        </ul>
-                        <div class="text-center">
-                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/5-Kreisklasse-Erwachsene/gruppe/493609/mannschaft/2955897/TTC-Gransee-II/spielplan/aktuell/"
-                               class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition">
-                                <i class="fas fa-external-link-alt mr-1"></i>
-                                Ergebnisse & Tabelle
+<p class="text-center text-sm">5. Kreisklasse Oberhavel</p>
+</div>
+<div class="p-6">
+<h4 class="font-bold mb-4 text-accent">Spieler:</h4>
+<ul class="space-y-2 mb-6">
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Bernd Guth (Mannschaftsführer)</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Lutz Kade</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Peter Gogol</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Anica Erdmann</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Uwe Heiden</li>
+</ul>
+<div class="text-center">
+<a class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition" href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/5-Kreisklasse-Erwachsene/gruppe/493609/mannschaft/2955897/TTC-Gransee-II/spielplan/aktuell/">
+<i class="fas fa-external-link-alt mr-1"></i>
+                                Ergebnisse &amp; Tabelle
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Nachwuchsmannschaft -->
-                <div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
-                    <div class="bg-accent text-black p-4">
-                        <h3 class="text-xl font-bold text-center">
-                            <i class="fas fa-seedling"></i> Nachwuchsmannschaft
+</div>
+</div>
+</div>
+<!-- Nachwuchsmannschaft -->
+<div class="bg-gray-800 rounded-lg overflow-hidden card-hover">
+<div class="bg-accent text-black p-4">
+<h3 class="text-xl font-bold text-center">
+<i class="fas fa-seedling"></i> Nachwuchsmannschaft
                         </h3>
-                        <p class="text-center text-sm">Kreisliga Oberhavel Jugend 19</p>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="font-bold mb-4 text-accent">Spieler:</h4>
-                        <ul class="space-y-2 mb-6">
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Tim Heiden (Mannschaftsführer)</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Tristan Krick</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Alexander Beil</li>
-                            <li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Leonard Wudicke</li>
-                        </ul>
-                        <div class="text-center">
-                            <a href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/Kreisliga-Jugend-19/gruppe/493647/mannschaft/2991364/TTC-Gransee/spielplan/aktuell/"
-                               class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition">
-                                <i class="fas fa-external-link-alt mr-1"></i>
-                                Ergebnisse & Tabelle
+<p class="text-center text-sm">Kreisliga Oberhavel Jugend 19</p>
+</div>
+<div class="p-6">
+<h4 class="font-bold mb-4 text-accent">Spieler:</h4>
+<ul class="space-y-2 mb-6">
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Tim Heiden (Mannschaftsführer)</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Tristan Krick</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Alexander Beil</li>
+<li class="flex items-center"><i class="fas fa-user text-accent mr-2"></i>Leonard Wudicke</li>
+</ul>
+<div class="text-center">
+<a class="inline-block bg-accent text-black px-4 py-2 rounded text-sm font-bold hover:bg-green-400 transition" href="https://www.mytischtennis.de/clicktt/TTVB/25-26/ligen/Kreisliga-Jugend-19/gruppe/493647/mannschaft/2991364/TTC-Gransee/spielplan/aktuell/">
+<i class="fas fa-external-link-alt mr-1"></i>
+                                Ergebnisse &amp; Tabelle
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Galerie -->
-    <section id="gallery" class="section-spacing">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">
-                <span class="text-accent">Bilder</span>galerie
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Galerie -->
+<section class="section-spacing" id="gallery">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">
+<span class="text-accent">Bilder</span>galerie
             </h2>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- Thumbnail-Kacheln: quadratisch & voll -->
-                <button class="gallery-thumb" type="button" data-full="DSC_6486.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6486.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6488.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6488.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6498.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6498.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6499.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6499.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6500.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6500.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6501.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6501.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6504.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6504.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-
-                <button class="gallery-thumb" type="button" data-full="DSC_6505.JPG" data-caption="Weihnachtsfeier am 19.12.25">
-                    <img src="DSC_6505.JPG" alt="Weihnachtsfeier am 19.12.25" loading="lazy" decoding="async">
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Kontakt -->
-    <section id="contact" class="section-spacing bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">
-                <span class="text-accent">Kontakt</span> & Ansprechpartner
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<!-- Thumbnail-Kacheln: quadratisch & voll -->
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6486.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6486.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6488.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6488.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6498.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6498.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6499.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6499.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6500.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6500.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6501.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6501.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6504.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6504.JPG"/>
+</button>
+<button class="gallery-thumb" data-caption="Weihnachtsfeier am 19.12.25" data-full="DSC_6505.JPG" type="button">
+<img alt="Weihnachtsfeier am 19.12.25" decoding="async" loading="lazy" src="DSC_6505.JPG"/>
+</button>
+</div>
+</div>
+</section>
+<!-- Kontakt -->
+<section class="section-spacing bg-gray-900" id="contact">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">
+<span class="text-accent">Kontakt</span> &amp; Ansprechpartner
             </h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-8 rounded-lg">
-                    <h3 class="text-xl font-bold mb-6 text-accent">
-                        <i class="fas fa-user-tie"></i> Vereinsführung
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-gray-800 p-8 rounded-lg">
+<h3 class="text-xl font-bold mb-6 text-accent">
+<i class="fas fa-user-tie"></i> Vereinsführung
                     </h3>
-                    <div class="space-y-6">
-                        <div>
-                            <h4 class="font-bold text-lg">1. Vorsitzender</h4>
-                            <p class="text-gray-300">Bernd Guth</p>
-                            <div class="mt-2 space-y-1">
-                                <p><i class="fas fa-phone text-accent mr-2"></i>+49 162 4324258</p>
-                                <p><i class="fas fa-envelope text-accent mr-2"></i>guth.Musikladen@web.de</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg">stellv. Vorsitzender</h4>
-                            <p class="text-gray-300">Michael Melchin</p>
-                            <div class="mt-2 space-y-1">
-                                <p><i class="fas fa-phone text-accent mr-2"></i>+49 174 1913935</p>
-                                <p><i class="fas fa-envelope text-accent mr-2"></i>mmelchin@gmx.de</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg">Jugendwart</h4>
-                            <p class="text-gray-300">Oliver Stiegat</p>
-                            <div class="mt-2 space-y-1">
-                                <p><i class="fas fa-phone text-accent mr-2"></i>+49 1577 8351415</p>
-                                <p><i class="fas fa-envelope text-accent mr-2"></i>oliverstiegat@outlook.com</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-lg">
-                    <h3 class="text-xl font-bold mb-6 text-accent">
-                        <i class="fas fa-info-circle"></i> Vereinsinformationen
+<div class="space-y-6">
+<div>
+<h4 class="font-bold text-lg">1. Vorsitzender</h4>
+<p class="text-gray-300">Bernd Guth</p>
+<div class="mt-2 space-y-1">
+<p><i class="fas fa-phone text-accent mr-2"></i>+49 162 4324258</p>
+<p><i class="fas fa-envelope text-accent mr-2"></i>guth.Musikladen@web.de</p>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-lg">stellv. Vorsitzender</h4>
+<p class="text-gray-300">Michael Melchin</p>
+<div class="mt-2 space-y-1">
+<p><i class="fas fa-phone text-accent mr-2"></i>+49 174 1913935</p>
+<p><i class="fas fa-envelope text-accent mr-2"></i>mmelchin@gmx.de</p>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-lg">Jugendwart</h4>
+<p class="text-gray-300">Oliver Stiegat</p>
+<div class="mt-2 space-y-1">
+<p><i class="fas fa-phone text-accent mr-2"></i>+49 1577 8351415</p>
+<p><i class="fas fa-envelope text-accent mr-2"></i>oliverstiegat@outlook.com</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gray-800 p-8 rounded-lg">
+<h3 class="text-xl font-bold mb-6 text-accent">
+<i class="fas fa-info-circle"></i> Vereinsinformationen
                     </h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-bold">Vereinsadresse:</h4>
-                            <p class="text-gray-300">
-                                TTC Gransee 98 e.V.<br>
-                                Rudolf-Breitscheid-Str. 72<br>
+<div class="space-y-4">
+<div>
+<h4 class="font-bold">Vereinsadresse:</h4>
+<p class="text-gray-300">
+                                TTC Gransee 98 e.V.<br/>
+                                Rudolf-Breitscheid-Str. 72<br/>
                                 16775 Gransee
                             </p>
-                        </div>
-                        <div>
-                            <h4 class="font-bold">Allgemeine Kontaktdaten:</h4>
-                            <p class="text-gray-300">
-                                <i class="fas fa-phone text-accent mr-2"></i>+49 162 4324258<br>
-                                <i class="fas fa-envelope text-accent mr-2"></i>guth.Musikladen@web.de<br>
-                                <i class="fas fa-globe text-accent mr-2"></i>ttcgransee.de
+</div>
+<div>
+<h4 class="font-bold">Allgemeine Kontaktdaten:</h4>
+<p class="text-gray-300">
+<i class="fas fa-phone text-accent mr-2"></i>+49 162 4324258<br/>
+<i class="fas fa-envelope text-accent mr-2"></i>guth.Musikladen@web.de<br/>
+<i class="fas fa-globe text-accent mr-2"></i>ttcgransee.de
                             </p>
-                        </div>
-                        <div>
-                            <h4 class="font-bold">Bankverbindung:</h4>
-                            <p class="text-gray-300 text-sm">
-                                Mittelbrandenburgische Sparkasse<br>
-                                IBAN: DE11 1605 0000 3751 0027 73<br>
+</div>
+<div>
+<h4 class="font-bold">Bankverbindung:</h4>
+<p class="text-gray-300 text-sm">
+                                Mittelbrandenburgische Sparkasse<br/>
+                                IBAN: DE11 1605 0000 3751 0027 73<br/>
                                 BIC: WELADED1PMB
                             </p>
-                        </div>
-                        <div class="mt-6">
-                            <a href="mailto:guth.Musikladen@web.de"
-                               class="inline-block bg-accent text-black px-6 py-3 rounded font-bold hover:bg-green-400 transition">
-                                <i class="fas fa-envelope mr-2"></i>
+</div>
+<div class="mt-6">
+<a class="inline-block bg-accent text-black px-6 py-3 rounded font-bold hover:bg-green-400 transition" href="mailto:guth.Musikladen@web.de">
+<i class="fas fa-envelope mr-2"></i>
                                 Nachricht senden
                             </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Impressum -->
-    <section id="impressum" class="section-spacing">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">
-                <span class="text-accent">Impressum</span>
-            </h2>
-            <div class="max-w-4xl mx-auto bg-gray-900 p-8 rounded-lg">
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-xl font-bold mb-4 text-accent">Vereinsangaben</h3>
-                        <div class="space-y-3 text-sm">
-                            <p><strong>Vereinsname:</strong><br>TTC Gransee 98 e.V.</p>
-                            <p><strong>Anschrift:</strong><br>Rudolf-Breitscheid-Str. 72<br>16775 Gransee</p>
-                            <p><strong>Vereinsregister:</strong><br>Registergericht: Amtsgericht Neuruppin<br>Vereinsnummer: 1024</p>
-                            <p><strong>Vertretungsberechtigter Vorstand:</strong><br>Bernd Guth<br>Michael Melchin</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-4 text-accent">Kontakt & Haftung</h3>
-                        <div class="space-y-3 text-sm">
-                            <p>
-                                <strong>Telefon:</strong> +49 162 4324258<br>
-                                <strong>E-Mail:</strong> guth.Musikladen@web.de<br>
-                                <strong>Website:</strong> ttcgransee.de
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Impressum -->
+<section class="section-spacing" id="impressum">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">
+<span class="text-accent">Impressum</span>
+</h2>
+<div class="max-w-4xl mx-auto bg-gray-900 p-8 rounded-lg">
+<div class="grid md:grid-cols-2 gap-8">
+<div>
+<h3 class="text-xl font-bold mb-4 text-accent">Vereinsangaben</h3>
+<div class="space-y-3 text-sm">
+<p><strong>Vereinsname:</strong><br/>TTC Gransee 98 e.V.</p>
+<p><strong>Anschrift:</strong><br/>Rudolf-Breitscheid-Str. 72<br/>16775 Gransee</p>
+<p><strong>Vereinsregister:</strong><br/>Registergericht: Amtsgericht Neuruppin<br/>Vereinsnummer: 1024</p>
+<p><strong>Vertretungsberechtigter Vorstand:</strong><br/>Bernd Guth<br/>Michael Melchin</p>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-bold mb-4 text-accent">Kontakt &amp; Haftung</h3>
+<div class="space-y-3 text-sm">
+<p>
+<strong>Telefon:</strong> +49 162 4324258<br/>
+<strong>E-Mail:</strong> guth.Musikladen@web.de<br/>
+<strong>Website:</strong> ttcgransee.de
                             </p>
-                            <p>
-                                <strong>Haftungsausschluss:</strong><br>
+<p>
+<strong>Haftungsausschluss:</strong><br/>
                                 Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links.
                                 Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
                             </p>
-                            <p>
-                                <strong>Datenschutz:</strong><br>
+<p>
+<strong>Datenschutz:</strong><br/>
                                 Die Nutzung unserer Website ist in der Regel ohne Angabe personenbezogener Daten möglich.
                                 Soweit auf unseren Seiten personenbezogene Daten erhoben werden, erfolgt dies stets auf freiwilliger Basis.
                             </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-8 pt-6 border-t border-gray-700 text-center text-sm text-gray-400">
-                    <p>© 2024 TTC Gransee 98 e.V. - Alle Rechte vorbehalten</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-accent py-8">
-        <div class="container mx-auto px-4 text-center">
-            <div class="flex justify-center space-x-6 mb-4">
-                <a href="#home" class="hover-accent">Start</a>
-                <a href="#training" class="hover-accent">Training</a>
-                <a href="#teams" class="hover-accent">Mannschaften</a>
-                <a href="#contact" class="hover-accent">Kontakt</a>
-                <a href="#impressum" class="hover-accent">Impressum</a>
-            </div>
-            <p class="text-gray-400 text-sm">
-                <i class="fas fa-table-tennis text-accent mr-2"></i>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-gray-700 text-center text-sm text-gray-400">
+<p>© 2024 TTC Gransee 98 e.V. - Alle Rechte vorbehalten</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-gray-900 border-t border-accent py-8">
+<div class="container mx-auto px-4 text-center">
+<div class="flex justify-center space-x-6 mb-4">
+<a class="hover-accent" href="#home">Start</a>
+<a class="hover-accent" href="#training">Training</a>
+<a class="hover-accent" href="#teams">Mannschaften</a>
+<a class="hover-accent" href="#contact">Kontakt</a>
+<a class="hover-accent" href="#impressum">Impressum</a>
+</div>
+<p class="text-gray-400 text-sm">
+<i class="fas fa-table-tennis text-accent mr-2"></i>
                 TTC Gransee 98 e.V. - Tischtennis im Norden Oberhavels
             </p>
-        </div>
-    </footer>
-
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox-overlay" aria-hidden="true" role="dialog" aria-label="Bildanzeige">
-        <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Schließen">
-            <i class="fas fa-times"></i>
-        </button>
-
-        <div class="lightbox-figure" role="document">
-            <div class="lightbox-frame" id="lightboxFrame">
-                <img id="lightboxImg" class="lightbox-img" src="" alt="">
-            </div>
-            <div id="lightboxCaption" class="lightbox-caption"></div>
-        </div>
-
-        <div class="lightbox-hint">ESC zum Schließen • Klicken außerhalb schließt</div>
-    </div>
-
-    <!-- JavaScript -->
-    <script>
+</div>
+</footer>
+<!-- Lightbox -->
+<div aria-hidden="true" aria-label="Bildanzeige" class="lightbox-overlay" id="lightbox" role="dialog">
+<button aria-label="Schließen" class="lightbox-close" id="lightboxClose" type="button">
+<i class="fas fa-times"></i>
+</button>
+<div class="lightbox-figure" role="document">
+<div class="lightbox-frame" id="lightboxFrame">
+<img alt="" class="lightbox-img" id="lightboxImg" src=""/>
+</div>
+<div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+<div class="lightbox-hint">ESC zum Schließen • Klicken außerhalb schließt</div>
+</div>
+<!-- JavaScript -->
+<script>
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -737,5 +697,45 @@
             }
         });
     </script>
-</body>
+<!-- Vereinsnachrichten-Dialog -->
+<div aria-hidden="true" aria-modal="true" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4" id="articleModal" role="dialog">
+<div class="bg-gray-900 border border-accent rounded-lg max-w-3xl w-full max-h-screen overflow-y-auto p-6 relative">
+<button aria-label="Artikel schließen" class="absolute top-3 right-3 text-accent text-2xl" id="articleModalClose" type="button"><i class="fas fa-times"></i></button>
+</div>
+</div><script>
+// Vereinsnachrichten im eingebetteten Dialog öffnen.
+(() => {
+    const modal = document.getElementById('articleModal');
+    const closeButton = document.getElementById('articleModalClose');
+    if (!modal || !closeButton) return;
+
+    const closeArticle = () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        modal.querySelectorAll('.article-content').forEach(el => el.classList.add('hidden'));
+    };
+
+    document.querySelectorAll('.article-open').forEach(button => {
+        button.addEventListener('click', () => {
+            const article = document.getElementById(`article-${button.dataset.articleId}`);
+            if (!article) return;
+            modal.querySelectorAll('.article-content').forEach(el => el.classList.add('hidden'));
+            article.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            closeButton.focus();
+        });
+    });
+
+    closeButton.addEventListener('click', closeArticle);
+    modal.addEventListener('click', event => { if (event.target === modal) closeArticle(); });
+    window.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeArticle();
+    });
+})();
+</script></body>
 </html>

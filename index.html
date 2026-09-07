@@ -155,6 +155,101 @@
             border-radius: 9999px;
             z-index: 10000;
         }
+
+        /* === Vereinsnachrichten-Dialog === */
+        .news-button {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+        .news-button:hover .news-title,
+        .news-button:focus-visible .news-title {
+            color: var(--accent-color);
+        }
+        .news-title {
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+        .news-meta {
+            margin-top: 0.25rem;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .article-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.88);
+        }
+        .article-overlay.is-open {
+            display: flex;
+        }
+        .article-dialog {
+            position: relative;
+            width: min(820px, 96vw);
+            max-height: 88vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 255, 0, 0.35);
+            border-radius: 0.75rem;
+            background: #111827;
+            padding: 1.5rem;
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.6);
+        }
+        .article-dialog h2 {
+            margin: 0 3rem 0.5rem 0;
+            color: var(--accent-color);
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+        .article-meta {
+            margin-bottom: 1.25rem;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        .article-body p {
+            margin: 0 0 1rem;
+            color: #e5e7eb;
+            line-height: 1.7;
+        }
+        .article-source {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+            font-size: 0.875rem;
+        }
+        .article-source a {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+        .article-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(0, 255, 0, 0.35);
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .article-close:hover {
+            background: #000;
+        }
+
     </style>
 </head>
 <body class="bg-primary text-white smooth-scroll">
@@ -232,7 +327,7 @@
 <i class="fas fa-bullhorn"></i> Vereinsnachrichten
                     </h3>
 <ul class="space-y-3"><li class="border-l-4 border-accent pl-4">
-<button class="news-button" data-article-body="Die Nachwuchs-II-Mannschaft des TTC Gransee trat am 4. September 2026 zu Hause gegen den SV Blau-Weiß Nassenheide an.
+<button class="news-button text-left hover-accent" data-article-body="Die Nachwuchs-II-Mannschaft des TTC Gransee trat am 4. September 2026 zu Hause gegen den SV Blau-Weiß Nassenheide an.
 
 Am Ende setzte sich der TTC Gransee deutlich mit 9:1 durch." data-article-date="04.09.2026" data-article-result="" data-article-source="https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Nord/gruppe/521534/spielbericht/16115879/TTC_Gransee-vs-SV_Blau-Wei%C3%9F_Nassenheide" data-article-team="TTC Gransee" data-article-title="Nachwuchs II gewinnt mit 9:1 gegen Nassenheide" type="button">
 <div class="news-row">
@@ -636,8 +731,85 @@ Am Ende setzte sich der TTC Gransee deutlich mit 9:1 durch." data-article-date="
 </div>
 <div class="lightbox-hint">ESC zum Schließen • Klicken außerhalb schließt</div>
 </div>
+<!-- Vereinsnachrichten-Dialog -->
+<div aria-hidden="true" aria-labelledby="articleTitle" aria-modal="true" class="article-overlay" id="articleOverlay" role="dialog">
+<article class="article-dialog">
+<button aria-label="Artikel schließen" class="article-close" id="articleClose" type="button">
+<i class="fas fa-times"></i>
+</button>
+<h2 id="articleTitle">Spielbericht</h2>
+<div class="article-meta" id="articleDate"></div>
+<div class="article-body" id="articleBody"></div>
+<div class="article-source" hidden="" id="articleSourceWrap">
+<a href="#" id="articleSource" rel="noopener noreferrer" target="_blank">
+                    Original-Spielbericht und Einzelergebnisse bei myTischtennis
+                    <i class="fas fa-external-link-alt ml-1"></i>
+</a>
+</div>
+</article>
+</div>
 <!-- JavaScript -->
 <script>
+
+        // === Vereinsnachrichten: vollständigen Artikel im Seiten-Dialog öffnen ===
+        const articleOverlay = document.getElementById('articleOverlay');
+        const articleClose = document.getElementById('articleClose');
+        const articleTitle = document.getElementById('articleTitle');
+        const articleDate = document.getElementById('articleDate');
+        const articleBody = document.getElementById('articleBody');
+        const articleSourceWrap = document.getElementById('articleSourceWrap');
+        const articleSource = document.getElementById('articleSource');
+
+        function openArticle(button) {
+            articleTitle.textContent = button.dataset.articleTitle || 'Spielbericht';
+            articleDate.textContent = button.dataset.articleDate || '';
+
+            articleBody.innerHTML = '';
+            const body = button.dataset.articleBody || '';
+            const paragraphs = body.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+
+            (paragraphs.length ? paragraphs : [body]).forEach(text => {
+                const p = document.createElement('p');
+                p.textContent = text;
+                articleBody.appendChild(p);
+            });
+
+            const source = button.dataset.articleSource || '';
+            if (source) {
+                articleSource.href = source;
+                articleSourceWrap.hidden = false;
+            } else {
+                articleSource.removeAttribute('href');
+                articleSourceWrap.hidden = true;
+            }
+
+            articleOverlay.classList.add('is-open');
+            articleOverlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            articleClose.focus();
+        }
+
+        function closeArticle() {
+            articleOverlay.classList.remove('is-open');
+            articleOverlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('click', (event) => {
+            const button = event.target.closest('.news-button');
+            if (button) {
+                openArticle(button);
+            }
+        });
+
+        articleClose.addEventListener('click', closeArticle);
+
+        articleOverlay.addEventListener('click', (event) => {
+            if (event.target === articleOverlay) {
+                closeArticle();
+            }
+        });
+
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -730,6 +902,10 @@ Am Ende setzte sich der TTC Gransee deutlich mit 9:1 durch." data-article-date="
 
         // ESC schließt
         window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && articleOverlay.classList.contains('is-open')) {
+                closeArticle();
+                return;
+            }
             if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
                 closeLightbox();
             }

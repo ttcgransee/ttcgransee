@@ -37,8 +37,12 @@ LEAGUES = [
         "url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/5._Kreisklasse/gruppe/521539/tabelle/gesamt",
     },
     {
-        "team": "Nachwuchsmannschaft",
+        "team": "Nachwuchs I",
         "url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Kreisliga/gruppe/521582/tabelle/gesamt",
+    },
+    {
+        "team": "Nachwuchs II",
+        "url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Nord/gruppe/521534/tabelle/gesamt",
     },
 ]
 

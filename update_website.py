@@ -369,13 +369,32 @@ def call_openai(match: Match, report_text: str) -> tuple[str, str]:
     system_prompt = (
         "Du schreibst ausführliche, journalistisch formulierte, aber sachliche Spielberichte "
         "für die Vereinswebseite des Tischtennisvereins TTC Gransee 98 e.V. "
-        "Der Bericht soll wie ein echter Vereins-Spielbericht wirken und den Verlauf der Begegnung "
-        "anhand der Doppel, Einzel und Satzergebnisse nachvollziehbar machen. "
+        "Der Text soll wie ein von einem Vereinsmitglied geschriebener Spielbericht wirken "
+        "und nicht wie eine technische Zusammenfassung von Daten. "
+
         "Nutze ausschließlich die gelieferten Spieldaten. "
         "Erfinde keine Zitate, Verletzungen, Zuschauerreaktionen, Stimmungen, "
         "Tabellenstände oder sonstige Ereignisse. "
-        "Beschreibe Spielverläufe nur, wenn sie aus den Einzelergebnissen eindeutig ableitbar sind. "
-        "Nenne konkrete Satzstände, Vier- und Fünfsatzspiele nur, wenn sie in den Quelldaten enthalten sind."
+
+        "Beschreibe den Spielverlauf anhand der Reihenfolge der Doppel und Einzel. "
+        "Nenne konkrete Satzstände nur dann, wenn mehrere beziehungsweise alle relevanten "
+        "Satzresultate eindeutig aus den Quelldaten hervorgehen. "
+
+        "Wenn Satzdaten unvollständig sind, erwähne niemals, dass Daten fehlen, "
+        "nur teilweise dokumentiert, ausgewiesen, erfasst oder überliefert sind. "
+        "Schreibe in diesem Fall einfach zum Beispiel: "
+        "'Jayden Ebert gewann sein Einzel klar mit 3:0.' "
+
+        "Verwende niemals Formulierungen wie "
+        "'der dokumentierte Satz', 'der ausgewiesene Satz', "
+        "'laut den vorliegenden Daten', 'die Daten zeigen', "
+        "'der erfasste Spielverlauf', 'der erste dokumentierte Satz' "
+        "oder ähnliche technische Formulierungen. "
+
+        "Schreibe flüssig, natürlich und abwechslungsreich. "
+        "Vermeide unnötige Wiederholungen von Wörtern wie "
+        "'anschließend', 'danach', 'klar', 'deutlich', 'souverän' und 'folgte'. "
+        "Bevorzuge konkrete, einfache Formulierungen gegenüber künstlich journalistischen Floskeln."
     )
 
     user_prompt = f"""Erstelle einen ausführlichen Spielbericht auf Deutsch für die Vereinswebseite des TTC Gransee 98 e.V.
@@ -386,23 +405,25 @@ Heim: {match.home}
 Gast: {match.away}
 Endstand: {match.result}
 
-Quelldaten des vollständigen Spielberichts:
+Quelldaten:
 {report_text}
 
 Vorgaben:
 - Schreibe ungefähr 350 bis 500 Wörter.
 - Verwende 5 bis 7 gut lesbare Absätze.
 - Beginne mit einer kurzen Einordnung des Endergebnisses.
-- Beschreibe danach den tatsächlichen Spielverlauf möglichst chronologisch.
-- Gehe auf vorhandene Doppel und anschließend auf wichtige Einzel ein.
+- Beschreibe danach den Spielverlauf möglichst chronologisch.
+- Gehe auf die Doppel und anschließend auf wichtige Einzel ein.
 - Nutze die Reihenfolge der Tabellenzeilen als Spielreihenfolge, sofern diese eindeutig ist.
-- Verarbeite konkrete Satzstände aus den Tabellen, wenn sie vorhanden sind.
-- Nenne Spielernamen und konkrete Satzergebnisse, wenn diese für den Verlauf interessant sind.
-- Hebe enge Vier- oder Fünfsatzspiele hervor, soweit sie aus den Quelldaten hervorgehen.
-- Beschreibe, wann sich eine Mannschaft entscheidend absetzen konnte, wenn dies aus der Reihenfolge der Spiele ableitbar ist.
+- Nenne Spielernamen und konkrete Satzresultate nur, wenn diese vollständig und eindeutig aus den Quelldaten hervorgehen.
+- Wenn bei einem Einzel nur das Gesamtergebnis 3:0, 3:1 oder 3:2 sicher erkennbar ist, nenne nur dieses Ergebnis und keine einzelnen Sätze.
+- Wenn einzelne Satzwerte unvollständig oder widersprüchlich erscheinen, lasse sie vollständig weg.
+- Hebe enge Vier- oder Fünfsatzspiele hervor, wenn sie eindeutig erkennbar sind.
+- Beschreibe, wann sich eine Mannschaft entscheidend absetzen konnte, wenn dies aus der Reihenfolge der Spiele hervorgeht.
+- Vermeide technische oder datenbezogene Formulierungen vollständig.
+- Schreibe so, als habe ein Vereinsmitglied den Bericht nach dem Spiel verfasst.
+- Erfinde keine Zitate, Emotionen, Verletzungen, Zuschauerreaktionen, Tabellenstände oder sonstige nicht belegte Informationen.
 - Schließe mit einem kurzen sachlichen Fazit.
-- Erfinde keine Zitate, Emotionen, Verletzungen, Zuschauerreaktionen, Tabellenstände oder andere nicht belegte Informationen.
-- Verwende ausschließlich Angaben aus den gelieferten Quelldaten.
 - Der Titel soll maximal 90 Zeichen lang sein.
 """
 

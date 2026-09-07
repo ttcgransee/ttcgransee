@@ -23,7 +23,7 @@ OUTPUT_FILE = BASE_DIR / "index.html"
 DATA_DIR = BASE_DIR / "data"
 ARTICLES_FILE = DATA_DIR / "articles.json"
 
-CLUB_PATTERN = re.compile(r"\bTTC\s+Gransee(?:\s+II)?\b", re.I)
+CLUB_PATTERN = re.compile(r"\bTTC\s+Gransee(?:\s+(?:II|III|IV))?\b", re.I)
 MAX_ITEMS = 5
 TIMEOUT = 30
 
@@ -136,62 +136,106 @@ def parse_matches(page_html: str, league_url: str, team_label: str) -> list[Matc
 
     matches: list[Match] = []
     last_date: datetime | None = None
+
     for row in table.find_all("tr"):
         cells_tags = row.find_all(["td", "th"])
         cells = [normalize_space(c.get_text(" ", strip=True)) for c in cells_tags]
-        if len(cells) < 4 or "Heimmannschaft" in " ".join(cells):
+        row_text = normalize_space(row.get_text(" ", strip=True))
+
+        # myTischtennis zeigt das Datum teils nur einmal vor mehreren Spielen.
+        # Deshalb Datum aus JEDER Tabellenzeile übernehmen, bevor nach dem Verein gefiltert wird.
+        row_date = parse_short_date(row_text, "")
+        if row_date is not None:
+            last_date = row_date
+
+        if "Heimmannschaft" in row_text or len(cells) < 4:
             continue
 
-        row_text = normalize_space(row.get_text(" ", strip=True))
         if not CLUB_PATTERN.search(row_text):
             continue
 
-        current_date = infer_date_from_row(cells, last_date)
+        current_date = row_date or last_date
         if current_date is None:
             logging.warning("Datum nicht erkennbar, Zeile übersprungen: %s", row_text)
             continue
-        last_date = current_date
 
         time_match = re.search(r"\b([01]?\d|2[0-3]):[0-5]\d\b", row_text)
         time_text = time_match.group(0) if time_match else ""
 
-        # Mannschaftslinks sind die Links mit Mannschaftsnamen; Ergebnislinks enthalten n:n.
         anchors = row.find_all("a")
-        team_links = [a for a in anchors if re.search(r"[A-Za-zÄÖÜäöüß]", normalize_space(a.get_text(" ", strip=True)))
-                      and not re.fullmatch(r"\d+", normalize_space(a.get_text(" ", strip=True)))]
-        result_anchor = next((a for a in anchors if re.fullmatch(r"\d+\s*:\s*\d+", normalize_space(a.get_text(" ", strip=True)))), None)
+        result_anchor = next(
+            (
+                a for a in anchors
+                if re.fullmatch(
+                    r"\d+\s*:\s*\d+",
+                    normalize_space(a.get_text(" ", strip=True)),
+                )
+            ),
+            None,
+        )
 
-        # Robuster Fallback: Namen anhand der Zellen nahe dem Ende bestimmen.
-        names = []
+        team_links = [
+            a for a in anchors
+            if re.search(
+                r"[A-Za-zÄÖÜäöüß]",
+                normalize_space(a.get_text(" ", strip=True)),
+            )
+            and not re.fullmatch(
+                r"\d+",
+                normalize_space(a.get_text(" ", strip=True)),
+            )
+        ]
+
+        names: list[str] = []
         for a in team_links:
             txt = normalize_space(a.get_text(" ", strip=True))
-            if txt and txt not in names and not txt.lower().startswith("pdf"):
+            if (
+                txt
+                and txt not in names
+                and not txt.lower().startswith("pdf")
+                and not re.fullmatch(r"\d+\s*:\s*\d+", txt)
+            ):
                 names.append(txt)
-        names = [n for n in names if not re.fullmatch(r"\d+\s*:\s*\d+", n)]
+
         if len(names) < 2:
-            # Tabellenzellen mit Vereinsnamen suchen.
-            candidates = [c for c in cells if re.search(r"(?:TTC|SV|TSV|TTV|FSV|Kremmener|Motor|Empor|TT-Freunde)", c)]
+            candidates = [
+                c for c in cells
+                if re.search(
+                    r"(?:TTC|SV|TSV|TTV|FSV|Kremmener|Motor|Empor|TT-Freunde)",
+                    c,
+                )
+            ]
             names = candidates[:2]
+
         if len(names) < 2:
             logging.warning("Mannschaften nicht erkennbar, Zeile übersprungen: %s", row_text)
             continue
 
         home, away = names[-2], names[-1]
         result = normalize_space(result_anchor.get_text(" ", strip=True)) if result_anchor else None
-        report_url = urljoin(league_url, result_anchor.get("href")) if result_anchor and result_anchor.get("href") else None
+        report_url = (
+            urljoin(league_url, result_anchor.get("href"))
+            if result_anchor and result_anchor.get("href")
+            else None
+        )
+
         raw_id = report_url or f"{current_date.date()}|{time_text}|{home}|{away}"
         match_id = hashlib.sha256(raw_id.encode("utf-8")).hexdigest()[:16]
-        matches.append(Match(
-            match_id=match_id,
-            team=team_label,
-            date=current_date.date().isoformat(),
-            time=time_text,
-            home=home,
-            away=away,
-            result=result,
-            report_url=report_url,
-            league_url=league_url,
-        ))
+
+        matches.append(
+            Match(
+                match_id=match_id,
+                team=team_label,
+                date=current_date.date().isoformat(),
+                time=time_text,
+                home=home,
+                away=away,
+                result=result,
+                report_url=report_url,
+                league_url=league_url,
+            )
+        )
+
     return matches
 
 
@@ -208,48 +252,92 @@ def extract_report_text(report_html: str) -> str:
     return text[:14000]
 
 
-def call_deepseek(match: Match, report_text: str) -> tuple[str, str]:
+def _extract_response_output_text(payload: dict) -> str:
+    for item in payload.get("output", []):
+        if item.get("type") != "message":
+            continue
+        for part in item.get("content", []):
+            if part.get("type") == "output_text" and part.get("text"):
+                return str(part["text"])
+    raise ValueError("Die OpenAI-API lieferte keinen output_text zurück.")
+
+
+def call_openai(match: Match, report_text: str) -> tuple[str, str]:
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
-    api_base = os.getenv("OPENAI_API_BASE", "https://api.deepseek.com").rstrip("/")
-    model = os.getenv("OPENAI_MODEL", "deepseek-chat")
+    api_base = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1").rstrip("/")
+    model = os.getenv("OPENAI_MODEL", "gpt-5.6-luna").strip()
+
     if not api_key:
-        raise RuntimeError("OPENAI_API_KEY fehlt. Bitte .env anhand von .env.example anlegen.")
+        raise RuntimeError(
+            "OPENAI_API_KEY fehlt. In GitHub muss das Repository-Secret OPENAI_API_KEY gesetzt sein."
+        )
 
     system_prompt = (
-        "Du schreibst sachliche, lebendige Vereinsnachrichten für den Tischtennisverein TTC Gransee 98 e.V. "
-        "Nutze ausschließlich die gelieferten Spieldaten. Erfinde keine Zitate, Verletzungen, Stimmungen, "
-        "Tabellenstände oder Ereignisse. Gib ausschließlich valides JSON mit den Schlüsseln title und body_html zurück. "
-        "body_html enthält 3 bis 5 kurze HTML-Absätze (<p>...</p>), keine Überschrift, kein Markdown und keine Scripts."
+        "Du schreibst sachliche, gut lesbare Vereinsnachrichten für den "
+        "Tischtennisverein TTC Gransee 98 e.V. "
+        "Nutze ausschließlich die gelieferten Spieldaten. "
+        "Erfinde keine Zitate, Verletzungen, Zuschauerreaktionen, Stimmungen, "
+        "Tabellenstände oder Ereignisse. "
+        "Beschreibe Spielverläufe nur, wenn sie aus den Einzelergebnissen eindeutig ableitbar sind. "
+        "Nenne Fünfsatzspiele und entscheidende Begegnungen nur, wenn sie in den Quelldaten enthalten sind."
     )
+
     user_prompt = f"""Erstelle einen Spielbericht auf Deutsch.
+
 Mannschaft: {match.team}
 Datum: {match.date}
 Heim: {match.home}
 Gast: {match.away}
 Endstand: {match.result}
+
 Quelldaten des vollständigen Spielberichts:
 {report_text}
 
-Titel: maximal 90 Zeichen. Im Text sollen Ergebnis, entscheidende Begegnungen und auffällige Fünfsatzspiele genannt werden, soweit aus den Daten belegbar."""
+Der Titel soll maximal 90 Zeichen lang sein.
+Der Bericht soll aus 3 bis 5 kurzen Absätzen bestehen.
+"""
 
     response = requests.post(
-        f"{api_base}/chat/completions",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        f"{api_base}/responses",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
         json={
             "model": model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            "temperature": 0.35,
-            "response_format": {"type": "json_object"},
+            "instructions": system_prompt,
+            "input": user_prompt,
+            "text": {
+                "format": {
+                    "type": "json_schema",
+                    "name": "spielbericht",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "title": {"type": "string"},
+                            "body_html": {"type": "string"},
+                        },
+                        "required": ["title", "body_html"],
+                        "additionalProperties": False,
+                    },
+                }
+            },
         },
-        timeout=90,
+        timeout=120,
     )
-    response.raise_for_status()
+
+    if not response.ok:
+        try:
+            detail = response.json()
+        except Exception:
+            detail = response.text[:2000]
+        raise RuntimeError(f"OpenAI API Fehler {response.status_code}: {detail}")
+
     payload = response.json()
-    content = payload["choices"][0]["message"]["content"]
+    content = _extract_response_output_text(payload)
     data = json.loads(content)
+
     title = normalize_space(str(data["title"]))[:120]
     body_html = sanitize_article_html(str(data["body_html"]))
     return title, body_html
@@ -295,7 +383,7 @@ def generate_new_articles(s: requests.Session, completed: Iterable[Match], artic
         try:
             report_html = fetch(s, match.report_url or "")
             report_text = extract_report_text(report_html)
-            title, body_html = call_deepseek(match, report_text)
+            title, body_html = call_openai(match, report_text)
             articles.append(Article(
                 match_id=match.match_id,
                 date=match.date,
@@ -313,13 +401,30 @@ def generate_new_articles(s: requests.Session, completed: Iterable[Match], artic
 def render_news(articles: list[Article]) -> str:
     if not articles:
         return '<li class="text-gray-400">Noch keine Spielberichte vorhanden.</li>'
+
     items = []
     for article in articles[:MAX_ITEMS]:
         date_de = datetime.fromisoformat(article.date).strftime("%d.%m.%Y")
-        items.append(f'''<li class="border-l-4 border-accent pl-4">
-<button type="button" class="article-open text-left hover-accent font-bold" data-article-id="{html.escape(article.match_id)}">{html.escape(article.title)}</button>
-<div class="text-sm text-gray-400 mt-1">{date_de}</div>
-</li>''')
+        body_text = BeautifulSoup(article.body_html, "html.parser").get_text("\n\n", strip=True)
+
+        items.append(
+            f"""<li class="border-l-4 border-accent pl-4">
+<button type="button"
+        class="news-button"
+        data-article-title="{html.escape(article.title, quote=True)}"
+        data-article-date="{html.escape(date_de, quote=True)}"
+        data-article-team="TTC Gransee"
+        data-article-result=""
+        data-article-source="{html.escape(article.source_url, quote=True)}"
+        data-article-body="{html.escape(body_text, quote=True)}">
+  <div class="news-row">
+    <span class="news-title">{html.escape(article.title)}</span>
+  </div>
+  <div class="news-meta">{date_de}</div>
+</button>
+</li>"""
+        )
+
     return "\n".join(items)
 
 
@@ -336,25 +441,6 @@ def render_dates(upcoming: list[Match]) -> str:
 <span class="text-accent whitespace-nowrap">{html.escape(date_text)}</span>
 </li>''')
     return "\n".join(items)
-
-
-def render_modal(articles: list[Article]) -> str:
-    article_nodes = []
-    for article in articles[:MAX_ITEMS]:
-        date_de = datetime.fromisoformat(article.date).strftime("%d.%m.%Y")
-        article_nodes.append(f'''<article id="article-{html.escape(article.match_id)}" class="article-content hidden">
-<h2 class="text-2xl font-bold text-accent mb-2">{html.escape(article.title)}</h2>
-<p class="text-sm text-gray-400 mb-5">{date_de}</p>
-<div class="space-y-4 text-gray-200">{article.body_html}</div>
-<p class="mt-6 text-xs text-gray-500">Quelle: <a class="hover-accent underline" href="{html.escape(article.source_url)}" target="_blank" rel="noopener noreferrer">myTischtennis.de</a></p>
-</article>''')
-    return f'''<!-- Vereinsnachrichten-Dialog -->
-<div id="articleModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="bg-gray-900 border border-accent rounded-lg max-w-3xl w-full max-h-screen overflow-y-auto p-6 relative">
-    <button id="articleModalClose" type="button" class="absolute top-3 right-3 text-accent text-2xl" aria-label="Artikel schließen"><i class="fas fa-times"></i></button>
-    {''.join(article_nodes)}
-  </div>
-</div>'''
 
 
 def replace_information_lists(soup: BeautifulSoup, news_html: str, dates_html: str) -> None:
@@ -376,59 +462,19 @@ def replace_information_lists(soup: BeautifulSoup, news_html: str, dates_html: s
         dates_list.append(node)
 
 
-def inject_modal_and_script(soup: BeautifulSoup, modal_html: str) -> None:
-    old_modal = soup.find(id="articleModal")
-    if old_modal:
-        old_modal.decompose()
-    modal_soup = BeautifulSoup(modal_html, "html.parser")
-    soup.body.append(modal_soup)
-
-    script = soup.new_tag("script")
-    script.string = r'''
-// Vereinsnachrichten im eingebetteten Dialog öffnen.
-(() => {
-    const modal = document.getElementById('articleModal');
-    const closeButton = document.getElementById('articleModalClose');
-    if (!modal || !closeButton) return;
-
-    const closeArticle = () => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        modal.querySelectorAll('.article-content').forEach(el => el.classList.add('hidden'));
-    };
-
-    document.querySelectorAll('.article-open').forEach(button => {
-        button.addEventListener('click', () => {
-            const article = document.getElementById(`article-${button.dataset.articleId}`);
-            if (!article) return;
-            modal.querySelectorAll('.article-content').forEach(el => el.classList.add('hidden'));
-            article.classList.remove('hidden');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            modal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-            closeButton.focus();
-        });
-    });
-
-    closeButton.addEventListener('click', closeArticle);
-    modal.addEventListener('click', event => { if (event.target === modal) closeArticle(); });
-    window.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeArticle();
-    });
-})();
-'''
-    soup.body.append(script)
-
-
 def build_website(articles: list[Article], upcoming: list[Match]) -> None:
     if not TEMPLATE_FILE.exists():
         raise FileNotFoundError(f"Template fehlt: {TEMPLATE_FILE}")
+
     soup = BeautifulSoup(TEMPLATE_FILE.read_text(encoding="utf-8"), "html.parser")
     replace_information_lists(soup, render_news(articles), render_dates(upcoming))
-    inject_modal_and_script(soup, render_modal(articles))
+
+    last_updated = soup.find(id="lastUpdated")
+    if last_updated:
+        now = datetime.now()
+        last_updated["datetime"] = now.date().isoformat()
+        last_updated.string = now.strftime("%d.%m.%Y")
+
     OUTPUT_FILE.write_text(str(soup), encoding="utf-8")
 
 

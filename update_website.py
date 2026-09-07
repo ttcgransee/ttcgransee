@@ -273,16 +273,18 @@ def call_openai(match: Match, report_text: str) -> tuple[str, str]:
         )
 
     system_prompt = (
-        "Du schreibst sachliche, gut lesbare Vereinsnachrichten für den "
-        "Tischtennisverein TTC Gransee 98 e.V. "
+        "Du schreibst ausführliche, journalistisch formulierte, aber sachliche Spielberichte "
+        "für die Vereinswebseite des Tischtennisvereins TTC Gransee 98 e.V. "
+        "Der Bericht soll wie ein echter Vereins-Spielbericht wirken und den Verlauf der Begegnung "
+        "anhand der Doppel, Einzel und Satzergebnisse nachvollziehbar machen. "
         "Nutze ausschließlich die gelieferten Spieldaten. "
         "Erfinde keine Zitate, Verletzungen, Zuschauerreaktionen, Stimmungen, "
-        "Tabellenstände oder Ereignisse. "
+        "Tabellenstände oder sonstige Ereignisse. "
         "Beschreibe Spielverläufe nur, wenn sie aus den Einzelergebnissen eindeutig ableitbar sind. "
-        "Nenne Fünfsatzspiele und entscheidende Begegnungen nur, wenn sie in den Quelldaten enthalten sind."
+        "Nenne konkrete Satzstände, Vier- und Fünfsatzspiele nur, wenn sie in den Quelldaten enthalten sind."
     )
 
-    user_prompt = f"""Erstelle einen Spielbericht auf Deutsch.
+    user_prompt = f"""Erstelle einen ausführlichen Spielbericht auf Deutsch für die Vereinswebseite des TTC Gransee 98 e.V.
 
 Mannschaft: {match.team}
 Datum: {match.date}
@@ -293,8 +295,19 @@ Endstand: {match.result}
 Quelldaten des vollständigen Spielberichts:
 {report_text}
 
-Der Titel soll maximal 90 Zeichen lang sein.
-Der Bericht soll aus 3 bis 5 kurzen Absätzen bestehen.
+Vorgaben:
+- Schreibe ungefähr 350 bis 500 Wörter.
+- Verwende 5 bis 7 gut lesbare Absätze.
+- Beginne mit einer kurzen Einordnung des Endergebnisses.
+- Beschreibe danach den tatsächlichen Spielverlauf möglichst chronologisch.
+- Gehe auf vorhandene Doppel und anschließend auf wichtige Einzel ein.
+- Nenne Spielernamen und konkrete Satzergebnisse, wenn diese für den Verlauf interessant sind.
+- Hebe enge Vier- oder Fünfsatzspiele hervor, soweit sie aus den Quelldaten hervorgehen.
+- Beschreibe, wann sich eine Mannschaft entscheidend absetzen konnte, wenn dies aus der Reihenfolge der Spiele ableitbar ist.
+- Schließe mit einem kurzen sachlichen Fazit.
+- Erfinde keine Zitate, Emotionen, Verletzungen, Zuschauerreaktionen, Tabellenstände oder andere nicht belegte Informationen.
+- Verwende ausschließlich Angaben aus den gelieferten Quelldaten.
+- Der Titel soll maximal 90 Zeichen lang sein.
 """
 
     response = requests.post(
@@ -410,7 +423,7 @@ def render_news(articles: list[Article]) -> str:
         items.append(
             f"""<li class="border-l-4 border-accent pl-4">
 <button type="button"
-        class="news-button"
+        class="news-button text-left hover-accent"
         data-article-title="{html.escape(article.title, quote=True)}"
         data-article-date="{html.escape(date_de, quote=True)}"
         data-article-team="TTC Gransee"

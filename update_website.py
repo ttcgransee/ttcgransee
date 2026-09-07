@@ -240,16 +240,110 @@ def parse_matches(page_html: str, league_url: str, team_label: str) -> list[Matc
 
 
 def extract_report_text(report_html: str) -> str:
+    """
+    Extrahiert aus einer myTischtennis-Spielberichtseite möglichst strukturiert
+    die relevanten Begegnungsdaten (Überschriften, Ergebnis, Doppel/Einzel,
+    Satzstände und weitere Tabellenwerte).
+
+    Anders als die frühere Version wird nicht nur der gesamte Seitentext
+    zusammengezogen. Stattdessen werden Tabellen zeilenweise erhalten, damit
+    OpenAI die Reihenfolge der Spiele und die Satzergebnisse erkennen kann.
+    """
     soup = BeautifulSoup(report_html, "html.parser")
-    # Werbung, Navigation und Footer entfernen; Tabelleninhalt bleibt erhalten.
-    for tag in soup.select("script, style, nav, footer, header, aside"):
+
+    # Unwichtige Seitenelemente entfernen.
+    for tag in soup.select(
+        "script, style, nav, footer, header, aside, "
+        ".advertisement, .ads, .banner, .cookie, .breadcrumb"
+    ):
         tag.decompose()
+
     main = soup.find("main") or soup.body or soup
-    text = normalize_space(main.get_text(" | ", strip=True))
-    marker = text.find("Spielbericht")
-    if marker >= 0:
-        text = text[marker:]
-    return text[:14000]
+
+    sections: list[str] = []
+
+    # 1) Aussagekräftige Überschriften übernehmen.
+    for heading in main.find_all(re.compile(r"^h[1-6]$")):
+        heading_text = normalize_space(heading.get_text(" ", strip=True))
+        if heading_text and heading_text not in sections:
+            sections.append(f"ÜBERSCHRIFT: {heading_text}")
+
+    # 2) Tabellen strukturiert und zeilenweise extrahieren.
+    #    Das ist für Doppel, Einzel und Satzstände entscheidend.
+    for table_index, table in enumerate(main.find_all("table"), start=1):
+        rows: list[str] = []
+
+        # Optional: unmittelbar vorhergehende Überschrift als Tabellenname.
+        table_title = ""
+        previous_heading = table.find_previous(re.compile(r"^h[1-6]$"))
+        if previous_heading:
+            table_title = normalize_space(previous_heading.get_text(" ", strip=True))
+
+        for row in table.find_all("tr"):
+            cells = [
+                normalize_space(cell.get_text(" ", strip=True))
+                for cell in row.find_all(["th", "td"])
+            ]
+            cells = [cell for cell in cells if cell]
+
+            if not cells:
+                continue
+
+            # Doppelte Zellwerte in derselben Zeile vermeiden, aber Reihenfolge erhalten.
+            compact_cells: list[str] = []
+            for cell in cells:
+                if not compact_cells or compact_cells[-1] != cell:
+                    compact_cells.append(cell)
+
+            row_text = " | ".join(compact_cells)
+            if row_text:
+                rows.append(row_text)
+
+        if rows:
+            title = f"TABELLE {table_index}"
+            if table_title:
+                title += f" – {table_title}"
+            sections.append(title)
+            sections.extend(rows)
+
+    # 3) Zusätzlich markante Textblöcke aufnehmen, die nicht in Tabellen stehen,
+    #    z. B. Endstand, Spielbeginn oder Mannschaftsnamen.
+    text_candidates: list[str] = []
+    for tag in main.find_all(["p", "div", "span", "strong"]):
+        value = normalize_space(tag.get_text(" ", strip=True))
+        if not value:
+            continue
+
+        # Nur kompakte, wahrscheinlich relevante Blöcke übernehmen.
+        if len(value) > 500:
+            continue
+
+        if (
+            re.search(r"\b\d+\s*:\s*\d+\b", value)
+            or re.search(r"\b(?:Doppel|Einzel|Spielbericht|Endstand|Beginn|Ende|Zuschauer)\b", value, re.I)
+            or CLUB_PATTERN.search(value)
+        ):
+            text_candidates.append(value)
+
+    # Duplikate entfernen, Reihenfolge beibehalten.
+    seen: set[str] = set()
+    for value in text_candidates:
+        if value not in seen:
+            seen.add(value)
+            sections.append(f"INFO: {value}")
+
+    # 4) Fallback: Falls die Seite unerwartet keine Tabellen enthält,
+    #    den sichtbaren Seitentext wenigstens weiterhin liefern.
+    if not sections:
+        fallback = normalize_space(main.get_text(" | ", strip=True))
+        if not fallback:
+            raise ValueError("Auf der Spielberichtseite konnten keine Spieldaten extrahiert werden.")
+        return fallback[:20000]
+
+    report_text = "\n".join(sections)
+
+    # Großzügiger als zuvor, damit auch komplette Einzel-/Doppeltabellen Platz haben.
+    return report_text[:30000]
 
 
 def _extract_response_output_text(payload: dict) -> str:
@@ -301,6 +395,8 @@ Vorgaben:
 - Beginne mit einer kurzen Einordnung des Endergebnisses.
 - Beschreibe danach den tatsächlichen Spielverlauf möglichst chronologisch.
 - Gehe auf vorhandene Doppel und anschließend auf wichtige Einzel ein.
+- Nutze die Reihenfolge der Tabellenzeilen als Spielreihenfolge, sofern diese eindeutig ist.
+- Verarbeite konkrete Satzstände aus den Tabellen, wenn sie vorhanden sind.
 - Nenne Spielernamen und konkrete Satzergebnisse, wenn diese für den Verlauf interessant sind.
 - Hebe enge Vier- oder Fünfsatzspiele hervor, soweit sie aus den Quelldaten hervorgehen.
 - Beschreibe, wann sich eine Mannschaft entscheidend absetzen konnte, wenn dies aus der Reihenfolge der Spiele ableitbar ist.
@@ -396,6 +492,16 @@ def generate_new_articles(s: requests.Session, completed: Iterable[Match], artic
         try:
             report_html = fetch(s, match.report_url or "")
             report_text = extract_report_text(report_html)
+
+            # Diagnose: Im GitHub-Log ist sichtbar, ob Doppel, Einzel und Satzstände
+            # tatsächlich aus der Detailseite ausgelesen wurden.
+            logging.info(
+                "Extrahierte Spielberichtsdaten für %s – %s:\n%s",
+                match.home,
+                match.away,
+                report_text[:12000],
+            )
+
             title, body_html = call_openai(match, report_text)
             articles.append(Article(
                 match_id=match.match_id,

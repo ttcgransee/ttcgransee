@@ -79,6 +79,9 @@ class Article:
     title: str
     body_html: str
     source_url: str
+    # Optionales Bild für manuell gepflegte Vereinsnachrichten/Nachrufe.
+    # Beispiel in articles.json: "image_url": "diethardt-goldenbogen.jpg"
+    image_url: str | None = None
 
 
 def session() -> requests.Session:
@@ -530,6 +533,7 @@ def generate_new_articles(s: requests.Session, completed: Iterable[Match], artic
                 title=title,
                 body_html=body_html,
                 source_url=match.report_url or match.league_url,
+                image_url=None,
             ))
         except Exception as exc:
             logging.exception("Bericht konnte nicht erzeugt werden: %s", exc)
@@ -556,6 +560,7 @@ def render_news(articles: list[Article]) -> str:
         data-article-team="TTC Gransee"
         data-article-result=""
         data-article-source="{html.escape(article.source_url, quote=True)}"
+        data-article-image="{html.escape(article.image_url or '', quote=True)}"
         data-article-body="{html.escape(body_text, quote=True)}">
   <div class="news-row">
     <span class="news-title">{html.escape(article.title)}</span>
@@ -602,12 +607,64 @@ def replace_information_lists(soup: BeautifulSoup, news_html: str, dates_html: s
         dates_list.append(node)
 
 
+
+def inject_article_image_support(soup: BeautifulSoup) -> None:
+    """Ergänzt den vorhandenen Artikel-Dialog um optionale Bilder."""
+    if soup.find(id="articleImageSupport"):
+        return
+
+    script_code = """
+document.addEventListener('click', function (event) {
+    const button = event.target.closest('.news-button');
+    if (!button) return;
+
+    const imageUrl = (button.dataset.articleImage || '').trim();
+
+    setTimeout(function () {
+        const articleBody = document.getElementById('articleBody');
+        if (!articleBody) return;
+
+        const oldImage = articleBody.querySelector('.article-news-image');
+        if (oldImage) oldImage.remove();
+
+        if (!imageUrl) return;
+
+        const figure = document.createElement('figure');
+        figure.className = 'article-news-image';
+        figure.style.margin = '0 0 1.25rem 0';
+
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = button.dataset.articleTitle || 'Bild zum Artikel';
+        img.loading = 'lazy';
+        img.style.display = 'block';
+        img.style.width = '100%';
+        img.style.maxHeight = '460px';
+        img.style.objectFit = 'contain';
+        img.style.borderRadius = '0.75rem';
+        img.style.background = '#0b0f14';
+
+        figure.appendChild(img);
+        articleBody.insertBefore(figure, articleBody.firstChild);
+    }, 0);
+});
+"""
+    tag = soup.new_tag("script", id="articleImageSupport")
+    tag.string = script_code
+
+    if soup.body:
+        soup.body.append(tag)
+    else:
+        soup.append(tag)
+
+
 def build_website(articles: list[Article], upcoming: list[Match]) -> None:
     if not TEMPLATE_FILE.exists():
         raise FileNotFoundError(f"Template fehlt: {TEMPLATE_FILE}")
 
     soup = BeautifulSoup(TEMPLATE_FILE.read_text(encoding="utf-8"), "html.parser")
     replace_information_lists(soup, render_news(articles), render_dates(upcoming))
+    inject_article_image_support(soup)
 
     last_updated = soup.find(id="lastUpdated")
     if last_updated:

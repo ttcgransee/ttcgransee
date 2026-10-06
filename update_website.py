@@ -7,6 +7,7 @@ import logging
 import os
 import re
 import sys
+import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
@@ -22,6 +23,7 @@ TEMPLATE_FILE = BASE_DIR / "template.html"
 OUTPUT_FILE = BASE_DIR / "index.html"
 DATA_DIR = BASE_DIR / "data"
 ARTICLES_FILE = DATA_DIR / "articles.json"
+UPCOMING_FILE = DATA_DIR / "upcoming.json"
 
 CLUB_PATTERN = re.compile(r"\bTTC\s+Gransee(?:\s+(?:II|III|IV))?\b", re.I)
 MAX_ITEMS = 5
@@ -93,11 +95,42 @@ def session() -> requests.Session:
     return s
 
 
-def fetch(s: requests.Session, url: str) -> str:
+def fetch(s: requests.Session, url: str, max_attempts: int = 3) -> str:
+    """
+    Lädt eine Seite mit vorsichtigem Retry bei HTTP 429.
+    Ein 429 bedeutet, dass myTischtennis den GitHub-Runner gerade drosselt.
+    """
     logging.info("Lade %s", url)
-    response = s.get(url, timeout=TIMEOUT)
-    response.raise_for_status()
-    return response.text
+
+    for attempt in range(1, max_attempts + 1):
+        response = s.get(url, timeout=TIMEOUT)
+
+        if response.status_code != 429:
+            response.raise_for_status()
+            return response.text
+
+        if attempt >= max_attempts:
+            response.raise_for_status()
+
+        retry_after = response.headers.get("Retry-After", "").strip()
+        try:
+            wait_seconds = int(retry_after)
+        except ValueError:
+            wait_seconds = 5 if attempt == 1 else 15
+
+        # Nicht unbegrenzt warten, falls ein Server extrem hohe Werte liefert.
+        wait_seconds = max(3, min(wait_seconds, 30))
+
+        logging.warning(
+            "HTTP 429 von %s – Versuch %d/%d. Warte %d Sekunden.",
+            url,
+            attempt,
+            max_attempts,
+            wait_seconds,
+        )
+        time.sleep(wait_seconds)
+
+    raise RuntimeError(f"Abruf fehlgeschlagen: {url}")
 
 
 def parse_short_date(text: str, season_hint: str) -> datetime | None:
@@ -490,6 +523,39 @@ def sanitize_article_html(value: str) -> str:
     return cleaned
 
 
+
+def load_upcoming_cache(today) -> list[Match]:
+    """
+    Lädt die zuletzt erfolgreich gespeicherten kommenden Spiele.
+    Bereits vergangene Termine werden beim Lesen automatisch entfernt.
+    """
+    if not UPCOMING_FILE.exists():
+        return []
+
+    try:
+        raw = json.loads(UPCOMING_FILE.read_text(encoding="utf-8"))
+        matches = [Match(**item) for item in raw]
+    except Exception as exc:
+        logging.warning("Termin-Cache konnte nicht gelesen werden: %s", exc)
+        return []
+
+    return sorted(
+        [
+            m for m in matches
+            if datetime.fromisoformat(m.date).date() >= today
+        ],
+        key=lambda m: (m.date, m.time),
+    )[:MAX_ITEMS]
+
+
+def save_upcoming_cache(upcoming: list[Match]) -> None:
+    DATA_DIR.mkdir(exist_ok=True)
+    UPCOMING_FILE.write_text(
+        json.dumps([asdict(m) for m in upcoming], ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
 def load_articles() -> list[Article]:
     if not ARTICLES_FILE.exists():
         return []
@@ -682,16 +748,71 @@ def main() -> int:
     today = datetime.now().date()
 
     all_current_matches: list[Match] = []
+    successful_leagues = 0
+
     for league in LEAGUES:
         try:
-            all_current_matches.extend(parse_matches(fetch(s, league["url"]), league["url"], league["team"]))
+            league_matches = parse_matches(
+                fetch(s, league["url"]),
+                league["url"],
+                league["team"],
+            )
+            all_current_matches.extend(league_matches)
+            successful_leagues += 1
+            logging.info(
+                "Liga erfolgreich verarbeitet: %s (%d Spiele)",
+                league["team"],
+                len(league_matches),
+            )
         except Exception as exc:
-            logging.exception("Liga konnte nicht verarbeitet werden: %s", exc)
+            logging.exception(
+                "Liga konnte nicht verarbeitet werden (%s): %s",
+                league["team"],
+                exc,
+            )
 
-    upcoming = sorted(
-        [m for m in all_current_matches if datetime.fromisoformat(m.date).date() >= today],
+    fresh_upcoming = sorted(
+        [
+            m for m in all_current_matches
+            if datetime.fromisoformat(m.date).date() >= today
+        ],
         key=lambda m: (m.date, m.time),
     )[:MAX_ITEMS]
+
+    if successful_leagues == len(LEAGUES):
+        # Nur bei vollständigem Erfolg den Cache überschreiben.
+        upcoming = fresh_upcoming
+        save_upcoming_cache(upcoming)
+        logging.info(
+            "Termin-Cache aktualisiert: %d kommende Spiele.",
+            len(upcoming),
+        )
+    else:
+        cached_upcoming = load_upcoming_cache(today)
+
+        if cached_upcoming:
+            upcoming = cached_upcoming
+            logging.warning(
+                "Nur %d/%d Ligen erfolgreich. "
+                "Verwende %d Termine aus dem letzten erfolgreichen Cache.",
+                successful_leagues,
+                len(LEAGUES),
+                len(upcoming),
+            )
+        elif fresh_upcoming:
+            # Beim allerersten Lauf existiert eventuell noch kein Cache.
+            upcoming = fresh_upcoming
+            logging.warning(
+                "Noch kein Termin-Cache vorhanden. "
+                "Verwende vorläufig %d Termine aus den erfolgreich geladenen Ligen.",
+                len(upcoming),
+            )
+        else:
+            upcoming = []
+            logging.warning(
+                "Keine Liga erfolgreich geladen und noch kein Termin-Cache vorhanden. "
+                "Es können derzeit keine kommenden Spiele angezeigt werden."
+            )
 
     article_source_matches = list(all_current_matches)
     use_test = os.getenv("GENERATE_REPORTS_FROM_TEST_LEAGUE", "true").lower() in {"1", "true", "yes", "ja"}

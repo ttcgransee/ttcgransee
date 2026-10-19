@@ -1,36 +1,14 @@
 [
   {
-    "match_id": "6241588d5f74e4eb",
-    "team": "1. Herren",
-    "date": "2026-10-15",
-    "time": "18:30",
-    "home": "FSV Germendorf",
-    "away": "TTC Gransee",
-    "result": null,
-    "report_url": null,
-    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/1._Kreisklasse/gruppe/521568/tabelle/gesamt"
-  },
-  {
-    "match_id": "8f1d80d029d85861",
+    "match_id": "50a923958da02987",
     "team": "2. Herren",
-    "date": "2026-10-16",
-    "time": "19:30",
-    "home": "TTC Gransee II",
-    "away": "SV Stahl Hennigsdorf V",
+    "date": "2026-10-29",
+    "time": "18:30",
+    "home": "SV Glienicke VI",
+    "away": "TTC Gransee II",
     "result": null,
     "report_url": null,
     "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/5._Kreisklasse/gruppe/521539/tabelle/gesamt"
-  },
-  {
-    "match_id": "e018c5d760cfcf7a",
-    "team": "Nachwuchs II",
-    "date": "2026-10-17",
-    "time": "12:00",
-    "home": "The Eagles IV",
-    "away": "TTC Gransee",
-    "result": null,
-    "report_url": null,
-    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Nord/gruppe/521534/tabelle/gesamt"
   },
   {
     "match_id": "0be05d4bb5fd9fc4",
@@ -44,14 +22,25 @@
     "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Kreisliga/gruppe/521582/tabelle/gesamt"
   },
   {
-    "match_id": "c211dfcb0fc718a6",
+    "match_id": "0426fbf2e011b27c",
     "team": "Nachwuchs II",
     "date": "2026-11-13",
-    "time": "00:00",
+    "time": "12:00",
     "home": "TTC Gransee",
     "away": "The Eagles III",
+    "result": "2:8",
+    "report_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Nord/gruppe/521534/spielbericht/16115871/TTC_Gransee-vs-The_Eagles_III",
+    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Nord/gruppe/521534/tabelle/gesamt"
+  },
+  {
+    "match_id": "577ee8445dbd5470",
+    "team": "Nachwuchs I",
+    "date": "2026-11-14",
+    "time": "10:30",
+    "home": "SG Empor Oranienburg II",
+    "away": "TTC Gransee",
     "result": null,
     "report_url": null,
-    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Nord/gruppe/521534/tabelle/gesamt"
+    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Kreisliga/gruppe/521582/tabelle/gesamt"
   }
 ]

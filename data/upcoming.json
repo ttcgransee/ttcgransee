@@ -1,16 +1,5 @@
 [
   {
-    "match_id": "50a923958da02987",
-    "team": "2. Herren",
-    "date": "2026-10-29",
-    "time": "18:30",
-    "home": "SV Glienicke VI",
-    "away": "TTC Gransee II",
-    "result": null,
-    "report_url": null,
-    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/5._Kreisklasse/gruppe/521539/tabelle/gesamt"
-  },
-  {
     "match_id": "0be05d4bb5fd9fc4",
     "team": "Nachwuchs I",
     "date": "2026-11-06",
@@ -20,6 +9,17 @@
     "result": null,
     "report_url": null,
     "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/Kreisliga/gruppe/521582/tabelle/gesamt"
+  },
+  {
+    "match_id": "bff94d2d4749a81f",
+    "team": "2. Herren",
+    "date": "2026-11-06",
+    "time": "19:30",
+    "home": "TTC Ofenstadt Velten IV",
+    "away": "TTC Gransee II",
+    "result": null,
+    "report_url": null,
+    "league_url": "https://www.mytischtennis.de/click-tt/TTVB/26--27/ligen/5._Kreisklasse/gruppe/521539/tabelle/gesamt"
   },
   {
     "match_id": "0426fbf2e011b27c",
